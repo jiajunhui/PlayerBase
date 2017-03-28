@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="play_alpha_black">#aa000000</color>
+    <color name="play_light_alpha_black">#44000000</color>
+    <color name="play_loading_text_color">#FFFFFF</color>
+</resources>

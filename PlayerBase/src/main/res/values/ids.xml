@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--player controller ids-->
+    <item name="cover_player_controller_top_container" type="id"/>
+    <item name="cover_player_controller_text_view_video_title" type="id"/>
+    <item name="cover_player_controller_text_view_system_time" type="id"/>
+    <item name="cover_player_controller_view_battery_state" type="id"/>
+
+    <item name="cover_player_controller_bottom_container" type="id"/>
+    <item name="cover_player_controller_seek_bar" type="id"/>
+    <item name="cover_player_controller_text_view_curr_time" type="id"/>
+    <item name="cover_player_controller_text_view_total_time" type="id"/>
+    <item name="cover_player_controller_text_view_merge_time" type="id"/>
+    <item name="cover_player_controller_image_view_play_state" type="id"/>
+
+    <!--player loading ids-->
+    <item name="cover_player_loading_container" type="id"/>
+    <item name="cover_player_loading_view_loading" type="id"/>
+    <item name="cover_player_loading_text_view_text" type="id"/>
+
+    <!--player gesture operation ids-->
+    <item name="cover_player_gesture_operation_volume_box" type="id"/>
+    <item name="cover_player_gesture_operation_volume_icon" type="id"/>
+    <item name="cover_player_gesture_operation_volume_text" type="id"/>
+
+    <item name="cover_player_gesture_operation_brightness_box" type="id"/>
+    <item name="cover_player_gesture_operation_brightness_icon" type="id"/>
+    <item name="cover_player_gesture_operation_brightness_text" type="id"/>
+
+    <item name="cover_player_gesture_operation_fast_forward_box" type="id"/>
+    <item name="cover_player_gesture_operation_fast_forward_text_view_step_time" type="id"/>
+    <item name="cover_player_gesture_operation_fast_forward_text_view_progress_time" type="id"/>
+
+    <!--player error page ids-->
+    <item name="cover_player_error_state_view_box" type="id"/>
+    <item name="cover_player_error_state_image_view_icon" type="id"/>
+    <item name="cover_player_error_state_text_view_tip" type="id"/>
+
+    <!--player ad cover ids-->
+    <item name="cover_player_ad_box" type="id"/>
+    <item name="cover_player_ad_image_view_pic" type="id"/>
+    <item name="cover_player_ad_text_view_timer" type="id"/>
+
+</resources>
