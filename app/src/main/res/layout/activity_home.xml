@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/ll_input"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:padding="1dp"
+        android:visibility="gone"
+        android:background="#22000000"
+        android:orientation="horizontal">
+        <EditText
+            android:id="@+id/et_url"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:paddingLeft="15dp"
+            android:background="@drawable/selector_edit_url"
+            android:textColor="#333333"
+            android:singleLine="true"
+            android:text="http://live.hkstv.hk.lxdns.com/live/hks/playlist.m3u8"
+            android:hint="http://"
+            android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/tv_play"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/selector_play_url"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp"
+            android:textSize="15sp"
+            android:textColor="#ffffff"
+            android:gravity="center"
+            android:text="Play"/>
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>

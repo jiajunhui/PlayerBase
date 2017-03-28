@@ -16,14 +16,20 @@
         android:name=".MApp"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="sensor">
+            android:name=".ui.SplashActivity"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".ui.HomeActivity"/>
+        <activity
+            android:name=".ui.PlayerActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="sensor">
+
         </activity>
     </application>
 

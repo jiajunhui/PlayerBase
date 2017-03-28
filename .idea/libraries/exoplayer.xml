@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="exoplayer">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/ijkplayer/libs/exoplayer.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
