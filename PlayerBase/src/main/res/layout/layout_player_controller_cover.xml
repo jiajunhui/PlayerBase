@@ -31,6 +31,7 @@
                 android:layout_height="match_parent"
                 android:layout_toRightOf="@id/cover_player_controller_image_view_back_icon"
                 android:gravity="center_vertical"
+                android:maxLines="1"
                 android:textSize="15sp"
                 android:textColor="@color/play_video_title_color"
                 android:text=""/>
@@ -41,6 +42,7 @@
             android:layout_height="match_parent"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
+            android:maxLines="1"
             android:textSize="13sp"
             android:textColor="@color/play_system_time_color"
             android:gravity="center"
@@ -82,6 +84,7 @@
             android:layout_weight="1"
             android:maxHeight="5dp"
             android:minHeight="5dp"
+            android:focusable="false"
             android:splitTrack="false"
             android:progressDrawable="@drawable/style_video_player_video_seekbar"
             android:thumb="@drawable/selector_seek_bar_thumb"/>

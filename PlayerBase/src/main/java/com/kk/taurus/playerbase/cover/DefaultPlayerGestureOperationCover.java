@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.kk.taurus.playerbase.R;
-import com.kk.taurus.playerbase.callback.CoverObserver;
 import com.kk.taurus.playerbase.cover.base.BaseCoverObserver;
 import com.kk.taurus.playerbase.cover.base.BaseGestureOperationCover;
 import com.kk.taurus.playerbase.utils.TimeUtil;
@@ -24,7 +23,6 @@ public class DefaultPlayerGestureOperationCover extends BaseGestureOperationCove
     private float brightness = -1;
     private int volume;
     private AudioManager audioManager;
-    private int mOriginalVolume;
     private int mMaxVolume;
 
     public DefaultPlayerGestureOperationCover(Context context, BaseCoverObserver coverObserver) {
@@ -44,7 +42,6 @@ public class DefaultPlayerGestureOperationCover extends BaseGestureOperationCove
 
     private void initAudioManager(Context context) {
         audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        mOriginalVolume = getVolume();
         mMaxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
         // Request audio focus for playback
         int result = audioManager.requestAudioFocus(afChangeListener,
@@ -146,7 +143,6 @@ public class DefaultPlayerGestureOperationCover extends BaseGestureOperationCove
             index = 0;
         // 变更声音
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, index, 0);
-        mOriginalVolume = index;
         // 变更进度条
         int i = (int) (index * 1.0 / mMaxVolume * 100);
         String s = i + "%";

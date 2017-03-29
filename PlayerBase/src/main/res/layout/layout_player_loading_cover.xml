@@ -16,6 +16,7 @@
             android:id="@id/cover_player_loading_view_loading"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:focusable="false"
             android:layout_centerHorizontal="true"
             android:indeterminateBehavior="repeat"
             android:indeterminateOnly="true"
