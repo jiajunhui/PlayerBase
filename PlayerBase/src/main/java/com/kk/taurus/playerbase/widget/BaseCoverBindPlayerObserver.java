@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.annotation.AttrRes;
@@ -74,6 +75,11 @@ public abstract class BaseCoverBindPlayerObserver extends BaseBindCover implemen
 
     protected void onErrorEvent(int eventCode, Bundle bundle){
         onNotifyErrorEvent(eventCode, bundle);
+    }
+
+    @Override
+    public void doConfigChange(Configuration newConfig) {
+        onNotifyConfigurationChanged(newConfig);
     }
 
     @Override

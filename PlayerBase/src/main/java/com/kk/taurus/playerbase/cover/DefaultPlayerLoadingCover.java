@@ -9,6 +9,7 @@ import com.kk.taurus.playerbase.R;
 import com.kk.taurus.playerbase.callback.CoverObserver;
 import com.kk.taurus.playerbase.callback.OnCoverEventListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
+import com.kk.taurus.playerbase.cover.base.BaseCoverObserver;
 import com.kk.taurus.playerbase.cover.base.BasePlayerLoadingCover;
 
 /**
@@ -19,7 +20,7 @@ public class DefaultPlayerLoadingCover extends BasePlayerLoadingCover {
 
     private final String TAG = "_LoadingCover";
 
-    public DefaultPlayerLoadingCover(Context context, CoverObserver coverObserver) {
+    public DefaultPlayerLoadingCover(Context context, BaseCoverObserver coverObserver) {
         super(context, coverObserver);
     }
 

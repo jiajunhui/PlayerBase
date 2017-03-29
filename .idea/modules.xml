@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/PlayerBase.iml" filepath="$PROJECT_DIR$/PlayerBase.iml" />
-      <module fileurl="file://$PROJECT_DIR$/PlayerBase/PlayerBase-PlayerBase.iml" filepath="$PROJECT_DIR$/PlayerBase/PlayerBase-PlayerBase.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PlayerBase/PlayerBase.iml" filepath="$PROJECT_DIR$/PlayerBase/PlayerBase.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PlayerBaseLibrary.iml" filepath="$PROJECT_DIR$/PlayerBaseLibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/ijkplayer/ijkplayer.iml" filepath="$PROJECT_DIR$/ijkplayer/ijkplayer.iml" />
       <module fileurl="file://$PROJECT_DIR$/ijkplayer-java/ijkplayer-java.iml" filepath="$PROJECT_DIR$/ijkplayer-java/ijkplayer-java.iml" />

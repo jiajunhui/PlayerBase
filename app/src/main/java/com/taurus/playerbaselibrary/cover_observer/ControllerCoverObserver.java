@@ -1,4 +1,4 @@
-package com.kk.taurus.playerbase.cover;
+package com.taurus.playerbaselibrary.cover_observer;
 
 import android.content.Context;
 import android.view.View;
@@ -6,12 +6,12 @@ import android.view.View;
 import com.kk.taurus.playerbase.cover.base.BaseCoverObserver;
 
 /**
- * Created by Taurus on 2017/3/24.
+ * Created by Taurus on 2017/3/29.
  */
 
-public class DefaultCoverObserver extends BaseCoverObserver<Object> {
+public class ControllerCoverObserver extends BaseCoverObserver {
 
-    public DefaultCoverObserver(Context context) {
+    public ControllerCoverObserver(Context context) {
         super(context);
     }
 

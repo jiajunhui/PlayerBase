@@ -8,7 +8,7 @@
     <LinearLayout
         android:id="@id/cover_player_controller_top_container"
         android:layout_width="match_parent"
-        android:layout_height="25dp"
+        android:layout_height="36dp"
         android:visibility="gone"
         android:gravity="center_vertical"
         android:background="@color/play_alpha_black"
@@ -17,7 +17,23 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1">
-
+            <ImageView
+                android:id="@id/cover_player_controller_image_view_back_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:scaleType="centerInside"
+                android:src="@mipmap/icon_player_back"/>
+            <TextView
+                android:id="@id/cover_player_controller_text_view_video_title"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@id/cover_player_controller_image_view_back_icon"
+                android:gravity="center_vertical"
+                android:textSize="15sp"
+                android:textColor="@color/play_video_title_color"
+                android:text=""/>
         </RelativeLayout>
         <TextView
             android:id="@id/cover_player_controller_text_view_system_time"
@@ -25,14 +41,14 @@
             android:layout_height="match_parent"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:textSize="12sp"
-            android:textColor="#ffffff"
+            android:textSize="13sp"
+            android:textColor="@color/play_system_time_color"
             android:gravity="center"
             android:text="10:08"/>
         <com.kk.taurus.playerbase.view.BatteryView
             android:id="@id/cover_player_controller_view_battery_state"
-            android:layout_width="22dp"
-            android:layout_height="11dp"
+            android:layout_width="30dp"
+            android:layout_height="15dp"
             android:layout_marginRight="10dp"
             app:border_width="2dp"
             app:border_color="#ffffff"

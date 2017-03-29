@@ -9,6 +9,7 @@ import com.kk.taurus.playerbase.callback.CoverObserver;
 import com.kk.taurus.playerbase.callback.OnCoverEventListener;
 import com.kk.taurus.playerbase.callback.OnErrorListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
+import com.kk.taurus.playerbase.cover.base.BaseCoverObserver;
 import com.kk.taurus.playerbase.cover.base.BasePlayerErrorCover;
 
 /**
@@ -17,7 +18,7 @@ import com.kk.taurus.playerbase.cover.base.BasePlayerErrorCover;
 
 public class DefaultPlayerErrorCover extends BasePlayerErrorCover {
 
-    public DefaultPlayerErrorCover(Context context, CoverObserver coverObserver) {
+    public DefaultPlayerErrorCover(Context context, BaseCoverObserver coverObserver) {
         super(context, coverObserver);
     }
 

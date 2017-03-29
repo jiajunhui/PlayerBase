@@ -1,5 +1,6 @@
 package com.kk.taurus.playerbase.callback;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import com.kk.taurus.playerbase.inter.IPlayer;
@@ -17,8 +18,7 @@ public interface PlayerObserver {
     int NETWORK_TYPE_MOBILE = 1;
     int NETWORK_TYPE_WIFI = 2;
 
-    void onBindPlayer(IPlayer player,OnCoverEventListener onCoverEventListener);
-
+    void onNotifyConfigurationChanged(Configuration newConfig);
     void onNotifyPlayEvent(int eventCode, Bundle bundle);
     void onNotifyErrorEvent(int eventCode, Bundle bundle);
     void onNotifyPlayTimerCounter(int curr, int duration, int bufferPercentage);

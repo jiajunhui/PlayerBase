@@ -26,7 +26,7 @@ public abstract class BaseAdCover extends BaseCover implements IAdCover{
 
     protected boolean adFinish;
 
-    public BaseAdCover(Context context, CoverObserver coverObserver) {
+    public BaseAdCover(Context context, BaseCoverObserver coverObserver) {
         super(context, coverObserver);
     }
 

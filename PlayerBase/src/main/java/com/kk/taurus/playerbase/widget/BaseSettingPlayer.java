@@ -110,11 +110,6 @@ public abstract class BaseSettingPlayer extends BaseCoverBindPlayerObserver {
     }
 
     @Override
-    public void doConfigChange(Configuration newConfig) {
-
-    }
-
-    @Override
     public void toggleFullScreen() {
 
     }

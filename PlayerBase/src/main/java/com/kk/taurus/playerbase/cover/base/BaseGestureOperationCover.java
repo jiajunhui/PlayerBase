@@ -28,7 +28,7 @@ public abstract class BaseGestureOperationCover extends BaseCover implements IGe
     protected TextView mFastForwardStepTime;
     protected TextView mFastForwardProgressTime;
 
-    public BaseGestureOperationCover(Context context, CoverObserver coverObserver) {
+    public BaseGestureOperationCover(Context context, BaseCoverObserver coverObserver) {
         super(context, coverObserver);
     }
 

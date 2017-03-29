@@ -8,6 +8,7 @@ import android.view.WindowManager;
 
 import com.kk.taurus.playerbase.R;
 import com.kk.taurus.playerbase.callback.CoverObserver;
+import com.kk.taurus.playerbase.cover.base.BaseCoverObserver;
 import com.kk.taurus.playerbase.cover.base.BaseGestureOperationCover;
 import com.kk.taurus.playerbase.utils.TimeUtil;
 
@@ -26,7 +27,7 @@ public class DefaultPlayerGestureOperationCover extends BaseGestureOperationCove
     private int mOriginalVolume;
     private int mMaxVolume;
 
-    public DefaultPlayerGestureOperationCover(Context context, CoverObserver coverObserver) {
+    public DefaultPlayerGestureOperationCover(Context context, BaseCoverObserver coverObserver) {
         super(context, coverObserver);
     }
 

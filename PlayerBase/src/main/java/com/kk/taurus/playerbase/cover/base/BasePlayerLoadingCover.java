@@ -20,7 +20,7 @@ public abstract class BasePlayerLoadingCover extends BaseCover implements ILoadi
     private View mLoadingView;
     private TextView mLoadingText;
 
-    public BasePlayerLoadingCover(Context context, CoverObserver coverObserver) {
+    public BasePlayerLoadingCover(Context context, BaseCoverObserver coverObserver) {
         super(context, coverObserver);
     }
 

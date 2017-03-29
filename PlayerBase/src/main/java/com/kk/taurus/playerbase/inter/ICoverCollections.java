@@ -9,6 +9,6 @@ import java.util.List;
  */
 
 public interface ICoverCollections {
-    BaseCover getCover(String key);
+    <T> T getCover(String key);
     List<BaseCover> getCovers();
 }

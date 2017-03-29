@@ -1,7 +1,10 @@
 package com.kk.taurus.playerbase.cover;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.pm.ActivityInfo;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
@@ -10,9 +13,9 @@ import android.view.View;
 import android.widget.SeekBar;
 
 import com.kk.taurus.playerbase.R;
-import com.kk.taurus.playerbase.callback.CoverObserver;
 import com.kk.taurus.playerbase.callback.OnCoverEventListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
+import com.kk.taurus.playerbase.cover.base.BaseCoverObserver;
 import com.kk.taurus.playerbase.cover.base.BasePlayerControllerCover;
 import com.kk.taurus.playerbase.inter.ISinglePlayer;
 import com.kk.taurus.playerbase.inter.MSG;
@@ -29,8 +32,10 @@ public class DefaultPlayerControllerCover extends BasePlayerControllerCover {
 
     private final String TAG = "player_controller";
     private static final long MSG_HIDDEN_CONTROLLER_DELAY_TIME = 5000;
+    private boolean isLandScape;
+    private BatteryReceiver batteryReceiver;
 
-    public DefaultPlayerControllerCover(Context context, CoverObserver coverObserver) {
+    public DefaultPlayerControllerCover(Context context, BaseCoverObserver coverObserver) {
         super(context, coverObserver);
     }
 
@@ -56,6 +61,15 @@ public class DefaultPlayerControllerCover extends BasePlayerControllerCover {
                 }
             }
         });
+        mIvBackIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mOnBackClickListener!=null){
+                    mOnBackClickListener.onClick(v);
+                }
+            }
+        });
+        initBatteryReceiver(mContext);
     }
 
     @Override
@@ -84,7 +98,7 @@ public class DefaultPlayerControllerCover extends BasePlayerControllerCover {
     @Override
     protected void switchControllerState() {
         if(isVisibilityGone()){
-            if(getScreenOrientation()== ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE){
+            if(isLandScape){
                 setTopContainerState(true);
             }else{
                 setTopContainerState(false);
@@ -153,6 +167,13 @@ public class DefaultPlayerControllerCover extends BasePlayerControllerCover {
     protected void onDestroy() {
         super.onDestroy();
         removeDelayHiddenControllerMsg();
+        unRegisterBatteryReceiver();
+    }
+
+    @Override
+    public void onNotifyConfigurationChanged(Configuration newConfig) {
+        super.onNotifyConfigurationChanged(newConfig);
+        isLandScape = newConfig.orientation== Configuration.ORIENTATION_LANDSCAPE;
     }
 
     @Override
@@ -203,4 +224,33 @@ public class DefaultPlayerControllerCover extends BasePlayerControllerCover {
     public void onGestureSingleTab(MotionEvent event) {
         switchControllerState();
     }
+
+    private void initBatteryReceiver(Context context) {
+        IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        batteryReceiver = new BatteryReceiver();
+        if(context!=null){
+            context.registerReceiver(batteryReceiver,filter);
+        }
+    }
+
+    protected void unRegisterBatteryReceiver(){
+        if(batteryReceiver !=null && mContext!=null){
+            try {
+                mContext.unregisterReceiver(batteryReceiver);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public class BatteryReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int current = intent.getExtras().getInt("level");// 获得当前电量
+            int total = intent.getExtras().getInt("scale");// 获得总电量
+            int percent = current * 100 / total;
+            updateBatteryState(percent);
+        }
+    }
+
 }

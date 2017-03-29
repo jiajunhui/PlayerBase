@@ -2,6 +2,7 @@
 <resources>
     <!--player controller ids-->
     <item name="cover_player_controller_top_container" type="id"/>
+    <item name="cover_player_controller_image_view_back_icon" type="id"/>
     <item name="cover_player_controller_text_view_video_title" type="id"/>
     <item name="cover_player_controller_text_view_system_time" type="id"/>
     <item name="cover_player_controller_view_battery_state" type="id"/>

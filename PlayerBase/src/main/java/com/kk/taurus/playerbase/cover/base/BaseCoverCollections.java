@@ -45,8 +45,8 @@ public abstract class BaseCoverCollections<T> implements ICoverCollections {
     }
 
     @Override
-    public BaseCover getCover(String key) {
-        return mCoverMap.get(key);
+    public <T> T getCover(String key) {
+        return (T) mCoverMap.get(key);
     }
 
     @Override

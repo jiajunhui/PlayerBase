@@ -3,4 +3,6 @@
     <color name="play_alpha_black">#aa000000</color>
     <color name="play_light_alpha_black">#44000000</color>
     <color name="play_loading_text_color">#FFFFFF</color>
+    <color name="play_video_title_color">#FFFFFF</color>
+    <color name="play_system_time_color">#FFFFFF</color>
 </resources>

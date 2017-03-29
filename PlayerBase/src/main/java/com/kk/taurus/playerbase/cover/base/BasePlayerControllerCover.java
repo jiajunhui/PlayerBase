@@ -25,14 +25,17 @@ public abstract class BasePlayerControllerCover extends BaseCover implements IPl
     protected View mTopContainer;
     protected View mBottomContainer;
     protected BatteryView mBatteryView;
+    protected ImageView mIvBackIcon;
     protected ImageView mIvPlayState;
+    protected TextView mTvVideoTitle;
     protected TextView mTvSystemTime;
     protected TextView mTvCurrTime;
     protected TextView mTvTotalTime;
     protected TextView mTvMergeTime;
     protected SeekBar mSeekBar;
+    protected View.OnClickListener mOnBackClickListener;
 
-    public BasePlayerControllerCover(Context context, CoverObserver coverObserver) {
+    public BasePlayerControllerCover(Context context, BaseCoverObserver coverObserver) {
         super(context, coverObserver);
     }
 
@@ -41,6 +44,8 @@ public abstract class BasePlayerControllerCover extends BaseCover implements IPl
         setCoverVisibility(View.GONE);
         mTopContainer = findViewById(R.id.cover_player_controller_top_container);
         mBottomContainer = findViewById(R.id.cover_player_controller_bottom_container);
+        mIvBackIcon = findViewById(R.id.cover_player_controller_image_view_back_icon);
+        mTvVideoTitle = findViewById(R.id.cover_player_controller_text_view_video_title);
         mBatteryView = findViewById(R.id.cover_player_controller_view_battery_state);
         mIvPlayState = findViewById(R.id.cover_player_controller_image_view_play_state);
         mTvSystemTime = findViewById(R.id.cover_player_controller_text_view_system_time);
@@ -58,9 +63,22 @@ public abstract class BasePlayerControllerCover extends BaseCover implements IPl
     }
 
     @Override
+    public void setOnBackClickListener(View.OnClickListener onBackClickListener) {
+        this.mOnBackClickListener = onBackClickListener;
+    }
+
+    @Override
+    public void setVideoTitle(String text) {
+        if(mTvVideoTitle!=null){
+            mTvVideoTitle.setText(text);
+        }
+    }
+
+    @Override
     public void setTopContainerState(boolean state) {
         if(mTopContainer!=null){
             mTopContainer.setVisibility(state?View.VISIBLE:View.GONE);
+            updateSystemTime();
         }
     }
 

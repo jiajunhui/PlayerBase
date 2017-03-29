@@ -6,6 +6,7 @@ import android.view.View;
 import com.kk.taurus.playerbase.R;
 import com.kk.taurus.playerbase.callback.CoverObserver;
 import com.kk.taurus.playerbase.cover.base.BaseAdCover;
+import com.kk.taurus.playerbase.cover.base.BaseCoverObserver;
 import com.kk.taurus.playerbase.setting.BaseAdVideo;
 import com.kk.taurus.playerbase.setting.VideoData;
 
@@ -17,7 +18,7 @@ import java.util.List;
 
 public class DefaultPlayerAdCover extends BaseAdCover {
 
-    public DefaultPlayerAdCover(Context context, CoverObserver coverObserver) {
+    public DefaultPlayerAdCover(Context context, BaseCoverObserver coverObserver) {
         super(context, coverObserver);
     }
 

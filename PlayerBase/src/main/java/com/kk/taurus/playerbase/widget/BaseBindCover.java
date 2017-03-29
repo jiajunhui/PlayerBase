@@ -1,6 +1,7 @@
 package com.kk.taurus.playerbase.widget;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
@@ -39,7 +40,7 @@ public abstract class BaseBindCover extends BaseContainer implements PlayerObser
         super(context, attrs, defStyleAttr);
     }
 
-    public void buildCoverCollections(BaseCoverCollections coverCollections){
+    public void bindCoverCollections(BaseCoverCollections coverCollections){
         if(this.coverCollections!=null)
             return;
         this.coverCollections = coverCollections;
@@ -73,11 +74,19 @@ public abstract class BaseBindCover extends BaseContainer implements PlayerObser
         }
     }
 
-    @Override
     public void onBindPlayer(IPlayer player, OnCoverEventListener onCoverEventListener) {
         for(BaseCover cover:mCovers){
             if(cover!=null){
                 cover.onBindPlayer(player,onCoverEventListener);
+            }
+        }
+    }
+
+    @Override
+    public void onNotifyConfigurationChanged(Configuration newConfig) {
+        for(BaseCover cover:mCovers){
+            if(cover!=null){
+                cover.onNotifyConfigurationChanged(newConfig);
             }
         }
     }

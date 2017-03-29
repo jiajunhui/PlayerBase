@@ -3,6 +3,7 @@ package com.kk.taurus.playerbase.cover.base;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -30,7 +31,7 @@ public abstract class BaseCover implements ICover ,View.OnClickListener,PlayerOb
 
     protected Context mContext;
     private View mCoverView;
-    private CoverObserver coverObserver;
+    private BaseCoverObserver coverObserver;
     protected int mScreenW,mScreenH;
     protected IPlayer player;
     private OnCoverEventListener onCoverEventListener;
@@ -60,7 +61,7 @@ public abstract class BaseCover implements ICover ,View.OnClickListener,PlayerOb
         }
     }
 
-    public BaseCover(Context context, CoverObserver coverObserver){
+    public BaseCover(Context context, BaseCoverObserver coverObserver){
         this.mContext = context;
         this.coverObserver = coverObserver;
         initBaseInfo(context);
@@ -163,6 +164,9 @@ public abstract class BaseCover implements ICover ,View.OnClickListener,PlayerOb
 
     @Override
     public void onNotifyPlayEvent(int eventCode, Bundle bundle) {
+        if(coverObserver!=null){
+            coverObserver.onNotifyPlayEvent(eventCode, bundle);
+        }
         switch (eventCode){
             case OnPlayerEventListener.EVENT_CODE_RENDER_START:
                 sendPlayMsg();
@@ -195,7 +199,6 @@ public abstract class BaseCover implements ICover ,View.OnClickListener,PlayerOb
         mHandler.removeMessages(MSG.MSG_CODE_DELAY_HIDDEN_CONTROLLER);
     }
 
-    @Override
     public void onBindPlayer(IPlayer player,OnCoverEventListener onCoverEventListener) {
         this.player = player;
         this.onCoverEventListener = onCoverEventListener;
@@ -208,32 +211,53 @@ public abstract class BaseCover implements ICover ,View.OnClickListener,PlayerOb
     }
 
     @Override
-    public void onNotifyErrorEvent(int eventCode, Bundle bundle) {
+    public void onNotifyConfigurationChanged(Configuration newConfig) {
+        if(coverObserver!=null){
+            coverObserver.onNotifyConfigurationChanged(newConfig);
+        }
+    }
 
+    @Override
+    public void onNotifyErrorEvent(int eventCode, Bundle bundle) {
+        if(coverObserver!=null){
+            coverObserver.onNotifyErrorEvent(eventCode, bundle);
+        }
     }
 
     @Override
     public void onNotifyPlayTimerCounter(int curr, int duration, int bufferPercentage) {
-
+        if(coverObserver!=null){
+            coverObserver.onNotifyPlayTimerCounter(curr, duration, bufferPercentage);
+        }
     }
 
     @Override
     public void onNotifyNetWorkConnected(int networkType) {
-
+        if(coverObserver!=null){
+            coverObserver.onNotifyNetWorkConnected(networkType);
+        }
     }
 
     @Override
     public void onNotifyNetWorkError() {
-
+        if(coverObserver!=null){
+            coverObserver.onNotifyNetWorkError();
+        }
     }
 
     @Override
     public void onNotifyAdPreparedStart(List<BaseAdVideo> adVideos) {
         adListFinish = false;
+        if(coverObserver!=null){
+            coverObserver.onNotifyAdPreparedStart(adVideos);
+        }
     }
 
     @Override
     public void onNotifyAdFinish(VideoData data, boolean isAllFinish) {
         adListFinish = isAllFinish;
+        if(coverObserver!=null){
+            coverObserver.onNotifyAdFinish(data, isAllFinish);
+        }
     }
 }

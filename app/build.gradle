@@ -27,7 +27,7 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:25.3.0'
     testCompile 'junit:junit:4.12'
-    compile 'com.kk.taurus.baseframe:baseframe:1.0.5'
+    compile 'com.kk.taurus.baseframe:baseframe:1.0.7'
     compile 'com.jiajunhui.xapp.medialoader:medialoader:1.0.0'
     compile 'com.lovedise:permissiongen:0.0.6'
     compile project(':ijkplayer')

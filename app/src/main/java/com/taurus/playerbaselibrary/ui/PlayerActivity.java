@@ -9,17 +9,10 @@ import com.kk.taurus.baseframe.ui.activity.ToolsActivity;
 import com.kk.taurus.playerbase.DefaultPlayer;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.cover.DefaultCoverCollections;
-import com.kk.taurus.playerbase.cover.DefaultPlayerLoadingCover;
-import com.kk.taurus.playerbase.setting.BaseAdVideo;
-import com.kk.taurus.playerbase.setting.PlayData;
+import com.kk.taurus.playerbase.cover.base.BasePlayerControllerCover;
 import com.kk.taurus.playerbase.setting.VideoData;
 import com.kk.taurus.playerbase.widget.BasePlayer;
-import com.taurus.playerbaselibrary.LoadingObserver;
 import com.taurus.playerbaselibrary.R;
-import com.taurus.playerbaselibrary.TestPlayData;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class PlayerActivity extends ToolsActivity implements OnPlayerEventListener {
 
@@ -52,13 +45,17 @@ public class PlayerActivity extends ToolsActivity implements OnPlayerEventListen
         mPlayer = (DefaultPlayer) findViewById(R.id.player);
 
         mCoverCollections = new DefaultCoverCollections(this);
-        mCoverCollections
-                .setDefaultPlayerControllerCover()
-                .addPlayerLoadingCover(new DefaultPlayerLoadingCover(this,new LoadingObserver(this)))
-                .setDefaultPlayerGestureCover()
-                .setDefaultPlayerErrorCover()
-                .setDefaultPlayerAdCover();
-        mPlayer.buildCoverCollections(mCoverCollections);
+        mCoverCollections.buildDefault();
+        mPlayer.bindCoverCollections(mCoverCollections);
+
+        BasePlayerControllerCover controllerCover = mCoverCollections.getCover(BasePlayerControllerCover.KEY);
+        controllerCover.setVideoTitle(item.getDisplayName());
+        controllerCover.setOnBackClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         mPlayer.setOnPlayerEventListener(this);
         mPlayer.setDataSource(videoData);
@@ -68,6 +65,9 @@ public class PlayerActivity extends ToolsActivity implements OnPlayerEventListen
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+        if(mPlayer!=null){
+            mPlayer.doConfigChange(newConfig);
+        }
     }
 
     @Override
@@ -82,9 +82,7 @@ public class PlayerActivity extends ToolsActivity implements OnPlayerEventListen
     public void onPlayerEvent(int eventCode, Bundle bundle) {
         switch (eventCode){
             case OnPlayerEventListener.EVENT_CODE_RENDER_START:
-                TestPlayData playData = new TestPlayData();
-                playData.setUrl("http://172.16.218.64:8080/lvyexianzong.mkv");
-                mCoverCollections.refreshData(playData);
+
                 break;
         }
     }

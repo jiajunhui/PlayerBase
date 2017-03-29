@@ -20,7 +20,7 @@ public abstract class BasePlayerErrorCover extends BaseCover implements IErrorCo
     protected ImageView mIvErrorIcon;
     protected TextView mTvTipText;
 
-    public BasePlayerErrorCover(Context context, CoverObserver coverObserver) {
+    public BasePlayerErrorCover(Context context, BaseCoverObserver coverObserver) {
         super(context, coverObserver);
     }
 
