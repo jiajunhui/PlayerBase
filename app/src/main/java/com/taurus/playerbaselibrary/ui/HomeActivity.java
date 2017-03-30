@@ -9,7 +9,9 @@ import android.view.View;
 import com.jiajunhui.xapp.medialoader.bean.VideoItem;
 import com.jiajunhui.xapp.medialoader.callback.OnVideoLoaderCallBack;
 import com.jiajunhui.xapp.medialoader.loader.MediaLoader;
+import com.kk.taurus.baseframe.base.top_bar.BaseTopBarNavigationMenu;
 import com.kk.taurus.baseframe.bean.PageState;
+import com.kk.taurus.baseframe.bean.TopBarMenu;
 import com.kk.taurus.baseframe.ui.activity.TopBarActivity;
 import com.taurus.playerbaselibrary.bean.VideosInfo;
 import com.taurus.playerbaselibrary.holder.HomeHolder;
@@ -27,6 +29,7 @@ import kr.co.namee.permissiongen.PermissionSuccess;
  */
 
 public class HomeActivity extends TopBarActivity<VideosInfo,HomeHolder> implements HomeHolder.OnHomeHolderListener {
+
     @Override
     public HomeHolder getContentViewHolder(Bundle savedInstanceState) {
         return new HomeHolder(this);
@@ -75,7 +78,15 @@ public class HomeActivity extends TopBarActivity<VideosInfo,HomeHolder> implemen
         getTopBarNavigationIcon().setVisibility(View.GONE);
         setTopBarTitle("KKPlayer");
         setStatusBarColor(Color.parseColor("#f83d46"));
+        setMenuType(BaseTopBarNavigationMenu.MENU_TYPE_TEXT,new TopBarMenu().setMenuText("设置"));
         mContentHolder.setOnHomeHolderListener(this);
+    }
+
+    @Override
+    public void onNavigationMenuClick() {
+        super.onNavigationMenuClick();
+        Intent intent = new Intent(this,SettingActivity.class);
+        startActivity(intent);
     }
 
     @Override

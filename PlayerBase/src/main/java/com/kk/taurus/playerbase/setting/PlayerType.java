@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class PlayerType {
 
-    private Map<Integer,String> playerTypes;
+    private Map<Integer,PlayerTypeEntity> playerTypes;
 
     private int defaultPlayerType;
 
@@ -17,7 +17,7 @@ public class PlayerType {
 
     private PlayerType(){
         playerTypes = new HashMap<>();
-        addPlayerType(0,"com.kk.taurus.playerbase.player.MediaSinglePlayer");
+        addPlayerType(0,new PlayerTypeEntity("原生解码","com.kk.taurus.playerbase.player.MediaSinglePlayer"));
     }
 
     public static PlayerType getInstance(){
@@ -40,13 +40,20 @@ public class PlayerType {
         return defaultPlayerType;
     }
 
-    public PlayerType addPlayerType(int playerType, String playerPath){
-        playerTypes.put(playerType,playerPath);
+    public PlayerType addPlayerType(int playerType, PlayerTypeEntity entity){
+        playerTypes.put(playerType,entity);
         return this;
     }
 
+    public Map<Integer,PlayerTypeEntity> getPlayerTypes(){
+        return playerTypes;
+    }
+
     public String getPlayerPath(int playerType){
-        return playerTypes.get(playerType);
+        PlayerTypeEntity entity = playerTypes.get(playerType);
+        if(entity==null)
+            return null;
+        return entity.getPlayerClassPath();
     }
 
 }

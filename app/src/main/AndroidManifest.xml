@@ -29,6 +29,9 @@
             android:name=".ui.HomeActivity"
             android:screenOrientation="portrait"/>
         <activity
+            android:name=".ui.SettingActivity"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".ui.PlayerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="sensor">
