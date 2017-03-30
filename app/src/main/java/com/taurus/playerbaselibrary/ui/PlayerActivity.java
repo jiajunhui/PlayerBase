@@ -13,6 +13,8 @@ import com.kk.taurus.playerbase.cover.base.BasePlayerControllerCover;
 import com.kk.taurus.playerbase.setting.VideoData;
 import com.kk.taurus.playerbase.widget.BasePlayer;
 import com.taurus.playerbaselibrary.R;
+import com.taurus.playerbaselibrary.callback.OnCompleteCallBack;
+import com.taurus.playerbaselibrary.cover.PlayCompleteCover;
 
 public class PlayerActivity extends ToolsActivity implements OnPlayerEventListener {
 
@@ -20,6 +22,7 @@ public class PlayerActivity extends ToolsActivity implements OnPlayerEventListen
     private DefaultCoverCollections mCoverCollections;
     private VideoItem item;
     private VideoData videoData;
+    private PlayCompleteCover completeCover;
 
     @Override
     public void loadState() {
@@ -45,7 +48,7 @@ public class PlayerActivity extends ToolsActivity implements OnPlayerEventListen
         mPlayer = (DefaultPlayer) findViewById(R.id.player);
 
         mCoverCollections = new DefaultCoverCollections(this);
-        mCoverCollections.buildDefault();
+        mCoverCollections.buildDefault().addCover(PlayCompleteCover.KEY,completeCover = new PlayCompleteCover(this,null));
         mPlayer.bindCoverCollections(mCoverCollections);
 
         BasePlayerControllerCover controllerCover = mCoverCollections.getCover(BasePlayerControllerCover.KEY);
@@ -54,6 +57,14 @@ public class PlayerActivity extends ToolsActivity implements OnPlayerEventListen
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        completeCover.setOnCompleteListener(new OnCompleteCallBack(){
+            @Override
+            public void onReplay(PlayCompleteCover completeCover) {
+                super.onReplay(completeCover);
+                mPlayer.rePlay(0);
             }
         });
 
@@ -67,6 +78,22 @@ public class PlayerActivity extends ToolsActivity implements OnPlayerEventListen
         super.onConfigurationChanged(newConfig);
         if(mPlayer!=null){
             mPlayer.doConfigChange(newConfig);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(mPlayer!=null){
+            mPlayer.pause();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(mPlayer!=null){
+            mPlayer.resume();
         }
     }
 

@@ -1,4 +1,4 @@
-package com.taurus.playerbaselibrary.cover_observer;
+package com.taurus.playerbaselibrary.cover;
 
 import android.content.Context;
 import android.view.View;

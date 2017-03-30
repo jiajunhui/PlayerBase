@@ -69,7 +69,12 @@ public abstract class BaseCover implements ICover ,View.OnClickListener,PlayerOb
         if(this.coverObserver!=null){
             this.coverObserver.onCoverViewInit(mCoverView);
         }
+        setDefaultGone();
         findView();
+    }
+
+    protected void setDefaultGone() {
+        setCoverVisibility(View.GONE);
     }
 
     private void handCoverView(Context context){

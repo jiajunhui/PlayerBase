@@ -3,6 +3,7 @@ package com.kk.taurus.playerbase.cover;
 import android.content.Context;
 
 import com.kk.taurus.playerbase.cover.base.BaseAdCover;
+import com.kk.taurus.playerbase.cover.base.BaseCover;
 import com.kk.taurus.playerbase.cover.base.BaseCoverCollections;
 import com.kk.taurus.playerbase.cover.base.BaseGestureOperationCover;
 import com.kk.taurus.playerbase.cover.base.BasePlayerControllerCover;
@@ -23,35 +24,35 @@ public class DefaultCoverCollections extends BaseCoverCollections<CoverData> {
     public DefaultCoverCollections addPlayerControllerCover(BasePlayerControllerCover controllerCover){
         if(controllerCover==null)
             return this;
-        putCover(BasePlayerControllerCover.KEY,controllerCover);
-        return this;
+        return addCover(BasePlayerControllerCover.KEY,controllerCover);
     }
 
     public DefaultCoverCollections addPlayerLoadingCover(BasePlayerLoadingCover loadingCover){
         if(loadingCover==null)
             return this;
-        putCover(BasePlayerLoadingCover.KEY,loadingCover);
-        return this;
+        return addCover(BasePlayerLoadingCover.KEY,loadingCover);
     }
 
     public DefaultCoverCollections addPlayerGestureCover(BaseGestureOperationCover gestureOperationCover){
         if(gestureOperationCover==null)
             return this;
-        putCover(BaseGestureOperationCover.KEY,gestureOperationCover);
-        return this;
+        return addCover(BaseGestureOperationCover.KEY,gestureOperationCover);
     }
 
     public DefaultCoverCollections addPlayerErrorCover(BasePlayerErrorCover errorCover){
         if(errorCover==null)
             return this;
-        putCover(BasePlayerErrorCover.KEY,errorCover);
-        return this;
+        return addCover(BasePlayerErrorCover.KEY,errorCover);
     }
 
     public DefaultCoverCollections addPlayerAdCover(BaseAdCover adCover){
         if(adCover==null)
             return this;
-        putCover(BaseAdCover.KEY,adCover);
+        return addCover(BaseAdCover.KEY,adCover);
+    }
+
+    public DefaultCoverCollections addCover(String key, BaseCover cover){
+        putCover(key,cover);
         return this;
     }
 
