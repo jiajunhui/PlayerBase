@@ -1,7 +1,6 @@
 package com.taurus.playerbaselibrary.holder;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.view.ViewGroup;
@@ -10,10 +9,10 @@ import android.widget.RadioGroup;
 
 import com.kk.taurus.baseframe.base.ContentHolder;
 import com.kk.taurus.baseframe.base.HolderData;
+import com.kk.taurus.baseframe.manager.SharedPrefer;
 import com.kk.taurus.playerbase.setting.PlayerType;
 import com.kk.taurus.playerbase.setting.PlayerTypeEntity;
 import com.taurus.playerbaselibrary.R;
-import com.taurus.playerbaselibrary.utils.Setting;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -55,7 +54,7 @@ public class SettingHolder extends ContentHolder<HolderData> {
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
                 int playerType = id_keys.get(checkedId);
                 PlayerType.getInstance().setDefaultPlayerType(playerType);
-                Setting.getInstance().save(mContext,"player_type",playerType);
+                SharedPrefer.getInstance().saveInt(mContext,"player_type",playerType);
                 PlayerType.getInstance().setDefaultPlayerType(playerType);
             }
         });

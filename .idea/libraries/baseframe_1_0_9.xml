@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="baseframe-1.0.9">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.android/build-cache/6c18e6499e647e54f46025d5cdaa7e7140cd6288/output/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/6c18e6499e647e54f46025d5cdaa7e7140cd6288/output/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.kk.taurus.baseframe/baseframe/1.0.9/398da87284aa77141c7e74686cd385fa6a47e0e7/baseframe-1.0.9-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
