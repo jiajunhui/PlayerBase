@@ -1,7 +1,6 @@
 package com.kk.taurus.playerbase.widget;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
@@ -11,6 +10,7 @@ import android.util.AttributeSet;
 import com.kk.taurus.playerbase.callback.OnErrorListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.setting.DecodeMode;
+import com.kk.taurus.playerbase.setting.PlayerType;
 
 /**
  * Created by Taurus on 2017/3/25.
@@ -36,6 +36,12 @@ public abstract class BaseSettingPlayer extends BaseCoverBindPlayerObserver {
 
     public BaseSettingPlayer(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+    }
+
+    @Override
+    protected void onPlayerContainerHasInit(Context context) {
+        super.onPlayerContainerHasInit(context);
+        this.mPlayerType = PlayerType.getInstance().getDefaultPlayerType();
     }
 
     @Override

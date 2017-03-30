@@ -33,6 +33,11 @@ public abstract class BaseGestureOperationCover extends BaseCover implements IGe
     }
 
     @Override
+    protected void setDefaultGone() {
+        setCoverVisibility(View.VISIBLE);
+    }
+
+    @Override
     protected void findView() {
         mVolumeBox = findViewById(R.id.cover_player_gesture_operation_volume_box);
         mVolumeIcon = findViewById(R.id.cover_player_gesture_operation_volume_icon);

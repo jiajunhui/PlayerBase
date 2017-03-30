@@ -12,7 +12,8 @@ public class MApp extends FrameApplication {
     @Override
     public void onCreateInAppMainProcess() {
         super.onCreateInAppMainProcess();
-        PlayerType.getInstance().addPlayerType(0,"com.kk.taurus.ijkplayer.IJKSinglePlayer");
+        PlayerType.getInstance().addPlayerType(1,"com.kk.taurus.ijkplayer.IJKSinglePlayer");
+        PlayerType.getInstance().setDefaultPlayerType(1);
     }
 
 }

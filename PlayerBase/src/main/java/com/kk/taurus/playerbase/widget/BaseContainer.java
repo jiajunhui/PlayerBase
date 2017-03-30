@@ -122,7 +122,12 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
         mPlayerContainer = new FrameLayout(context);
         mPlayerContainer.setBackgroundColor(Color.TRANSPARENT);
         addView(mPlayerContainer,new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        onPlayerContainerHasInit(context);
         notifyPlayerWidget(context);
+    }
+
+    protected void onPlayerContainerHasInit(Context context) {
+
     }
 
     private void initPlayerWidget(Context context) {

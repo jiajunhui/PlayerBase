@@ -187,10 +187,10 @@ public abstract class BasePlayer extends BaseAdPlayer {
     @Override
     public void destroy() {
         super.destroy();
-        destroyPlayer();
+        destroyInternalPlayer();
     }
 
-    protected void destroyPlayer() {
+    protected void destroyInternalPlayer() {
         if(available()){
             mInternalPlayer.setOnErrorListener(null);
             mInternalPlayer.setOnPlayerEventListener(null);

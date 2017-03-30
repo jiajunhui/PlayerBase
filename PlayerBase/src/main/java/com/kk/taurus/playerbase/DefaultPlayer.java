@@ -39,7 +39,7 @@ public class DefaultPlayer extends BasePlayer {
 
     @Override
     protected View getPlayerWidget(Context context) {
-        destroyPlayer();
+        destroyInternalPlayer();
         Log.d(TAG,"init player : " + PlayerType.getInstance().getPlayerPath(getPlayerType()));
         mInternalPlayer = (BaseSinglePlayer) ConfigLoader.getPlayerInstance(mAppContext,getPlayerType());
         if(mInternalPlayer !=null){

@@ -60,13 +60,15 @@ public class PlayerActivity extends ToolsActivity implements OnPlayerEventListen
             }
         });
 
-        completeCover.setOnCompleteListener(new OnCompleteCallBack(){
-            @Override
-            public void onReplay(PlayCompleteCover completeCover) {
-                super.onReplay(completeCover);
-                mPlayer.rePlay(0);
-            }
-        });
+        if(completeCover!=null){
+            completeCover.setOnCompleteListener(new OnCompleteCallBack(){
+                @Override
+                public void onReplay(PlayCompleteCover completeCover) {
+                    super.onReplay(completeCover);
+                    mPlayer.rePlay(0);
+                }
+            });
+        }
 
         mPlayer.setOnPlayerEventListener(this);
         mPlayer.setDataSource(videoData);
