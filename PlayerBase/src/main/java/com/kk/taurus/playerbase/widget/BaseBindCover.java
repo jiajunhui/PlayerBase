@@ -137,10 +137,19 @@ public abstract class BaseBindCover extends BaseContainer implements PlayerObser
     }
 
     @Override
-    public void onNotifyAdPreparedStart(List<BaseAdVideo> adVideos) {
+    public void onNotifyAdPrepared(List<BaseAdVideo> adVideos) {
         for(BaseCover cover:mCovers){
             if(cover!=null){
-                cover.onNotifyAdPreparedStart(adVideos);
+                cover.onNotifyAdPrepared(adVideos);
+            }
+        }
+    }
+
+    @Override
+    public void onNotifyAdStart(BaseAdVideo adVideo) {
+        for(BaseCover cover:mCovers){
+            if(cover!=null){
+                cover.onNotifyAdStart(adVideo);
             }
         }
     }

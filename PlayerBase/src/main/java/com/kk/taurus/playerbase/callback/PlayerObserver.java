@@ -24,7 +24,8 @@ public interface PlayerObserver {
     void onNotifyPlayTimerCounter(int curr, int duration, int bufferPercentage);
     void onNotifyNetWorkConnected(int networkType);
     void onNotifyNetWorkError();
-    void onNotifyAdPreparedStart(List<BaseAdVideo> adVideos);
+    void onNotifyAdPrepared(List<BaseAdVideo> adVideos);
+    void onNotifyAdStart(BaseAdVideo adVideo);
     void onNotifyAdFinish(VideoData data,boolean isAllFinish);
 
 }

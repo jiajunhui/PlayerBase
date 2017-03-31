@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
+import com.kk.taurus.playerbase.callback.OnAdListener;
 import com.kk.taurus.playerbase.callback.OnErrorListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.setting.BaseAdVideo;
@@ -21,7 +22,7 @@ import java.util.List;
 public abstract class BaseAdPlayer extends BaseSettingPlayer {
 
     private PlayData mPlayData;
-    private boolean adListFinish = true;
+    private OnAdListener mOnAdListener;
     private int mAdIndex;
     private List<BaseAdVideo> adVideos;
 
@@ -50,58 +51,103 @@ public abstract class BaseAdPlayer extends BaseSettingPlayer {
     }
 
     @Override
-    public void playData(@NonNull PlayData data) {
+    public void playData(@NonNull PlayData data, OnAdListener onAdListener) {
         this.mPlayData = data;
+        this.mOnAdListener = onAdListener;
         if(data.isNeedAdPlay()){
-            adListFinish = false;
             this.adVideos = data.getAdVideos();
             mAdIndex = 0;
-            onNotifyAdPreparedStart(adVideos);
-            startPlayAdVideos();
+            //notify ad prepared
+            onNotifyAdPrepared(adVideos);
+            BaseAdVideo firstAd = adVideos.get(mAdIndex);
+            //-----go play first ad-----
+            if(mOnAdListener!=null){
+                mOnAdListener.onAdPlay(this,firstAd);
+            }else{
+                startPlayAdVideo(firstAd);
+            }
         }else{
-            adListFinish = true;
+            //-----call back play all complete-----
             onNotifyAdFinish(null,true);
-            setAndStartVideo(data);
+
+            //-----call back on video start-----
+            if(mOnAdListener!=null){
+                mOnAdListener.onVideoStart(this);
+            }else{
+                setAndStartVideo();
+            }
         }
     }
 
-    private void setAndStartVideo(@NonNull PlayData data) {
-        updatePlayerType(data.getData().getPlayerType());
-        setDataSource(data.getData());
-        start(data.getData().getStartPos());
+    public final void setAndStartVideo() {
+        updatePlayerType(mPlayData.getData().getPlayerType());
+        setDataSource(mPlayData.getData());
+        start(mPlayData.getData().getStartPos());
     }
 
-    private void startPlayAdVideos() {
-        if(mAdIndex>adVideos.size()-1){
-            adListFinish = true;
-            onNotifyAdFinish(adVideos.get(adVideos.size()-1),true);
-            setAndStartVideo(mPlayData);
-            return;
-        }
-        BaseAdVideo adVideo = adVideos.get(mAdIndex);
+    public final void startPlayAdVideo(BaseAdVideo adVideo) {
         updatePlayerType(adVideo.getPlayerType());
         setDataSource(adVideo);
         start(adVideo.getStartPos());
-        mAdIndex++;
+        onNotifyAdStart(adVideo);
     }
 
 
     private void onHandleAdPlay(int eventCode, Bundle bundle) {
         switch (eventCode){
             case OnPlayerEventListener.EVENT_CODE_PLAY_COMPLETE:
-                if(!adListFinish){
-                    onNotifyAdFinish(adVideos.get(mAdIndex-1),false);
-                    startPlayAdVideos();
-                }
+                judgeAdPlay();
                 break;
         }
     }
 
-    private void onHandleErrorEvent(int eventCode, Bundle bundle) {
-        if(adListFinish)
-            return;
-        if(eventCode!=OnErrorListener.ERROR_CODE_NET_ERROR){
-            startPlayAdVideos();
+    private void judgeAdPlay() {
+        if(!isAdListFinish()){
+            BaseAdVideo adVideo = adVideos.get(mAdIndex);
+            mAdIndex++;
+            if(!isAdListFinish()){
+                //-----call back play complete-----
+                onNotifyAdFinish(adVideo,false);
+                if(mOnAdListener!=null){
+                    mOnAdListener.onAdPlayComplete(adVideo,false);
+                }
+                BaseAdVideo playAd = adVideos.get(mAdIndex);
+
+                //-----go play next ad-----
+                if(mOnAdListener!=null){
+                    mOnAdListener.onAdPlay(this,playAd);
+                }else{
+                    startPlayAdVideo(playAd);
+                }
+            }else{
+                //-----call back play all complete-----
+                onNotifyAdFinish(adVideo,true);
+                if(mOnAdListener!=null){
+                    mOnAdListener.onAdPlayComplete(adVideo,true);
+                }
+
+                //-----call back on video start-----
+                if(mOnAdListener!=null){
+                    mOnAdListener.onVideoStart(this);
+                }else{
+                    setAndStartVideo();
+                }
+            }
         }
+    }
+
+    private void onHandleErrorEvent(int eventCode, Bundle bundle) {
+        if(eventCode!=OnErrorListener.ERROR_CODE_NET_ERROR){
+            judgeAdPlay();
+        }
+    }
+
+    @Override
+    public boolean isAdListFinish(){
+        if(adVideos==null)
+            return true;
+        if(adVideos.size()<=0)
+            return true;
+        return mAdIndex > adVideos.size()-1;
     }
 }

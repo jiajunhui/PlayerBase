@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.View;
 
 import com.kk.taurus.playerbase.R;
-import com.kk.taurus.playerbase.callback.CoverObserver;
 import com.kk.taurus.playerbase.callback.OnCoverEventListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.cover.base.BaseCoverObserver;

@@ -192,8 +192,8 @@ public class DefaultPlayerControllerCover extends BasePlayerControllerCover {
     }
 
     @Override
-    public void onNotifyAdPreparedStart(List<BaseAdVideo> adVideos) {
-        super.onNotifyAdPreparedStart(adVideos);
+    public void onNotifyAdPrepared(List<BaseAdVideo> adVideos) {
+        super.onNotifyAdPrepared(adVideos);
         setCoverEnable(false);
     }
 

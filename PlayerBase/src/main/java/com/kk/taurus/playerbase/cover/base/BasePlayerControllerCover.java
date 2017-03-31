@@ -11,7 +11,6 @@ import com.kk.taurus.playerbase.R;
 import com.kk.taurus.playerbase.callback.GestureObserver;
 import com.kk.taurus.playerbase.callback.OnCoverEventListener;
 import com.kk.taurus.playerbase.inter.IPlayerControllerCover;
-import com.kk.taurus.playerbase.callback.CoverObserver;
 import com.kk.taurus.playerbase.utils.TimeUtil;
 import com.kk.taurus.playerbase.view.BatteryView;
 

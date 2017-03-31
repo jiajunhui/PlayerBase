@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.kk.taurus.playerbase.R;
-import com.kk.taurus.playerbase.callback.CoverObserver;
 import com.kk.taurus.playerbase.callback.OnCoverEventListener;
 import com.kk.taurus.playerbase.callback.OnErrorListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;

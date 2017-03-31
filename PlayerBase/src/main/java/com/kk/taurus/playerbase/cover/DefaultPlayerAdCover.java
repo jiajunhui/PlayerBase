@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.View;
 
 import com.kk.taurus.playerbase.R;
-import com.kk.taurus.playerbase.callback.CoverObserver;
 import com.kk.taurus.playerbase.cover.base.BaseAdCover;
 import com.kk.taurus.playerbase.cover.base.BaseCoverObserver;
 import com.kk.taurus.playerbase.setting.BaseAdVideo;
@@ -36,8 +35,8 @@ public class DefaultPlayerAdCover extends BaseAdCover {
     }
 
     @Override
-    public void onNotifyAdPreparedStart(List<BaseAdVideo> adVideos) {
-        super.onNotifyAdPreparedStart(adVideos);
+    public void onNotifyAdPrepared(List<BaseAdVideo> adVideos) {
+        super.onNotifyAdPrepared(adVideos);
         setAdCoverState(true);
     }
 

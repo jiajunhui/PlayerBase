@@ -6,7 +6,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kk.taurus.playerbase.R;
-import com.kk.taurus.playerbase.callback.CoverObserver;
 import com.kk.taurus.playerbase.inter.IAdCover;
 import com.kk.taurus.playerbase.setting.BaseAdVideo;
 import com.kk.taurus.playerbase.setting.VideoData;
@@ -65,8 +64,8 @@ public abstract class BaseAdCover extends BaseCover implements IAdCover{
     }
 
     @Override
-    public void onNotifyAdPreparedStart(List<BaseAdVideo> adVideos) {
-        super.onNotifyAdPreparedStart(adVideos);
+    public void onNotifyAdPrepared(List<BaseAdVideo> adVideos) {
+        super.onNotifyAdPrepared(adVideos);
         adFinish = false;
     }
 

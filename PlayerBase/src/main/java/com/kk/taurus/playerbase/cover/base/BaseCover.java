@@ -251,10 +251,17 @@ public abstract class BaseCover implements ICover ,View.OnClickListener,PlayerOb
     }
 
     @Override
-    public void onNotifyAdPreparedStart(List<BaseAdVideo> adVideos) {
+    public void onNotifyAdPrepared(List<BaseAdVideo> adVideos) {
         adListFinish = false;
         if(coverObserver!=null){
-            coverObserver.onNotifyAdPreparedStart(adVideos);
+            coverObserver.onNotifyAdPrepared(adVideos);
+        }
+    }
+
+    @Override
+    public void onNotifyAdStart(BaseAdVideo adVideo) {
+        if(coverObserver!=null){
+            coverObserver.onNotifyAdStart(adVideo);
         }
     }
 

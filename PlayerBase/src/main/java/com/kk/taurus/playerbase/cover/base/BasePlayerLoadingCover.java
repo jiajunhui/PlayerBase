@@ -6,7 +6,6 @@ import android.widget.TextView;
 
 import com.kk.taurus.playerbase.R;
 import com.kk.taurus.playerbase.inter.ILoadingCover;
-import com.kk.taurus.playerbase.callback.CoverObserver;
 
 /**
  * Created by Taurus on 2017/3/25.

@@ -65,7 +65,12 @@ public abstract class BaseCoverObserver<T> implements CoverObserver<T> ,PlayerOb
     }
 
     @Override
-    public void onNotifyAdPreparedStart(List<BaseAdVideo> adVideos) {
+    public void onNotifyAdPrepared(List<BaseAdVideo> adVideos) {
+
+    }
+
+    @Override
+    public void onNotifyAdStart(BaseAdVideo adVideo) {
 
     }
 

@@ -208,7 +208,7 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
      * @param path the path of the video.
      */
     public void setVideoPath(String path) {
-        Log.d("IJKVideoView","path : " + path);
+        Log.d(TAG,"path : " + path);
         setVideoURI(Uri.parse(path));
     }
 
