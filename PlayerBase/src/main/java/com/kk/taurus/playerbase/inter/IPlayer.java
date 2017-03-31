@@ -12,6 +12,6 @@ public interface IPlayer extends ISinglePlayer{
     void playData(PlayData data, OnAdListener onAdListener);
     boolean isAdListFinish();
     void doConfigChange(Configuration newConfig);
-    void toggleFullScreen();
-    boolean isFullScreen();
+    void setScreenOrientationLandscape(boolean landscape);
+    boolean isLandscape();
 }

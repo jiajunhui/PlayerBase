@@ -1,6 +1,9 @@
 package com.kk.taurus.playerbase.widget;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
@@ -99,6 +102,10 @@ public abstract class BaseSettingPlayer extends BaseCoverBindPlayerObserver {
         this.mDecodeMode = decodeMode;
     }
 
+    public DecodeMode getDecodeMode() {
+        return mDecodeMode;
+    }
+
     @Override
     public int getStatus() {
         return mStatus;
@@ -116,12 +123,13 @@ public abstract class BaseSettingPlayer extends BaseCoverBindPlayerObserver {
     }
 
     @Override
-    public void toggleFullScreen() {
-
+    public void setScreenOrientationLandscape(boolean landscape) {
+        ((Activity)mAppContext).setRequestedOrientation(landscape? ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE:ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
     @Override
-    public boolean isFullScreen() {
-        return false;
+    public boolean isLandscape() {
+        return mAppContext.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
+
 }

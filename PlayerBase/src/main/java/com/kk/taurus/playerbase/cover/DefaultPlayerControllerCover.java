@@ -174,6 +174,9 @@ public class DefaultPlayerControllerCover extends BasePlayerControllerCover {
     public void onNotifyConfigurationChanged(Configuration newConfig) {
         super.onNotifyConfigurationChanged(newConfig);
         isLandScape = newConfig.orientation== Configuration.ORIENTATION_LANDSCAPE;
+        if(!isLandScape){
+            setTopContainerState(false);
+        }
     }
 
     @Override

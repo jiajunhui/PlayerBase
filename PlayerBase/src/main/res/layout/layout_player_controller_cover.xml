@@ -75,8 +75,17 @@
             android:layout_width="wrap_content"
             android:layout_height="16dp"
             android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:scaleType="centerInside"
             android:src="@drawable/selector_play_state"/>
+        <TextView
+            android:id="@id/cover_player_controller_text_view_curr_time"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="12sp"
+            android:textColor="#ffffff"
+            android:gravity="center"
+            android:text="00:00:00"/>
         <SeekBar
             android:id="@id/cover_player_controller_seek_bar"
             android:layout_width="0dp"
@@ -89,14 +98,14 @@
             android:progressDrawable="@drawable/style_video_player_video_seekbar"
             android:thumb="@drawable/selector_seek_bar_thumb"/>
         <TextView
-            android:id="@id/cover_player_controller_text_view_merge_time"
+            android:id="@id/cover_player_controller_text_view_total_time"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:paddingRight="10dp"
             android:textSize="12sp"
             android:textColor="#ffffff"
             android:gravity="center"
-            android:text="00:00:00/00:00:00"/>
+            android:text="00:00:00"/>
     </LinearLayout>
 
 </RelativeLayout>
