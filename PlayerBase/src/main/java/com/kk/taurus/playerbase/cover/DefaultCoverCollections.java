@@ -51,6 +51,12 @@ public class DefaultCoverCollections extends BaseCoverCollections<CoverData> {
         return addCover(BaseAdCover.KEY,adCover);
     }
 
+    public DefaultCoverCollections addCornerCutCover(CornerCutCover cornerCutCover){
+        if(cornerCutCover==null)
+            return this;
+        return addCover(CornerCutCover.KEY,cornerCutCover);
+    }
+
     public DefaultCoverCollections addCover(String key, BaseCover cover){
         putCover(key,cover);
         return this;

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#000000"
     tools:context="com.taurus.playerbaselibrary.ui.PlayerActivity">
 
     <com.kk.taurus.playerbase.DefaultPlayer

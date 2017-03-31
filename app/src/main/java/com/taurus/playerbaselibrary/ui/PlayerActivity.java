@@ -1,6 +1,7 @@
 package com.taurus.playerbaselibrary.ui;
 
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -10,6 +11,7 @@ import com.kk.taurus.baseframe.ui.activity.ToolsActivity;
 import com.kk.taurus.playerbase.DefaultPlayer;
 import com.kk.taurus.playerbase.callback.OnAdCallBack;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
+import com.kk.taurus.playerbase.cover.CornerCutCover;
 import com.kk.taurus.playerbase.cover.DefaultCoverCollections;
 import com.kk.taurus.playerbase.cover.base.BasePlayerControllerCover;
 import com.kk.taurus.playerbase.setting.BaseAdVideo;
@@ -57,6 +59,12 @@ public class PlayerActivity extends ToolsActivity implements OnPlayerEventListen
 
         mCoverCollections = new DefaultCoverCollections(this);
         mCoverCollections.buildDefault().addCover(PlayCompleteCover.KEY,completeCover = new PlayCompleteCover(this,null));
+
+//        CornerCutCover cornerCutCover = new CornerCutCover(this,null);
+//        cornerCutCover.setCornerRadius(80);
+//        cornerCutCover.setCornerBgColor(Color.WHITE);
+//        mCoverCollections.addCornerCutCover(cornerCutCover);
+
         mPlayer.bindCoverCollections(mCoverCollections);
 
         BasePlayerControllerCover controllerCover = mCoverCollections.getCover(BasePlayerControllerCover.KEY);

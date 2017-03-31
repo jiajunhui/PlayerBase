@@ -157,12 +157,20 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
 
     protected void addCover(BaseCover cover, ViewGroup.LayoutParams layoutParams){
         if(mCoverContainer!=null && cover!=null){
+            if(isContainCoverView(cover))
+                return;
             if(layoutParams==null){
                 layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             }
             mCoverContainer.addView(cover.getView(),layoutParams);
             mCovers.add(cover);
         }
+    }
+
+    private boolean isContainCoverView(BaseCover cover){
+        if(cover==null)
+            return false;
+        return mCoverContainer.indexOfChild(cover.getView())!=-1;
     }
 
     protected void addExtView(View view, ViewGroup.LayoutParams layoutParams){
