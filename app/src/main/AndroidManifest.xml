@@ -16,7 +16,7 @@
         android:name=".MApp"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.SplashActivity"
+            android:name=".ui.TestKeyActionPlayerActivity"
             android:screenOrientation="portrait"
             >
             <intent-filter>

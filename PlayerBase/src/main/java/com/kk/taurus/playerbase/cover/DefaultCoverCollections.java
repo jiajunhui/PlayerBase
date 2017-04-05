@@ -5,6 +5,7 @@ import android.content.Context;
 import com.kk.taurus.playerbase.cover.base.BaseAdCover;
 import com.kk.taurus.playerbase.cover.base.BaseCover;
 import com.kk.taurus.playerbase.cover.base.BaseCoverCollections;
+import com.kk.taurus.playerbase.cover.base.BaseFocusCover;
 import com.kk.taurus.playerbase.cover.base.BaseGestureOperationCover;
 import com.kk.taurus.playerbase.cover.base.BasePlayerControllerCover;
 import com.kk.taurus.playerbase.cover.base.BasePlayerErrorCover;
@@ -55,6 +56,12 @@ public class DefaultCoverCollections extends BaseCoverCollections<CoverData> {
         if(cornerCutCover==null)
             return this;
         return addCover(CornerCutCover.KEY,cornerCutCover);
+    }
+
+    public DefaultCoverCollections addFocusCover(BaseFocusCover focusCover){
+        if(focusCover==null)
+            return this;
+        return addCover(BaseFocusCover.KEY,focusCover);
     }
 
     public DefaultCoverCollections addCover(String key, BaseCover cover){

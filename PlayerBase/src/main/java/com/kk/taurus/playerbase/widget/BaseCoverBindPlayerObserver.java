@@ -44,12 +44,6 @@ public abstract class BaseCoverBindPlayerObserver extends BaseBindCover implemen
         registerNetChangeReceiver();
     }
 
-    @Override
-    protected void onCoversHasInit(Context context) {
-        super.onCoversHasInit(context);
-        onBindPlayer(this,this);
-    }
-
     private void registerNetChangeReceiver() {
         if(mAppContext!=null){
             mNetChangeReceiver = new NetChangeReceiver();

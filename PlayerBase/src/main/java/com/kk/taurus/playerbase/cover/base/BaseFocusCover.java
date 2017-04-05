@@ -1,34 +1,42 @@
 package com.kk.taurus.playerbase.cover.base;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.FrameLayout;
 
 import com.kk.taurus.playerbase.inter.IFocusCover;
 
 /**
  * Created by Taurus on 2017/3/31.
+ * 获取焦点后，监听key事件。
  */
 
-public abstract class BaseFocusCover extends BaseCover implements IFocusCover,View.OnKeyListener {
+public abstract class BaseFocusCover extends BaseCover implements IFocusCover,View.OnKeyListener, View.OnFocusChangeListener {
 
-    protected FrameLayout mFocusView;
+    public static final String KEY = "focus_cover";
+    private final String TAG = "focus_cover";
+    protected View mFocusView;
 
     public BaseFocusCover(Context context, BaseCoverObserver coverObserver) {
         super(context, coverObserver);
     }
 
     @Override
-    protected void findView() {
+    public void onFocusChange(View v, boolean hasFocus) {
+        Log.d(TAG,"onFocusChange : " + hasFocus);
+    }
+
+    protected void bindFocusListener(View focusView){
+        mFocusView = focusView;
+        mFocusView.setFocusable(true);
         mFocusView.setOnKeyListener(this);
+        mFocusView.setOnFocusChangeListener(this);
     }
 
     @Override
-    public View initCoverLayout(Context context) {
-        mFocusView = new FrameLayout(context);
-        mFocusView.setFocusable(true);
-        return mFocusView;
+    public void requestFocus() {
+        mFocusView.requestFocus();
     }
 
     @Override
@@ -46,25 +54,32 @@ public abstract class BaseFocusCover extends BaseCover implements IFocusCover,Vi
     private boolean handleKeyActionDown(View v, int keyCode, KeyEvent event) {
         switch (keyCode){
             case KeyEvent.KEYCODE_DPAD_UP:
+                Log.d(TAG,"onKeyActionDown : dpad up");
                 return onKeyActionDownDpadUp(v, keyCode, event);
 
             case KeyEvent.KEYCODE_DPAD_DOWN:
+                Log.d(TAG,"onKeyActionDown : dpad down");
                 return onKeyActionDownDpadDown(v, keyCode, event);
 
             case KeyEvent.KEYCODE_DPAD_LEFT:
+                Log.d(TAG,"onKeyActionDown : dpad left");
                 return onKeyActionDownDpadLeft(v, keyCode, event);
 
             case KeyEvent.KEYCODE_DPAD_RIGHT:
+                Log.d(TAG,"onKeyActionDown : dpad right");
                 return onKeyActionDownDpadRight(v, keyCode, event);
 
             case KeyEvent.KEYCODE_DPAD_CENTER:
             case KeyEvent.KEYCODE_ENTER:
+                Log.d(TAG,"onKeyActionDown : dpad enter");
                 return onKeyActionDownDpadEnter(v, keyCode, event);
 
             case KeyEvent.KEYCODE_BACK:
+                Log.d(TAG,"onKeyActionDown : dpad back");
                 return onKeyActionDownDpadBack(v, keyCode, event);
 
             case KeyEvent.KEYCODE_MENU:
+                Log.d(TAG,"onKeyActionDown : dpad menu");
                 return onKeyActionDownDpadMenu(v, keyCode, event);
         }
         return false;
@@ -73,33 +88,35 @@ public abstract class BaseFocusCover extends BaseCover implements IFocusCover,Vi
     private boolean handleKeyActionUp(View v, int keyCode, KeyEvent event) {
         switch (keyCode){
             case KeyEvent.KEYCODE_DPAD_UP:
+                Log.d(TAG,"onKeyActionUp : dpad up");
                 return onKeyActionUpDpadUp(v, keyCode, event);
 
             case KeyEvent.KEYCODE_DPAD_DOWN:
+                Log.d(TAG,"onKeyActionUp : dpad down");
                 return onKeyActionUpDpadDown(v, keyCode, event);
 
             case KeyEvent.KEYCODE_DPAD_LEFT:
+                Log.d(TAG,"onKeyActionUp : dpad left");
                 return onKeyActionUpDpadLeft(v, keyCode, event);
 
             case KeyEvent.KEYCODE_DPAD_RIGHT:
+                Log.d(TAG,"onKeyActionUp : dpad right");
                 return onKeyActionUpDpadRight(v, keyCode, event);
 
             case KeyEvent.KEYCODE_DPAD_CENTER:
             case KeyEvent.KEYCODE_ENTER:
+                Log.d(TAG,"onKeyActionUp : dpad enter");
                 return onKeyActionUpDpadEnter(v, keyCode, event);
 
             case KeyEvent.KEYCODE_BACK:
+                Log.d(TAG,"onKeyActionUp : dpad back");
                 return onKeyActionUpDpadBack(v, keyCode, event);
 
             case KeyEvent.KEYCODE_MENU:
+                Log.d(TAG,"onKeyActionUp : dpad menu");
                 return onKeyActionUpDpadMenu(v, keyCode, event);
         }
         return false;
-    }
-
-    @Override
-    public void requestFocus() {
-        mFocusView.requestFocus();
     }
 
     @Override
@@ -175,4 +192,5 @@ public abstract class BaseFocusCover extends BaseCover implements IFocusCover,Vi
     protected boolean defaultReturn(){
         return true;
     }
+
 }

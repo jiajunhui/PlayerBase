@@ -11,10 +11,11 @@ import android.view.MotionEvent;
 
 import com.kk.taurus.playerbase.callback.GestureObserver;
 import com.kk.taurus.playerbase.callback.OnCoverEventListener;
+import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.cover.base.BaseCover;
 import com.kk.taurus.playerbase.cover.base.BaseCoverCollections;
 import com.kk.taurus.playerbase.callback.PlayerObserver;
-import com.kk.taurus.playerbase.inter.IPlayer;
+import com.kk.taurus.playerbase.inter.IDpadFocusCover;
 import com.kk.taurus.playerbase.setting.BaseAdVideo;
 import com.kk.taurus.playerbase.setting.VideoData;
 
@@ -27,6 +28,7 @@ import java.util.List;
 public abstract class BaseBindCover extends BaseContainer implements PlayerObserver,GestureObserver,OnCoverEventListener{
 
     private BaseCoverCollections coverCollections;
+    private OnCoverEventListener mOnCoverEventListener;
 
     public BaseBindCover(@NonNull Context context){
         super(context);
@@ -65,8 +67,15 @@ public abstract class BaseBindCover extends BaseContainer implements PlayerObser
 
     }
 
+    public void setOnCoverEventListener(OnCoverEventListener onCoverEventListener){
+        this.mOnCoverEventListener = onCoverEventListener;
+    }
+
     @Override
     public void onCoverEvent(int eventCode, Bundle bundle) {
+        if(mOnCoverEventListener!=null){
+            mOnCoverEventListener.onCoverEvent(eventCode, bundle);
+        }
         for(BaseCover cover:mCovers){
             if(cover!=null){
                 cover.onCoverEvent(eventCode, bundle);
@@ -74,7 +83,15 @@ public abstract class BaseBindCover extends BaseContainer implements PlayerObser
         }
     }
 
-    public void onBindPlayer(IPlayer player, OnCoverEventListener onCoverEventListener) {
+    public void dPadRequestFocus(){
+        for(BaseCover cover:mCovers){
+            if(cover!=null && cover instanceof IDpadFocusCover){
+                cover.onNotifyPlayEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_DPAD_REQUEST_FOCUS, null);
+            }
+        }
+    }
+
+    public void onBindPlayer(BasePlayer player, OnCoverEventListener onCoverEventListener) {
         for(BaseCover cover:mCovers){
             if(cover!=null){
                 cover.onBindPlayer(player,onCoverEventListener);

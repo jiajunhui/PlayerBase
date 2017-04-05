@@ -15,11 +15,11 @@ import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.inter.ICover;
 import com.kk.taurus.playerbase.callback.CoverObserver;
 import com.kk.taurus.playerbase.callback.PlayerObserver;
-import com.kk.taurus.playerbase.inter.IPlayer;
 import com.kk.taurus.playerbase.inter.MSG;
 import com.kk.taurus.playerbase.setting.BaseAdVideo;
 import com.kk.taurus.playerbase.setting.VideoData;
 import com.kk.taurus.playerbase.utils.CommonUtils;
+import com.kk.taurus.playerbase.widget.BasePlayer;
 
 import java.util.List;
 
@@ -33,7 +33,7 @@ public abstract class BaseCover implements ICover ,View.OnClickListener,PlayerOb
     private View mCoverView;
     private BaseCoverObserver coverObserver;
     protected int mScreenW,mScreenH;
-    protected IPlayer player;
+    protected BasePlayer player;
     private OnCoverEventListener onCoverEventListener;
     protected boolean coverEnable = true;
     protected boolean adListFinish = true;
@@ -204,7 +204,7 @@ public abstract class BaseCover implements ICover ,View.OnClickListener,PlayerOb
         mHandler.removeMessages(MSG.MSG_CODE_DELAY_HIDDEN_CONTROLLER);
     }
 
-    public void onBindPlayer(IPlayer player,OnCoverEventListener onCoverEventListener) {
+    public void onBindPlayer(BasePlayer player, OnCoverEventListener onCoverEventListener) {
         this.player = player;
         this.onCoverEventListener = onCoverEventListener;
     }

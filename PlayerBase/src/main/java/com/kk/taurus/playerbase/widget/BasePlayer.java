@@ -37,6 +37,12 @@ public abstract class BasePlayer extends BaseAdPlayer {
         super(context, attrs, defStyleAttr);
     }
 
+    @Override
+    protected void onCoversHasInit(Context context) {
+        super.onCoversHasInit(context);
+        onBindPlayer(this,this);
+    }
+
     private boolean available(){
         return mInternalPlayer !=null;
     }
