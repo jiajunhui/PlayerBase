@@ -8,6 +8,7 @@ import com.kk.taurus.playerbase.DefaultPlayer;
 import com.kk.taurus.playerbase.callback.OnCoverEventListener;
 import com.kk.taurus.playerbase.cover.DefaultCoverCollections;
 import com.kk.taurus.playerbase.cover.DefaultDpadFocusCover;
+import com.kk.taurus.playerbase.inter.IDpadFocusCover;
 import com.kk.taurus.playerbase.setting.VideoData;
 import com.taurus.playerbaselibrary.R;
 import com.taurus.playerbaselibrary.cover.TestKeyActionDownMenuCover;
@@ -46,7 +47,9 @@ public class TestKeyActionPlayerActivity extends ToolsActivity implements OnCove
     @Override
     public void onCoverEvent(int eventCode, Bundle bundle) {
         switch (eventCode){
-
+            case IDpadFocusCover.EVENT_CODE_ACTION_DOWN_BACK:
+                finish();
+                break;
         }
     }
 

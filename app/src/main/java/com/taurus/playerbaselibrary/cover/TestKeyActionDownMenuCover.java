@@ -41,7 +41,7 @@ public class TestKeyActionDownMenuCover extends BaseFocusCover {
     @Override
     public boolean onKeyActionDownDpadBack(View v, int keyCode, KeyEvent event) {
         setCoverState(false);
-        player.dPadRequestFocus();
+        releaseFocusToDpadCover();
         return super.onKeyActionDownDpadBack(v, keyCode, event);
     }
 

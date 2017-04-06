@@ -23,6 +23,9 @@ import java.util.List;
 
 /**
  * Created by Taurus on 2017/3/24.
+ *
+ * 绑定cover集合，负责分发和中转player或者cover消息。
+ *
  */
 
 public abstract class BaseBindCover extends BaseContainer implements PlayerObserver,GestureObserver,OnCoverEventListener{

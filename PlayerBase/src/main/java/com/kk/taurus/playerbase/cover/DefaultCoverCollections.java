@@ -14,6 +14,9 @@ import com.kk.taurus.playerbase.setting.CoverData;
 
 /**
  * Created by Taurus on 2017/3/24.
+ *
+ * cover覆盖层集合，添加cover层时注意add的顺序。
+ *
  */
 
 public class DefaultCoverCollections extends BaseCoverCollections<CoverData> {

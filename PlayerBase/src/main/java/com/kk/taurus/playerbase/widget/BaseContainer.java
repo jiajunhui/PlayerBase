@@ -24,6 +24,9 @@ import java.util.List;
 
 /**
  * Created by Taurus on 2017/3/24.
+ *
+ * 播放组件容器。初始化一些设备基本信息。
+ *
  */
 
 public abstract class BaseContainer extends FrameLayout implements OnPlayerGestureListener {

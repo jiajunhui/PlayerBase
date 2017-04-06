@@ -25,6 +25,9 @@ import java.util.List;
 
 /**
  * Created by Taurus on 2017/3/24.
+ *
+ * 覆盖层基类，默认显示状态为GONE。
+ *
  */
 
 public abstract class BaseCover implements ICover ,View.OnClickListener,PlayerObserver,OnCoverEventListener{
@@ -207,6 +210,10 @@ public abstract class BaseCover implements ICover ,View.OnClickListener,PlayerOb
     public void onBindPlayer(BasePlayer player, OnCoverEventListener onCoverEventListener) {
         this.player = player;
         this.onCoverEventListener = onCoverEventListener;
+    }
+
+    protected void releaseFocusToDpadCover(){
+        player.dPadRequestFocus();
     }
 
     protected void notifyCoverEvent(int eventCode, Bundle bundle){
