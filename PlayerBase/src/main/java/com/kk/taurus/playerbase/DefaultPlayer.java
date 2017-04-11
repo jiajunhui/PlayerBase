@@ -18,7 +18,9 @@ import com.kk.taurus.playerbase.widget.BasePlayer;
 import com.kk.taurus.playerbase.widget.BaseSinglePlayer;
 
 /**
+ *
  * Created by Taurus on 2017/3/28.
+ *
  */
 
 public class DefaultPlayer extends BasePlayer {

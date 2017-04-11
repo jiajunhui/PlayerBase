@@ -45,31 +45,37 @@ public class DefaultPlayerControllerCover extends BasePlayerControllerCover {
     }
 
     @Override
-    protected void findView() {
-        super.findView();
-        mIvPlayState.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(player==null)
-                    return;
-                if(player.getStatus()==ISinglePlayer.STATUS_PLAYING){
-                    player.pause();
-                    setPlayState(false);
-                }else{
-                    player.resume();
-                    setPlayState(true);
+    protected void afterFindView() {
+        super.afterFindView();
+        if(mIvPlayState!=null){
+            mIvPlayState.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(player==null)
+                        return;
+                    if(player.getStatus()==ISinglePlayer.STATUS_PLAYING){
+                        player.pause();
+                        setPlayState(false);
+                    }else{
+                        player.resume();
+                        setPlayState(true);
+                    }
                 }
-            }
-        });
-        mIvBackIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(mOnBackClickListener!=null){
-                    mOnBackClickListener.onClick(v);
+            });
+        }
+        if(mIvBackIcon!=null){
+            mIvBackIcon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(mOnBackClickListener!=null){
+                        mOnBackClickListener.onClick(v);
+                    }
                 }
-            }
-        });
-        initBatteryReceiver(mContext);
+            });
+        }
+        if(mBatteryView!=null){
+            initBatteryReceiver(mContext);
+        }
     }
 
     @Override

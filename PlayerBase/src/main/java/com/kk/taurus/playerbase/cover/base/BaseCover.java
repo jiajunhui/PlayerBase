@@ -74,6 +74,11 @@ public abstract class BaseCover implements ICover ,View.OnClickListener,PlayerOb
         }
         setDefaultGone();
         findView();
+        afterFindView();
+    }
+
+    protected void afterFindView() {
+
     }
 
     protected void setDefaultGone() {
