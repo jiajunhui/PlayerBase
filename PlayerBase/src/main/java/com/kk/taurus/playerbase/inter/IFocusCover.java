@@ -9,6 +9,7 @@ import android.view.View;
 
 public interface IFocusCover {
 
+    void setFocusable(boolean focusable);
     void requestFocus();
 
     boolean onKeyActionDownDpadLeft(View v, int keyCode, KeyEvent event);

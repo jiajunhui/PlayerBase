@@ -10,9 +10,11 @@ import com.jiajunhui.xapp.medialoader.bean.VideoItem;
 import com.kk.taurus.baseframe.ui.activity.ToolsActivity;
 import com.kk.taurus.playerbase.DefaultPlayer;
 import com.kk.taurus.playerbase.callback.OnAdCallBack;
+import com.kk.taurus.playerbase.callback.OnAdCoverClickListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.cover.CornerCutCover;
 import com.kk.taurus.playerbase.cover.DefaultCoverCollections;
+import com.kk.taurus.playerbase.cover.base.BaseAdCover;
 import com.kk.taurus.playerbase.cover.base.BasePlayerControllerCover;
 import com.kk.taurus.playerbase.setting.BaseAdVideo;
 import com.kk.taurus.playerbase.setting.PlayData;
@@ -102,6 +104,15 @@ public class PlayerActivity extends ToolsActivity implements OnPlayerEventListen
         adVideos.add(new BaseAdVideo("http://172.16.218.64:8080/batamu_trans19.mp4"));
         adVideos.add(new BaseAdVideo("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"));
         playData.setAdVideos(adVideos);
+
+        final BaseAdCover adCover = mCoverCollections.getCover(BaseAdCover.KEY);
+        adCover.setOnAdCoverClickListener(new OnAdCoverClickListener() {
+            @Override
+            public void onAdCoverClick(BaseAdVideo adVideo) {
+                showToast("click : " + adVideo.getData());
+            }
+        });
+
         mPlayer.playData(playData,new OnAdCallBack(){
             @Override
             public void onAdPlay(BaseAdPlayer adPlayer, BaseAdVideo adVideo) {
@@ -115,8 +126,8 @@ public class PlayerActivity extends ToolsActivity implements OnPlayerEventListen
             }
 
             @Override
-            public void onVideoStart(BaseAdPlayer adPlayer) {
-                super.onVideoStart(adPlayer);
+            public void onVideoStart(BaseAdPlayer adPlayer,VideoData data) {
+                super.onVideoStart(adPlayer,data);
             }
         });
     }

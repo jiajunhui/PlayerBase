@@ -12,6 +12,7 @@ import com.kk.taurus.playerbase.callback.OnErrorListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.setting.BaseAdVideo;
 import com.kk.taurus.playerbase.setting.PlayData;
+import com.kk.taurus.playerbase.setting.VideoData;
 
 import java.util.List;
 
@@ -72,17 +73,17 @@ public abstract class BaseAdPlayer extends BaseSettingPlayer {
 
             //-----call back on video start-----
             if(mOnAdListener!=null){
-                mOnAdListener.onVideoStart(this);
+                mOnAdListener.onVideoStart(this,mPlayData.getData());
             }else{
-                setAndStartVideo();
+                setAndStartVideo(mPlayData.getData());
             }
         }
     }
 
-    public final void setAndStartVideo() {
-        updatePlayerType(mPlayData.getData().getPlayerType());
-        setDataSource(mPlayData.getData());
-        start(mPlayData.getData().getStartPos());
+    public final void setAndStartVideo(VideoData data) {
+        updatePlayerType(data.getPlayerType());
+        setDataSource(data);
+        start(data.getStartPos());
     }
 
     public final void startPlayAdVideo(BaseAdVideo adVideo) {
@@ -128,9 +129,9 @@ public abstract class BaseAdPlayer extends BaseSettingPlayer {
 
                 //-----call back on video start-----
                 if(mOnAdListener!=null){
-                    mOnAdListener.onVideoStart(this);
+                    mOnAdListener.onVideoStart(this,mPlayData.getData());
                 }else{
-                    setAndStartVideo();
+                    setAndStartVideo(mPlayData.getData());
                 }
             }
         }

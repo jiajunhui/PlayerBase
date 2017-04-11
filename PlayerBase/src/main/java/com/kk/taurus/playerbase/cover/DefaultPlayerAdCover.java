@@ -1,6 +1,7 @@
 package com.kk.taurus.playerbase.cover;
 
 import android.content.Context;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.kk.taurus.playerbase.R;
@@ -24,6 +25,14 @@ public class DefaultPlayerAdCover extends BaseAdCover {
     @Override
     public View initCoverLayout(Context context) {
         return View.inflate(context, R.layout.layout_ad_cover,null);
+    }
+
+    @Override
+    public void onGestureSingleTab(MotionEvent event) {
+        super.onGestureSingleTab(event);
+        if(onAdCoverClickListener!=null){
+            onAdCoverClickListener.onAdCoverClick(adVideo);
+        }
     }
 
     @Override

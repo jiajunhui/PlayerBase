@@ -72,10 +72,14 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
         this.mAppContext = context;
         setBackgroundColor(Color.BLACK);
         initBaseInfo(context);
+        //初始化播放器渲染视图容器
         initPlayerContainer(context);
-        initGesture(context);
+        //初始化cover容器
         initCoverContainer(context);
+        //初始化扩展容器
         initExtContainer(context);
+        //初始化手势处理层（注：为避免cover层的点击事件影响，故将手势处理layout）
+        initGesture(context);
         onContainerHasInit(context);
     }
 

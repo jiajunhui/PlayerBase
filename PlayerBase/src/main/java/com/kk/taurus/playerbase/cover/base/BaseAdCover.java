@@ -1,11 +1,14 @@
 package com.kk.taurus.playerbase.cover.base;
 
 import android.content.Context;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.kk.taurus.playerbase.R;
+import com.kk.taurus.playerbase.callback.GestureObserver;
+import com.kk.taurus.playerbase.callback.OnAdCoverClickListener;
 import com.kk.taurus.playerbase.inter.IAdCover;
 import com.kk.taurus.playerbase.setting.BaseAdVideo;
 import com.kk.taurus.playerbase.setting.VideoData;
@@ -16,7 +19,7 @@ import java.util.List;
  * Created by Taurus on 2017/3/28.
  */
 
-public abstract class BaseAdCover extends BaseCover implements IAdCover{
+public abstract class BaseAdCover extends BaseCover implements IAdCover,GestureObserver{
 
     public static final String KEY = "ad_cover";
     protected View mAdBox;
@@ -24,6 +27,10 @@ public abstract class BaseAdCover extends BaseCover implements IAdCover{
     protected TextView mTvTimer;
 
     protected boolean adFinish;
+
+    protected BaseAdVideo adVideo;
+
+    protected OnAdCoverClickListener onAdCoverClickListener;
 
     public BaseAdCover(Context context, BaseCoverObserver coverObserver) {
         super(context, coverObserver);
@@ -35,6 +42,11 @@ public abstract class BaseAdCover extends BaseCover implements IAdCover{
         mAdBox = findViewById(R.id.cover_player_ad_box);
         mIvPic = findViewById(R.id.cover_player_ad_image_view_pic);
         mTvTimer = findViewById(R.id.cover_player_ad_text_view_timer);
+    }
+
+    @Override
+    public void setOnAdCoverClickListener(OnAdCoverClickListener onAdCoverClickListener) {
+        this.onAdCoverClickListener = onAdCoverClickListener;
     }
 
     @Override
@@ -70,10 +82,56 @@ public abstract class BaseAdCover extends BaseCover implements IAdCover{
     }
 
     @Override
+    public void onNotifyAdStart(BaseAdVideo adVideo) {
+        super.onNotifyAdStart(adVideo);
+        this.adVideo = adVideo;
+    }
+
+    @Override
     public void onNotifyAdFinish(VideoData data, boolean isAllFinish) {
         super.onNotifyAdFinish(data, isAllFinish);
         if(isAllFinish){
             adFinish = true;
         }
+    }
+
+    @Override
+    public void onGestureSingleTab(MotionEvent event) {
+
+    }
+
+    @Override
+    public void onGestureDoubleTab(MotionEvent event) {
+
+    }
+
+    @Override
+    public void onGestureScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+
+    }
+
+    @Override
+    public void onGestureHorizontalSlide(float percent) {
+
+    }
+
+    @Override
+    public void onGestureRightVerticalSlide(float percent) {
+
+    }
+
+    @Override
+    public void onGestureLeftVerticalSlide(float percent) {
+
+    }
+
+    @Override
+    public void onGestureEnableChange(boolean enable) {
+
+    }
+
+    @Override
+    public void onGestureEnd() {
+
     }
 }

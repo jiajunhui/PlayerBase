@@ -29,9 +29,14 @@ public abstract class BaseFocusCover extends BaseCover implements IFocusCover,Vi
 
     protected void bindFocusListener(View focusView){
         mFocusView = focusView;
-        mFocusView.setFocusable(true);
+        setFocusable(true);
         mFocusView.setOnKeyListener(this);
         mFocusView.setOnFocusChangeListener(this);
+    }
+
+    @Override
+    public void setFocusable(boolean focusable) {
+        mFocusView.setFocusable(focusable);
     }
 
     @Override

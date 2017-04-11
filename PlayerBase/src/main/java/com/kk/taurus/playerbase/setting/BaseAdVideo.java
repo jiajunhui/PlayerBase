@@ -6,6 +6,8 @@ package com.kk.taurus.playerbase.setting;
  */
 public class BaseAdVideo extends VideoData {
 
+    private String redirectUrl;
+
     public BaseAdVideo(String data) {
         super(data);
     }
@@ -16,5 +18,13 @@ public class BaseAdVideo extends VideoData {
 
     public BaseAdVideo(String data, int playerType, Rate rate) {
         super(data, playerType, rate);
+    }
+
+    public String getRedirectUrl() {
+        return redirectUrl;
+    }
+
+    public void setRedirectUrl(String redirectUrl) {
+        this.redirectUrl = redirectUrl;
     }
 }

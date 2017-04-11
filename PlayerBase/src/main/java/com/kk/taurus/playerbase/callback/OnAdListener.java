@@ -1,6 +1,7 @@
 package com.kk.taurus.playerbase.callback;
 
 import com.kk.taurus.playerbase.setting.BaseAdVideo;
+import com.kk.taurus.playerbase.setting.VideoData;
 import com.kk.taurus.playerbase.widget.BaseAdPlayer;
 
 /**
@@ -10,5 +11,5 @@ import com.kk.taurus.playerbase.widget.BaseAdPlayer;
 public interface OnAdListener {
     void onAdPlay(BaseAdPlayer adPlayer, BaseAdVideo adVideo);
     void onAdPlayComplete(BaseAdVideo adVideo,boolean isAllComplete);
-    void onVideoStart(BaseAdPlayer adPlayer);
+    void onVideoStart(BaseAdPlayer adPlayer, VideoData data);
 }
