@@ -10,7 +10,6 @@ import com.kk.taurus.playerbase.cover.base.BaseGestureOperationCover;
 import com.kk.taurus.playerbase.cover.base.BasePlayerControllerCover;
 import com.kk.taurus.playerbase.cover.base.BasePlayerErrorCover;
 import com.kk.taurus.playerbase.cover.base.BasePlayerLoadingCover;
-import com.kk.taurus.playerbase.setting.CoverData;
 
 /**
  * Created by Taurus on 2017/3/24.
@@ -19,7 +18,7 @@ import com.kk.taurus.playerbase.setting.CoverData;
  *
  */
 
-public class DefaultCoverCollections extends BaseCoverCollections<CoverData> {
+public class DefaultCoverCollections extends BaseCoverCollections {
 
     public DefaultCoverCollections(Context context) {
         super(context);
@@ -73,27 +72,27 @@ public class DefaultCoverCollections extends BaseCoverCollections<CoverData> {
     }
 
     public DefaultCoverCollections setDefaultPlayerControllerCover(){
-        addPlayerControllerCover(new DefaultPlayerControllerCover(mContext,new DefaultCoverObserver(mContext)));
+        addPlayerControllerCover(new DefaultPlayerControllerCover(mContext));
         return this;
     }
 
     public DefaultCoverCollections setDefaultPlayerLoadingCover(){
-        addPlayerLoadingCover(new DefaultPlayerLoadingCover(mContext,new DefaultCoverObserver(mContext)));
+        addPlayerLoadingCover(new DefaultPlayerLoadingCover(mContext));
         return this;
     }
 
     public DefaultCoverCollections setDefaultPlayerGestureCover(){
-        addPlayerGestureCover(new DefaultPlayerGestureOperationCover(mContext,new DefaultCoverObserver(mContext)));
+        addPlayerGestureCover(new DefaultPlayerGestureOperationCover(mContext));
         return this;
     }
 
     public DefaultCoverCollections setDefaultPlayerErrorCover(){
-        addPlayerErrorCover(new DefaultPlayerErrorCover(mContext,new DefaultCoverObserver(mContext)));
+        addPlayerErrorCover(new DefaultPlayerErrorCover(mContext));
         return this;
     }
 
     public DefaultCoverCollections setDefaultPlayerAdCover(){
-        addPlayerAdCover(new DefaultPlayerAdCover(mContext,new DefaultCoverObserver(mContext)));
+        addPlayerAdCover(new DefaultPlayerAdCover(mContext));
         return this;
     }
 

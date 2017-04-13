@@ -16,6 +16,10 @@ public class CornerCutCover extends BaseCover {
     public static final String KEY = "corner_cut_cover";
     private CornerCutView mCornerView;
 
+    public CornerCutCover(Context context){
+        super(context);
+    }
+
     public CornerCutCover(Context context, BaseCoverObserver coverObserver) {
         super(context, coverObserver);
     }

@@ -17,6 +17,9 @@ import com.kk.taurus.playerbase.inter.IDpadFocusCover;
  */
 
 public class DefaultDpadFocusCover extends BaseFocusCover implements IDpadFocusCover{
+    public DefaultDpadFocusCover(Context context) {
+        super(context);
+    }
 
     public DefaultDpadFocusCover(Context context, BaseCoverObserver coverObserver) {
         super(context, coverObserver);

@@ -19,6 +19,10 @@ public class DefaultPlayerLoadingCover extends BasePlayerLoadingCover {
 
     private final String TAG = "_LoadingCover";
 
+    public DefaultPlayerLoadingCover(Context context) {
+        super(context);
+    }
+
     public DefaultPlayerLoadingCover(Context context, BaseCoverObserver coverObserver) {
         super(context, coverObserver);
     }

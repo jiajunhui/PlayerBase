@@ -9,7 +9,7 @@ import com.kk.taurus.playerbase.cover.base.BaseCoverObserver;
  * Created by Taurus on 2017/3/24.
  */
 
-public class DefaultCoverObserver extends BaseCoverObserver<Object> {
+public class DefaultCoverObserver extends BaseCoverObserver {
 
     public DefaultCoverObserver(Context context) {
         super(context);

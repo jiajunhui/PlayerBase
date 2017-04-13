@@ -3,7 +3,7 @@ package com.kk.taurus.playerbase.cover.base;
 import android.content.Context;
 
 import com.kk.taurus.playerbase.inter.ICoverCollections;
-import com.kk.taurus.playerbase.callback.CoverObserver;
+import com.kk.taurus.playerbase.setting.CoverData;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -13,11 +13,10 @@ import java.util.List;
  * Created by Taurus on 2017/3/24.
  */
 
-public abstract class BaseCoverCollections<T> implements ICoverCollections {
+public abstract class BaseCoverCollections implements ICoverCollections {
 
     protected Context mContext;
-    protected T mData;
-    protected List<CoverObserver<T>> mCoverObservers = new ArrayList<>();
+    protected CoverData mData;
     protected LinkedHashMap<String,BaseCover> mCoverMap = new LinkedHashMap<>();
 
     public BaseCoverCollections(Context context){
@@ -34,14 +33,7 @@ public abstract class BaseCoverCollections<T> implements ICoverCollections {
     }
 
     protected void onCoversHasInit(Context context) {
-        if(mCoverMap!=null){
-            for(String key:mCoverMap.keySet()){
-                BaseCover cover = mCoverMap.get(key);
-                if(cover!=null){
-                    mCoverObservers.add(cover.getCoverObserver());
-                }
-            }
-        }
+
     }
 
     @Override
@@ -61,11 +53,11 @@ public abstract class BaseCoverCollections<T> implements ICoverCollections {
         return covers;
     }
 
-    public void refreshData(T data){
+    public void refreshData(CoverData data){
         this.mData = data;
-        for(CoverObserver observer : mCoverObservers){
-            if(observer!=null){
-                observer.onDataChange(data);
+        if(mCoverMap!=null){
+            for(String key:mCoverMap.keySet()){
+                mCoverMap.get(key).onRefreshCoverData(data);
             }
         }
     }

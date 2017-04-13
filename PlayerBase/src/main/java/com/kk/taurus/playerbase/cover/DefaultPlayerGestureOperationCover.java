@@ -25,6 +25,10 @@ public class DefaultPlayerGestureOperationCover extends BaseGestureOperationCove
     private AudioManager audioManager;
     private int mMaxVolume;
 
+    public DefaultPlayerGestureOperationCover(Context context) {
+        super(context);
+    }
+
     public DefaultPlayerGestureOperationCover(Context context, BaseCoverObserver coverObserver) {
         super(context, coverObserver);
     }

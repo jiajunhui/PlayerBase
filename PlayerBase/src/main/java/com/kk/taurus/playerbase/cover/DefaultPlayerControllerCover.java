@@ -35,6 +35,10 @@ public class DefaultPlayerControllerCover extends BasePlayerControllerCover {
     private boolean isLandScape;
     private BatteryReceiver batteryReceiver;
 
+    public DefaultPlayerControllerCover(Context context) {
+        super(context);
+    }
+
     public DefaultPlayerControllerCover(Context context, BaseCoverObserver coverObserver) {
         super(context, coverObserver);
     }

@@ -34,6 +34,10 @@ public abstract class BasePlayerControllerCover extends BaseCover implements IPl
     protected SeekBar mSeekBar;
     protected View.OnClickListener mOnBackClickListener;
 
+    public BasePlayerControllerCover(Context context){
+        super(context);
+    }
+
     public BasePlayerControllerCover(Context context, BaseCoverObserver coverObserver) {
         super(context, coverObserver);
     }

@@ -16,6 +16,9 @@ import com.kk.taurus.playerbase.cover.base.BasePlayerErrorCover;
  */
 
 public class DefaultPlayerErrorCover extends BasePlayerErrorCover {
+    public DefaultPlayerErrorCover(Context context) {
+        super(context);
+    }
 
     public DefaultPlayerErrorCover(Context context, BaseCoverObserver coverObserver) {
         super(context, coverObserver);

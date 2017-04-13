@@ -17,6 +17,9 @@ import java.util.List;
  */
 
 public class DefaultPlayerAdCover extends BaseAdCover {
+    public DefaultPlayerAdCover(Context context) {
+        super(context);
+    }
 
     public DefaultPlayerAdCover(Context context, BaseCoverObserver coverObserver) {
         super(context, coverObserver);

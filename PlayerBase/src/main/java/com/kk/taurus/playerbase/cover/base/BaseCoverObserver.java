@@ -8,7 +8,9 @@ import android.view.View;
 import com.kk.taurus.playerbase.callback.CoverObserver;
 import com.kk.taurus.playerbase.callback.PlayerObserver;
 import com.kk.taurus.playerbase.setting.BaseAdVideo;
+import com.kk.taurus.playerbase.setting.CoverData;
 import com.kk.taurus.playerbase.setting.VideoData;
+import com.kk.taurus.playerbase.widget.BasePlayer;
 
 import java.util.List;
 
@@ -16,9 +18,11 @@ import java.util.List;
  * Created by Taurus on 2017/3/24.
  */
 
-public abstract class BaseCoverObserver<T> implements CoverObserver<T> ,PlayerObserver {
+public abstract class BaseCoverObserver implements CoverObserver ,PlayerObserver {
 
     protected Context mContext;
+    protected BaseCover mCover;
+    protected BasePlayer mPlayer;
 
     public BaseCoverObserver(Context context){
         this.mContext = context;
@@ -30,7 +34,18 @@ public abstract class BaseCoverObserver<T> implements CoverObserver<T> ,PlayerOb
     }
 
     @Override
-    public void onDataChange(T data) {
+    public void onCoverViewInit(View coverView) {
+
+    }
+
+    @Override
+    public void onBindCover(BaseCover cover, BasePlayer player) {
+        this.mCover = cover;
+        this.mPlayer = player;
+    }
+
+    @Override
+    public void onDataChange(CoverData data) {
 
     }
 

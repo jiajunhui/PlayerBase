@@ -32,6 +32,10 @@ public abstract class BaseAdCover extends BaseCover implements IAdCover,GestureO
 
     protected OnAdCoverClickListener onAdCoverClickListener;
 
+    public BaseAdCover(Context context){
+        super(context);
+    }
+
     public BaseAdCover(Context context, BaseCoverObserver coverObserver) {
         super(context, coverObserver);
     }

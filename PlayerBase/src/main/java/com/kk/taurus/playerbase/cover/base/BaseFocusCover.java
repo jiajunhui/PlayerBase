@@ -18,6 +18,10 @@ public abstract class BaseFocusCover extends BaseCover implements IFocusCover,Vi
     private final String TAG = "focus_cover";
     protected View mFocusView;
 
+    public BaseFocusCover(Context context){
+        super(context);
+    }
+
     public BaseFocusCover(Context context, BaseCoverObserver coverObserver) {
         super(context, coverObserver);
     }

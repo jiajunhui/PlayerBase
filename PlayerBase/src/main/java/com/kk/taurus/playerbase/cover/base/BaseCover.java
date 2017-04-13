@@ -17,6 +17,7 @@ import com.kk.taurus.playerbase.callback.CoverObserver;
 import com.kk.taurus.playerbase.callback.PlayerObserver;
 import com.kk.taurus.playerbase.inter.MSG;
 import com.kk.taurus.playerbase.setting.BaseAdVideo;
+import com.kk.taurus.playerbase.setting.CoverData;
 import com.kk.taurus.playerbase.setting.VideoData;
 import com.kk.taurus.playerbase.utils.CommonUtils;
 import com.kk.taurus.playerbase.widget.BasePlayer;
@@ -64,6 +65,10 @@ public abstract class BaseCover implements ICover ,View.OnClickListener,PlayerOb
         }
     }
 
+    public BaseCover(Context context){
+        this(context,null);
+    }
+
     public BaseCover(Context context, BaseCoverObserver coverObserver){
         this.mContext = context;
         this.coverObserver = coverObserver;
@@ -106,8 +111,8 @@ public abstract class BaseCover implements ICover ,View.OnClickListener,PlayerOb
 
     protected abstract void findView();
 
-    protected <T> T findViewById(int id){
-        return (T) mCoverView.findViewById(id);
+    protected <V> V findViewById(int id){
+        return (V) mCoverView.findViewById(id);
     }
 
     @Override
@@ -129,6 +134,12 @@ public abstract class BaseCover implements ICover ,View.OnClickListener,PlayerOb
             if(coverObserver!=null){
                 coverObserver.onCoverVisibilityChange(getView(),visibility);
             }
+        }
+    }
+
+    public void onRefreshCoverData(CoverData data) {
+        if(coverObserver!=null){
+            coverObserver.onDataChange(data);
         }
     }
 
@@ -215,6 +226,9 @@ public abstract class BaseCover implements ICover ,View.OnClickListener,PlayerOb
     public void onBindPlayer(BasePlayer player, OnCoverEventListener onCoverEventListener) {
         this.player = player;
         this.onCoverEventListener = onCoverEventListener;
+        if(coverObserver!=null){
+            coverObserver.onBindCover(this,player);
+        }
     }
 
     protected void releaseFocusToDpadCover(){
