@@ -86,6 +86,9 @@ public abstract class BaseBindCover extends BaseContainer implements PlayerObser
         }
     }
 
+    /**
+     * 当cover集合中存在Dpad控制层时，将焦点控制权交给它。
+     */
     public void dPadRequestFocus(){
         for(BaseCover cover:mCovers){
             if(cover!=null && cover instanceof IDpadFocusCover){

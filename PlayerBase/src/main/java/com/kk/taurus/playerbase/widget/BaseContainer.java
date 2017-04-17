@@ -32,14 +32,34 @@ import java.util.List;
 public abstract class BaseContainer extends FrameLayout implements OnPlayerGestureListener {
 
     private final String TAG = "_BaseContainer";
+    /**
+     * the app context , must set activity context.
+     */
     protected Context mAppContext;
+    /**
+     * player widget container. such as VideoView.
+     */
     private FrameLayout mPlayerContainer;
+    /**
+     * the covers container .
+     */
     private FrameLayout mCoverContainer;
-    private FrameLayout mExtContainer;
+    /**
+     * cover collections.
+     */
     protected List<BaseCover> mCovers = new ArrayList<>();
 
+    /**
+     * the container width and height.
+     */
     protected int mWidth,mHeight;
+    /**
+     * the device info , screen width and screen height.
+     */
     protected int mScreenW, mScreenH;
+    /**
+     * gesture layout for handle user gesture.
+     */
     private FrameLayout mGestureLayout;
     private PlayerGestureDetector mPlayerGestureDetector;
 
@@ -72,12 +92,10 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
         this.mAppContext = context;
         setBackgroundColor(Color.BLACK);
         initBaseInfo(context);
-        //初始化播放器渲染视图容器
+        //init render container
         initPlayerContainer(context);
-        //初始化cover容器
+        //init cover container
         initCoverContainer(context);
-        //初始化扩展容器
-        initExtContainer(context);
         //初始化手势处理层（注：为避免cover层的点击事件影响，故将手势处理layout）
         initGesture(context);
         onContainerHasInit(context);
@@ -156,12 +174,6 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
         addView(mCoverContainer,new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
     }
 
-    private void initExtContainer(Context context) {
-        mExtContainer = new FrameLayout(context);
-        mExtContainer.setBackgroundColor(Color.TRANSPARENT);
-        addView(mExtContainer,new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-    }
-
     protected void addCover(BaseCover cover, ViewGroup.LayoutParams layoutParams){
         if(mCoverContainer!=null && cover!=null){
             if(isContainCoverView(cover))
@@ -180,25 +192,10 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
         return mCoverContainer.indexOfChild(cover.getView())!=-1;
     }
 
-    protected void addExtView(View view, ViewGroup.LayoutParams layoutParams){
-        if(mExtContainer!=null && view!=null){
-            if(layoutParams==null){
-                layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            }
-            mExtContainer.addView(view,layoutParams);
-        }
-    }
-
     protected void removeCover(BaseCover cover){
         if(mCoverContainer!=null){
             mCoverContainer.removeView(cover.getView());
             mCovers.remove(cover);
-        }
-    }
-
-    protected void removeExtView(View view){
-        if(mExtContainer!=null){
-            mExtContainer.removeView(view);
         }
     }
 

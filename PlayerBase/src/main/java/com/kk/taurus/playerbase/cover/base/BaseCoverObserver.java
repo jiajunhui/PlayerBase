@@ -18,7 +18,7 @@ import java.util.List;
  * Created by Taurus on 2017/3/24.
  */
 
-public abstract class BaseCoverObserver implements CoverObserver ,PlayerObserver {
+public abstract class BaseCoverObserver<T extends CoverData> implements CoverObserver ,PlayerObserver {
 
     protected Context mContext;
     protected BaseCover mCover;
@@ -44,8 +44,7 @@ public abstract class BaseCoverObserver implements CoverObserver ,PlayerObserver
         this.mPlayer = player;
     }
 
-    @Override
-    public void onDataChange(CoverData data) {
+    public void onDataChange(T data) {
 
     }
 
