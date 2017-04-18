@@ -16,7 +16,6 @@ import java.util.List;
 public abstract class BaseCoverCollections implements ICoverCollections {
 
     protected Context mContext;
-    protected CoverData mData;
     protected LinkedHashMap<String,BaseCover> mCoverMap = new LinkedHashMap<>();
 
     public BaseCoverCollections(Context context){
@@ -54,12 +53,15 @@ public abstract class BaseCoverCollections implements ICoverCollections {
     }
 
     public void refreshData(CoverData data){
-        this.mData = data;
         if(mCoverMap!=null){
             for(String key:mCoverMap.keySet()){
                 mCoverMap.get(key).onRefreshCoverData(data);
             }
         }
+    }
+
+    public void refreshData(CoverData data,BaseCoverObserver observer){
+        observer.onDataChange(data);
     }
 
 }
