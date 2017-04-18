@@ -111,6 +111,10 @@ public abstract class BaseSettingPlayer extends BaseCoverBindPlayerObserver {
         return mStatus;
     }
 
+    public boolean isExpectedBufferAvailable(){
+        return (getBufferPercentage()*getDuration()/100) > getCurrentPosition();
+    }
+
     public void updatePlayerType(int playerType){
         if(mPlayerType!=playerType){
             this.mPlayerType = playerType;

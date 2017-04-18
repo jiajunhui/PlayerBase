@@ -41,6 +41,7 @@ public abstract class BaseCover implements ICover ,View.OnClickListener,PlayerOb
     private OnCoverEventListener onCoverEventListener;
     protected boolean coverEnable = true;
     protected boolean adListFinish = true;
+    protected boolean isNetError = false;
 
     protected Handler mHandler = new Handler(){
         @Override
@@ -264,6 +265,7 @@ public abstract class BaseCover implements ICover ,View.OnClickListener,PlayerOb
 
     @Override
     public void onNotifyNetWorkConnected(int networkType) {
+        isNetError = false;
         if(coverObserver!=null){
             coverObserver.onNotifyNetWorkConnected(networkType);
         }
@@ -271,6 +273,7 @@ public abstract class BaseCover implements ICover ,View.OnClickListener,PlayerOb
 
     @Override
     public void onNotifyNetWorkError() {
+        isNetError = true;
         if(coverObserver!=null){
             coverObserver.onNotifyNetWorkError();
         }
