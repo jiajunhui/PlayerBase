@@ -39,6 +39,11 @@ public abstract class BaseCoverObserver<T extends CoverData> implements CoverObs
     }
 
     @Override
+    public void onCoverVisibilityChange(View coverView, int visibility) {
+
+    }
+
+    @Override
     public void onBindCover(BaseCover cover, BasePlayer player) {
         this.mCover = cover;
         this.mPlayer = player;

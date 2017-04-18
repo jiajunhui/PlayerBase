@@ -60,8 +60,10 @@ public abstract class BaseCoverCollections implements ICoverCollections {
         }
     }
 
-    public void refreshData(CoverData data,BaseCoverObserver observer){
-        observer.onDataChange(data);
+    public void refreshData(CoverData data,BaseCoverObserver... coverObservers){
+        for(BaseCoverObserver coverObserver : coverObservers){
+            coverObserver.onDataChange(data);
+        }
     }
 
 }

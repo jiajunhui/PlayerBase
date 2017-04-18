@@ -15,9 +15,9 @@ public abstract class BasePlayerLoadingCover extends BaseCover implements ILoadi
 
     public static final String KEY = "loading_cover";
 
-    private View mLoadingContainer;
-    private View mLoadingView;
-    private TextView mLoadingText;
+    protected View mLoadingContainer;
+    protected View mLoadingView;
+    protected TextView mLoadingText;
 
     public BasePlayerLoadingCover(Context context){
         super(context);
