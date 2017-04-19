@@ -16,6 +16,7 @@ public interface IPlayerControllerCover {
     void updateBatteryState(int batteryValue);
     void setPlayState(boolean isPlaying);
     void setPlayTime(long curr, long total);
+    void setTimerCounterUpdateProgressEnable(boolean enable);
     void setSeekMax(int max);
     void setSeekProgress(int progress);
     void setSeekSecondProgress(int progress);

@@ -33,6 +33,7 @@ public abstract class BasePlayerControllerCover extends BaseCover implements IPl
     protected TextView mTvMergeTime;
     protected SeekBar mSeekBar;
     protected View.OnClickListener mOnBackClickListener;
+    private boolean timerCounterUpdateEnable = true;
 
     public BasePlayerControllerCover(Context context){
         super(context);
@@ -61,8 +62,10 @@ public abstract class BasePlayerControllerCover extends BaseCover implements IPl
     @Override
     public void onNotifyPlayTimerCounter(int curr, int duration, int bufferPercentage) {
         super.onNotifyPlayTimerCounter(curr, duration, bufferPercentage);
-        updateSeekBar(curr, duration, bufferPercentage);
-        setPlayTime(curr,duration);
+        if(timerCounterUpdateEnable){
+            updateSeekBar(curr, duration, bufferPercentage);
+            setPlayTime(curr,duration);
+        }
     }
 
     @Override
@@ -94,6 +97,8 @@ public abstract class BasePlayerControllerCover extends BaseCover implements IPl
 
     @Override
     public void setControllerState(boolean state) {
+        setTopContainerState(state);
+        setBottomContainerState(state);
         setCoverVisibility(state?View.VISIBLE:View.GONE);
         if(state){
             onControllerShow();
@@ -153,6 +158,11 @@ public abstract class BasePlayerControllerCover extends BaseCover implements IPl
         setSeekMax(duration);
         setSeekProgress(curr);
         setSeekSecondProgress(bufferPercentage);
+    }
+
+    @Override
+    public void setTimerCounterUpdateProgressEnable(boolean enable) {
+        timerCounterUpdateEnable = enable;
     }
 
     @Override
