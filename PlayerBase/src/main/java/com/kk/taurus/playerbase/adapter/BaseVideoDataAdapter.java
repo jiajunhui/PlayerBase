@@ -25,6 +25,11 @@ public abstract class BaseVideoDataAdapter<V> implements IDataAdapter<VideoData>
         return mIndex;
     }
 
+    @Override
+    public void setIndex(int index) {
+        this.mIndex = index;
+    }
+
     protected int nextIndex(){
         if(getCount() > 0){
             mIndex++;

@@ -15,6 +15,9 @@ public interface IDataAdapter<T> {
     //返回当前列表索引位置
     int getIndex();
 
+    //指定当前列表索引位置
+    void setIndex(int index);
+
     //返回播放列表长度
     int getCount();
 
