@@ -10,6 +10,7 @@ import android.os.Message;
 import android.util.DisplayMetrics;
 import android.view.View;
 
+import com.kk.taurus.playerbase.adapter.BaseVideoDataAdapter;
 import com.kk.taurus.playerbase.callback.OnCoverEventListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.inter.ICover;
@@ -135,6 +136,12 @@ public abstract class BaseCover implements ICover ,View.OnClickListener,PlayerOb
             if(coverObserver!=null){
                 coverObserver.onCoverVisibilityChange(getView(),visibility);
             }
+        }
+    }
+
+    public void onRefreshDataAdapter(BaseVideoDataAdapter dataAdapter){
+        if(coverObserver!=null){
+            coverObserver.onRefreshDataAdapter(dataAdapter);
         }
     }
 

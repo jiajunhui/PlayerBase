@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 
+import com.kk.taurus.playerbase.adapter.BaseVideoDataAdapter;
 import com.kk.taurus.playerbase.callback.CoverObserver;
 import com.kk.taurus.playerbase.callback.PlayerObserver;
 import com.kk.taurus.playerbase.setting.BaseAdVideo;
@@ -23,6 +24,7 @@ public abstract class BaseCoverObserver<T extends CoverData> implements CoverObs
     protected Context mContext;
     protected BaseCover mCover;
     protected BasePlayer mPlayer;
+    protected BaseVideoDataAdapter mDataAdapter;
 
     public BaseCoverObserver(Context context){
         this.mContext = context;
@@ -47,6 +49,10 @@ public abstract class BaseCoverObserver<T extends CoverData> implements CoverObs
     public void onBindCover(BaseCover cover, BasePlayer player) {
         this.mCover = cover;
         this.mPlayer = player;
+    }
+
+    public void onRefreshDataAdapter(BaseVideoDataAdapter dataAdapter){
+        this.mDataAdapter = dataAdapter;
     }
 
     public void onDataChange(T data) {

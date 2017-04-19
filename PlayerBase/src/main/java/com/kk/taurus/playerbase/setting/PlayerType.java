@@ -9,6 +9,8 @@ import java.util.Map;
 
 public class PlayerType {
 
+    public static final int TYPE_PLAYER_DEFAULT = 0;
+
     private Map<Integer,PlayerTypeEntity> playerTypes;
 
     private int defaultPlayerType;
@@ -17,7 +19,7 @@ public class PlayerType {
 
     private PlayerType(){
         playerTypes = new HashMap<>();
-        addPlayerType(0,new PlayerTypeEntity("原生解码","com.kk.taurus.playerbase.player.MediaSinglePlayer"));
+        addPlayerType(TYPE_PLAYER_DEFAULT,new PlayerTypeEntity("原生解码","com.kk.taurus.playerbase.player.MediaSinglePlayer"));
     }
 
     public static PlayerType getInstance(){

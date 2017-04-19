@@ -2,6 +2,7 @@ package com.kk.taurus.playerbase.cover.base;
 
 import android.content.Context;
 
+import com.kk.taurus.playerbase.adapter.BaseVideoDataAdapter;
 import com.kk.taurus.playerbase.inter.ICoverCollections;
 import com.kk.taurus.playerbase.setting.CoverData;
 
@@ -52,6 +53,14 @@ public abstract class BaseCoverCollections implements ICoverCollections {
         return covers;
     }
 
+    public void refreshDataAdapter(BaseVideoDataAdapter dataAdapter){
+        if(mCoverMap!=null){
+            for(String key:mCoverMap.keySet()){
+                mCoverMap.get(key).onRefreshDataAdapter(dataAdapter);
+            }
+        }
+    }
+
     public void refreshData(CoverData data){
         if(mCoverMap!=null){
             for(String key:mCoverMap.keySet()){
@@ -60,9 +69,9 @@ public abstract class BaseCoverCollections implements ICoverCollections {
         }
     }
 
-    public void refreshData(CoverData data,BaseCoverObserver... coverObservers){
-        for(BaseCoverObserver coverObserver : coverObservers){
-            coverObserver.onDataChange(data);
+    public void refreshData(CoverData data,BaseCover... covers){
+        for(BaseCover cover : covers){
+            cover.onRefreshCoverData(data);
         }
     }
 
