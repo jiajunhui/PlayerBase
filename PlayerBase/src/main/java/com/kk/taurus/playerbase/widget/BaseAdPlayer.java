@@ -81,12 +81,14 @@ public abstract class BaseAdPlayer extends BaseSettingPlayer {
     }
 
     public final void setAndStartVideo(VideoData data) {
+        stop();
         updatePlayerType(data.getPlayerType());
         setDataSource(data);
         start(data.getStartPos());
     }
 
     public final void startPlayAdVideo(BaseAdVideo adVideo) {
+        stop();
         updatePlayerType(adVideo.getPlayerType());
         setDataSource(adVideo);
         start(adVideo.getStartPos());
