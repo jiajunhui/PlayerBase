@@ -195,7 +195,15 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
     protected void removeCover(BaseCover cover){
         if(mCoverContainer!=null){
             mCoverContainer.removeView(cover.getView());
-            mCovers.remove(cover);
+        }
+    }
+
+    protected void removeAllCovers(){
+        if(mCovers!=null){
+            for(BaseCover cover : mCovers){
+                removeCover(cover);
+            }
+            mCovers.clear();
         }
     }
 
