@@ -243,7 +243,7 @@ public class MediaSinglePlayer extends BaseSinglePlayer {
             if(mVideoView!=null){
                 mVideoView.stopPlayback();
                 mVideoView.release(true);
-                destroyDrawingCache();
+                mVideoView = null;
             }
         }catch (Exception e){
             e.printStackTrace();

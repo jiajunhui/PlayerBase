@@ -33,6 +33,7 @@ import android.widget.MediaController;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -88,7 +89,7 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
      */
     // private RenderingWidget.OnChangedListener mSubtitlesChangedListener;
 
-    private Context mAppContext;
+    private WeakReference<Context> mAppContext;
     private IRenderView mRenderView;
     private int mVideoSarNum;
     private int mVideoSarDen;
@@ -126,7 +127,7 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
     // REMOVED: resolveAdjustedSize
 
     private void initVideoView(Context context) {
-        mAppContext = context.getApplicationContext();
+        mAppContext = new WeakReference<>(context.getApplicationContext());
 
         initRenders();
 
@@ -181,7 +182,7 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
                 setRenderView(null);
                 break;
             case RENDER_TEXTURE_VIEW: {
-                TextureRenderView renderView = new TextureRenderView(getContext());
+                TextureRenderView renderView = new TextureRenderView(mAppContext.get());
                 if (mMediaPlayer != null) {
                     renderView.getSurfaceHolder().bindToMediaPlayer(mMediaPlayer);
                     renderView.setVideoSize(mMediaPlayer.getVideoWidth(), mMediaPlayer.getVideoHeight());
@@ -192,7 +193,7 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
                 break;
             }
             case RENDER_SURFACE_VIEW: {
-                SurfaceRenderView renderView = new SurfaceRenderView(getContext());
+                SurfaceRenderView renderView = new SurfaceRenderView(mAppContext.get());
                 setRenderView(renderView);
                 break;
             }
@@ -260,8 +261,11 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
             mMediaPlayer = null;
             mCurrentState = STATE_IDLE;
             mTargetState = STATE_IDLE;
-            AudioManager am = (AudioManager) mAppContext.getSystemService(Context.AUDIO_SERVICE);
-            am.abandonAudioFocus(null);
+            if(mAppContext!=null){
+                AudioManager am = (AudioManager) mAppContext.get().getSystemService(Context.AUDIO_SERVICE);
+                am.abandonAudioFocus(null);
+            }
+            mAppContext = null;
         }
     }
 
@@ -275,8 +279,10 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
         // called start() previously
         release(false);
 
-        AudioManager am = (AudioManager) mAppContext.getSystemService(Context.AUDIO_SERVICE);
-        am.requestAudioFocus(null, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+        if(mAppContext!=null){
+            AudioManager am = (AudioManager) mAppContext.get().getSystemService(Context.AUDIO_SERVICE);
+            am.requestAudioFocus(null, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+        }
 
         try {
             mMediaPlayer = createPlayer(0);
@@ -301,7 +307,7 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
                 IMediaDataSource dataSource = new FileMediaDataSource(new File(mUri.toString()));
                 mMediaPlayer.setDataSource(dataSource);
             }  else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                mMediaPlayer.setDataSource(mAppContext, mUri, mHeaders);
+                mMediaPlayer.setDataSource(mAppContext.get(), mUri, mHeaders);
             } else {
                 mMediaPlayer.setDataSource(mUri.toString());
             }
@@ -600,8 +606,10 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
             if (cleartargetstate) {
                 mTargetState = STATE_IDLE;
             }
-            AudioManager am = (AudioManager) mAppContext.getSystemService(Context.AUDIO_SERVICE);
-            am.abandonAudioFocus(null);
+            if(mAppContext!=null){
+                AudioManager am = (AudioManager) mAppContext.get().getSystemService(Context.AUDIO_SERVICE);
+                am.abandonAudioFocus(null);
+            }
         }
     }
 

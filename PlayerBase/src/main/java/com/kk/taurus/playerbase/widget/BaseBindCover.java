@@ -58,6 +58,7 @@ public abstract class BaseBindCover extends BaseContainer implements PlayerObser
             coverCollections = null;
         }
         removeAllCovers();
+        removeAllContainers();
     }
 
     private void initCovers(Context context) {

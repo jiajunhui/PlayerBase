@@ -207,6 +207,12 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
         }
     }
 
+    protected void removeAllContainers(){
+        removeView(mPlayerContainer);
+        removeView(mCoverContainer);
+        removeView(mGestureLayout);
+    }
+
     @Override
     public void onSingleTapUp(MotionEvent event) {
         Log.d(TAG,"onSingleTapUp...");
