@@ -57,11 +57,11 @@ public class DefaultPlayerControllerCover extends BasePlayerControllerCover {
                 public void onClick(View v) {
                     if(player==null)
                         return;
-                    if(player.getStatus()==ISinglePlayer.STATUS_PLAYING){
-                        player.pause();
+                    if(getStatus()==ISinglePlayer.STATUS_PLAYING){
+                        pause();
                         setPlayState(false);
                     }else{
-                        player.resume();
+                        resume();
                         setPlayState(true);
                     }
                 }
@@ -93,7 +93,7 @@ public class DefaultPlayerControllerCover extends BasePlayerControllerCover {
                 if(player==null)
                     return;
                 int progress = (int) msg.obj;
-                player.seekTo(progress);
+                seekTo(progress);
                 break;
         }
     }
@@ -152,7 +152,7 @@ public class DefaultPlayerControllerCover extends BasePlayerControllerCover {
         public void onStopTrackingTouch(SeekBar seekBar) {
             if(player==null)
                 return;
-            if(seekBar.getMax()<=0 || player.getDuration() <= 0)
+            if(seekBar.getMax()<=0 || getDuration() <= 0)
                 return;
             Log.d(TAG,"onStopTrackingTouch...");
             int progress = seekBar.getProgress();
@@ -166,7 +166,7 @@ public class DefaultPlayerControllerCover extends BasePlayerControllerCover {
         Message message = Message.obtain();
         message.what = MSG.MSG_CODE_SEEK_TO;
         message.obj = progress;
-        if(player.getStatus() == ISinglePlayer.STATUS_PAUSE){
+        if(getStatus() == ISinglePlayer.STATUS_PAUSE){
             mHandler.sendMessage(message);
         }else{
             mHandler.sendMessageDelayed(message,600);

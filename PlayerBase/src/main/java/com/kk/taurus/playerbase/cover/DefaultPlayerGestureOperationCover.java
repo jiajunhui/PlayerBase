@@ -85,8 +85,8 @@ public class DefaultPlayerGestureOperationCover extends BaseGestureOperationCove
             return;
         if(player==null)
             return;
-        long position = player.getCurrentPosition();
-        long duration = player.getDuration();
+        long position = getCurrentPosition();
+        long duration = getDuration();
         long deltaMax = Math.min(100 * 1000, duration - position);
         long delta = (long) (deltaMax * percent);
         newPosition = delta + position;
@@ -169,7 +169,7 @@ public class DefaultPlayerGestureOperationCover extends BaseGestureOperationCove
         setVolumeBoxState(false);
         setBrightnessBoxState(false);
         if(newPosition>0){
-            player.seekTo((int) newPosition);
+            seekTo((int) newPosition);
             newPosition = -1;
             setFastForwardState(false);
         }

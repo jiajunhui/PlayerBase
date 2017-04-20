@@ -12,7 +12,7 @@ import com.kk.taurus.playerbase.inter.IErrorCover;
  * Created by Taurus on 2017/3/27.
  */
 
-public abstract class BasePlayerErrorCover extends BaseCover implements IErrorCover{
+public abstract class BasePlayerErrorCover extends BaseCoverPlayerHandle implements IErrorCover{
 
     public static final String KEY = "error_cover";
     protected View mErrorView;

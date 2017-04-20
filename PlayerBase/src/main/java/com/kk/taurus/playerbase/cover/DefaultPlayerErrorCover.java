@@ -43,7 +43,7 @@ public class DefaultPlayerErrorCover extends BasePlayerErrorCover {
     private void onClickRetry() {
         if(player==null)
             return;
-        player.rePlay(0);
+        rePlay(0);
     }
 
     @Override

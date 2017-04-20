@@ -49,7 +49,7 @@ public class PlayCompleteCover extends BaseCover implements IPlayCompleteCover{
         super.onNotifyPlayEvent(eventCode, bundle);
         switch (eventCode){
             case OnPlayerEventListener.EVENT_CODE_PLAY_COMPLETE:
-                if(player.isAdListFinish()){
+                if(getPlayer()!=null && getPlayer().isAdListFinish()){
                     setCompleteCoverState(true);
                 }
                 break;

@@ -11,7 +11,6 @@ import com.kk.taurus.playerbase.callback.PlayerObserver;
 import com.kk.taurus.playerbase.setting.BaseAdVideo;
 import com.kk.taurus.playerbase.setting.CoverData;
 import com.kk.taurus.playerbase.setting.VideoData;
-import com.kk.taurus.playerbase.widget.BasePlayer;
 
 import java.util.List;
 
@@ -23,7 +22,6 @@ public abstract class BaseCoverObserver<T extends CoverData> implements CoverObs
 
     protected Context mContext;
     protected BaseCover mCover;
-    protected BasePlayer mPlayer;
     protected BaseVideoDataAdapter mDataAdapter;
 
     public BaseCoverObserver(Context context){
@@ -46,9 +44,8 @@ public abstract class BaseCoverObserver<T extends CoverData> implements CoverObs
     }
 
     @Override
-    public void onBindCover(BaseCover cover, BasePlayer player) {
+    public void onBindCover(BaseCover cover) {
         this.mCover = cover;
-        this.mPlayer = player;
     }
 
     public void onRefreshDataAdapter(BaseVideoDataAdapter dataAdapter){

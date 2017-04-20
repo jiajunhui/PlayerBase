@@ -18,7 +18,7 @@ import com.kk.taurus.playerbase.view.BatteryView;
  * Created by Taurus on 2017/3/24.
  */
 
-public abstract class BasePlayerControllerCover extends BaseCover implements IPlayerControllerCover,GestureObserver{
+public abstract class BasePlayerControllerCover extends BaseCoverPlayerHandle implements IPlayerControllerCover,GestureObserver{
 
     public static final String KEY = "player_controller_cover";
     protected View mTopContainer;

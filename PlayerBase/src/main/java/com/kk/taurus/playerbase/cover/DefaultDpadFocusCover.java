@@ -17,6 +17,7 @@ import com.kk.taurus.playerbase.inter.IDpadFocusCover;
  */
 
 public class DefaultDpadFocusCover extends BaseFocusCover implements IDpadFocusCover{
+
     public DefaultDpadFocusCover(Context context) {
         super(context);
     }
@@ -50,6 +51,18 @@ public class DefaultDpadFocusCover extends BaseFocusCover implements IDpadFocusC
         if(eventCode== OnPlayerEventListener.EVENT_CODE_PLAYER_DPAD_REQUEST_FOCUS){
             requestFocus();
         }
+    }
+
+    protected boolean isInterruptSendEvent(int eventCode, Bundle bundle){
+        return false;
+    }
+
+    @Override
+    protected void notifyCoverEvent(int eventCode, Bundle bundle) {
+        if(isInterruptSendEvent(eventCode, bundle)){
+            return;
+        }
+        super.notifyCoverEvent(eventCode, bundle);
     }
 
     @Override

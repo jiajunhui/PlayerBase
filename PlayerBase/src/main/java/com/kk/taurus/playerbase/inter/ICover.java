@@ -15,6 +15,7 @@ public interface ICover {
     void setCoverEnable(boolean enable);
     void setCoverVisibility(int visibility);
     void onRefreshCoverData(CoverData data);
+    String getString(int resId);
     View getView();
     CoverObserver getCoverObserver();
     int getScreenOrientation();

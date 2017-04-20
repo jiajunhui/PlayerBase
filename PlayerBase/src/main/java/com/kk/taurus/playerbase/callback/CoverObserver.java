@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.View;
 
 import com.kk.taurus.playerbase.cover.base.BaseCover;
-import com.kk.taurus.playerbase.widget.BasePlayer;
 
 /**
  * Created by Taurus on 2017/3/24.
@@ -13,6 +12,6 @@ import com.kk.taurus.playerbase.widget.BasePlayer;
 public interface CoverObserver {
     View initCustomCoverView(Context context);
     void onCoverViewInit(View coverView);
-    void onBindCover(BaseCover cover, BasePlayer player);
+    void onBindCover(BaseCover cover);
     void onCoverVisibilityChange(View coverView, int visibility);
 }

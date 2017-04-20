@@ -12,17 +12,16 @@ import android.view.View;
 
 import com.kk.taurus.playerbase.adapter.BaseVideoDataAdapter;
 import com.kk.taurus.playerbase.callback.OnCoverEventListener;
-import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.inter.ICover;
 import com.kk.taurus.playerbase.callback.CoverObserver;
 import com.kk.taurus.playerbase.callback.PlayerObserver;
-import com.kk.taurus.playerbase.inter.MSG;
 import com.kk.taurus.playerbase.setting.BaseAdVideo;
 import com.kk.taurus.playerbase.setting.CoverData;
 import com.kk.taurus.playerbase.setting.VideoData;
 import com.kk.taurus.playerbase.utils.CommonUtils;
 import com.kk.taurus.playerbase.widget.BasePlayer;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 /**
@@ -32,13 +31,13 @@ import java.util.List;
  *
  */
 
-public abstract class BaseCover implements ICover ,View.OnClickListener,PlayerObserver,OnCoverEventListener{
+public abstract class BaseCover implements ICover , View.OnClickListener,PlayerObserver,OnCoverEventListener{
 
     protected Context mContext;
     private View mCoverView;
     private BaseCoverObserver coverObserver;
     protected int mScreenW,mScreenH;
-    protected BasePlayer player;
+    protected WeakReference<BasePlayer> player;
     private OnCoverEventListener onCoverEventListener;
     protected boolean coverEnable = true;
     protected boolean adListFinish = true;
@@ -53,18 +52,7 @@ public abstract class BaseCover implements ICover ,View.OnClickListener,PlayerOb
     };
 
     protected void _handleMessage(Message msg){
-        switch (msg.what){
-            case MSG.MSG_CODE_PLAYING:
-                if(player==null)
-                    return;
-                int curr = player.getCurrentPosition();
-                int duration = player.getDuration();
-                int bufferPercentage = player.getBufferPercentage();
-                int bufferPos = bufferPercentage*duration/100;
-                onNotifyPlayTimerCounter(curr,duration,bufferPos);
-                sendPlayMsg();
-                break;
-        }
+
     }
 
     public BaseCover(Context context){
@@ -156,6 +144,14 @@ public abstract class BaseCover implements ICover ,View.OnClickListener,PlayerOb
     }
 
     @Override
+    public String getString(int resId) {
+        if(mContext!=null){
+            return mContext.getString(resId);
+        }
+        return null;
+    }
+
+    @Override
     public View getView() {
         return mCoverView;
     }
@@ -185,6 +181,41 @@ public abstract class BaseCover implements ICover ,View.OnClickListener,PlayerOb
 
     }
 
+
+
+    protected void onDestroy(){
+        player.clear();
+        mHandler.removeCallbacks(null);
+    }
+
+    public void onBindPlayer(BasePlayer player, OnCoverEventListener onCoverEventListener) {
+        this.player = new WeakReference<>(player);
+        this.onCoverEventListener = onCoverEventListener;
+        if(coverObserver!=null){
+            coverObserver.onBindCover(this);
+        }
+    }
+
+    protected void releaseFocusToDpadCover(){
+        if(getPlayer()!=null){
+            getPlayer().dPadRequestFocus();
+        }
+    }
+
+    protected BasePlayer getPlayer(){
+        if(player!=null){
+            return player.get();
+        }
+        return null;
+    }
+
+
+    //--------------------------------------------------------------------------------------------
+
+    //*************************************************************************************
+    // for some event
+    //*************************************************************************************
+
     /**
      * on receive cover event
      * @param eventCode
@@ -199,48 +230,6 @@ public abstract class BaseCover implements ICover ,View.OnClickListener,PlayerOb
         if(coverObserver!=null){
             coverObserver.onNotifyPlayEvent(eventCode, bundle);
         }
-        switch (eventCode){
-            case OnPlayerEventListener.EVENT_CODE_RENDER_START:
-                sendPlayMsg();
-                break;
-            case OnPlayerEventListener.EVENT_CODE_BUFFERING_START:
-
-                break;
-            case OnPlayerEventListener.EVENT_CODE_BUFFERING_END:
-                sendPlayMsg();
-                break;
-            case OnPlayerEventListener.EVENT_CODE_PLAYER_ON_DESTROY:
-                onDestroy();
-                player = null;
-                break;
-        }
-    }
-
-    protected void sendPlayMsg() {
-        removePlayMsg();
-        mHandler.sendEmptyMessageDelayed(MSG.MSG_CODE_PLAYING,1000);
-    }
-
-    protected void removePlayMsg() {
-        mHandler.removeMessages(MSG.MSG_CODE_PLAYING);
-    }
-
-    protected void onDestroy(){
-        mHandler.removeCallbacks(null);
-        mHandler.removeMessages(MSG.MSG_CODE_PLAYING);
-        mHandler.removeMessages(MSG.MSG_CODE_DELAY_HIDDEN_CONTROLLER);
-    }
-
-    public void onBindPlayer(BasePlayer player, OnCoverEventListener onCoverEventListener) {
-        this.player = player;
-        this.onCoverEventListener = onCoverEventListener;
-        if(coverObserver!=null){
-            coverObserver.onBindCover(this,player);
-        }
-    }
-
-    protected void releaseFocusToDpadCover(){
-        player.dPadRequestFocus();
     }
 
     protected void notifyCoverEvent(int eventCode, Bundle bundle){

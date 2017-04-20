@@ -14,7 +14,7 @@ import com.kk.taurus.playerbase.inter.IGestureOperation;
  * Created by Taurus on 2017/3/26.
  */
 
-public abstract class BaseGestureOperationCover extends BaseCover implements IGestureOperation, GestureObserver{
+public abstract class BaseGestureOperationCover extends BaseCoverPlayerHandle implements IGestureOperation, GestureObserver{
 
     public static final String KEY = "gesture_cover";
     protected View mVolumeBox;
