@@ -75,4 +75,11 @@ public abstract class BaseCoverCollections implements ICoverCollections {
         }
     }
 
+    public void clear(){
+        if(mCoverMap!=null){
+            mCoverMap.clear();
+            mContext = null;
+        }
+    }
+
 }

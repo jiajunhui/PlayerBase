@@ -78,7 +78,6 @@ public abstract class BaseCoverPlayerHandle extends BaseCover implements IPlayer
     protected void onDestroy() {
         super.onDestroy();
         mHandler.removeMessages(MSG.MSG_CODE_PLAYING);
-        mHandler.removeMessages(MSG.MSG_CODE_DELAY_HIDDEN_CONTROLLER);
     }
 
     //--------------------------------------------------------------------------------------------

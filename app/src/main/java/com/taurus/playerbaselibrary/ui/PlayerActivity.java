@@ -161,6 +161,7 @@ public class PlayerActivity extends ToolsActivity implements OnPlayerEventListen
         super.onDestroy();
         if(mPlayer!=null){
             mPlayer.destroy();
+            mPlayer.unbindCoverCollections();
         }
     }
 

@@ -52,6 +52,13 @@ public abstract class BaseBindCover extends BaseContainer implements PlayerObser
         initCovers(mAppContext);
     }
 
+    public void unbindCoverCollections(){
+        if(coverCollections!=null){
+            coverCollections.clear();
+            coverCollections = null;
+        }
+    }
+
     private void initCovers(Context context) {
         if(coverCollections==null)
             return;

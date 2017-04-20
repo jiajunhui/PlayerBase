@@ -181,8 +181,6 @@ public abstract class BaseCover implements ICover , View.OnClickListener,PlayerO
 
     }
 
-
-
     protected void onDestroy(){
         player.clear();
         mHandler.removeCallbacks(null);

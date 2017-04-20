@@ -34,6 +34,7 @@ public class DefaultPlayerLoadingCover extends BasePlayerLoadingCover {
 
     @Override
     public void onNotifyPlayEvent(int eventCode, Bundle bundle) {
+        super.onNotifyPlayEvent(eventCode, bundle);
         switch (eventCode){
             case OnPlayerEventListener.EVENT_CODE_ON_INTENT_TO_START:
                 Log.d(TAG,"on intent to start......");
