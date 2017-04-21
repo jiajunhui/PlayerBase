@@ -89,8 +89,8 @@ public class PlayerActivity extends ToolsActivity implements OnPlayerEventListen
         }
 
         mPlayer.setOnPlayerEventListener(this);
-        normalStart();
-//        testAdStart();
+//        normalStart();
+        testAdStart();
     }
 
     private void normalStart(){
@@ -101,8 +101,8 @@ public class PlayerActivity extends ToolsActivity implements OnPlayerEventListen
     private void testAdStart(){
         PlayData playData = new PlayData(videoData);
         List<BaseAdVideo> adVideos = new ArrayList<>();
-        adVideos.add(new BaseAdVideo("http://172.16.218.64:8080/batamu_trans19.mp4"));
         adVideos.add(new BaseAdVideo("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"));
+        adVideos.add(new BaseAdVideo("http://172.16.218.64:8080/batamu_trans19.mp4"));
         playData.setAdVideos(adVideos);
 
         final BaseAdCover adCover = mCoverCollections.getCover(BaseAdCover.KEY);

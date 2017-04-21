@@ -40,6 +40,7 @@
     <!--player ad cover ids-->
     <item name="cover_player_ad_box" type="id"/>
     <item name="cover_player_ad_image_view_pic" type="id"/>
+    <item name="cover_player_ad_timer_box" type="id"/>
     <item name="cover_player_ad_text_view_timer" type="id"/>
 
 </resources>

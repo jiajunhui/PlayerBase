@@ -46,6 +46,9 @@ public abstract class BaseCoverPlayerHandle extends BaseCover implements IPlayer
     public void onNotifyPlayEvent(int eventCode, Bundle bundle) {
         super.onNotifyPlayEvent(eventCode, bundle);
         switch (eventCode){
+            case OnPlayerEventListener.EVENT_CODE_PLAYER_ON_SET_DATA_SOURCE:
+                removePlayMsg();
+                break;
             case OnPlayerEventListener.EVENT_CODE_RENDER_START:
                 sendPlayMsg();
                 break;

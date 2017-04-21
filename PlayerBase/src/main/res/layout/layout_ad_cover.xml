@@ -11,18 +11,24 @@
         android:scaleType="fitCenter"
         android:visibility="gone"/>
 
-    <TextView
-        android:id="@id/cover_player_ad_text_view_timer"
+    <RelativeLayout
+        android:id="@id/cover_player_ad_timer_box"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:layout_alignParentRight="true"
         android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:background="@color/play_alpha_black"
-        android:textSize="12sp"
-        android:textColor="@color/play_loading_text_color"
-        android:text=""/>
+        android:layout_marginRight="10dp">
+        <TextView
+            android:id="@id/cover_player_ad_text_view_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:background="@color/play_alpha_black"
+            android:textSize="12sp"
+            android:textColor="@color/play_loading_text_color"
+            android:text=""/>
+    </RelativeLayout>
 
 </RelativeLayout>

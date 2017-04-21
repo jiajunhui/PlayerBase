@@ -23,6 +23,7 @@ public abstract class BaseAdCover extends BaseCoverPlayerHandle implements IAdCo
 
     public static final String KEY = "ad_cover";
     protected View mAdBox;
+    protected View mAdTimerBox;
     protected ImageView mIvPic;
     protected TextView mTvTimer;
 
@@ -42,8 +43,8 @@ public abstract class BaseAdCover extends BaseCoverPlayerHandle implements IAdCo
 
     @Override
     protected void findView() {
-        setCoverVisibility(View.GONE);
         mAdBox = findViewById(R.id.cover_player_ad_box);
+        mAdTimerBox = findViewById(R.id.cover_player_ad_timer_box);
         mIvPic = findViewById(R.id.cover_player_ad_image_view_pic);
         mTvTimer = findViewById(R.id.cover_player_ad_text_view_timer);
     }
@@ -67,8 +68,8 @@ public abstract class BaseAdCover extends BaseCoverPlayerHandle implements IAdCo
 
     @Override
     public void setAdTimerState(boolean state) {
-        if(mTvTimer!=null){
-            mTvTimer.setVisibility(state?View.VISIBLE:View.GONE);
+        if(mAdTimerBox!=null){
+            mAdTimerBox.setVisibility(state?View.VISIBLE:View.GONE);
         }
     }
 

@@ -176,6 +176,7 @@ public class DefaultPlayerControllerCover extends BasePlayerControllerCover {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mHandler.removeMessages(MSG.MSG_CODE_SEEK_TO);
         removeDelayHiddenControllerMsg();
         unRegisterBatteryReceiver();
     }
