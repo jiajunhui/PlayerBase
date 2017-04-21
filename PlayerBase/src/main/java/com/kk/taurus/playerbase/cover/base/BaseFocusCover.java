@@ -60,7 +60,14 @@ public abstract class BaseFocusCover extends BaseCoverPlayerHandle implements IF
         return false;
     }
 
+    protected boolean isInterruptOnKeyActionDown(View v, int keyCode, KeyEvent event){
+        return false;
+    }
+
     private boolean handleKeyActionDown(View v, int keyCode, KeyEvent event) {
+        if(isInterruptOnKeyActionDown(v, keyCode, event)){
+            return true;
+        }
         switch (keyCode){
             case KeyEvent.KEYCODE_DPAD_UP:
                 Log.d(TAG,"onKeyActionDown : dpad up");
@@ -94,7 +101,14 @@ public abstract class BaseFocusCover extends BaseCoverPlayerHandle implements IF
         return false;
     }
 
+    protected boolean isInterruptOnKeyActionUp(View v, int keyCode, KeyEvent event){
+        return false;
+    }
+
     private boolean handleKeyActionUp(View v, int keyCode, KeyEvent event) {
+        if(isInterruptOnKeyActionUp(v, keyCode, event)){
+            return true;
+        }
         switch (keyCode){
             case KeyEvent.KEYCODE_DPAD_UP:
                 Log.d(TAG,"onKeyActionUp : dpad up");
