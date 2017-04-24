@@ -103,14 +103,14 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
         initBaseInfo(context);
         //init render container
         initPlayerContainer(context);
+        //init gesture handle layout
+        initGesture(context);
         //init business cover container
         initBusinessCoverContainer(context);
         //init state cover container
         initStateCoverContainer(context);
         //init extend cover container
         initExtendCoverContainer(context);
-        //初始化手势处理层（注：为避免cover层的点击事件影响，故将手势处理layout）
-        initGesture(context);
         onContainerHasInit(context);
     }
 

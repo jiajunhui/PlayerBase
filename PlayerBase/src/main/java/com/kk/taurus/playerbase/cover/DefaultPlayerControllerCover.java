@@ -110,11 +110,6 @@ public class DefaultPlayerControllerCover extends BasePlayerControllerCover {
         if(isVisibilityGone()){
             setControllerState(true);
             setBottomContainerState(true);
-            if(isLandScape){
-                setTopContainerState(true);
-            }else{
-                setTopContainerState(false);
-            }
         }else{
             setControllerState(false);
         }
@@ -185,9 +180,6 @@ public class DefaultPlayerControllerCover extends BasePlayerControllerCover {
     public void onNotifyConfigurationChanged(Configuration newConfig) {
         super.onNotifyConfigurationChanged(newConfig);
         isLandScape = newConfig.orientation== Configuration.ORIENTATION_LANDSCAPE;
-        if(!isLandScape){
-            setTopContainerState(false);
-        }
     }
 
     @Override
