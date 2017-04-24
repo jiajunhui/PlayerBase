@@ -14,7 +14,7 @@ import java.util.List;
  * Created by Taurus on 2017/4/24.
  */
 
-public class BasePlayerImageAdCover extends BaseCoverPlayerHandle implements IAdImageCover{
+public abstract class BasePlayerImageAdCover extends BaseCoverPlayerHandle implements IAdImageCover{
 
     protected View mAdBox;
     protected ImageView mIvPic;
@@ -30,13 +30,9 @@ public class BasePlayerImageAdCover extends BaseCoverPlayerHandle implements IAd
 
     @Override
     protected void findView() {
+        this.mAdImages = getAdImages();
         mAdBox = findViewById(R.id.cover_player_image_ad_box);
         mIvPic = findViewById(R.id.cover_player_image_ad_image_view_pic);
-    }
-
-    @Override
-    public void refreshAdData(List<BaseAdImage> adImages) {
-        this.mAdImages = adImages;
     }
 
     @Override
@@ -55,4 +51,7 @@ public class BasePlayerImageAdCover extends BaseCoverPlayerHandle implements IAd
     public View initCoverLayout(Context context) {
         return View.inflate(context, R.layout.layout_player_image_ad,null);
     }
+
+    protected abstract List<BaseAdImage> getAdImages();
+
 }
