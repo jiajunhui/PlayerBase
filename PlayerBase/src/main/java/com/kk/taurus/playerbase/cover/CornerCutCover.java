@@ -5,6 +5,7 @@ import android.view.View;
 
 import com.kk.taurus.playerbase.cover.base.BaseCover;
 import com.kk.taurus.playerbase.cover.base.BaseCoverObserver;
+import com.kk.taurus.playerbase.inter.ICover;
 import com.kk.taurus.playerbase.view.CornerCutView;
 
 /**
@@ -45,6 +46,11 @@ public class CornerCutCover extends BaseCover {
     @Override
     public View initCoverLayout(Context context) {
         return mCornerView = new CornerCutView(context);
+    }
+
+    @Override
+    public int getCoverLevel() {
+        return ICover.COVER_LEVEL_HIGH;
     }
 
 }
