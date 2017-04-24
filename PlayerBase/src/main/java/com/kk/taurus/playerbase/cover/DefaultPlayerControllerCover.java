@@ -194,6 +194,10 @@ public class DefaultPlayerControllerCover extends BasePlayerControllerCover {
             case OnPlayerEventListener.EVENT_CODE_RENDER_START:
                 setPlayState(true);
                 break;
+
+            case OnPlayerEventListener.EVENT_CODE_SEEK_COMPLETE:
+                sendPlayMsg();
+                break;
         }
     }
 

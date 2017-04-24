@@ -89,8 +89,8 @@ public class PlayerActivity extends ToolsActivity implements OnPlayerEventListen
         }
 
         mPlayer.setOnPlayerEventListener(this);
-//        normalStart();
-        testAdStart();
+        normalStart();
+//        testAdStart();
     }
 
     private void normalStart(){
