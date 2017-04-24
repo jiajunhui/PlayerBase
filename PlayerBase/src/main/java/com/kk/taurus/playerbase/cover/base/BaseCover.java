@@ -157,8 +157,8 @@ public abstract class BaseCover implements ICover , View.OnClickListener,PlayerO
     }
 
     @Override
-    public int getCoverType() {
-        return COVER_TYPE_BUSINESS;
+    public int getCoverLevel() {
+        return COVER_LEVEL_LOW;
     }
 
     @Override

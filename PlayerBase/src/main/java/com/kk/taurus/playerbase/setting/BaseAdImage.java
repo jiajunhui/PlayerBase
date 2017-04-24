@@ -7,8 +7,10 @@ import java.io.Serializable;
  */
 
 public class BaseAdImage implements Serializable {
+
+    public static final long DEFAULT_DISPLAY_TIME = 5000;
     private String imageUrl;
-    private long displayTime;
+    private long displayTime = DEFAULT_DISPLAY_TIME;
 
     public String getImageUrl() {
         return imageUrl;

@@ -44,15 +44,15 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
     /**
      * the business covers container .
      */
-    private FrameLayout mBusinessCoverContainer;
+    private FrameLayout mLevelLowCoverContainer;
     /**
      * the state covers container .
      */
-    private FrameLayout mStateCoverContainer;
+    private FrameLayout mLevelMediumCoverContainer;
     /**
      * the extend covers container .
      */
-    private FrameLayout mExtendCoverContainer;
+    private FrameLayout mLevelHighCoverContainer;
     /**
      * cover collections.
      */
@@ -105,12 +105,12 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
         initPlayerContainer(context);
         //init gesture handle layout
         initGesture(context);
-        //init business cover container
-        initBusinessCoverContainer(context);
-        //init state cover container
-        initStateCoverContainer(context);
-        //init extend cover container
-        initExtendCoverContainer(context);
+        //init low cover container
+        initLevelLowCoverContainer(context);
+        //init medium cover container
+        initLevelMediumCoverContainer(context);
+        //init high cover container
+        initLevelHighCoverContainer(context);
         onContainerHasInit(context);
     }
 
@@ -181,22 +181,22 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
 
     protected abstract View getPlayerWidget(Context context);
 
-    private void initBusinessCoverContainer(Context context) {
-        mBusinessCoverContainer = new FrameLayout(context);
-        mBusinessCoverContainer.setBackgroundColor(Color.TRANSPARENT);
-        addView(mBusinessCoverContainer,new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+    private void initLevelLowCoverContainer(Context context) {
+        mLevelLowCoverContainer = new FrameLayout(context);
+        mLevelLowCoverContainer.setBackgroundColor(Color.TRANSPARENT);
+        addView(mLevelLowCoverContainer,new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
     }
 
-    private void initStateCoverContainer(Context context) {
-        mStateCoverContainer = new FrameLayout(context);
-        mStateCoverContainer.setBackgroundColor(Color.TRANSPARENT);
-        addView(mStateCoverContainer,new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+    private void initLevelMediumCoverContainer(Context context) {
+        mLevelMediumCoverContainer = new FrameLayout(context);
+        mLevelMediumCoverContainer.setBackgroundColor(Color.TRANSPARENT);
+        addView(mLevelMediumCoverContainer,new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
     }
 
-    private void initExtendCoverContainer(Context context) {
-        mExtendCoverContainer = new FrameLayout(context);
-        mExtendCoverContainer.setBackgroundColor(Color.TRANSPARENT);
-        addView(mExtendCoverContainer,new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+    private void initLevelHighCoverContainer(Context context) {
+        mLevelHighCoverContainer = new FrameLayout(context);
+        mLevelHighCoverContainer.setBackgroundColor(Color.TRANSPARENT);
+        addView(mLevelHighCoverContainer,new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
     }
 
     protected void addCover(BaseCover cover, ViewGroup.LayoutParams layoutParams){
@@ -208,15 +208,15 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
             layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         }
         mCovers.add(cover);
-        switch (cover.getCoverType()){
-            case ICover.COVER_TYPE_BUSINESS:
-                mBusinessCoverContainer.addView(cover.getView(),layoutParams);
+        switch (cover.getCoverLevel()){
+            case ICover.COVER_LEVEL_LOW:
+                mLevelLowCoverContainer.addView(cover.getView(),layoutParams);
                 break;
-            case ICover.COVER_TYPE_STATE:
-                mStateCoverContainer.addView(cover.getView(),layoutParams);
+            case ICover.COVER_LEVEL_MEDIUM:
+                mLevelMediumCoverContainer.addView(cover.getView(),layoutParams);
                 break;
-            case ICover.COVER_TYPE_EXTEND:
-                mExtendCoverContainer.addView(cover.getView(),layoutParams);
+            case ICover.COVER_LEVEL_HIGH:
+                mLevelHighCoverContainer.addView(cover.getView(),layoutParams);
                 break;
         }
     }
@@ -224,17 +224,17 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
     private boolean isContainCoverView(BaseCover cover){
         if(cover==null)
             return false;
-        return mBusinessCoverContainer.indexOfChild(cover.getView())!=-1
-                || mStateCoverContainer.indexOfChild(cover.getView())!=-1
-                || mExtendCoverContainer.indexOfChild(cover.getView())!=-1;
+        return mLevelLowCoverContainer.indexOfChild(cover.getView())!=-1
+                || mLevelMediumCoverContainer.indexOfChild(cover.getView())!=-1
+                || mLevelHighCoverContainer.indexOfChild(cover.getView())!=-1;
     }
 
     protected void removeCover(BaseCover cover){
         if(cover==null)
             return;
-        mBusinessCoverContainer.removeView(cover.getView());
-        mStateCoverContainer.removeView(cover.getView());
-        mExtendCoverContainer.removeView(cover.getView());
+        mLevelLowCoverContainer.removeView(cover.getView());
+        mLevelMediumCoverContainer.removeView(cover.getView());
+        mLevelHighCoverContainer.removeView(cover.getView());
     }
 
     protected void removeAllCovers(){
@@ -248,9 +248,9 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
 
     protected void removeAllContainers(){
         removeView(mPlayerContainer);
-        removeView(mBusinessCoverContainer);
-        removeView(mStateCoverContainer);
-        removeView(mExtendCoverContainer);
+        removeView(mLevelLowCoverContainer);
+        removeView(mLevelMediumCoverContainer);
+        removeView(mLevelHighCoverContainer);
         removeView(mGestureLayout);
     }
 
