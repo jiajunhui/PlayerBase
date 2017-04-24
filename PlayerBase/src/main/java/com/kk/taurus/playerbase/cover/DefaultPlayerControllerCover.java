@@ -108,13 +108,13 @@ public class DefaultPlayerControllerCover extends BasePlayerControllerCover {
     @Override
     protected void switchControllerState() {
         if(isVisibilityGone()){
+            setControllerState(true);
+            setBottomContainerState(true);
             if(isLandScape){
                 setTopContainerState(true);
             }else{
                 setTopContainerState(false);
             }
-            setControllerState(true);
-            setBottomContainerState(true);
         }else{
             setControllerState(false);
         }
