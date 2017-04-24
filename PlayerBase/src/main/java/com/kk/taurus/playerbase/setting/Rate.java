@@ -7,9 +7,6 @@ import java.io.Serializable;
  */
 public class Rate implements Serializable{
 
-    public static final int DEFINITION_TYPE_LETV = 1;
-    public static final int DEFINITION_TYPE_BF = 2;
-
     private int definitionType;
 
     private String rate_key;
@@ -54,14 +51,7 @@ public class Rate implements Serializable{
     }
 
     public String getDefinition(){
-        switch (definitionType){
-            case DEFINITION_TYPE_BF:
-                return rate_value;
-
-            case DEFINITION_TYPE_LETV:
-                return rate_value;
-        }
-        return "";
+        return rate_value;
     }
 
 }

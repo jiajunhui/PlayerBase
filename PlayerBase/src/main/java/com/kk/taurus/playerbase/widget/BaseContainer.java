@@ -17,6 +17,7 @@ import android.widget.FrameLayout;
 
 import com.kk.taurus.playerbase.callback.OnPlayerGestureListener;
 import com.kk.taurus.playerbase.cover.base.BaseCover;
+import com.kk.taurus.playerbase.inter.ICover;
 import com.kk.taurus.playerbase.setting.PlayerGestureDetector;
 
 import java.util.ArrayList;
@@ -41,9 +42,17 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
      */
     private FrameLayout mPlayerContainer;
     /**
-     * the covers container .
+     * the business covers container .
      */
-    private FrameLayout mCoverContainer;
+    private FrameLayout mBusinessCoverContainer;
+    /**
+     * the state covers container .
+     */
+    private FrameLayout mStateCoverContainer;
+    /**
+     * the extend covers container .
+     */
+    private FrameLayout mExtendCoverContainer;
     /**
      * cover collections.
      */
@@ -94,8 +103,12 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
         initBaseInfo(context);
         //init render container
         initPlayerContainer(context);
-        //init cover container
-        initCoverContainer(context);
+        //init business cover container
+        initBusinessCoverContainer(context);
+        //init state cover container
+        initStateCoverContainer(context);
+        //init extend cover container
+        initExtendCoverContainer(context);
         //初始化手势处理层（注：为避免cover层的点击事件影响，故将手势处理layout）
         initGesture(context);
         onContainerHasInit(context);
@@ -168,34 +181,60 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
 
     protected abstract View getPlayerWidget(Context context);
 
-    private void initCoverContainer(Context context) {
-        mCoverContainer = new FrameLayout(context);
-        mCoverContainer.setBackgroundColor(Color.TRANSPARENT);
-        addView(mCoverContainer,new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+    private void initBusinessCoverContainer(Context context) {
+        mBusinessCoverContainer = new FrameLayout(context);
+        mBusinessCoverContainer.setBackgroundColor(Color.TRANSPARENT);
+        addView(mBusinessCoverContainer,new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+    }
+
+    private void initStateCoverContainer(Context context) {
+        mStateCoverContainer = new FrameLayout(context);
+        mStateCoverContainer.setBackgroundColor(Color.TRANSPARENT);
+        addView(mStateCoverContainer,new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+    }
+
+    private void initExtendCoverContainer(Context context) {
+        mExtendCoverContainer = new FrameLayout(context);
+        mExtendCoverContainer.setBackgroundColor(Color.TRANSPARENT);
+        addView(mExtendCoverContainer,new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
     }
 
     protected void addCover(BaseCover cover, ViewGroup.LayoutParams layoutParams){
-        if(mCoverContainer!=null && cover!=null){
-            if(isContainCoverView(cover))
-                return;
-            if(layoutParams==null){
-                layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            }
-            mCoverContainer.addView(cover.getView(),layoutParams);
-            mCovers.add(cover);
+        if(cover==null)
+            return;
+        if(isContainCoverView(cover))
+            return;
+        if(layoutParams==null){
+            layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        }
+        mCovers.add(cover);
+        switch (cover.getCoverType()){
+            case ICover.COVER_TYPE_BUSINESS:
+                mBusinessCoverContainer.addView(cover.getView(),layoutParams);
+                break;
+            case ICover.COVER_TYPE_STATE:
+                mStateCoverContainer.addView(cover.getView(),layoutParams);
+                break;
+            case ICover.COVER_TYPE_EXTEND:
+                mExtendCoverContainer.addView(cover.getView(),layoutParams);
+                break;
         }
     }
 
     private boolean isContainCoverView(BaseCover cover){
         if(cover==null)
             return false;
-        return mCoverContainer.indexOfChild(cover.getView())!=-1;
+        return mBusinessCoverContainer.indexOfChild(cover.getView())!=-1
+                || mStateCoverContainer.indexOfChild(cover.getView())!=-1
+                || mExtendCoverContainer.indexOfChild(cover.getView())!=-1;
     }
 
     protected void removeCover(BaseCover cover){
-        if(mCoverContainer!=null){
-            mCoverContainer.removeView(cover.getView());
-        }
+        if(cover==null)
+            return;
+        mBusinessCoverContainer.removeView(cover.getView());
+        mStateCoverContainer.removeView(cover.getView());
+        mExtendCoverContainer.removeView(cover.getView());
     }
 
     protected void removeAllCovers(){
@@ -209,7 +248,9 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
 
     protected void removeAllContainers(){
         removeView(mPlayerContainer);
-        removeView(mCoverContainer);
+        removeView(mBusinessCoverContainer);
+        removeView(mStateCoverContainer);
+        removeView(mExtendCoverContainer);
         removeView(mGestureLayout);
     }
 

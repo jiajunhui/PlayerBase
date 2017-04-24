@@ -11,12 +11,18 @@ import com.kk.taurus.playerbase.setting.CoverData;
  */
 
 public interface ICover {
+
+    int COVER_TYPE_BUSINESS = 0;
+    int COVER_TYPE_STATE = 1;
+    int COVER_TYPE_EXTEND = 2;
+
     View initCoverLayout(Context context);
     void setCoverEnable(boolean enable);
     void setCoverVisibility(int visibility);
     void onRefreshCoverData(CoverData data);
     String getString(int resId);
     View getView();
+    int getCoverType();
     CoverObserver getCoverObserver();
     int getScreenOrientation();
 }
