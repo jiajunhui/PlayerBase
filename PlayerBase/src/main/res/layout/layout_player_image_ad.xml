@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@id/cover_player_image_ad_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_centerInParent="true">
+        <ImageView
+            android:id="@id/cover_player_image_ad_image_view_pic"
+            android:layout_width="720px"
+            android:layout_height="480px"
+            android:scaleType="fitCenter"/>
+    </RelativeLayout>
+
+</RelativeLayout>
