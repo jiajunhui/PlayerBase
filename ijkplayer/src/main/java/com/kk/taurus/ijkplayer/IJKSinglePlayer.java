@@ -5,16 +5,12 @@ import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
 
-import com.kk.taurus.ijkplayer.media.IRenderView;
 import com.kk.taurus.ijkplayer.media.IjkVideoView;
-import com.kk.taurus.ijkplayer.media.Settings;
 import com.kk.taurus.playerbase.callback.OnErrorListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.setting.AspectRatio;
-import com.kk.taurus.playerbase.setting.DecodeMode;
 import com.kk.taurus.playerbase.setting.Rate;
 import com.kk.taurus.playerbase.setting.VideoData;
-import com.kk.taurus.playerbase.setting.ViewType;
 import com.kk.taurus.playerbase.widget.BaseSinglePlayer;
 
 import java.util.List;
@@ -58,103 +54,90 @@ public class IJKSinglePlayer extends BaseSinglePlayer {
     }
 
     private void initPlayerListener() {
-        mVideoView.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(IMediaPlayer mp) {
-                Log.d(TAG,"EVENT_CODE_PLAY_COMPLETE");
-                onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAY_COMPLETE,null);
-            }
-        });
-        mVideoView.setOnInfoListener(new IMediaPlayer.OnInfoListener() {
-            @Override
-            public boolean onInfo(IMediaPlayer mp, int what, int extra) {
-                switch (what) {
-                    case IMediaPlayer.MEDIA_INFO_BUFFERING_START:
-                        Log.d(TAG,"EVENT_CODE_BUFFERING_START");
-                        onPlayerEvent(OnPlayerEventListener.EVENT_CODE_BUFFERING_START,null);
-                        break;
-                    case IMediaPlayer.MEDIA_INFO_BUFFERING_END:
-                        Log.d(TAG,"EVENT_CODE_BUFFERING_END");
-                        onPlayerEvent(OnPlayerEventListener.EVENT_CODE_BUFFERING_END,null);
-                        break;
-                    case IMediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START:
-                        Log.d(TAG,"EVENT_CODE_RENDER_START");
-                        onPlayerEvent(OnPlayerEventListener.EVENT_CODE_RENDER_START,null);
-                        break;
-                }
-                return false;
-            }
-        });
-        mVideoView.setOnErrorListener(new IMediaPlayer.OnErrorListener() {
-            @Override
-            public boolean onError(IMediaPlayer mp, int what, int extra) {
-                onErrorEvent(OnErrorListener.ERROR_CODE_COMMON,null);
-                return false;
-            }
-        });
-        mVideoView.setOnPreparedListener(new IMediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(IMediaPlayer mp) {
-                preparedMediaPlayer(mp);
-                Log.d(TAG,"EVENT_CODE_PREPARED");
-                onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PREPARED,null);
-                //IjkVideoView  ...int STATE_PLAYING = 3;
-                if(mVideoView != null && mStatus!= STATUS_PAUSED && mVideoView.getTargetState() == 3){
-                    mVideoView.start();
-                }
-                onStartSeek();
-            }
-        });
+        if(mVideoView==null)
+            return;
+        mVideoView.setOnPreparedListener(mOnPreparedListener);
+        mVideoView.setOnInfoListener(mOnInfoListener);
+        mVideoView.setOnCompletionListener(mOnCompletionListener);
+        mVideoView.setOnErrorListener(mOnErrorListener);
+    }
+
+    private void resetListener(){
+        if(mVideoView==null)
+            return;
+        mVideoView.setOnPreparedListener(null);
+        mVideoView.setOnInfoListener(null);
+        mVideoView.setOnCompletionListener(null);
+        mVideoView.setOnErrorListener(null);
     }
 
     private void preparedMediaPlayer(IMediaPlayer mediaPlayer) {
         if (mediaPlayer == null)
             return;
-        mediaPlayer.setOnSeekCompleteListener(new IMediaPlayer.OnSeekCompleteListener() {
-            @Override
-            public void onSeekComplete(IMediaPlayer mp) {
-                Log.d(TAG,"EVENT_CODE_SEEK_COMPLETE");
-                onPlayerEvent(OnPlayerEventListener.EVENT_CODE_SEEK_COMPLETE,null);
+        mediaPlayer.setOnSeekCompleteListener(mOnSeekCompleteListener);
+    }
+
+    private IMediaPlayer.OnPreparedListener mOnPreparedListener = new IMediaPlayer.OnPreparedListener() {
+        @Override
+        public void onPrepared(IMediaPlayer mp) {
+            mStatus = STATUS_PREPARED;
+            preparedMediaPlayer(mp);
+            Log.d(TAG,"EVENT_CODE_PREPARED");
+            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PREPARED,null);
+//                //IjkVideoView  ...int STATE_PLAYING = 3;
+            if(available() && mTargetStatus==STATUS_STARTED){
+                start();
             }
-        });
-    }
-
-    @Override
-    public void setDecodeMode(DecodeMode mDecodeMode) {
-        super.setDecodeMode(mDecodeMode);
-        updateVideoViewDecodeMode();
-    }
-
-    @Override
-    public void setViewType(ViewType mViewType) {
-        super.setViewType(mViewType);
-        updateVideoViewViewType();
-    }
-
-    private void updateVideoViewViewType() {
-        if(mVideoView!=null){
-            if(getViewType() == ViewType.SURFACEVIEW){
-                mVideoView.setEnableSurfaceView();
-            }else if(getViewType() == ViewType.TEXTUREVIEW){
-                mVideoView.setEnableTextureView();
-            }
+            onStartSeek();
         }
-    }
+    };
 
-    private void updateVideoViewDecodeMode() {
-        if(mVideoView!=null){
-            if(getDecodeMode() == DecodeMode.MEDIA_PLAYER){
-                mVideoView.setUsingAndroidPlayer(true);
-            }else if(getDecodeMode() == DecodeMode.SOFT){
-                mVideoView.setUsingAndroidPlayer(false);
-            }else if(getDecodeMode() == DecodeMode.HARD){
-                mVideoView.setUsingAndroidPlayer(false);
-                mVideoView.setUsingMediaCodec(true);
-            }else if(getDecodeMode() == DecodeMode.EXO_PLAYER){
-                mVideoView.setPlayerType(Settings.PV_PLAYER__IjkExoMediaPlayer);
+    private IMediaPlayer.OnInfoListener mOnInfoListener = new IMediaPlayer.OnInfoListener() {
+        @Override
+        public boolean onInfo(IMediaPlayer mp, int what, int extra) {
+            switch (what) {
+                case IMediaPlayer.MEDIA_INFO_BUFFERING_START:
+                    Log.d(TAG,"EVENT_CODE_BUFFERING_START");
+                    onPlayerEvent(OnPlayerEventListener.EVENT_CODE_BUFFERING_START,null);
+                    break;
+                case IMediaPlayer.MEDIA_INFO_BUFFERING_END:
+                    Log.d(TAG,"EVENT_CODE_BUFFERING_END");
+                    onPlayerEvent(OnPlayerEventListener.EVENT_CODE_BUFFERING_END,null);
+                    break;
+                case IMediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START:
+                    Log.d(TAG,"EVENT_CODE_RENDER_START");
+                    onPlayerEvent(OnPlayerEventListener.EVENT_CODE_RENDER_START,null);
+                    break;
             }
+            return false;
         }
-    }
+    };
+
+    private IMediaPlayer.OnCompletionListener mOnCompletionListener = new IMediaPlayer.OnCompletionListener() {
+        @Override
+        public void onCompletion(IMediaPlayer mp) {
+            Log.d(TAG,"EVENT_CODE_PLAY_COMPLETE");
+            mStatus = STATUS_PLAYBACK_COMPLETE;
+            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAY_COMPLETE,null);
+        }
+    };
+
+    private IMediaPlayer.OnErrorListener mOnErrorListener = new IMediaPlayer.OnErrorListener() {
+        @Override
+        public boolean onError(IMediaPlayer mp, int what, int extra) {
+            mStatus = STATUS_ERROR;
+            onErrorEvent(OnErrorListener.ERROR_CODE_COMMON,null);
+            return false;
+        }
+    };
+
+    private IMediaPlayer.OnSeekCompleteListener mOnSeekCompleteListener = new IMediaPlayer.OnSeekCompleteListener() {
+        @Override
+        public void onSeekComplete(IMediaPlayer mp) {
+            Log.d(TAG,"EVENT_CODE_SEEK_COMPLETE");
+            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_SEEK_COMPLETE,null);
+        }
+    };
 
     private void toggleAspectRatio() {
         if(available()){
@@ -183,10 +166,14 @@ public class IJKSinglePlayer extends BaseSinglePlayer {
 
     @Override
     public void setDataSource(VideoData data) {
-        if(available() && data!=null && data.getData()!=null){
+        if(available() && data!=null && data.getData()!=null && mStatus==STATUS_IDLE){
             this.dataSource = data;
+            startSeekPos = -1;
             mVideoView.setVideoPath(data.getData());
+            mStatus = STATUS_INITIALIZED;
+            initPlayerListener();
         }
+        mTargetStatus = STATUS_INITIALIZED;
     }
 
     @Override
@@ -200,9 +187,14 @@ public class IJKSinglePlayer extends BaseSinglePlayer {
 
     @Override
     public void start() {
-        if(available()){
+        if(available() &&
+                (mStatus==STATUS_PREPARED
+                        || mStatus==STATUS_PAUSED
+                        || mStatus==STATUS_PLAYBACK_COMPLETE)){
             mVideoView.start();
+            mStatus = STATUS_STARTED;
         }
+        mTargetStatus = STATUS_STARTED;
     }
 
     @Override
@@ -217,32 +209,55 @@ public class IJKSinglePlayer extends BaseSinglePlayer {
 
     @Override
     public void pause() {
-        if(available() && isPlaying()){
+        if(available() && mStatus==STATUS_STARTED){
             mVideoView.pause();
             mStatus = STATUS_PAUSED;
         }
+        mTargetStatus = STATUS_PAUSED;
     }
 
     @Override
     public void resume() {
-        if(available() && mStatus == STATUS_PAUSED){
-            mVideoView.start();
-            mStatus = STATUS_STARTED;
-        }
+//        if(available() && mStatus == STATUS_PAUSED){
+//            mVideoView.start();
+//            mStatus = STATUS_STARTED;
+//        }
+//        mTargetStatus = STATUS_STARTED;
+        start();
     }
 
     @Override
     public void seekTo(int msc) {
-        if(available()){
+        if(available() &&
+                (mStatus==STATUS_PREPARED
+                        || mStatus==STATUS_STARTED
+                        || mStatus==STATUS_PAUSED
+                        || mStatus==STATUS_PLAYBACK_COMPLETE)){
             mVideoView.seekTo(msc);
         }
     }
 
     @Override
     public void stop() {
-        if(available()){
+        if(available() &&
+                (mStatus==STATUS_PREPARED
+                        || mStatus==STATUS_STARTED
+                        || mStatus==STATUS_PAUSED
+                        || mStatus==STATUS_PLAYBACK_COMPLETE)){
             mVideoView.stop();
+            mStatus = STATUS_STOPPED;
         }
+        mTargetStatus = STATUS_STOPPED;
+    }
+
+    @Override
+    public void reset() {
+        if(available()){
+//            mVideoView.reset();
+            resetListener();
+            mStatus = STATUS_IDLE;
+        }
+        mTargetStatus = STATUS_IDLE;
     }
 
     @Override
@@ -281,13 +296,13 @@ public class IJKSinglePlayer extends BaseSinglePlayer {
     public void setAspectRatio(AspectRatio aspectRatio) {
         if(available()){
             if(aspectRatio == AspectRatio.AspectRatio_16_9){
-                mVideoView.setAspectRatio(IRenderView.AR_16_9_FIT_PARENT);
+                mVideoView.setAspectRatio(com.kk.taurus.playerbase.player.IRenderView.AR_16_9_FIT_PARENT);
             }else if(aspectRatio == AspectRatio.AspectRatio_4_3){
-                mVideoView.setAspectRatio(IRenderView.AR_4_3_FIT_PARENT);
+                mVideoView.setAspectRatio(com.kk.taurus.playerbase.player.IRenderView.AR_4_3_FIT_PARENT);
             }else if(aspectRatio == AspectRatio.AspectRatio_FILL_PARENT){
-                mVideoView.setAspectRatio(IRenderView.AR_ASPECT_FILL_PARENT);
+                mVideoView.setAspectRatio(com.kk.taurus.playerbase.player.IRenderView.AR_ASPECT_FILL_PARENT);
             }else if(aspectRatio == AspectRatio.AspectRatio_ORIGIN){
-                mVideoView.setAspectRatio(IRenderView.AR_ASPECT_WRAP_CONTENT);
+                mVideoView.setAspectRatio(com.kk.taurus.playerbase.player.IRenderView.AR_ASPECT_WRAP_CONTENT);
             }
         }
     }
@@ -296,10 +311,11 @@ public class IJKSinglePlayer extends BaseSinglePlayer {
     public void destroy() {
         super.destroy();
         try{
+            mStatus = STATUS_END;
+            mTargetStatus = STATUS_IDLE;
             if(mVideoView!=null){
                 mVideoView.stopPlayback();
-                mVideoView.release(true);
-                destroyDrawingCache();
+                mVideoView = null;
             }
         }catch (Exception e){
             e.printStackTrace();

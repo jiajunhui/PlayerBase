@@ -28,6 +28,7 @@ public interface ISinglePlayer {
     void resume();
     void seekTo(int msc);
     void stop();
+    void reset();
     /** replay current data source*/
     void rePlay(int msc);
     boolean isPlaying();

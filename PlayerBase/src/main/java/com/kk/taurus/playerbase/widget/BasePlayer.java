@@ -104,7 +104,15 @@ public abstract class BasePlayer extends BaseAdPlayer {
     public void stop() {
         if(available()){
             mInternalPlayer.stop();
+            reset();
             onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_ON_STOP,null);
+        }
+    }
+
+    @Override
+    public void reset() {
+        if(available()){
+            mInternalPlayer.reset();
         }
     }
 

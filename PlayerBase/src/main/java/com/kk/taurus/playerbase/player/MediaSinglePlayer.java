@@ -39,69 +39,90 @@ public class MediaSinglePlayer extends BaseSinglePlayer {
     }
 
     private void initPlayerListener() {
-        mVideoView.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(IMediaPlayer mp) {
-                Log.d(TAG,"EVENT_CODE_PLAY_COMPLETE");
-                mStatus = STATUS_PLAYBACK_COMPLETE;
-                onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAY_COMPLETE,null);
-            }
-        });
-        mVideoView.setOnInfoListener(new IMediaPlayer.OnInfoListener() {
-            @Override
-            public boolean onInfo(IMediaPlayer mp, int what, int extra) {
-                switch (what) {
-                    case IMediaPlayer.MEDIA_INFO_BUFFERING_START:
-                        Log.d(TAG,"EVENT_CODE_BUFFERING_START");
-                        onPlayerEvent(OnPlayerEventListener.EVENT_CODE_BUFFERING_START,null);
-                        break;
-                    case IMediaPlayer.MEDIA_INFO_BUFFERING_END:
-                        Log.d(TAG,"EVENT_CODE_BUFFERING_END");
-                        onPlayerEvent(OnPlayerEventListener.EVENT_CODE_BUFFERING_END,null);
-                        break;
-                    case IMediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START:
-                        Log.d(TAG,"EVENT_CODE_RENDER_START");
-                        onPlayerEvent(OnPlayerEventListener.EVENT_CODE_RENDER_START,null);
-                        break;
-                }
-                return false;
-            }
-        });
-        mVideoView.setOnErrorListener(new IMediaPlayer.OnErrorListener() {
-            @Override
-            public boolean onError(IMediaPlayer mp, int what, int extra) {
-                mStatus = STATUS_ERROR;
-                onErrorEvent(OnErrorListener.ERROR_CODE_COMMON,null);
-                return false;
-            }
-        });
-        mVideoView.setOnPreparedListener(new IMediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(IMediaPlayer mp) {
-                mStatus = STATUS_PREPARED;
-                preparedMediaPlayer(mp);
-                Log.d(TAG,"EVENT_CODE_PREPARED");
-                onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PREPARED,null);
-//                //IjkVideoView  ...int STATE_PLAYING = 3;
-                if(available() && mTargetStatus==STATUS_STARTED){
-                    start();
-                }
-                onStartSeek();
-            }
-        });
+        if(mVideoView==null)
+            return;
+        mVideoView.setOnPreparedListener(mOnPreparedListener);
+        mVideoView.setOnInfoListener(mOnInfoListener);
+        mVideoView.setOnCompletionListener(mOnCompletionListener);
+        mVideoView.setOnErrorListener(mOnErrorListener);
+    }
+
+    private void resetListener(){
+        if(mVideoView==null)
+            return;
+        mVideoView.setOnPreparedListener(null);
+        mVideoView.setOnInfoListener(null);
+        mVideoView.setOnCompletionListener(null);
+        mVideoView.setOnErrorListener(null);
     }
 
     private void preparedMediaPlayer(IMediaPlayer mediaPlayer) {
         if (mediaPlayer == null)
             return;
-        mediaPlayer.setOnSeekCompleteListener(new IMediaPlayer.OnSeekCompleteListener() {
-            @Override
-            public void onSeekComplete(IMediaPlayer mp) {
-                Log.d(TAG,"EVENT_CODE_SEEK_COMPLETE");
-                onPlayerEvent(OnPlayerEventListener.EVENT_CODE_SEEK_COMPLETE,null);
-            }
-        });
+        mediaPlayer.setOnSeekCompleteListener(mOnSeekCompleteListener);
     }
+
+    private IMediaPlayer.OnPreparedListener mOnPreparedListener = new IMediaPlayer.OnPreparedListener() {
+        @Override
+        public void onPrepared(IMediaPlayer mp) {
+            mStatus = STATUS_PREPARED;
+            preparedMediaPlayer(mp);
+            Log.d(TAG,"EVENT_CODE_PREPARED");
+            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PREPARED,null);
+//                //IjkVideoView  ...int STATE_PLAYING = 3;
+            if(available() && mTargetStatus==STATUS_STARTED){
+                start();
+            }
+            onStartSeek();
+        }
+    };
+
+    private IMediaPlayer.OnInfoListener mOnInfoListener = new IMediaPlayer.OnInfoListener() {
+        @Override
+        public boolean onInfo(IMediaPlayer mp, int what, int extra) {
+            switch (what) {
+                case IMediaPlayer.MEDIA_INFO_BUFFERING_START:
+                    Log.d(TAG,"EVENT_CODE_BUFFERING_START");
+                    onPlayerEvent(OnPlayerEventListener.EVENT_CODE_BUFFERING_START,null);
+                    break;
+                case IMediaPlayer.MEDIA_INFO_BUFFERING_END:
+                    Log.d(TAG,"EVENT_CODE_BUFFERING_END");
+                    onPlayerEvent(OnPlayerEventListener.EVENT_CODE_BUFFERING_END,null);
+                    break;
+                case IMediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START:
+                    Log.d(TAG,"EVENT_CODE_RENDER_START");
+                    onPlayerEvent(OnPlayerEventListener.EVENT_CODE_RENDER_START,null);
+                    break;
+            }
+            return false;
+        }
+    };
+
+    private IMediaPlayer.OnCompletionListener mOnCompletionListener = new IMediaPlayer.OnCompletionListener() {
+        @Override
+        public void onCompletion(IMediaPlayer mp) {
+            Log.d(TAG,"EVENT_CODE_PLAY_COMPLETE");
+            mStatus = STATUS_PLAYBACK_COMPLETE;
+            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAY_COMPLETE,null);
+        }
+    };
+
+    private IMediaPlayer.OnErrorListener mOnErrorListener = new IMediaPlayer.OnErrorListener() {
+        @Override
+        public boolean onError(IMediaPlayer mp, int what, int extra) {
+            mStatus = STATUS_ERROR;
+            onErrorEvent(OnErrorListener.ERROR_CODE_COMMON,null);
+            return false;
+        }
+    };
+
+    private IMediaPlayer.OnSeekCompleteListener mOnSeekCompleteListener = new IMediaPlayer.OnSeekCompleteListener() {
+        @Override
+        public void onSeekComplete(IMediaPlayer mp) {
+            Log.d(TAG,"EVENT_CODE_SEEK_COMPLETE");
+            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_SEEK_COMPLETE,null);
+        }
+    };
 
     private void toggleAspectRatio() {
         if(available()){
@@ -131,10 +152,11 @@ public class MediaSinglePlayer extends BaseSinglePlayer {
     @Override
     public void setDataSource(VideoData data) {
         if(available() && data!=null && data.getData()!=null && mStatus==STATUS_IDLE){
-            mStatus = STATUS_INITIALIZED;
             this.dataSource = data;
             startSeekPos = -1;
             mVideoView.setVideoPath(data.getData());
+            mStatus = STATUS_INITIALIZED;
+            initPlayerListener();
         }
         mTargetStatus = STATUS_INITIALIZED;
     }
@@ -208,10 +230,19 @@ public class MediaSinglePlayer extends BaseSinglePlayer {
                         || mStatus==STATUS_PAUSED
                         || mStatus==STATUS_PLAYBACK_COMPLETE)){
             mVideoView.stop();
-            mVideoView.reset();
             mStatus = STATUS_STOPPED;
         }
         mTargetStatus = STATUS_STOPPED;
+    }
+
+    @Override
+    public void reset() {
+        if(available()){
+            mVideoView.reset();
+            resetListener();
+            mStatus = STATUS_IDLE;
+        }
+        mTargetStatus = STATUS_IDLE;
     }
 
     @Override
