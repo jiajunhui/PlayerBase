@@ -686,7 +686,10 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
 
     @Override
     public int getCurrentPosition() {
-        if (mMediaPlayer!=null && mCurrentState!=STATE_ERROR) {
+        if (mMediaPlayer!=null && (mCurrentState==STATE_PREPARED
+                || mCurrentState==STATE_STARTED
+                || mCurrentState==STATE_PAUSED
+                || mCurrentState==STATE_PLAYBACK_COMPLETED)) {
             return (int) mMediaPlayer.getCurrentPosition();
         }
         return 0;

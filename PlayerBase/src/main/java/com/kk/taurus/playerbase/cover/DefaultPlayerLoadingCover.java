@@ -53,6 +53,11 @@ public class DefaultPlayerLoadingCover extends BasePlayerLoadingCover {
                 Log.d(TAG,"buffering end......");
                 setLoadingState(false);
                 break;
+
+            case OnPlayerEventListener.EVENT_CODE_PLAYER_ON_STOP:
+                Log.d(TAG,"on stopped......");
+                setLoadingState(false);
+                break;
         }
     }
 
