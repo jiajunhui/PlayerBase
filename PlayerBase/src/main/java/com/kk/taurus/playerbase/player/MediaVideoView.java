@@ -238,7 +238,9 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
         mUri = uri;
         mHeaders = headers;
         mSeekWhenPrepared = 0;
-        openVideo();
+        if(mCurrentState==STATE_IDLE){
+            openVideo();
+        }
         requestLayout();
         invalidate();
     }
@@ -668,6 +670,7 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
     public void seekTo(int msc) {
         if (mMediaPlayer!=null && (mCurrentState==STATE_PREPARED
                 || mCurrentState==STATE_PAUSED
+                || mCurrentState==STATE_STARTED
                 || mCurrentState==STATE_PLAYBACK_COMPLETED)) {
             mMediaPlayer.seekTo(msc);
             mSeekWhenPrepared = 0;
