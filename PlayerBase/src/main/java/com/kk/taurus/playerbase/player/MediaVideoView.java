@@ -476,6 +476,12 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
                     mCurrentState = STATE_ERROR;
                     mTargetState = STATE_ERROR;
 
+                    switch (framework_err){
+                        case 100:
+                            release(true);
+                            break;
+                    }
+
                     /* If an error handler has been supplied, use it and finish. */
                     if (mOnErrorListener != null) {
                         if (mOnErrorListener.onError(mMediaPlayer, framework_err, impl_err)) {
@@ -608,7 +614,6 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
     public void release(boolean cleartargetstate) {
         if (mMediaPlayer != null) {
             mMediaPlayer.release();
-            mMediaPlayer = null;
             // REMOVED: mPendingSubtitleTracks.clear();
             mCurrentState = STATE_END;
             if (cleartargetstate) {
