@@ -19,6 +19,8 @@ public abstract class BasePlayerLoadingCover extends BaseCoverPlayerHandle imple
     protected View mLoadingView;
     protected TextView mLoadingText;
 
+    protected boolean mLoadingEnable = true;
+
     public BasePlayerLoadingCover(Context context){
         super(context);
     }
@@ -40,7 +42,17 @@ public abstract class BasePlayerLoadingCover extends BaseCoverPlayerHandle imple
     }
 
     @Override
+    public void setLoadingEnable(boolean enable) {
+        if(!enable){
+            setLoadingState(false);
+        }
+        this.mLoadingEnable = enable;
+    }
+
+    @Override
     public void setLoadingState(boolean state) {
+        if(!mLoadingEnable)
+            return;
         setCoverVisibility(state?View.VISIBLE:View.GONE);
     }
 

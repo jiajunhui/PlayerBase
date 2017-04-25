@@ -167,10 +167,10 @@ public class IJKSinglePlayer extends BaseSinglePlayer {
     @Override
     public void setDataSource(VideoData data) {
         if(available() && data!=null && data.getData()!=null && mStatus==STATUS_IDLE){
+            mStatus = STATUS_INITIALIZED;
             this.dataSource = data;
             startSeekPos = -1;
             mVideoView.setVideoPath(data.getData());
-            mStatus = STATUS_INITIALIZED;
             initPlayerListener();
         }
         mTargetStatus = STATUS_INITIALIZED;

@@ -152,10 +152,10 @@ public class MediaSinglePlayer extends BaseSinglePlayer {
     @Override
     public void setDataSource(VideoData data) {
         if(available() && data!=null && data.getData()!=null && mStatus==STATUS_IDLE){
+            mStatus = STATUS_INITIALIZED;
             this.dataSource = data;
             startSeekPos = -1;
             mVideoView.setVideoPath(data.getData());
-            mStatus = STATUS_INITIALIZED;
             initPlayerListener();
         }
         mTargetStatus = STATUS_INITIALIZED;
@@ -203,12 +203,11 @@ public class MediaSinglePlayer extends BaseSinglePlayer {
 
     @Override
     public void resume() {
-//        if(available() && mStatus == STATUS_PAUSED){
-//            mVideoView.start();
-//            mStatus = STATUS_STARTED;
-//        }
-//        mTargetStatus = STATUS_STARTED;
-        start();
+        if(available() && mStatus == STATUS_PAUSED){
+            mVideoView.start();
+            mStatus = STATUS_STARTED;
+        }
+        mTargetStatus = STATUS_STARTED;
     }
 
     @Override
