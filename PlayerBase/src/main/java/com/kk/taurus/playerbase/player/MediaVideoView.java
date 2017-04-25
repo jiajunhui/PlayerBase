@@ -268,6 +268,15 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
         }
     }
 
+    private void resetListener(){
+        mMediaPlayer.setOnPreparedListener(null);
+        mMediaPlayer.setOnVideoSizeChangedListener(null);
+        mMediaPlayer.setOnCompletionListener(null);
+        mMediaPlayer.setOnErrorListener(null);
+        mMediaPlayer.setOnInfoListener(null);
+        mMediaPlayer.setOnBufferingUpdateListener(null);
+    }
+
     //-----------Taurus Add 2016/08/21---------------
 
     // REMOVED: addSubtitleSource
@@ -289,6 +298,7 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
         // we shouldn't clear the target state, because somebody might have
         // called start() previously
         reset();
+        resetListener();
 
         if(mAppContext!=null){
             AudioManager am = (AudioManager) mAppContext.get().getSystemService(Context.AUDIO_SERVICE);
@@ -432,6 +442,7 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
                             break;
                         case IMediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START:
                             Log.d(TAG, "MEDIA_INFO_VIDEO_RENDERING_START:");
+                            mSeekWhenPrepared = 0;
                             break;
                         case IMediaPlayer.MEDIA_INFO_BUFFERING_START:
                             Log.d(TAG, "MEDIA_INFO_BUFFERING_START:");
@@ -617,6 +628,7 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
         if (mMediaPlayer != null) {
             Log.d(TAG,"--->release");
             mMediaPlayer.release();
+            resetListener();
             // REMOVED: mPendingSubtitleTracks.clear();
             mCurrentState = STATE_END;
             if (cleartargetstate) {
