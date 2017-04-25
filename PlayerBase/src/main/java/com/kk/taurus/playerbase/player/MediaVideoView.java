@@ -211,7 +211,6 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
      * @param path the path of the video.
      */
     public void setVideoPath(String path) {
-        Log.d(TAG,"path : " + path);
         setVideoURI(Uri.parse(path));
     }
 
@@ -239,6 +238,7 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
         mHeaders = headers;
         mSeekWhenPrepared = 0;
         if(mCurrentState==STATE_IDLE){
+            Log.d(TAG,"setVideoPath : " + uri.toString());
             openVideo();
         }
         requestLayout();
@@ -252,6 +252,7 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
                         || mCurrentState==STATE_STARTED
                         || mCurrentState==STATE_PAUSED
                         || mCurrentState==STATE_PLAYBACK_COMPLETED)){
+            Log.d(TAG,"--->stop");
             mMediaPlayer.stop();
             mCurrentState = STATE_STOPPED;
             mTargetState = STATE_STOPPED;
@@ -260,6 +261,7 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
 
     public void reset(){
         if(mMediaPlayer!=null){
+            Log.d(TAG,"--->reset");
             mMediaPlayer.reset();
             mCurrentState = STATE_IDLE;
             mTargetState = STATE_IDLE;
@@ -613,6 +615,7 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
      */
     public void release(boolean cleartargetstate) {
         if (mMediaPlayer != null) {
+            Log.d(TAG,"--->release");
             mMediaPlayer.release();
             // REMOVED: mPendingSubtitleTracks.clear();
             mCurrentState = STATE_END;
@@ -629,6 +632,7 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
     @Override
     public void start() {
         if (mMediaPlayer!=null && (mCurrentState==STATE_PREPARED || mCurrentState==STATE_PAUSED)) {
+            Log.d(TAG,"--->start");
             mMediaPlayer.start();
             mCurrentState = STATE_STARTED;
         }
@@ -638,6 +642,7 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
     @Override
     public void pause() {
         if (mMediaPlayer!=null && mCurrentState==STATE_STARTED) {
+            Log.d(TAG,"--->pause");
             mMediaPlayer.pause();
             mCurrentState = STATE_PAUSED;
         }
@@ -677,6 +682,7 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
                 || mCurrentState==STATE_PAUSED
                 || mCurrentState==STATE_STARTED
                 || mCurrentState==STATE_PLAYBACK_COMPLETED)) {
+            Log.d(TAG,"--->seek to : " + msc);
             mMediaPlayer.seekTo(msc);
             mSeekWhenPrepared = 0;
         } else {
