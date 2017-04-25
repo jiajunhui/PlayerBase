@@ -269,6 +269,8 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
     }
 
     private void resetListener(){
+        if(mMediaPlayer==null)
+            return;
         mMediaPlayer.setOnPreparedListener(null);
         mMediaPlayer.setOnVideoSizeChangedListener(null);
         mMediaPlayer.setOnCompletionListener(null);
@@ -306,7 +308,9 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
         }
 
         try {
-            mMediaPlayer = createPlayer(0);
+            if(mMediaPlayer==null){
+                mMediaPlayer = createPlayer(0);
+            }
 
             // TODO: create SubtitleController in MediaPlayer, but we need
             // a context for the subtitle renderers
