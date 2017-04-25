@@ -86,7 +86,7 @@ public abstract class BasePlayer extends BaseAdPlayer {
 
     @Override
     public void resume() {
-        if(available() && mStatus == STATUS_PAUSE){
+        if(available() && mStatus == STATUS_PAUSED){
             mInternalPlayer.resume();
             onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAY_RESUME,null);
         }

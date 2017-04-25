@@ -43,6 +43,7 @@ public class MediaSinglePlayer extends BaseSinglePlayer {
             @Override
             public void onCompletion(IMediaPlayer mp) {
                 Log.d(TAG,"EVENT_CODE_PLAY_COMPLETE");
+                mStatus = STATUS_PLAYBACK_COMPLETE;
                 onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAY_COMPLETE,null);
             }
         });
@@ -69,6 +70,7 @@ public class MediaSinglePlayer extends BaseSinglePlayer {
         mVideoView.setOnErrorListener(new IMediaPlayer.OnErrorListener() {
             @Override
             public boolean onError(IMediaPlayer mp, int what, int extra) {
+                mStatus = STATUS_ERROR;
                 onErrorEvent(OnErrorListener.ERROR_CODE_COMMON,null);
                 return false;
             }
@@ -76,12 +78,13 @@ public class MediaSinglePlayer extends BaseSinglePlayer {
         mVideoView.setOnPreparedListener(new IMediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(IMediaPlayer mp) {
+                mStatus = STATUS_PREPARED;
                 preparedMediaPlayer(mp);
                 Log.d(TAG,"EVENT_CODE_PREPARED");
                 onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PREPARED,null);
-                //IjkVideoView  ...int STATE_PLAYING = 3;
-                if(mVideoView != null && mStatus!=STATUS_PAUSE && mVideoView.getTargetState() == 3){
-                    mVideoView.start();
+//                //IjkVideoView  ...int STATE_PLAYING = 3;
+                if(available() && mTargetStatus==STATUS_STARTED){
+                    start();
                 }
                 onStartSeek();
             }
@@ -127,10 +130,13 @@ public class MediaSinglePlayer extends BaseSinglePlayer {
 
     @Override
     public void setDataSource(VideoData data) {
-        if(available() && data!=null && data.getData()!=null){
+        if(available() && data!=null && data.getData()!=null && mStatus==STATUS_IDLE){
+            mStatus = STATUS_INITIALIZED;
             this.dataSource = data;
+            startSeekPos = -1;
             mVideoView.setVideoPath(data.getData());
         }
+        mTargetStatus = STATUS_INITIALIZED;
     }
 
     @Override
@@ -144,9 +150,14 @@ public class MediaSinglePlayer extends BaseSinglePlayer {
 
     @Override
     public void start() {
-        if(available()){
+        if(available() &&
+                (mStatus==STATUS_PREPARED
+                        || mStatus==STATUS_PAUSED
+                        || mStatus==STATUS_PLAYBACK_COMPLETE)){
             mVideoView.start();
+            mStatus = STATUS_STARTED;
         }
+        mTargetStatus = STATUS_STARTED;
     }
 
     @Override
@@ -161,33 +172,46 @@ public class MediaSinglePlayer extends BaseSinglePlayer {
 
     @Override
     public void pause() {
-        if(available() && isPlaying()){
+        if(available() && mStatus==STATUS_STARTED){
             mVideoView.pause();
-            mStatus = STATUS_PAUSE;
+            mStatus = STATUS_PAUSED;
         }
+        mTargetStatus = STATUS_PAUSED;
     }
 
     @Override
     public void resume() {
-        if(available() && mStatus == STATUS_PAUSE){
-            mVideoView.start();
-            mStatus = STATUS_PLAYING;
-        }
+//        if(available() && mStatus == STATUS_PAUSED){
+//            mVideoView.start();
+//            mStatus = STATUS_STARTED;
+//        }
+//        mTargetStatus = STATUS_STARTED;
+        start();
     }
 
     @Override
     public void seekTo(int msc) {
-        if(available()){
+        if(available() &&
+                (mStatus==STATUS_PREPARED
+                        || mStatus==STATUS_STARTED
+                        || mStatus==STATUS_PAUSED
+                        || mStatus==STATUS_PLAYBACK_COMPLETE)){
             mVideoView.seekTo(msc);
         }
     }
 
     @Override
     public void stop() {
-        if(available()){
+        if(available() &&
+                (mStatus==STATUS_PREPARED
+                        || mStatus==STATUS_STARTED
+                        || mStatus==STATUS_PAUSED
+                        || mStatus==STATUS_PLAYBACK_COMPLETE)){
             mVideoView.stop();
             mVideoView.reset();
+            mStatus = STATUS_STOPPED;
         }
+        mTargetStatus = STATUS_STOPPED;
     }
 
     @Override
@@ -241,6 +265,8 @@ public class MediaSinglePlayer extends BaseSinglePlayer {
     public void destroy() {
         super.destroy();
         try{
+            mStatus = STATUS_END;
+            mTargetStatus = STATUS_IDLE;
             if(mVideoView!=null){
                 mVideoView.stopPlayback();
                 mVideoView = null;

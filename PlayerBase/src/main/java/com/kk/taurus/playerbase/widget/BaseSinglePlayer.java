@@ -19,6 +19,7 @@ import com.kk.taurus.playerbase.setting.ViewType;
 public abstract class BaseSinglePlayer extends FrameLayout implements ISinglePlayer {
 
     protected int mStatus = STATUS_IDLE;
+    protected int mTargetStatus = STATUS_IDLE;
     private OnErrorListener mOnErrorListener;
     private OnPlayerEventListener mOnPlayerEventListener;
     protected int startSeekPos;

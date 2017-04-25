@@ -59,16 +59,16 @@ public abstract class BaseSettingPlayer extends BaseCoverBindPlayerObserver {
     private void onHandleStatus(int eventCode, Bundle bundle) {
         switch (eventCode){
             case OnPlayerEventListener.EVENT_CODE_RENDER_START:
-                mStatus = STATUS_PLAYING;
+                mStatus = STATUS_STARTED;
                 break;
             case OnPlayerEventListener.EVENT_CODE_PLAY_PAUSE:
-                mStatus = STATUS_PAUSE;
+                mStatus = STATUS_PAUSED;
                 break;
             case OnPlayerEventListener.EVENT_CODE_PLAY_RESUME:
-                mStatus = STATUS_PLAYING;
+                mStatus = STATUS_STARTED;
                 break;
             case OnPlayerEventListener.EVENT_CODE_PLAYER_ON_STOP:
-                mStatus = STATUS_STOP;
+                mStatus = STATUS_STOPPED;
                 break;
         }
     }

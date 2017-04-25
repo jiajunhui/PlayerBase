@@ -99,7 +99,7 @@ public class IJKSinglePlayer extends BaseSinglePlayer {
                 Log.d(TAG,"EVENT_CODE_PREPARED");
                 onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PREPARED,null);
                 //IjkVideoView  ...int STATE_PLAYING = 3;
-                if(mVideoView != null && mStatus!=STATUS_PAUSE && mVideoView.getTargetState() == 3){
+                if(mVideoView != null && mStatus!= STATUS_PAUSED && mVideoView.getTargetState() == 3){
                     mVideoView.start();
                 }
                 onStartSeek();
@@ -219,15 +219,15 @@ public class IJKSinglePlayer extends BaseSinglePlayer {
     public void pause() {
         if(available() && isPlaying()){
             mVideoView.pause();
-            mStatus = STATUS_PAUSE;
+            mStatus = STATUS_PAUSED;
         }
     }
 
     @Override
     public void resume() {
-        if(available() && mStatus == STATUS_PAUSE){
+        if(available() && mStatus == STATUS_PAUSED){
             mVideoView.start();
-            mStatus = STATUS_PLAYING;
+            mStatus = STATUS_STARTED;
         }
     }
 

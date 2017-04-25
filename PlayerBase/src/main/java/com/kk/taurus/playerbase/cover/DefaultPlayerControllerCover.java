@@ -57,7 +57,7 @@ public class DefaultPlayerControllerCover extends BasePlayerControllerCover {
                 public void onClick(View v) {
                     if(player==null)
                         return;
-                    if(getStatus()==ISinglePlayer.STATUS_PLAYING){
+                    if(getStatus()==ISinglePlayer.STATUS_STARTED){
                         pause();
                         setPlayState(false);
                     }else{
@@ -161,7 +161,7 @@ public class DefaultPlayerControllerCover extends BasePlayerControllerCover {
         Message message = Message.obtain();
         message.what = MSG.MSG_CODE_SEEK_TO;
         message.obj = progress;
-        if(getStatus() == ISinglePlayer.STATUS_PAUSE){
+        if(getStatus() == ISinglePlayer.STATUS_PAUSED){
             mHandler.sendMessage(message);
         }else{
             mHandler.sendMessageDelayed(message,600);

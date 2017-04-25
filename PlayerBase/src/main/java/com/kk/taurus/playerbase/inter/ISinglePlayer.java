@@ -1,7 +1,6 @@
 package com.kk.taurus.playerbase.inter;
 
 import com.kk.taurus.playerbase.setting.AspectRatio;
-import com.kk.taurus.playerbase.setting.PlayData;
 import com.kk.taurus.playerbase.setting.Rate;
 import com.kk.taurus.playerbase.setting.VideoData;
 
@@ -12,11 +11,15 @@ import java.util.List;
  */
 public interface ISinglePlayer {
 
+    int STATUS_END = -2;
     int STATUS_ERROR = -1;
     int STATUS_IDLE = 0;
-    int STATUS_PLAYING = 1;
-    int STATUS_PAUSE = 2;
-    int STATUS_STOP = 3;
+    int STATUS_INITIALIZED = 1;
+    int STATUS_PREPARED = 2;
+    int STATUS_STARTED = 3;
+    int STATUS_PAUSED = 4;
+    int STATUS_STOPPED = 5;
+    int STATUS_PLAYBACK_COMPLETE = 6;
 
     void setDataSource(VideoData data);
     void start();
