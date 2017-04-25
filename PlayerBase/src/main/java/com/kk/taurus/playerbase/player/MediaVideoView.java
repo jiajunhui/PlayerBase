@@ -46,13 +46,15 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
     private Map<String, String> mHeaders;
 
     // all possible internal states
+    private static final int STATE_END = -2;
     private static final int STATE_ERROR = -1;
     private static final int STATE_IDLE = 0;
-    private static final int STATE_PREPARING = 1;
+    private static final int STATE_INITIALIZED = 1;
     private static final int STATE_PREPARED = 2;
-    private static final int STATE_PLAYING = 3;
+    private static final int STATE_STARTED = 3;
     private static final int STATE_PAUSED = 4;
-    private static final int STATE_PLAYBACK_COMPLETED = 5;
+    private static final int STATE_STOPPED = 5;
+    private static final int STATE_PLAYBACK_COMPLETED = 6;
 
     // mCurrentState is a VideoView object's current state.
     // mTargetState is the state that a method caller intends to reach.
@@ -243,12 +245,25 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
 
     //-----------Taurus Add 2016/08/21---------------
     public void stop(){
-        if(mMediaPlayer!=null){
+        if(mMediaPlayer!=null &&
+                (mCurrentState==STATE_PREPARED
+                        || mCurrentState==STATE_STARTED
+                        || mCurrentState==STATE_PAUSED
+                        || mCurrentState==STATE_PLAYBACK_COMPLETED)){
             mMediaPlayer.stop();
+            mCurrentState = STATE_STOPPED;
+            mTargetState = STATE_STOPPED;
+        }
+    }
+
+    public void reset(){
+        if(mMediaPlayer!=null){
+            mMediaPlayer.reset();
             mCurrentState = STATE_IDLE;
             mTargetState = STATE_IDLE;
         }
     }
+
     //-----------Taurus Add 2016/08/21---------------
 
     // REMOVED: addSubtitleSource
@@ -256,16 +271,8 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
 
     public void stopPlayback() {
         if (mMediaPlayer != null) {
-            mMediaPlayer.stop();
-            mMediaPlayer.release();
-            mMediaPlayer = null;
-            mCurrentState = STATE_IDLE;
-            mTargetState = STATE_IDLE;
-            if(mAppContext!=null){
-                AudioManager am = (AudioManager) mAppContext.get().getSystemService(Context.AUDIO_SERVICE);
-                am.abandonAudioFocus(null);
-            }
-            mAppContext = null;
+            stop();
+            release(true);
         }
     }
 
@@ -320,7 +327,7 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
 
             // we don't set the target state here either, but preserve the
             // target state that was there before.
-            mCurrentState = STATE_PREPARING;
+            mCurrentState = STATE_INITIALIZED;
         } catch (IOException ex) {
             Log.w(TAG, "Unable to open content: " + mUri, ex);
             mCurrentState = STATE_ERROR;
@@ -381,7 +388,7 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
                         // We didn't actually change the size (it was already at the size
                         // we need), so we won't get a "surface changed" callback, so
                         // start the video here instead of in the callback.
-                        if (mTargetState == STATE_PLAYING) {
+                        if (mTargetState == STATE_STARTED) {
                             start();
                         } else if (!isPlaying() &&
                                 (seekToPosition != 0 || getCurrentPosition() > 0)) {
@@ -391,7 +398,7 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
             } else {
                 // We don't know the video size yet, but should start anyway.
                 // The video size might be reported to us later.
-                if (mTargetState == STATE_PLAYING) {
+                if (mTargetState == STATE_STARTED) {
                     start();
                 }
             }
@@ -549,7 +556,7 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
 
             mSurfaceWidth = w;
             mSurfaceHeight = h;
-            boolean isValidState = (mTargetState == STATE_PLAYING);
+            boolean isValidState = (mTargetState == STATE_STARTED);
             boolean hasValidSize = !mRenderView.shouldWaitForResize() || (mVideoWidth == w && mVideoHeight == h);
             if (mMediaPlayer != null && isValidState && hasValidSize) {
                 if (mSeekWhenPrepared != 0) {
@@ -598,13 +605,12 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
      */
     public void release(boolean cleartargetstate) {
         if (mMediaPlayer != null) {
-            mMediaPlayer.reset();
             mMediaPlayer.release();
             mMediaPlayer = null;
             // REMOVED: mPendingSubtitleTracks.clear();
-            mCurrentState = STATE_IDLE;
+            mCurrentState = STATE_END;
             if (cleartargetstate) {
-                mTargetState = STATE_IDLE;
+                mTargetState = STATE_END;
             }
             if(mAppContext!=null){
                 AudioManager am = (AudioManager) mAppContext.get().getSystemService(Context.AUDIO_SERVICE);
@@ -615,20 +621,18 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
 
     @Override
     public void start() {
-        if (isInPlaybackState()) {
+        if (mMediaPlayer!=null && (mCurrentState==STATE_PREPARED || mCurrentState==STATE_PAUSED)) {
             mMediaPlayer.start();
-            mCurrentState = STATE_PLAYING;
+            mCurrentState = STATE_STARTED;
         }
-        mTargetState = STATE_PLAYING;
+        mTargetState = STATE_STARTED;
     }
 
     @Override
     public void pause() {
-        if (isInPlaybackState()) {
-            if (mMediaPlayer.isPlaying()) {
-                mMediaPlayer.pause();
-                mCurrentState = STATE_PAUSED;
-            }
+        if (mMediaPlayer!=null && mCurrentState==STATE_STARTED) {
+            mMediaPlayer.pause();
+            mCurrentState = STATE_PAUSED;
         }
         mTargetState = STATE_PAUSED;
     }
@@ -643,7 +647,9 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
 
     @Override
     public int getDuration() {
-        if (isInPlaybackState()) {
+        if (mMediaPlayer!=null && mCurrentState!=STATE_IDLE
+                && mCurrentState!=STATE_INITIALIZED
+                && mCurrentState!=STATE_ERROR) {
             return (int) mMediaPlayer.getDuration();
         }
 
@@ -652,25 +658,29 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
 
     @Override
     public int getCurrentPosition() {
-        if (isInPlaybackState()) {
+        if (mMediaPlayer!=null && mCurrentState!=STATE_ERROR) {
             return (int) mMediaPlayer.getCurrentPosition();
         }
         return 0;
     }
 
     @Override
-    public void seekTo(int msec) {
-        if (isInPlaybackState()) {
-            mMediaPlayer.seekTo(msec);
+    public void seekTo(int msc) {
+        if (mMediaPlayer!=null && (mCurrentState==STATE_PREPARED
+                || mCurrentState==STATE_PAUSED
+                || mCurrentState==STATE_PLAYBACK_COMPLETED)) {
+            mMediaPlayer.seekTo(msc);
             mSeekWhenPrepared = 0;
         } else {
-            mSeekWhenPrepared = msec;
+            mSeekWhenPrepared = msc;
         }
     }
 
     @Override
     public boolean isPlaying() {
-        return isInPlaybackState() && mMediaPlayer.isPlaying();
+        if(mMediaPlayer==null || mCurrentState==STATE_ERROR)
+            return false;
+        return mMediaPlayer.isPlaying();
     }
 
     @Override
@@ -685,7 +695,7 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
         return (mMediaPlayer != null &&
                 mCurrentState != STATE_ERROR &&
                 mCurrentState != STATE_IDLE &&
-                mCurrentState != STATE_PREPARING);
+                mCurrentState != STATE_INITIALIZED);
     }
 
     @Override

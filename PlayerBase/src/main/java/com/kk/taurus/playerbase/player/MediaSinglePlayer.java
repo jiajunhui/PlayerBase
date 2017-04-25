@@ -186,6 +186,7 @@ public class MediaSinglePlayer extends BaseSinglePlayer {
     public void stop() {
         if(available()){
             mVideoView.stop();
+            mVideoView.reset();
         }
     }
 
@@ -242,7 +243,6 @@ public class MediaSinglePlayer extends BaseSinglePlayer {
         try{
             if(mVideoView!=null){
                 mVideoView.stopPlayback();
-                mVideoView.release(true);
                 mVideoView = null;
             }
         }catch (Exception e){
