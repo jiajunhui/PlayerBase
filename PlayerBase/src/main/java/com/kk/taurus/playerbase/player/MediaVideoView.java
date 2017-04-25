@@ -260,7 +260,7 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
     }
 
     public void reset(){
-        if(mMediaPlayer!=null){
+        if(mMediaPlayer!=null && mCurrentState!=STATE_IDLE){
             Log.d(TAG,"--->reset");
             mMediaPlayer.reset();
             mCurrentState = STATE_IDLE;
@@ -288,7 +288,7 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
         }
         // we shouldn't clear the target state, because somebody might have
         // called start() previously
-        release(false);
+        reset();
 
         if(mAppContext!=null){
             AudioManager am = (AudioManager) mAppContext.get().getSystemService(Context.AUDIO_SERVICE);
