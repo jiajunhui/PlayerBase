@@ -297,10 +297,6 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
             // not ready for playback just yet, will try again later
             return;
         }
-        // we shouldn't clear the target state, because somebody might have
-        // called start() previously
-        reset();
-        resetListener();
 
         if(mAppContext!=null){
             AudioManager am = (AudioManager) mAppContext.get().getSystemService(Context.AUDIO_SERVICE);
@@ -310,6 +306,11 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
         try {
             if(mMediaPlayer==null){
                 mMediaPlayer = createPlayer(0);
+            }else{
+                // we shouldn't clear the target state, because somebody might have
+                // called start() previously
+                reset();
+                resetListener();
             }
 
             // TODO: create SubtitleController in MediaPlayer, but we need
@@ -353,6 +354,11 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
             mErrorListener.onError(mMediaPlayer, MediaPlayer.MEDIA_ERROR_UNKNOWN, 0);
         } catch (IllegalArgumentException ex) {
             Log.w(TAG, "Unable to open content: " + mUri, ex);
+            mCurrentState = STATE_ERROR;
+            mTargetState = STATE_ERROR;
+            mErrorListener.onError(mMediaPlayer, MediaPlayer.MEDIA_ERROR_UNKNOWN, 0);
+        } catch (IllegalStateException ex) {
+            Log.w(TAG, "IllegalStateException ......");
             mCurrentState = STATE_ERROR;
             mTargetState = STATE_ERROR;
             mErrorListener.onError(mMediaPlayer, MediaPlayer.MEDIA_ERROR_UNKNOWN, 0);
