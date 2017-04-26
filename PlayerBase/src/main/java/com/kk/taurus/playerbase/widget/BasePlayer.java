@@ -53,7 +53,7 @@ public abstract class BasePlayer extends BaseAdPlayer {
             this.dataSource = data;
             mInternalPlayer.setDataSource(data);
             Bundle bundle = new Bundle();
-            bundle.putSerializable("data",data);
+            bundle.putSerializable(OnPlayerEventListener.BUNDLE_KEY_VIDEO_DATA,data);
             onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_ON_SET_DATA_SOURCE,bundle);
         }
     }
@@ -72,7 +72,9 @@ public abstract class BasePlayer extends BaseAdPlayer {
         if(available()){
             startPos = msc;
             mInternalPlayer.start(msc);
-            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_INTENT_TO_START,null);
+            Bundle bundle = new Bundle();
+            bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_POSITION,msc);
+            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_INTENT_TO_START,bundle);
         }
     }
 
@@ -80,7 +82,9 @@ public abstract class BasePlayer extends BaseAdPlayer {
     public void pause() {
         if(available()){
             mInternalPlayer.pause();
-            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAY_PAUSE,null);
+            Bundle bundle = new Bundle();
+            bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_POSITION,getCurrentPosition());
+            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAY_PAUSE,bundle);
         }
     }
 
@@ -88,7 +92,9 @@ public abstract class BasePlayer extends BaseAdPlayer {
     public void resume() {
         if(available() && mStatus == STATUS_PAUSED){
             mInternalPlayer.resume();
-            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAY_RESUME,null);
+            Bundle bundle = new Bundle();
+            bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_POSITION,getCurrentPosition());
+            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAY_RESUME,bundle);
         }
     }
 
@@ -96,7 +102,9 @@ public abstract class BasePlayer extends BaseAdPlayer {
     public void seekTo(int msc) {
         if(available()){
             mInternalPlayer.seekTo(msc);
-            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_SEEK_TO,null);
+            Bundle bundle = new Bundle();
+            bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_POSITION,msc);
+            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_SEEK_TO,bundle);
         }
     }
 
@@ -176,10 +184,12 @@ public abstract class BasePlayer extends BaseAdPlayer {
     }
 
     @Override
-    public void changeVideoDefinition(Rate videoRate) {
-        if(available()){
-            mInternalPlayer.changeVideoDefinition(videoRate);
-            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_CHANGE_DEFINITION,null);
+    public void changeVideoDefinition(Rate rate) {
+        if(available() && rate!=null){
+            mInternalPlayer.changeVideoDefinition(rate);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(OnPlayerEventListener.BUNDLE_KEY_RATE_DATA,rate);
+            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_CHANGE_DEFINITION,bundle);
         }
     }
 

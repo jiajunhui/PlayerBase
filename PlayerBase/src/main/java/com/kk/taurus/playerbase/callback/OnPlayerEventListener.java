@@ -41,5 +41,10 @@ public interface OnPlayerEventListener {
     int EVENT_CODE_PLAYER_QUIT_FULL_SCREEN = 30002;
     int EVENT_CODE_PLAYER_DPAD_REQUEST_FOCUS = 30003;
 
+
+    String BUNDLE_KEY_POSITION = "position";
+    String BUNDLE_KEY_VIDEO_DATA = "video_data";
+    String BUNDLE_KEY_RATE_DATA = "rate_data";
+
     void onPlayerEvent(int eventCode, Bundle bundle);
 }
