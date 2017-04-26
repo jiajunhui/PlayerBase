@@ -49,6 +49,7 @@ public class DefaultDpadFocusCover extends BaseFocusCover implements IDpadFocusC
          * 当收到播放器获取焦点的请求后，dpad监听层获取焦点。
          */
         if(eventCode== OnPlayerEventListener.EVENT_CODE_PLAYER_DPAD_REQUEST_FOCUS){
+            setFocusable(true);
             requestFocus();
         }
     }
