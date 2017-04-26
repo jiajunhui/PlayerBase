@@ -33,7 +33,7 @@ public abstract class BaseFocusCover extends BaseCoverPlayerHandle implements IF
 
     protected void bindFocusListener(View focusView){
         mFocusView = focusView;
-        setFocusable(true);
+        setFocusable(false);
         mFocusView.setOnKeyListener(this);
         mFocusView.setOnFocusChangeListener(this);
     }
@@ -45,6 +45,7 @@ public abstract class BaseFocusCover extends BaseCoverPlayerHandle implements IF
 
     @Override
     public void requestFocus() {
+        setFocusable(true);
         mFocusView.requestFocus();
     }
 
