@@ -22,6 +22,7 @@ import java.util.List;
 
 public abstract class BaseAdPlayer extends BaseSettingPlayer {
 
+    protected VideoData dataSource;
     private PlayData mPlayData;
     private OnAdListener mOnAdListener;
     private int mAdIndex;
@@ -49,6 +50,15 @@ public abstract class BaseAdPlayer extends BaseSettingPlayer {
     protected void onErrorEvent(int eventCode, Bundle bundle) {
         super.onErrorEvent(eventCode, bundle);
         onHandleErrorEvent(eventCode, bundle);
+    }
+
+    @Override
+    public void setDataSource(VideoData dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    protected boolean isDataSourceAvaliable(){
+        return dataSource!=null;
     }
 
     @Override

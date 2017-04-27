@@ -12,6 +12,7 @@ import android.util.AttributeSet;
 
 import com.kk.taurus.playerbase.callback.OnErrorListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
+import com.kk.taurus.playerbase.setting.AspectRatio;
 import com.kk.taurus.playerbase.setting.DecodeMode;
 import com.kk.taurus.playerbase.setting.PlayerType;
 
@@ -25,6 +26,7 @@ public abstract class BaseSettingPlayer extends BaseCoverBindPlayerObserver {
     protected int startPos;
     protected int mStatus = STATUS_IDLE;
     private DecodeMode mDecodeMode = DecodeMode.SOFT;
+    private AspectRatio aspectRatio = AspectRatio.AspectRatio_FILL_PARENT;
 
     private OnPlayerEventListener mOnPlayerEventListener;
     private OnErrorListener mOnErrorListener;
@@ -104,6 +106,15 @@ public abstract class BaseSettingPlayer extends BaseCoverBindPlayerObserver {
 
     public DecodeMode getDecodeMode() {
         return mDecodeMode;
+    }
+
+    @Override
+    public void setAspectRatio(AspectRatio aspectRatio) {
+        this.aspectRatio = aspectRatio;
+    }
+
+    public AspectRatio getAspectRatio() {
+        return aspectRatio;
     }
 
     @Override

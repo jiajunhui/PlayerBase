@@ -23,7 +23,6 @@ public abstract class BasePlayer extends BaseAdPlayer {
 
     private final String TAG = "BasePlayer";
     protected BaseSinglePlayer mInternalPlayer;
-    protected VideoData dataSource;
 
     public BasePlayer(@NonNull Context context) {
         super(context);
@@ -49,8 +48,8 @@ public abstract class BasePlayer extends BaseAdPlayer {
 
     @Override
     public void setDataSource(VideoData data) {
+        super.setDataSource(data);
         if(available() && data!=null && data.getData()!=null){
-            this.dataSource = data;
             mInternalPlayer.setDataSource(data);
             Bundle bundle = new Bundle();
             bundle.putSerializable(OnPlayerEventListener.BUNDLE_KEY_VIDEO_DATA,data);
@@ -126,12 +125,10 @@ public abstract class BasePlayer extends BaseAdPlayer {
 
     @Override
     public void rePlay(int msc) {
-        if(available()){
-            if(dataSource!=null && available()){
-                stop();
-                setDataSource(dataSource);
-                start(msc);
-            }
+        if(available() && isDataSourceAvaliable()){
+            stop();
+            setDataSource(dataSource);
+            start(msc);
         }
     }
 
@@ -203,6 +200,7 @@ public abstract class BasePlayer extends BaseAdPlayer {
 
     @Override
     public void setAspectRatio(AspectRatio aspectRatio) {
+        super.setAspectRatio(aspectRatio);
         if(available()){
             mInternalPlayer.setAspectRatio(aspectRatio);
         }
