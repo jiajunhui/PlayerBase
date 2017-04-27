@@ -1,27 +1,19 @@
 package com.kk.taurus.playerbase.cover.base;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.util.DisplayMetrics;
 import android.view.View;
 
 import com.kk.taurus.playerbase.adapter.BaseVideoDataAdapter;
 import com.kk.taurus.playerbase.callback.OnCoverEventListener;
 import com.kk.taurus.playerbase.inter.ICover;
 import com.kk.taurus.playerbase.callback.CoverObserver;
-import com.kk.taurus.playerbase.callback.PlayerObserver;
 import com.kk.taurus.playerbase.setting.BaseAdVideo;
 import com.kk.taurus.playerbase.setting.CoverData;
 import com.kk.taurus.playerbase.setting.VideoData;
-import com.kk.taurus.playerbase.utils.CommonUtils;
 import com.kk.taurus.playerbase.widget.BasePlayer;
 
-import java.lang.ref.WeakReference;
 import java.util.List;
 
 /**
@@ -31,38 +23,19 @@ import java.util.List;
  *
  */
 
-public abstract class BaseCover implements ICover , View.OnClickListener,PlayerObserver,OnCoverEventListener{
+public abstract class BaseCover extends BasePlayerHandle implements ICover , View.OnClickListener{
 
-    protected Context mContext;
     private View mCoverView;
     private BaseCoverObserver coverObserver;
-    protected int mScreenW,mScreenH;
-    protected WeakReference<BasePlayer> player;
-    private OnCoverEventListener onCoverEventListener;
     protected boolean coverEnable = true;
-    protected boolean adListFinish = true;
-    protected boolean isNetError = false;
-
-    protected Handler mHandler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            _handleMessage(msg);
-        }
-    };
-
-    protected void _handleMessage(Message msg){
-
-    }
 
     public BaseCover(Context context){
         this(context,null);
     }
 
     public BaseCover(Context context, BaseCoverObserver coverObserver){
-        this.mContext = context;
+        super(context);
         this.coverObserver = coverObserver;
-        initBaseInfo(context);
         handCoverView(context);
         if(this.coverObserver!=null){
             this.coverObserver.onCoverViewInit(mCoverView);
@@ -91,12 +64,6 @@ public abstract class BaseCover implements ICover , View.OnClickListener,PlayerO
         }else{
             mCoverView = initCoverLayout(context);
         }
-    }
-
-    protected void initBaseInfo(Context context) {
-        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-        mScreenW = displayMetrics.widthPixels;
-        mScreenH = displayMetrics.heightPixels;
     }
 
     protected abstract void findView();
@@ -128,12 +95,14 @@ public abstract class BaseCover implements ICover , View.OnClickListener,PlayerO
     }
 
     public void onRefreshDataAdapter(BaseVideoDataAdapter dataAdapter){
+        super.onRefreshDataAdapter(dataAdapter);
         if(coverObserver!=null){
             coverObserver.onRefreshDataAdapter(dataAdapter);
         }
     }
 
     public void onRefreshCoverData(CoverData data) {
+        super.onRefreshCoverData(data);
         if(coverObserver!=null){
             coverObserver.onDataChange(data);
         }
@@ -141,14 +110,6 @@ public abstract class BaseCover implements ICover , View.OnClickListener,PlayerO
 
     protected boolean isVisibilityGone(){
         return getView().getVisibility()!=View.VISIBLE;
-    }
-
-    @Override
-    public String getString(int resId) {
-        if(mContext!=null){
-            return mContext.getString(resId);
-        }
-        return null;
     }
 
     @Override
@@ -166,34 +127,13 @@ public abstract class BaseCover implements ICover , View.OnClickListener,PlayerO
         return coverObserver;
     }
 
-    protected Activity getActivity(){
-        if(mContext!=null && mContext instanceof Activity)
-            return (Activity) mContext;
-        return null;
-    }
-
-    @Override
-    public int getScreenOrientation() {
-        if(mContext==null)
-            return ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-        if(!(mContext instanceof Activity))
-            return ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-        return CommonUtils.getScreenOrientation((Activity) mContext,mScreenW,mScreenH);
-    }
-
     @Override
     public void onClick(View v) {
 
     }
 
-    protected void onDestroy(){
-        player.clear();
-        mHandler.removeCallbacks(null);
-    }
-
     public void onBindPlayer(BasePlayer player, OnCoverEventListener onCoverEventListener) {
-        this.player = new WeakReference<>(player);
-        this.onCoverEventListener = onCoverEventListener;
+        super.onBindPlayer(player, onCoverEventListener);
         if(coverObserver!=null){
             coverObserver.onBindCover(this);
         }
@@ -205,13 +145,6 @@ public abstract class BaseCover implements ICover , View.OnClickListener,PlayerO
         }
     }
 
-    protected BasePlayer getPlayer(){
-        if(player!=null){
-            return player.get();
-        }
-        return null;
-    }
-
 
     //--------------------------------------------------------------------------------------------
 
@@ -219,30 +152,17 @@ public abstract class BaseCover implements ICover , View.OnClickListener,PlayerO
     // for some event
     //*************************************************************************************
 
-    /**
-     * on receive cover event
-     * @param eventCode
-     * @param bundle
-     */
-    public void onCoverEvent(int eventCode, Bundle bundle) {
-
-    }
-
     @Override
     public void onNotifyPlayEvent(int eventCode, Bundle bundle) {
+        super.onNotifyPlayEvent(eventCode, bundle);
         if(coverObserver!=null){
             coverObserver.onNotifyPlayEvent(eventCode, bundle);
         }
     }
 
-    protected void notifyCoverEvent(int eventCode, Bundle bundle){
-        if(onCoverEventListener!=null){
-            onCoverEventListener.onCoverEvent(eventCode, bundle);
-        }
-    }
-
     @Override
     public void onNotifyConfigurationChanged(Configuration newConfig) {
+        super.onNotifyConfigurationChanged(newConfig);
         if(coverObserver!=null){
             coverObserver.onNotifyConfigurationChanged(newConfig);
         }
@@ -250,6 +170,7 @@ public abstract class BaseCover implements ICover , View.OnClickListener,PlayerO
 
     @Override
     public void onNotifyErrorEvent(int eventCode, Bundle bundle) {
+        super.onNotifyErrorEvent(eventCode, bundle);
         if(coverObserver!=null){
             coverObserver.onNotifyErrorEvent(eventCode, bundle);
         }
@@ -257,6 +178,7 @@ public abstract class BaseCover implements ICover , View.OnClickListener,PlayerO
 
     @Override
     public void onNotifyPlayTimerCounter(int curr, int duration, int bufferPercentage) {
+        super.onNotifyPlayTimerCounter(curr, duration, bufferPercentage);
         if(coverObserver!=null){
             coverObserver.onNotifyPlayTimerCounter(curr, duration, bufferPercentage);
         }
@@ -264,7 +186,7 @@ public abstract class BaseCover implements ICover , View.OnClickListener,PlayerO
 
     @Override
     public void onNotifyNetWorkConnected(int networkType) {
-        isNetError = false;
+        super.onNotifyNetWorkConnected(networkType);
         if(coverObserver!=null){
             coverObserver.onNotifyNetWorkConnected(networkType);
         }
@@ -272,7 +194,7 @@ public abstract class BaseCover implements ICover , View.OnClickListener,PlayerO
 
     @Override
     public void onNotifyNetWorkError() {
-        isNetError = true;
+        super.onNotifyNetWorkError();
         if(coverObserver!=null){
             coverObserver.onNotifyNetWorkError();
         }
@@ -280,7 +202,7 @@ public abstract class BaseCover implements ICover , View.OnClickListener,PlayerO
 
     @Override
     public void onNotifyAdPrepared(List<BaseAdVideo> adVideos) {
-        adListFinish = false;
+        super.onNotifyAdPrepared(adVideos);
         if(coverObserver!=null){
             coverObserver.onNotifyAdPrepared(adVideos);
         }
@@ -288,6 +210,7 @@ public abstract class BaseCover implements ICover , View.OnClickListener,PlayerO
 
     @Override
     public void onNotifyAdStart(BaseAdVideo adVideo) {
+        super.onNotifyAdStart(adVideo);
         if(coverObserver!=null){
             coverObserver.onNotifyAdStart(adVideo);
         }
@@ -295,7 +218,7 @@ public abstract class BaseCover implements ICover , View.OnClickListener,PlayerO
 
     @Override
     public void onNotifyAdFinish(VideoData data, boolean isAllFinish) {
-        adListFinish = isAllFinish;
+        super.onNotifyAdFinish(data, isAllFinish);
         if(coverObserver!=null){
             coverObserver.onNotifyAdFinish(data, isAllFinish);
         }

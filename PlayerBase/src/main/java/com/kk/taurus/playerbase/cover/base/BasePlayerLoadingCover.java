@@ -11,7 +11,7 @@ import com.kk.taurus.playerbase.inter.ILoadingCover;
  * Created by Taurus on 2017/3/25.
  */
 
-public abstract class BasePlayerLoadingCover extends BaseCoverPlayerHandle implements ILoadingCover{
+public abstract class BasePlayerLoadingCover extends BaseCover implements ILoadingCover{
 
     public static final String KEY = "loading_cover";
 

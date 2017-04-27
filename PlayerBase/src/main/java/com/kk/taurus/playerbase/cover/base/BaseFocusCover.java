@@ -12,7 +12,7 @@ import com.kk.taurus.playerbase.inter.IFocusCover;
  * 获取焦点后，监听key事件。
  */
 
-public abstract class BaseFocusCover extends BaseCoverPlayerHandle implements IFocusCover,View.OnKeyListener, View.OnFocusChangeListener {
+public abstract class BaseFocusCover extends BaseCover implements IFocusCover,View.OnKeyListener, View.OnFocusChangeListener {
 
     public static final String KEY = "focus_cover";
     private final String TAG = "focus_cover";

@@ -19,7 +19,7 @@ import java.util.List;
  * Created by Taurus on 2017/3/28.
  */
 
-public abstract class BaseAdCover extends BaseCoverPlayerHandle implements IAdCover,GestureObserver{
+public abstract class BaseAdCover extends BaseCover implements IAdCover,GestureObserver{
 
     public static final String KEY = "ad_cover";
     protected View mAdBox;

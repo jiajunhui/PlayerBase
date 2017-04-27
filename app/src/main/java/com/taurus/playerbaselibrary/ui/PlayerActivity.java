@@ -1,7 +1,6 @@
 package com.taurus.playerbaselibrary.ui;
 
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -12,8 +11,7 @@ import com.kk.taurus.playerbase.DefaultPlayer;
 import com.kk.taurus.playerbase.callback.OnAdCallBack;
 import com.kk.taurus.playerbase.callback.OnAdCoverClickListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
-import com.kk.taurus.playerbase.cover.CornerCutCover;
-import com.kk.taurus.playerbase.cover.DefaultCoverCollections;
+import com.kk.taurus.playerbase.cover.DefaultReceiverCollections;
 import com.kk.taurus.playerbase.cover.base.BaseAdCover;
 import com.kk.taurus.playerbase.cover.base.BasePlayerControllerCover;
 import com.kk.taurus.playerbase.setting.BaseAdVideo;
@@ -31,7 +29,7 @@ import java.util.List;
 public class PlayerActivity extends ToolsActivity implements OnPlayerEventListener {
 
     private BasePlayer mPlayer;
-    private DefaultCoverCollections mCoverCollections;
+    private DefaultReceiverCollections mCoverCollections;
     private VideoItem item;
     private VideoData videoData;
     private PlayCompleteCover completeCover;
@@ -59,7 +57,7 @@ public class PlayerActivity extends ToolsActivity implements OnPlayerEventListen
         fullScreen();
         mPlayer = (DefaultPlayer) findViewById(R.id.player);
 
-        mCoverCollections = new DefaultCoverCollections(this);
+        mCoverCollections = new DefaultReceiverCollections(this);
         mCoverCollections.buildDefault().addCover(PlayCompleteCover.KEY,completeCover = new PlayCompleteCover(this,null));
 
 //        CornerCutCover cornerCutCover = new CornerCutCover(this,null);

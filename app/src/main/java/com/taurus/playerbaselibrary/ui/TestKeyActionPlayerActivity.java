@@ -6,7 +6,7 @@ import android.view.View;
 import com.kk.taurus.baseframe.ui.activity.ToolsActivity;
 import com.kk.taurus.playerbase.DefaultPlayer;
 import com.kk.taurus.playerbase.callback.OnCoverEventListener;
-import com.kk.taurus.playerbase.cover.DefaultCoverCollections;
+import com.kk.taurus.playerbase.cover.DefaultReceiverCollections;
 import com.kk.taurus.playerbase.cover.DefaultDpadFocusCover;
 import com.kk.taurus.playerbase.inter.IDpadFocusCover;
 import com.kk.taurus.playerbase.setting.VideoData;
@@ -31,7 +31,7 @@ public class TestKeyActionPlayerActivity extends ToolsActivity implements OnCove
     public void initData() {
         super.initData();
         mPlayer = (DefaultPlayer) findViewById(R.id.player);
-        DefaultCoverCollections coverCollections = new DefaultCoverCollections(this);
+        DefaultReceiverCollections coverCollections = new DefaultReceiverCollections(this);
         coverCollections.buildDefault()
                 .addFocusCover(new DefaultDpadFocusCover(this,null))
                 .addCover("test_key_action_down_up",new TestKeyActionDownUpCover(this,null))

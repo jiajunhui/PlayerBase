@@ -9,11 +9,12 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
+import com.kk.taurus.playerbase.callback.BaseEventReceiver;
 import com.kk.taurus.playerbase.callback.GestureObserver;
 import com.kk.taurus.playerbase.callback.OnCoverEventListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.cover.base.BaseCover;
-import com.kk.taurus.playerbase.cover.base.BaseCoverCollections;
+import com.kk.taurus.playerbase.cover.base.BaseReceiverCollections;
 import com.kk.taurus.playerbase.callback.PlayerObserver;
 import com.kk.taurus.playerbase.inter.IDpadFocusCover;
 import com.kk.taurus.playerbase.setting.BaseAdVideo;
@@ -30,7 +31,7 @@ import java.util.List;
 
 public abstract class BaseBindCover extends BaseContainer implements PlayerObserver,GestureObserver,OnCoverEventListener{
 
-    private BaseCoverCollections coverCollections;
+    private BaseReceiverCollections coverCollections;
     private OnCoverEventListener mOnCoverEventListener;
 
     public BaseBindCover(@NonNull Context context){
@@ -45,7 +46,7 @@ public abstract class BaseBindCover extends BaseContainer implements PlayerObser
         super(context, attrs, defStyleAttr);
     }
 
-    public void bindCoverCollections(BaseCoverCollections coverCollections){
+    public void bindCoverCollections(BaseReceiverCollections coverCollections){
         if(this.coverCollections!=null)
             return;
         this.coverCollections = coverCollections;
@@ -64,14 +65,16 @@ public abstract class BaseBindCover extends BaseContainer implements PlayerObser
     private void initCovers(Context context) {
         if(coverCollections==null)
             return;
-        List<BaseCover> covers = coverCollections.getCovers();
-        for(BaseCover cover : covers){
-            addCover(cover,null);
+        List<BaseEventReceiver> covers = coverCollections.getCovers();
+        for(BaseEventReceiver cover : covers){
+            if(cover instanceof BaseCover){
+                addCover((BaseCover) cover,null);
+            }
         }
         onCoversHasInit(context);
     }
 
-    public BaseCoverCollections getCoverCollections(){
+    public BaseReceiverCollections getCoverCollections(){
         return coverCollections;
     }
 
@@ -88,9 +91,9 @@ public abstract class BaseBindCover extends BaseContainer implements PlayerObser
         if(mOnCoverEventListener!=null){
             mOnCoverEventListener.onCoverEvent(eventCode, bundle);
         }
-        for(BaseCover cover:mCovers){
-            if(cover!=null){
-                cover.onCoverEvent(eventCode, bundle);
+        for(BaseEventReceiver receiver:mCovers){
+            if(receiver!=null){
+                receiver.onCoverEvent(eventCode, bundle);
             }
         }
     }
@@ -99,170 +102,170 @@ public abstract class BaseBindCover extends BaseContainer implements PlayerObser
      * 当cover集合中存在Dpad控制层时，将焦点控制权交给它。
      */
     public void dPadRequestFocus(){
-        for(BaseCover cover:mCovers){
-            if(cover!=null && cover instanceof IDpadFocusCover){
-                cover.onNotifyPlayEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_DPAD_REQUEST_FOCUS, null);
+        for(BaseEventReceiver receiver:mCovers){
+            if(receiver!=null && receiver instanceof IDpadFocusCover){
+                receiver.onNotifyPlayEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_DPAD_REQUEST_FOCUS, null);
             }
         }
     }
 
     public void onBindPlayer(BasePlayer player, OnCoverEventListener onCoverEventListener) {
-        for(BaseCover cover:mCovers){
-            if(cover!=null){
-                cover.onBindPlayer(player,onCoverEventListener);
+        for(BaseEventReceiver receiver:mCovers){
+            if(receiver!=null){
+                receiver.onBindPlayer(player,onCoverEventListener);
             }
         }
     }
 
     @Override
     public void onNotifyConfigurationChanged(Configuration newConfig) {
-        for(BaseCover cover:mCovers){
-            if(cover!=null){
-                cover.onNotifyConfigurationChanged(newConfig);
+        for(BaseEventReceiver receiver:mCovers){
+            if(receiver!=null){
+                receiver.onNotifyConfigurationChanged(newConfig);
             }
         }
     }
 
     @Override
     public void onNotifyPlayEvent(int eventCode, Bundle bundle) {
-        for(BaseCover cover:mCovers){
-            if(cover!=null){
-                cover.onNotifyPlayEvent(eventCode, bundle);
+        for(BaseEventReceiver receiver:mCovers){
+            if(receiver!=null){
+                receiver.onNotifyPlayEvent(eventCode, bundle);
             }
         }
     }
 
     @Override
     public void onNotifyErrorEvent(int eventCode, Bundle bundle) {
-        for(BaseCover cover:mCovers){
-            if(cover!=null){
-                cover.onNotifyErrorEvent(eventCode, bundle);
+        for(BaseEventReceiver receiver:mCovers){
+            if(receiver!=null){
+                receiver.onNotifyErrorEvent(eventCode, bundle);
             }
         }
     }
 
     @Override
     public void onNotifyPlayTimerCounter(int curr, int duration, int bufferPercentage) {
-        for(BaseCover cover:mCovers){
-            if(cover!=null){
-                cover.onNotifyPlayTimerCounter(curr, duration, bufferPercentage);
+        for(BaseEventReceiver receiver:mCovers){
+            if(receiver!=null){
+                receiver.onNotifyPlayTimerCounter(curr, duration, bufferPercentage);
             }
         }
     }
 
     @Override
     public void onNotifyNetWorkConnected(int networkType) {
-        for(BaseCover cover:mCovers){
-            if(cover!=null){
-                cover.onNotifyNetWorkConnected(networkType);
+        for(BaseEventReceiver receiver:mCovers){
+            if(receiver!=null){
+                receiver.onNotifyNetWorkConnected(networkType);
             }
         }
     }
 
     @Override
     public void onNotifyNetWorkError() {
-        for(BaseCover cover:mCovers){
-            if(cover!=null){
-                cover.onNotifyNetWorkError();
+        for(BaseEventReceiver receiver:mCovers){
+            if(receiver!=null){
+                receiver.onNotifyNetWorkError();
             }
         }
     }
 
     @Override
     public void onNotifyAdPrepared(List<BaseAdVideo> adVideos) {
-        for(BaseCover cover:mCovers){
-            if(cover!=null){
-                cover.onNotifyAdPrepared(adVideos);
+        for(BaseEventReceiver receiver:mCovers){
+            if(receiver!=null){
+                receiver.onNotifyAdPrepared(adVideos);
             }
         }
     }
 
     @Override
     public void onNotifyAdStart(BaseAdVideo adVideo) {
-        for(BaseCover cover:mCovers){
-            if(cover!=null){
-                cover.onNotifyAdStart(adVideo);
+        for(BaseEventReceiver receiver:mCovers){
+            if(receiver!=null){
+                receiver.onNotifyAdStart(adVideo);
             }
         }
     }
 
     @Override
     public void onNotifyAdFinish(VideoData data, boolean isAllFinish) {
-        for(BaseCover cover:mCovers){
-            if(cover!=null){
-                cover.onNotifyAdFinish(data, isAllFinish);
+        for(BaseEventReceiver receiver:mCovers){
+            if(receiver!=null){
+                receiver.onNotifyAdFinish(data, isAllFinish);
             }
         }
     }
 
     @Override
     public void onGestureSingleTab(MotionEvent event) {
-        for(BaseCover cover:mCovers){
-            if(cover instanceof GestureObserver){
-                ((GestureObserver)cover).onGestureSingleTab(event);
+        for(BaseEventReceiver receiver:mCovers){
+            if(receiver instanceof GestureObserver){
+                ((GestureObserver)receiver).onGestureSingleTab(event);
             }
         }
     }
 
     @Override
     public void onGestureDoubleTab(MotionEvent event) {
-        for(BaseCover cover:mCovers){
-            if(cover instanceof GestureObserver){
-                ((GestureObserver)cover).onGestureDoubleTab(event);
+        for(BaseEventReceiver receiver:mCovers){
+            if(receiver instanceof GestureObserver){
+                ((GestureObserver)receiver).onGestureDoubleTab(event);
             }
         }
     }
 
     @Override
     public void onGestureScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        for(BaseCover cover:mCovers){
-            if(cover instanceof GestureObserver){
-                ((GestureObserver)cover).onGestureScroll(e1, e2, distanceX, distanceY);
+        for(BaseEventReceiver receiver:mCovers){
+            if(receiver instanceof GestureObserver){
+                ((GestureObserver)receiver).onGestureScroll(e1, e2, distanceX, distanceY);
             }
         }
     }
 
     @Override
     public void onGestureHorizontalSlide(float percent) {
-        for(BaseCover cover:mCovers){
-            if(cover instanceof GestureObserver){
-                ((GestureObserver)cover).onGestureHorizontalSlide(percent);
+        for(BaseEventReceiver receiver:mCovers){
+            if(receiver instanceof GestureObserver){
+                ((GestureObserver)receiver).onGestureHorizontalSlide(percent);
             }
         }
     }
 
     @Override
     public void onGestureRightVerticalSlide(float percent) {
-        for(BaseCover cover:mCovers){
-            if(cover instanceof GestureObserver){
-                ((GestureObserver)cover).onGestureRightVerticalSlide(percent);
+        for(BaseEventReceiver receiver:mCovers){
+            if(receiver instanceof GestureObserver){
+                ((GestureObserver)receiver).onGestureRightVerticalSlide(percent);
             }
         }
     }
 
     @Override
     public void onGestureLeftVerticalSlide(float percent) {
-        for(BaseCover cover:mCovers){
-            if(cover instanceof GestureObserver){
-                ((GestureObserver)cover).onGestureLeftVerticalSlide(percent);
+        for(BaseEventReceiver receiver:mCovers){
+            if(receiver instanceof GestureObserver){
+                ((GestureObserver)receiver).onGestureLeftVerticalSlide(percent);
             }
         }
     }
 
     @Override
     public void onGestureEnableChange(boolean enable) {
-        for(BaseCover cover:mCovers){
-            if(cover instanceof GestureObserver){
-                ((GestureObserver)cover).onGestureEnableChange(enable);
+        for(BaseEventReceiver receiver:mCovers){
+            if(receiver instanceof GestureObserver){
+                ((GestureObserver)receiver).onGestureEnableChange(enable);
             }
         }
     }
 
     @Override
     public void onGestureEnd() {
-        for(BaseCover cover:mCovers){
-            if(cover instanceof GestureObserver){
-                ((GestureObserver)cover).onGestureEnd();
+        for(BaseEventReceiver receiver:mCovers){
+            if(receiver instanceof GestureObserver){
+                ((GestureObserver)receiver).onGestureEnd();
             }
         }
     }

@@ -3,7 +3,8 @@ package com.kk.taurus.playerbase.cover.base;
 import android.content.Context;
 
 import com.kk.taurus.playerbase.adapter.BaseVideoDataAdapter;
-import com.kk.taurus.playerbase.inter.ICoverCollections;
+import com.kk.taurus.playerbase.callback.BaseEventReceiver;
+import com.kk.taurus.playerbase.inter.IReceiverCollections;
 import com.kk.taurus.playerbase.setting.CoverData;
 
 import java.util.ArrayList;
@@ -14,20 +15,20 @@ import java.util.List;
  * Created by Taurus on 2017/3/24.
  */
 
-public abstract class BaseCoverCollections implements ICoverCollections {
+public abstract class BaseReceiverCollections implements IReceiverCollections {
 
     protected Context mContext;
-    protected LinkedHashMap<String,BaseCover> mCoverMap = new LinkedHashMap<>();
+    protected LinkedHashMap<String,BaseEventReceiver> mCoverMap = new LinkedHashMap<>();
 
-    public BaseCoverCollections(Context context){
+    public BaseReceiverCollections(Context context){
         this.mContext = context;
     }
 
-    protected void putCover(String key, BaseCover cover){
+    protected void putCover(String key, BaseEventReceiver cover){
         mCoverMap.put(key, cover);
     }
 
-    public BaseCoverCollections build(){
+    public BaseReceiverCollections build(){
         onCoversHasInit(mContext);
         return this;
     }
@@ -42,11 +43,11 @@ public abstract class BaseCoverCollections implements ICoverCollections {
     }
 
     @Override
-    public List<BaseCover> getCovers() {
-        List<BaseCover> covers = new ArrayList<>();
+    public List<BaseEventReceiver> getCovers() {
+        List<BaseEventReceiver> covers = new ArrayList<>();
         if(mCoverMap!=null){
             for(String key:mCoverMap.keySet()){
-                BaseCover cover = mCoverMap.get(key);
+                BaseEventReceiver cover = mCoverMap.get(key);
                 covers.add(cover);
             }
         }

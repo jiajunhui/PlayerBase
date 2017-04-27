@@ -14,7 +14,7 @@ import java.util.List;
  * Created by Taurus on 2017/4/24.
  */
 
-public abstract class BasePlayerImageAdCover extends BaseCoverPlayerHandle implements IAdImageCover{
+public abstract class BasePlayerImageAdCover extends BaseCover implements IAdImageCover{
 
     protected View mAdBox;
     protected ImageView mIvPic;

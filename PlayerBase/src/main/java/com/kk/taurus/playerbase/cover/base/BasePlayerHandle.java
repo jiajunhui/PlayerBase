@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Message;
 
+import com.kk.taurus.playerbase.callback.BaseEventReceiver;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.inter.IPlayerCoverHandle;
 import com.kk.taurus.playerbase.inter.MSG;
@@ -16,14 +17,10 @@ import java.util.List;
  * Created by Taurus on 2017/4/20.
  */
 
-public abstract class BaseCoverPlayerHandle extends BaseCover implements IPlayerCoverHandle{
+public abstract class BasePlayerHandle extends BaseEventReceiver implements IPlayerCoverHandle{
 
-    public BaseCoverPlayerHandle(Context context) {
+    public BasePlayerHandle(Context context) {
         super(context);
-    }
-
-    public BaseCoverPlayerHandle(Context context, BaseCoverObserver coverObserver) {
-        super(context, coverObserver);
     }
 
     protected void _handleMessage(Message msg){
