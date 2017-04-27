@@ -23,7 +23,7 @@ import java.util.List;
  *
  */
 
-public abstract class BaseCover extends BasePlayerHandle implements ICover , View.OnClickListener{
+public abstract class BaseCover extends BasePlayerToolsReceiver implements ICover , View.OnClickListener{
 
     private View mCoverView;
     private BaseCoverObserver coverObserver;

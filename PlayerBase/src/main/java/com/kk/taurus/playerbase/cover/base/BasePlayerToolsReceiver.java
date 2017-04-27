@@ -17,9 +17,9 @@ import java.util.List;
  * Created by Taurus on 2017/4/20.
  */
 
-public abstract class BasePlayerHandle extends BaseEventReceiver implements IPlayerCoverHandle{
+public abstract class BasePlayerToolsReceiver extends BaseEventReceiver implements IPlayerCoverHandle{
 
-    public BasePlayerHandle(Context context) {
+    public BasePlayerToolsReceiver(Context context) {
         super(context);
     }
 
