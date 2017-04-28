@@ -66,8 +66,8 @@ public class DefaultReceiverCollections extends BaseReceiverCollections {
         return addCover(BaseFocusCover.KEY,focusCover);
     }
 
-    public DefaultReceiverCollections addCover(String key, BaseEventReceiver cover){
-        putCover(key,cover);
+    public DefaultReceiverCollections addCover(String key, BaseEventReceiver receiver){
+        putReceiver(key,receiver);
         return this;
     }
 

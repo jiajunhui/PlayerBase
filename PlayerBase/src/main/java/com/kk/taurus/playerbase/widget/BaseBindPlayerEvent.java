@@ -21,20 +21,20 @@ import com.kk.taurus.playerbase.utils.CommonUtils;
  * Created by Taurus on 2017/3/24.
  */
 
-public abstract class BaseCoverBindPlayerObserver extends BaseBindCover implements IPlayer {
+public abstract class BaseBindPlayerEvent extends BaseBindEventReceiver implements IPlayer {
 
     private boolean mNetError;
     private NetChangeReceiver mNetChangeReceiver;
 
-    public BaseCoverBindPlayerObserver(@NonNull Context context) {
+    public BaseBindPlayerEvent(@NonNull Context context) {
         super(context);
     }
 
-    public BaseCoverBindPlayerObserver(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public BaseBindPlayerEvent(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public BaseCoverBindPlayerObserver(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
+    public BaseBindPlayerEvent(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
@@ -80,6 +80,7 @@ public abstract class BaseCoverBindPlayerObserver extends BaseBindCover implemen
     public void destroy() {
         onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_ON_DESTROY,null);
         unRegisterNetChangeReceiver();
+        unbindCoverCollections();
     }
 
     private class NetChangeReceiver extends BroadcastReceiver {

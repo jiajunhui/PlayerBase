@@ -67,7 +67,7 @@ public class PlayerActivity extends ToolsActivity implements OnPlayerEventListen
 
         mPlayer.bindCoverCollections(mCoverCollections);
 
-        BasePlayerControllerCover controllerCover = mCoverCollections.getCover(BasePlayerControllerCover.KEY);
+        BasePlayerControllerCover controllerCover = mCoverCollections.getReceiver(BasePlayerControllerCover.KEY);
         controllerCover.setVideoTitle(item.getDisplayName());
         controllerCover.setOnBackClickListener(new View.OnClickListener() {
             @Override
@@ -103,7 +103,7 @@ public class PlayerActivity extends ToolsActivity implements OnPlayerEventListen
         adVideos.add(new BaseAdVideo("http://172.16.218.64:8080/batamu_trans19.mp4"));
         playData.setAdVideos(adVideos);
 
-        final BaseAdCover adCover = mCoverCollections.getCover(BaseAdCover.KEY);
+        final BaseAdCover adCover = mCoverCollections.getReceiver(BaseAdCover.KEY);
         adCover.setOnAdCoverClickListener(new OnAdCoverClickListener() {
             @Override
             public void onAdCoverClick(BaseAdVideo adVideo) {
@@ -159,7 +159,6 @@ public class PlayerActivity extends ToolsActivity implements OnPlayerEventListen
         super.onDestroy();
         if(mPlayer!=null){
             mPlayer.destroy();
-            mPlayer.unbindCoverCollections();
         }
     }
 

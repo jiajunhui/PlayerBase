@@ -9,6 +9,6 @@ import java.util.List;
  */
 
 public interface IReceiverCollections {
-    <T> T getCover(String key);
-    List<BaseEventReceiver> getCovers();
+    <T> T getReceiver(String key);
+    List<BaseEventReceiver> getReceivers();
 }

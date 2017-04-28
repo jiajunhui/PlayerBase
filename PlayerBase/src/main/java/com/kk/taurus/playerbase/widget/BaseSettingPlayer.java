@@ -20,7 +20,7 @@ import com.kk.taurus.playerbase.setting.PlayerType;
  * Created by Taurus on 2017/3/25.
  */
 
-public abstract class BaseSettingPlayer extends BaseCoverBindPlayerObserver {
+public abstract class BaseSettingPlayer extends BaseBindPlayerEvent {
 
     private int mPlayerType;
     protected int startPos;

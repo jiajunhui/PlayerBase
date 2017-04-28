@@ -17,6 +17,7 @@ import com.kk.taurus.playerbase.cover.base.BaseCover;
 import com.kk.taurus.playerbase.cover.base.BaseReceiverCollections;
 import com.kk.taurus.playerbase.callback.PlayerObserver;
 import com.kk.taurus.playerbase.inter.IDpadFocusCover;
+import com.kk.taurus.playerbase.inter.IEventReceiver;
 import com.kk.taurus.playerbase.setting.BaseAdVideo;
 import com.kk.taurus.playerbase.setting.VideoData;
 
@@ -25,47 +26,47 @@ import java.util.List;
 /**
  * Created by Taurus on 2017/3/24.
  *
- * 绑定cover集合，负责分发和中转player或者cover消息。
+ * 绑定receiver集合，负责分发和中转player或者cover消息。
  *
  */
 
-public abstract class BaseBindCover extends BaseContainer implements PlayerObserver,GestureObserver,OnCoverEventListener{
+public abstract class BaseBindEventReceiver extends BaseContainer implements IEventReceiver, PlayerObserver,GestureObserver,OnCoverEventListener{
 
-    private BaseReceiverCollections coverCollections;
+    private BaseReceiverCollections receiverCollections;
     private OnCoverEventListener mOnCoverEventListener;
 
-    public BaseBindCover(@NonNull Context context){
+    public BaseBindEventReceiver(@NonNull Context context){
         super(context);
     }
 
-    public BaseBindCover(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public BaseBindEventReceiver(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public BaseBindCover(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
+    public BaseBindEventReceiver(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
     public void bindCoverCollections(BaseReceiverCollections coverCollections){
-        if(this.coverCollections!=null)
+        if(this.receiverCollections !=null)
             return;
-        this.coverCollections = coverCollections;
+        this.receiverCollections = coverCollections;
         initCovers(mAppContext);
     }
 
     public void unbindCoverCollections(){
-        if(coverCollections!=null){
-            coverCollections.clear();
-            coverCollections = null;
+        if(receiverCollections !=null){
+            receiverCollections.clear();
+            receiverCollections = null;
         }
         removeAllCovers();
         removeAllContainers();
     }
 
     private void initCovers(Context context) {
-        if(coverCollections==null)
+        if(receiverCollections ==null)
             return;
-        List<BaseEventReceiver> covers = coverCollections.getCovers();
+        List<BaseEventReceiver> covers = receiverCollections.getReceivers();
         for(BaseEventReceiver cover : covers){
             if(cover instanceof BaseCover){
                 addCover((BaseCover) cover,null);
@@ -74,8 +75,8 @@ public abstract class BaseBindCover extends BaseContainer implements PlayerObser
         onCoversHasInit(context);
     }
 
-    public BaseReceiverCollections getCoverCollections(){
-        return coverCollections;
+    public BaseReceiverCollections getReceiverCollections(){
+        return receiverCollections;
     }
 
     protected void onCoversHasInit(Context context) {
@@ -109,6 +110,7 @@ public abstract class BaseBindCover extends BaseContainer implements PlayerObser
         }
     }
 
+    @Override
     public void onBindPlayer(BasePlayer player, OnCoverEventListener onCoverEventListener) {
         for(BaseEventReceiver receiver:mCovers){
             if(receiver!=null){

@@ -3,7 +3,6 @@ package com.kk.taurus.playerbase.callback;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
-import com.kk.taurus.playerbase.inter.IPlayer;
 import com.kk.taurus.playerbase.setting.BaseAdVideo;
 import com.kk.taurus.playerbase.setting.VideoData;
 

@@ -18,67 +18,71 @@ import java.util.List;
 public abstract class BaseReceiverCollections implements IReceiverCollections {
 
     protected Context mContext;
-    protected LinkedHashMap<String,BaseEventReceiver> mCoverMap = new LinkedHashMap<>();
+    protected LinkedHashMap<String,BaseEventReceiver> mReceiverMap = new LinkedHashMap<>();
 
     public BaseReceiverCollections(Context context){
         this.mContext = context;
     }
 
-    protected void putCover(String key, BaseEventReceiver cover){
-        mCoverMap.put(key, cover);
+    protected void putReceiver(String key, BaseEventReceiver receiver){
+        mReceiverMap.put(key, receiver);
     }
 
     public BaseReceiverCollections build(){
-        onCoversHasInit(mContext);
+        onReceiversHasInit(mContext);
         return this;
     }
 
-    protected void onCoversHasInit(Context context) {
+    protected void onReceiversHasInit(Context context) {
 
     }
 
     @Override
-    public <T> T getCover(String key) {
-        return (T) mCoverMap.get(key);
+    public <T> T getReceiver(String key) {
+        return (T) mReceiverMap.get(key);
     }
 
     @Override
-    public List<BaseEventReceiver> getCovers() {
-        List<BaseEventReceiver> covers = new ArrayList<>();
-        if(mCoverMap!=null){
-            for(String key:mCoverMap.keySet()){
-                BaseEventReceiver cover = mCoverMap.get(key);
-                covers.add(cover);
+    public List<BaseEventReceiver> getReceivers() {
+        List<BaseEventReceiver> receivers = new ArrayList<>();
+        if(mReceiverMap !=null){
+            for(String key: mReceiverMap.keySet()){
+                BaseEventReceiver receiver = mReceiverMap.get(key);
+                receivers.add(receiver);
             }
         }
-        return covers;
+        return receivers;
     }
 
     public void refreshDataAdapter(BaseVideoDataAdapter dataAdapter){
-        if(mCoverMap!=null){
-            for(String key:mCoverMap.keySet()){
-                mCoverMap.get(key).onRefreshDataAdapter(dataAdapter);
+        if(mReceiverMap !=null){
+            for(String key: mReceiverMap.keySet()){
+                mReceiverMap.get(key).onRefreshDataAdapter(dataAdapter);
             }
         }
     }
 
     public void refreshData(CoverData data){
-        if(mCoverMap!=null){
-            for(String key:mCoverMap.keySet()){
-                mCoverMap.get(key).onRefreshCoverData(data);
+        refreshData(data,null);
+    }
+
+    public void refreshData(CoverData data,BaseEventReceiver[] receivers){
+        if(receivers!=null && receivers.length>0){
+            for(BaseEventReceiver receiver : receivers){
+                receiver.onRefreshCoverData(data);
+            }
+        }else{
+            if(mReceiverMap !=null){
+                for(String key: mReceiverMap.keySet()){
+                    mReceiverMap.get(key).onRefreshCoverData(data);
+                }
             }
         }
     }
 
-    public void refreshData(CoverData data,BaseCover... covers){
-        for(BaseCover cover : covers){
-            cover.onRefreshCoverData(data);
-        }
-    }
-
     public void clear(){
-        if(mCoverMap!=null){
-            mCoverMap.clear();
+        if(mReceiverMap !=null){
+            mReceiverMap.clear();
             mContext = null;
         }
     }
