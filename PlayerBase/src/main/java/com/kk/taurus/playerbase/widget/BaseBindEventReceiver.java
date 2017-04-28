@@ -92,184 +92,204 @@ public abstract class BaseBindEventReceiver extends BaseContainer implements IEv
         if(mOnCoverEventListener!=null){
             mOnCoverEventListener.onCoverEvent(eventCode, bundle);
         }
-        for(BaseEventReceiver receiver:mCovers){
-            if(receiver!=null){
-                receiver.onCoverEvent(eventCode, bundle);
+        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
+            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
+                if(receiver!=null){
+                    receiver.onCoverEvent(eventCode, bundle);
+                }
             }
-        }
     }
 
     /**
      * 当cover集合中存在Dpad控制层时，将焦点控制权交给它。
      */
     public void dPadRequestFocus(){
-        for(BaseEventReceiver receiver:mCovers){
-            if(receiver!=null && receiver instanceof IDpadFocusCover){
-                receiver.onNotifyPlayEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_DPAD_REQUEST_FOCUS, null);
+        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
+            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
+                if(receiver!=null && receiver instanceof IDpadFocusCover){
+                    receiver.onNotifyPlayEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_DPAD_REQUEST_FOCUS, null);
+                }
             }
-        }
     }
 
     @Override
     public void onBindPlayer(BasePlayer player, OnCoverEventListener onCoverEventListener) {
-        for(BaseEventReceiver receiver:mCovers){
-            if(receiver!=null){
-                receiver.onBindPlayer(player,onCoverEventListener);
+        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
+            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
+                if(receiver!=null){
+                    receiver.onBindPlayer(player,onCoverEventListener);
+                }
             }
-        }
     }
 
     @Override
     public void onNotifyConfigurationChanged(Configuration newConfig) {
-        for(BaseEventReceiver receiver:mCovers){
-            if(receiver!=null){
-                receiver.onNotifyConfigurationChanged(newConfig);
+        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
+            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
+                if(receiver!=null){
+                    receiver.onNotifyConfigurationChanged(newConfig);
+                }
             }
-        }
     }
 
     @Override
     public void onNotifyPlayEvent(int eventCode, Bundle bundle) {
-        for(BaseEventReceiver receiver:mCovers){
-            if(receiver!=null){
-                receiver.onNotifyPlayEvent(eventCode, bundle);
+        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
+            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
+                if(receiver!=null){
+                    receiver.onNotifyPlayEvent(eventCode, bundle);
+                }
             }
-        }
     }
 
     @Override
     public void onNotifyErrorEvent(int eventCode, Bundle bundle) {
-        for(BaseEventReceiver receiver:mCovers){
-            if(receiver!=null){
-                receiver.onNotifyErrorEvent(eventCode, bundle);
+        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
+            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
+                if(receiver!=null){
+                    receiver.onNotifyErrorEvent(eventCode, bundle);
+                }
             }
-        }
     }
 
     @Override
     public void onNotifyPlayTimerCounter(int curr, int duration, int bufferPercentage) {
-        for(BaseEventReceiver receiver:mCovers){
-            if(receiver!=null){
-                receiver.onNotifyPlayTimerCounter(curr, duration, bufferPercentage);
+        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
+            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
+                if(receiver!=null){
+                    receiver.onNotifyPlayTimerCounter(curr, duration, bufferPercentage);
+                }
             }
-        }
     }
 
     @Override
     public void onNotifyNetWorkConnected(int networkType) {
-        for(BaseEventReceiver receiver:mCovers){
-            if(receiver!=null){
-                receiver.onNotifyNetWorkConnected(networkType);
+        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
+            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
+                if(receiver!=null){
+                    receiver.onNotifyNetWorkConnected(networkType);
+                }
             }
-        }
     }
 
     @Override
     public void onNotifyNetWorkError() {
-        for(BaseEventReceiver receiver:mCovers){
-            if(receiver!=null){
-                receiver.onNotifyNetWorkError();
+        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
+            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
+                if(receiver!=null){
+                    receiver.onNotifyNetWorkError();
+                }
             }
-        }
     }
 
     @Override
     public void onNotifyAdPrepared(List<BaseAdVideo> adVideos) {
-        for(BaseEventReceiver receiver:mCovers){
-            if(receiver!=null){
-                receiver.onNotifyAdPrepared(adVideos);
+        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
+            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
+                if(receiver!=null){
+                    receiver.onNotifyAdPrepared(adVideos);
+                }
             }
-        }
     }
 
     @Override
     public void onNotifyAdStart(BaseAdVideo adVideo) {
-        for(BaseEventReceiver receiver:mCovers){
-            if(receiver!=null){
-                receiver.onNotifyAdStart(adVideo);
+        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
+            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
+                if(receiver!=null){
+                    receiver.onNotifyAdStart(adVideo);
+                }
             }
-        }
     }
 
     @Override
     public void onNotifyAdFinish(VideoData data, boolean isAllFinish) {
-        for(BaseEventReceiver receiver:mCovers){
-            if(receiver!=null){
-                receiver.onNotifyAdFinish(data, isAllFinish);
+        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
+            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
+                if(receiver!=null){
+                    receiver.onNotifyAdFinish(data, isAllFinish);
+                }
             }
-        }
     }
 
     @Override
     public void onGestureSingleTab(MotionEvent event) {
-        for(BaseEventReceiver receiver:mCovers){
-            if(receiver instanceof GestureObserver){
-                ((GestureObserver)receiver).onGestureSingleTab(event);
+        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
+            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
+                if(receiver instanceof GestureObserver){
+                    ((GestureObserver)receiver).onGestureSingleTab(event);
+                }
             }
-        }
     }
 
     @Override
     public void onGestureDoubleTab(MotionEvent event) {
-        for(BaseEventReceiver receiver:mCovers){
-            if(receiver instanceof GestureObserver){
-                ((GestureObserver)receiver).onGestureDoubleTab(event);
+        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
+            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
+                if(receiver instanceof GestureObserver){
+                    ((GestureObserver)receiver).onGestureDoubleTab(event);
+                }
             }
-        }
     }
 
     @Override
     public void onGestureScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        for(BaseEventReceiver receiver:mCovers){
-            if(receiver instanceof GestureObserver){
-                ((GestureObserver)receiver).onGestureScroll(e1, e2, distanceX, distanceY);
+        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
+            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
+                if(receiver instanceof GestureObserver){
+                    ((GestureObserver)receiver).onGestureScroll(e1, e2, distanceX, distanceY);
+                }
             }
-        }
     }
 
     @Override
     public void onGestureHorizontalSlide(float percent) {
-        for(BaseEventReceiver receiver:mCovers){
-            if(receiver instanceof GestureObserver){
-                ((GestureObserver)receiver).onGestureHorizontalSlide(percent);
+        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
+            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
+                if(receiver instanceof GestureObserver){
+                    ((GestureObserver)receiver).onGestureHorizontalSlide(percent);
+                }
             }
-        }
     }
 
     @Override
     public void onGestureRightVerticalSlide(float percent) {
-        for(BaseEventReceiver receiver:mCovers){
-            if(receiver instanceof GestureObserver){
-                ((GestureObserver)receiver).onGestureRightVerticalSlide(percent);
+        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
+            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
+                if(receiver instanceof GestureObserver){
+                    ((GestureObserver)receiver).onGestureRightVerticalSlide(percent);
+                }
             }
-        }
     }
 
     @Override
     public void onGestureLeftVerticalSlide(float percent) {
-        for(BaseEventReceiver receiver:mCovers){
-            if(receiver instanceof GestureObserver){
-                ((GestureObserver)receiver).onGestureLeftVerticalSlide(percent);
+        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
+            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
+                if(receiver instanceof GestureObserver){
+                    ((GestureObserver)receiver).onGestureLeftVerticalSlide(percent);
+                }
             }
-        }
     }
 
     @Override
     public void onGestureEnableChange(boolean enable) {
-        for(BaseEventReceiver receiver:mCovers){
-            if(receiver instanceof GestureObserver){
-                ((GestureObserver)receiver).onGestureEnableChange(enable);
+        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
+            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
+                if(receiver instanceof GestureObserver){
+                    ((GestureObserver)receiver).onGestureEnableChange(enable);
+                }
             }
-        }
     }
 
     @Override
     public void onGestureEnd() {
-        for(BaseEventReceiver receiver:mCovers){
-            if(receiver instanceof GestureObserver){
-                ((GestureObserver)receiver).onGestureEnd();
+        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
+            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
+                if(receiver instanceof GestureObserver){
+                    ((GestureObserver)receiver).onGestureEnd();
+                }
             }
-        }
     }
 
 

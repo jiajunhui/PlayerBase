@@ -89,7 +89,7 @@ public abstract class BasePlayer extends BaseAdPlayer {
 
     @Override
     public void resume() {
-        if(available() && mStatus == STATUS_PAUSED){
+        if(available()){
             mInternalPlayer.resume();
             Bundle bundle = new Bundle();
             bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_POSITION,getCurrentPosition());
