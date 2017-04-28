@@ -44,9 +44,9 @@ public class DefaultPlayer extends BasePlayer {
         destroyInternalPlayer();
         Log.d(TAG,"init player : " + PlayerType.getInstance().getPlayerPath(getPlayerType()));
         mInternalPlayer = (BaseSinglePlayer) ConfigLoader.getPlayerInstance(mAppContext,getPlayerType());
-        mInternalPlayer.setDecodeMode(getDecodeMode());
-        mInternalPlayer.setAspectRatio(getAspectRatio());
         if(mInternalPlayer !=null){
+            mInternalPlayer.setDecodeMode(getDecodeMode());
+            mInternalPlayer.setAspectRatio(getAspectRatio());
             mInternalPlayer.setOnErrorListener(new OnErrorListener() {
                 @Override
                 public void onError(int errorCode, Bundle bundle) {
