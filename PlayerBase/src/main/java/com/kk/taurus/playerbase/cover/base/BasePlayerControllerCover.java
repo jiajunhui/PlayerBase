@@ -44,6 +44,11 @@ public abstract class BasePlayerControllerCover extends BaseCover implements IPl
     }
 
     @Override
+    protected void setDefaultGone() {
+
+    }
+
+    @Override
     protected void findView() {
         setCoverVisibility(View.GONE);
         mTopContainer = findViewById(R.id.cover_player_controller_top_container);
@@ -99,7 +104,6 @@ public abstract class BasePlayerControllerCover extends BaseCover implements IPl
     public void setControllerState(boolean state) {
         setTopContainerState(state);
         setBottomContainerState(state);
-        setCoverVisibility(state?View.VISIBLE:View.GONE);
         if(state){
             onControllerShow();
         }
