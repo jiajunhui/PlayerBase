@@ -49,6 +49,10 @@ public class DefaultPlayerErrorCover extends BasePlayerErrorCover {
     @Override
     public void onNotifyPlayEvent(int eventCode, Bundle bundle) {
         super.onNotifyPlayEvent(eventCode, bundle);
+        handlePlayEvent(eventCode, bundle);
+    }
+
+    protected void handlePlayEvent(int eventCode, Bundle bundle) {
         switch (eventCode){
             case OnPlayerEventListener.EVENT_CODE_RENDER_START:
                 setErrorState(false);
@@ -59,6 +63,10 @@ public class DefaultPlayerErrorCover extends BasePlayerErrorCover {
     @Override
     public void onNotifyErrorEvent(int eventCode, Bundle bundle) {
         super.onNotifyErrorEvent(eventCode, bundle);
+        handleErrorEvent(eventCode, bundle);
+    }
+
+    protected void handleErrorEvent(int eventCode, Bundle bundle) {
         switch (eventCode){
             case OnErrorListener.ERROR_CODE_COMMON:
                 setErrorState(true);
