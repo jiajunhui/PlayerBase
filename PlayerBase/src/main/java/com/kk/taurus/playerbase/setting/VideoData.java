@@ -9,6 +9,7 @@ import java.io.Serializable;
 public class VideoData implements Serializable {
 
     private String data;
+    private String name;
     private int playerType;
     private Rate rate;
     private int startPos;
@@ -34,6 +35,14 @@ public class VideoData implements Serializable {
 
     public void setData(String data) {
         this.data = data;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getPlayerType() {
