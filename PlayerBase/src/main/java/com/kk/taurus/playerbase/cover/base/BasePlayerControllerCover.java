@@ -50,7 +50,6 @@ public abstract class BasePlayerControllerCover extends BaseCover implements IPl
 
     @Override
     protected void findView() {
-        setCoverVisibility(View.GONE);
         mTopContainer = findViewById(R.id.cover_player_controller_top_container);
         mBottomContainer = findViewById(R.id.cover_player_controller_bottom_container);
         mIvBackIcon = findViewById(R.id.cover_player_controller_image_view_back_icon);
