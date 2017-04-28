@@ -50,10 +50,10 @@ public abstract class BasePlayer extends BaseAdPlayer {
     public void setDataSource(VideoData data) {
         super.setDataSource(data);
         if(available() && data!=null && data.getData()!=null){
-            mInternalPlayer.setDataSource(data);
             Bundle bundle = new Bundle();
             bundle.putSerializable(OnPlayerEventListener.BUNDLE_KEY_VIDEO_DATA,data);
             onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_ON_SET_DATA_SOURCE,bundle);
+            mInternalPlayer.setDataSource(data);
         }
     }
 
@@ -182,11 +182,12 @@ public abstract class BasePlayer extends BaseAdPlayer {
 
     @Override
     public void changeVideoDefinition(Rate rate) {
+        super.changeVideoDefinition(rate);
         if(available() && rate!=null){
-            mInternalPlayer.changeVideoDefinition(rate);
             Bundle bundle = new Bundle();
             bundle.putSerializable(OnPlayerEventListener.BUNDLE_KEY_RATE_DATA,rate);
             onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_CHANGE_DEFINITION,bundle);
+            mInternalPlayer.changeVideoDefinition(rate);
         }
     }
 

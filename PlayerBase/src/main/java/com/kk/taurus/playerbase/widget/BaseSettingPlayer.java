@@ -12,9 +12,13 @@ import android.util.AttributeSet;
 
 import com.kk.taurus.playerbase.callback.OnErrorListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
+import com.kk.taurus.playerbase.inter.VideoDataInterceptor;
+import com.kk.taurus.playerbase.inter.VideoRateInterceptor;
 import com.kk.taurus.playerbase.setting.AspectRatio;
 import com.kk.taurus.playerbase.setting.DecodeMode;
 import com.kk.taurus.playerbase.setting.PlayerType;
+import com.kk.taurus.playerbase.setting.Rate;
+import com.kk.taurus.playerbase.setting.VideoData;
 
 /**
  * Created by Taurus on 2017/3/25.
@@ -22,6 +26,8 @@ import com.kk.taurus.playerbase.setting.PlayerType;
 
 public abstract class BaseSettingPlayer extends BaseBindPlayerEvent {
 
+    protected VideoData dataSource;
+    protected Rate rate;
     private int mPlayerType;
     protected int startPos;
     protected int mStatus = STATUS_IDLE;
@@ -30,6 +36,9 @@ public abstract class BaseSettingPlayer extends BaseBindPlayerEvent {
 
     private OnPlayerEventListener mOnPlayerEventListener;
     private OnErrorListener mOnErrorListener;
+
+    private VideoDataInterceptor videoDataInterceptor;
+    private VideoRateInterceptor videoRateInterceptor;
 
     public BaseSettingPlayer(@NonNull Context context) {
         super(context);
@@ -41,6 +50,18 @@ public abstract class BaseSettingPlayer extends BaseBindPlayerEvent {
 
     public BaseSettingPlayer(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+    }
+
+    @Override
+    public void setDataSource(VideoData dataSource) {
+        this.dataSource = dataSource;
+        onSetDataSource(dataSource);
+    }
+
+    @Override
+    public void changeVideoDefinition(Rate rate) {
+        this.rate = rate;
+        onSetVideoRate(rate);
     }
 
     @Override
@@ -98,6 +119,26 @@ public abstract class BaseSettingPlayer extends BaseBindPlayerEvent {
 
     public void setOnErrorListener(OnErrorListener onErrorListener) {
         this.mOnErrorListener = onErrorListener;
+    }
+
+    public void setVideoDataInterceptor(VideoDataInterceptor videoDataInterceptor) {
+        this.videoDataInterceptor = videoDataInterceptor;
+    }
+
+    public void setVideoRateInterceptor(VideoRateInterceptor videoRateInterceptor) {
+        this.videoRateInterceptor = videoRateInterceptor;
+    }
+
+    private void onSetDataSource(VideoData data){
+        if(videoDataInterceptor!=null){
+            videoDataInterceptor.onSetDataSource(data);
+        }
+    }
+
+    private void onSetVideoRate(Rate rate){
+        if(videoRateInterceptor!=null){
+            videoRateInterceptor.onSetVideoRate(rate);
+        }
     }
 
     public void setDecodeMode(DecodeMode decodeMode) {
