@@ -17,11 +17,9 @@ import android.widget.FrameLayout;
 
 import com.kk.taurus.playerbase.callback.OnPlayerGestureListener;
 import com.kk.taurus.playerbase.cover.base.BaseCover;
-import com.kk.taurus.playerbase.inter.ICover;
+import com.kk.taurus.playerbase.inter.ICoverContainer;
 import com.kk.taurus.playerbase.setting.PlayerGestureDetector;
 
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Taurus on 2017/3/24.
@@ -42,22 +40,9 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
      */
     private FrameLayout mPlayerContainer;
     /**
-     * the business covers container .
+     * cover container
      */
-    private FrameLayout mLevelLowCoverContainer;
-    /**
-     * the state covers container .
-     */
-    private FrameLayout mLevelMediumCoverContainer;
-    /**
-     * the extend covers container .
-     */
-    private FrameLayout mLevelHighCoverContainer;
-    /**
-     * cover collections.
-     */
-    protected List<BaseCover> mCovers = new ArrayList<>();
-
+    private ICoverContainer mCoverContainer;
     /**
      * the container width and height.
      */
@@ -105,12 +90,8 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
         initPlayerContainer(context);
         //init gesture handle layout
         initGesture(context);
-        //init low cover container
-        initLevelLowCoverContainer(context);
-        //init medium cover container
-        initLevelMediumCoverContainer(context);
-        //init high cover container
-        initLevelHighCoverContainer(context);
+        //init cover container
+        initCoverContainer(context);
         onContainerHasInit(context);
     }
 
@@ -181,77 +162,47 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
 
     protected abstract View getPlayerWidget(Context context);
 
-    private void initLevelLowCoverContainer(Context context) {
-        mLevelLowCoverContainer = new FrameLayout(context);
-        mLevelLowCoverContainer.setBackgroundColor(Color.TRANSPARENT);
-        addView(mLevelLowCoverContainer,new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-    }
-
-    private void initLevelMediumCoverContainer(Context context) {
-        mLevelMediumCoverContainer = new FrameLayout(context);
-        mLevelMediumCoverContainer.setBackgroundColor(Color.TRANSPARENT);
-        addView(mLevelMediumCoverContainer,new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-    }
-
-    private void initLevelHighCoverContainer(Context context) {
-        mLevelHighCoverContainer = new FrameLayout(context);
-        mLevelHighCoverContainer.setBackgroundColor(Color.TRANSPARENT);
-        addView(mLevelHighCoverContainer,new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-    }
-
-    protected void addCover(BaseCover cover, ViewGroup.LayoutParams layoutParams){
-        if(cover==null)
-            return;
-        if(isContainCoverView(cover))
-            return;
-        if(layoutParams==null){
-            layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+    private void initCoverContainer(Context context) {
+        mCoverContainer = getCoverContainer(context);
+        if(mCoverContainer==null){
+            throw new NullPointerException("please init cover container !");
         }
-        mCovers.add(cover);
-        switch (cover.getCoverLevel()){
-            case ICover.COVER_LEVEL_LOW:
-                mLevelLowCoverContainer.addView(cover.getView(),layoutParams);
-                break;
-            case ICover.COVER_LEVEL_MEDIUM:
-                mLevelMediumCoverContainer.addView(cover.getView(),layoutParams);
-                break;
-            case ICover.COVER_LEVEL_HIGH:
-                mLevelHighCoverContainer.addView(cover.getView(),layoutParams);
-                break;
+        addView(mCoverContainer.getContainerRoot(),new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+    }
+
+    protected abstract ICoverContainer getCoverContainer(Context context);
+
+    protected void addCover(BaseCover cover){
+        if(mCoverContainer!=null){
+            mCoverContainer.addCover(cover);
         }
     }
 
     private boolean isContainCoverView(BaseCover cover){
-        if(cover==null)
-            return false;
-        return mLevelLowCoverContainer.indexOfChild(cover.getView())!=-1
-                || mLevelMediumCoverContainer.indexOfChild(cover.getView())!=-1
-                || mLevelHighCoverContainer.indexOfChild(cover.getView())!=-1;
+        if(mCoverContainer!=null){
+            return mCoverContainer.isContainsCover(cover);
+        }
+        return false;
     }
 
     protected void removeCover(BaseCover cover){
-        if(cover==null)
-            return;
-        mLevelLowCoverContainer.removeView(cover.getView());
-        mLevelMediumCoverContainer.removeView(cover.getView());
-        mLevelHighCoverContainer.removeView(cover.getView());
+        if(mCoverContainer!=null){
+            mCoverContainer.removeCover(cover);
+        }
     }
 
     protected void removeAllCovers(){
-        if(mCovers!=null){
-            for(BaseCover cover : mCovers){
-                removeCover(cover);
-            }
-            mCovers.clear();
+        if(mCoverContainer!=null){
+            mCoverContainer.removeAllCovers();
         }
     }
 
     protected void removeAllContainers(){
         removeView(mPlayerContainer);
-        removeView(mLevelLowCoverContainer);
-        removeView(mLevelMediumCoverContainer);
-        removeView(mLevelHighCoverContainer);
         removeView(mGestureLayout);
+        if(mCoverContainer!=null){
+            removeView(mCoverContainer.getContainerRoot());
+        }
     }
 
     @Override

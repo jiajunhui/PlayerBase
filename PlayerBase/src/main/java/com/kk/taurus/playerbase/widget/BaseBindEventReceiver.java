@@ -69,7 +69,7 @@ public abstract class BaseBindEventReceiver extends BaseContainer implements IEv
         List<BaseEventReceiver> covers = receiverCollections.getReceivers();
         for(BaseEventReceiver cover : covers){
             if(cover instanceof BaseCover){
-                addCover((BaseCover) cover,null);
+                addCover((BaseCover) cover);
             }
         }
         onCoversHasInit(context);

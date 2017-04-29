@@ -50,6 +50,7 @@ public class DefaultPlayerControllerCover extends BasePlayerControllerCover {
 
     @Override
     protected void afterFindView() {
+        setCoverVisibility(View.GONE);
         super.afterFindView();
         if(mIvPlayState!=null){
             mIvPlayState.setOnClickListener(new View.OnClickListener() {
@@ -100,6 +101,7 @@ public class DefaultPlayerControllerCover extends BasePlayerControllerCover {
 
     @Override
     public void setControllerState(boolean state) {
+        setCoverVisibility(state?View.VISIBLE:View.GONE);
         super.setControllerState(state);
         notifyCoverEvent(state? OnCoverEventListener.EVENT_CODE_ON_PLAYER_CONTROLLER_SHOW
                 :OnCoverEventListener.EVENT_CODE_ON_PLAYER_CONTROLLER_HIDDEN,null);

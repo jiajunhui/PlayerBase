@@ -13,6 +13,8 @@ import android.widget.FrameLayout;
 import com.kk.taurus.playerbase.callback.OnErrorListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.config.ConfigLoader;
+import com.kk.taurus.playerbase.cover.container.DefaultLevelCoverContainer;
+import com.kk.taurus.playerbase.inter.ICoverContainer;
 import com.kk.taurus.playerbase.setting.PlayerType;
 import com.kk.taurus.playerbase.widget.BasePlayer;
 import com.kk.taurus.playerbase.widget.BaseSinglePlayer;
@@ -63,5 +65,10 @@ public class DefaultPlayer extends BasePlayer {
             return new FrameLayout(mAppContext);
         }
         return mInternalPlayer;
+    }
+
+    @Override
+    protected ICoverContainer getCoverContainer(Context context) {
+        return new DefaultLevelCoverContainer(context);
     }
 }
