@@ -16,7 +16,7 @@
         android:name=".MApp"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.SplashActivity"
+            android:name=".ui.activity.SplashActivity"
             android:screenOrientation="portrait"
             >
             <intent-filter>
@@ -26,13 +26,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.HomeActivity"
+            android:name=".ui.activity.HomeActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".ui.SettingActivity"
+            android:name=".ui.activity.SettingActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".ui.PlayerActivity"
+            android:name=".ui.activity.PlayerActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="sensor">
+
+        </activity>
+        <activity
+            android:name=".ui.activity.VideoDetailActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="sensor">
 

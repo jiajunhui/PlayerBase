@@ -1,20 +1,17 @@
-package com.taurus.playerbaselibrary.ui;
+package com.taurus.playerbaselibrary.ui.fragment;
 
 import android.Manifest;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.view.View;
 
 import com.jiajunhui.xapp.medialoader.bean.VideoItem;
 import com.jiajunhui.xapp.medialoader.callback.OnVideoLoaderCallBack;
 import com.jiajunhui.xapp.medialoader.loader.MediaLoader;
-import com.kk.taurus.baseframe.base.top_bar.BaseTopBarNavigationMenu;
 import com.kk.taurus.baseframe.bean.PageState;
-import com.kk.taurus.baseframe.bean.TopBarMenu;
-import com.kk.taurus.baseframe.ui.activity.TopBarActivity;
+import com.kk.taurus.baseframe.ui.fragment.StateFragment;
 import com.taurus.playerbaselibrary.bean.VideosInfo;
-import com.taurus.playerbaselibrary.holder.HomeHolder;
+import com.taurus.playerbaselibrary.holder.LocalVideoHolder;
+import com.taurus.playerbaselibrary.ui.activity.PlayerActivity;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -25,20 +22,19 @@ import kr.co.namee.permissiongen.PermissionGen;
 import kr.co.namee.permissiongen.PermissionSuccess;
 
 /**
- * Created by Taurus on 2017/3/28.
+ * Created by Taurus on 2017/4/30.
  */
 
-public class HomeActivity extends TopBarActivity<VideosInfo,HomeHolder> implements HomeHolder.OnHomeHolderListener {
-
+public class LocalVideoFragment extends StateFragment<VideosInfo,LocalVideoHolder> implements LocalVideoHolder.OnLocalVideoListener {
     @Override
-    public HomeHolder getContentViewHolder(Bundle savedInstanceState) {
-        return new HomeHolder(this);
+    public LocalVideoHolder getContentViewHolder(Bundle savedInstanceState) {
+        return new LocalVideoHolder(mContext);
     }
 
     @Override
     public void loadState() {
         setPageState(PageState.loading());
-        PermissionGen.with(HomeActivity.this)
+        PermissionGen.with(this)
                 .addRequestCode(100)
                 .permissions(
                         Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -55,11 +51,12 @@ public class HomeActivity extends TopBarActivity<VideosInfo,HomeHolder> implemen
 
     @PermissionSuccess(requestCode = 100)
     public void permissionSuccess(){
-        MediaLoader.loadVideos(this, new OnVideoLoaderCallBack() {
+        MediaLoader.loadVideos(getActivity(), new OnVideoLoaderCallBack() {
             @Override
             public void onResultList(List<VideoItem> items) {
-                Collections.sort(items,new MCompartor());
+                Collections.sort(items,new LocalVideoFragment.MCompartor());
                 VideosInfo videosInfo = new VideosInfo(items);
+                mContentHolder.setOnLocalVideoListener(LocalVideoFragment.this);
                 setData(videosInfo);
                 setPageState(PageState.success());
             }
@@ -70,23 +67,6 @@ public class HomeActivity extends TopBarActivity<VideosInfo,HomeHolder> implemen
     public void permissionFailure(){
         showSnackBar("permission deny",null,null);
         setPageState(PageState.success());
-    }
-
-    @Override
-    public void initData() {
-        super.initData();
-        getTopBarNavigationIcon().setVisibility(View.GONE);
-        setTopBarTitle("KKPlayer");
-        setStatusBarColor(Color.parseColor("#f83d46"));
-        setMenuType(BaseTopBarNavigationMenu.MENU_TYPE_TEXT,new TopBarMenu().setMenuText("设置"));
-        mContentHolder.setOnHomeHolderListener(this);
-    }
-
-    @Override
-    public void onNavigationMenuClick() {
-        super.onNavigationMenuClick();
-        Intent intent = new Intent(this,SettingActivity.class);
-        startActivity(intent);
     }
 
     @Override

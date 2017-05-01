@@ -4,41 +4,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/ll_input"
+    <RelativeLayout
+        android:id="@+id/container"
+        android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="52dp"
-        android:padding="1dp"
-        android:visibility="gone"
-        android:background="#22000000"
+        android:layout_height="0dp"/>
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#efefef"
         android:orientation="horizontal">
-        <EditText
-            android:id="@+id/et_url"
+        <RadioButton
+            android:id="@+id/rb_online_video"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:paddingLeft="15dp"
-            android:background="@drawable/selector_edit_url"
+            android:layout_weight="1"
+            android:background="@drawable/selector_tabs"
+            android:textSize="18sp"
             android:textColor="#333333"
-            android:singleLine="true"
-            android:text="http://live.hkstv.hk.lxdns.com/live/hks/playlist.m3u8"
-            android:hint="http://"
-            android:layout_weight="1"/>
-        <TextView
-            android:id="@+id/tv_play"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="@drawable/selector_play_url"
-            android:paddingLeft="25dp"
-            android:paddingRight="25dp"
-            android:textSize="15sp"
-            android:textColor="#ffffff"
+            android:checked="true"
             android:gravity="center"
-            android:text="Play"/>
-    </LinearLayout>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+            android:button="@null"
+            android:text="热点视频"/>
+        <RadioButton
+            android:id="@+id/rb_local_video"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_tabs"
+            android:textSize="18sp"
+            android:textColor="#333333"
+            android:checked="false"
+            android:gravity="center"
+            android:button="@null"
+            android:text="本地视频"/>
+    </RadioGroup>
 
 </LinearLayout>

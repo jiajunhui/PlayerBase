@@ -2,70 +2,64 @@ package com.taurus.playerbaselibrary.holder;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.RadioGroup;
 
-import com.jiajunhui.xapp.medialoader.bean.VideoItem;
 import com.kk.taurus.baseframe.base.ContentHolder;
 import com.taurus.playerbaselibrary.R;
-import com.taurus.playerbaselibrary.adapter.VideoListAdapter;
 import com.taurus.playerbaselibrary.bean.VideosInfo;
 
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Taurus on 2017/3/28.
  */
 
-public class HomeHolder extends ContentHolder<VideosInfo> implements VideoListAdapter.OnItemClickListener {
+public class HomeHolder extends ContentHolder<VideosInfo>{
 
-    private RecyclerView mRecycler;
-    private VideoListAdapter mAdapter;
-    private List<VideoItem> videoItems = new ArrayList<>();
-    private OnHomeHolderListener onHomeHolderListener;
+    private RadioGroup mRadioGroup;
+    private OnMainPageListener onMainPageListener;
 
-    public HomeHolder(Context context) {
+    public HomeHolder(Context context,OnMainPageListener onMainPageListener) {
         super(context);
-    }
-
-    public void setOnHomeHolderListener(OnHomeHolderListener onHomeHolderListener) {
-        this.onHomeHolderListener = onHomeHolderListener;
+        this.onMainPageListener = onMainPageListener;
     }
 
     @Override
     public void onCreate() {
         setContentView(R.layout.activity_home);
-        mRecycler = getViewById(R.id.recycler);
+        mRadioGroup = getViewById(R.id.radioGroup);
+    }
+
+    public View getContainer(){
+        return mRootView.findViewById(R.id.container);
     }
 
     @Override
     public void onHolderCreated(Bundle savedInstanceState) {
         super.onHolderCreated(savedInstanceState);
-        mRecycler.setLayoutManager(new LinearLayoutManager(mContext,LinearLayoutManager.VERTICAL,false));
-        mAdapter = new VideoListAdapter(mContext,videoItems);
-        mAdapter.setOnItemClickListener(this);
-        mRecycler.setAdapter(mAdapter);
+        mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId){
+                    case R.id.rb_online_video:
+                        if(onMainPageListener!=null){
+                            onMainPageListener.onSwitchOnlineVideos();
+                        }
+                        break;
+
+                    case R.id.rb_local_video:
+                        if(onMainPageListener!=null){
+                            onMainPageListener.onSwitchLocalVideos();
+                        }
+                        break;
+                }
+            }
+        });
     }
 
-    @Override
-    public void refreshView() {
-        super.refreshView();
-        videoItems.clear();
-        videoItems.addAll(mData.getVideoItems());
-        mAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onItemClick(RecyclerView.ViewHolder holder, int position) {
-        VideoItem item = videoItems.get(position);
-        if(onHomeHolderListener!=null){
-            onHomeHolderListener.onItemClick(item,position);
-        }
-    }
-
-    public interface OnHomeHolderListener{
-        void onItemClick(VideoItem item, int position);
+    public interface OnMainPageListener{
+        void onSwitchOnlineVideos();
+        void onSwitchLocalVideos();
     }
 
 }

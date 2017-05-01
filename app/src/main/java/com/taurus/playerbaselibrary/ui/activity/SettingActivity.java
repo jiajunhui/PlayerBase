@@ -1,4 +1,4 @@
-package com.taurus.playerbaselibrary.ui;
+package com.taurus.playerbaselibrary.ui.activity;
 
 import android.graphics.Color;
 import android.os.Bundle;

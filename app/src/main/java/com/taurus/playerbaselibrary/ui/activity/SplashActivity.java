@@ -1,4 +1,4 @@
-package com.taurus.playerbaselibrary.ui;
+package com.taurus.playerbaselibrary.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;

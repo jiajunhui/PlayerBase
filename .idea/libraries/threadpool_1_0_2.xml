@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="threadpool-1.0.2">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.android/build-cache/bb0075bffb215d110db784d7715ab362c8a8ac7f/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/bb0075bffb215d110db784d7715ab362c8a8ac7f/output/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.kk.taurus.threadpool/threadpool/1.0.2/efb714f0b7a18291bb54907c4445f6b535888153/threadpool-1.0.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

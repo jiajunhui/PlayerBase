@@ -35,6 +35,6 @@ dependencies {
     })
     testCompile 'junit:junit:4.12'
     compile 'tv.danmaku.ijk.media:ijkplayer-java:0.7.8.1'
-    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:appcompat-v7:25.3.0'
     compile project(':PlayerBase')
 }

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000"
-    tools:context="com.taurus.playerbaselibrary.ui.PlayerActivity">
+    tools:context="com.taurus.playerbaselibrary.ui.activity.PlayerActivity">
 
     <com.kk.taurus.playerbase.DefaultPlayer
         android:id="@+id/player"
