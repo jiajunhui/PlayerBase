@@ -37,6 +37,9 @@ public interface OnPlayerEventListener {
     /** when player destroy*/
     int EVENT_CODE_PLAYER_ON_DESTROY = 20014;
 
+    /** when ready to switch player type*/
+    int EVENT_CODE_ON_INTENT_TO_SWITCH_PLAYER_TYPE = 20015;
+
     int EVENT_CODE_PLAYER_FULL_SCREEN = 30001;
     int EVENT_CODE_PLAYER_QUIT_FULL_SCREEN = 30002;
     int EVENT_CODE_PLAYER_DPAD_REQUEST_FOCUS = 30003;

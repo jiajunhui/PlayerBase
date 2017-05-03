@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="http-helper-1.0.16">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.android/build-cache/0e459d255b9b6f0ea3af4c597dedc4bb27227d09/output/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.android/build-cache/0e459d255b9b6f0ea3af4c597dedc4bb27227d09/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/a774e57528eb9369f39319f908cd4880188735bc/output/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/a774e57528eb9369f39319f908cd4880188735bc/output/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

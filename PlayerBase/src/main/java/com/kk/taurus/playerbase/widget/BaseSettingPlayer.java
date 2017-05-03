@@ -143,6 +143,7 @@ public abstract class BaseSettingPlayer extends BaseBindPlayerEvent {
     public void updatePlayerType(int playerType){
         if(mPlayerType!=playerType){
             this.mPlayerType = playerType;
+            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_INTENT_TO_SWITCH_PLAYER_TYPE,null);
             notifyPlayerWidget(mAppContext);
         }
     }

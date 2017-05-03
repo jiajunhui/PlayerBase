@@ -58,6 +58,10 @@ public class DefaultPlayerLoadingCover extends BasePlayerLoadingCover {
                 Log.d(TAG,"on stopped......");
                 setLoadingState(false);
                 break;
+
+            case OnPlayerEventListener.EVENT_CODE_ON_INTENT_TO_SWITCH_PLAYER_TYPE:
+                setLoadingState(false);
+                break;
         }
     }
 
