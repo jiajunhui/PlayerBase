@@ -37,6 +37,7 @@ public abstract class BaseEventReceiver implements IEventReceiver, PlayerObserve
     private OnCoverEventListener onCoverEventListener;
     protected boolean adListFinish = true;
     protected boolean isNetError = false;
+    private Bundle mBundle;
 
     protected Handler mHandler = new Handler(){
         @Override
@@ -56,6 +57,7 @@ public abstract class BaseEventReceiver implements IEventReceiver, PlayerObserve
     }
 
     protected void initBaseInfo(Context context) {
+        mBundle = new Bundle();
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         mScreenW = displayMetrics.widthPixels;
         mScreenH = displayMetrics.heightPixels;
@@ -81,6 +83,12 @@ public abstract class BaseEventReceiver implements IEventReceiver, PlayerObserve
         if(mContext!=null && mContext instanceof Activity)
             return (Activity) mContext;
         return null;
+    }
+
+    @Override
+    public Bundle getBundle() {
+        mBundle.clear();
+        return mBundle;
     }
 
     @Override

@@ -134,6 +134,9 @@ public class DefaultPlayerControllerCover extends BasePlayerControllerCover {
     private SeekBar.OnSeekBarChangeListener onSeekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            Bundle bundle = getBundle();
+            bundle.putInt(OnCoverEventListener.KEY_INT_DATA,progress);
+            notifyCoverEvent(OnCoverEventListener.EVENT_CODE_ON_SEEK_BAR_PROGRESS_CHANGE,bundle);
             if(fromUser){
                 Log.d(TAG,"onProgressChanged...");
                 setPlayTime(progress,seekBar.getMax());
@@ -142,11 +145,17 @@ public class DefaultPlayerControllerCover extends BasePlayerControllerCover {
         @Override
         public void onStartTrackingTouch(SeekBar seekBar) {
             Log.d(TAG,"onStartTrackingTouch...");
+            Bundle bundle = getBundle();
+            bundle.putInt(OnCoverEventListener.KEY_INT_DATA,seekBar.getProgress());
+            notifyCoverEvent(OnCoverEventListener.EVENT_CODE_ON_SEEK_BAR_START_TRACKING_TOUCH,bundle);
             removePlayMsg();
             removeDelayHiddenControllerMsg();
         }
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
+            Bundle bundle = getBundle();
+            bundle.putInt(OnCoverEventListener.KEY_INT_DATA,seekBar.getProgress());
+            notifyCoverEvent(OnCoverEventListener.EVENT_CODE_ON_SEEK_BAR_STOP_TRACKING_TOUCH,bundle);
             if(player==null)
                 return;
             if(seekBar.getMax()<=0 || getDuration() <= 0)
