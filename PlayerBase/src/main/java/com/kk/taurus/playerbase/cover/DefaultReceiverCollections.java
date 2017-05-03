@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.kk.taurus.playerbase.callback.BaseEventReceiver;
 import com.kk.taurus.playerbase.cover.base.BaseAdCover;
+import com.kk.taurus.playerbase.cover.base.BaseCover;
 import com.kk.taurus.playerbase.cover.base.BaseReceiverCollections;
 import com.kk.taurus.playerbase.cover.base.BaseFocusCover;
 import com.kk.taurus.playerbase.cover.base.BaseGestureOperationCover;
@@ -66,7 +67,12 @@ public class DefaultReceiverCollections extends BaseReceiverCollections {
         return addCover(BaseFocusCover.KEY,focusCover);
     }
 
-    public DefaultReceiverCollections addCover(String key, BaseEventReceiver receiver){
+    public DefaultReceiverCollections addCover(String key, BaseCover cover){
+        putReceiver(key,cover);
+        return this;
+    }
+
+    public DefaultReceiverCollections addEventReceiver(String key, BaseEventReceiver receiver){
         putReceiver(key,receiver);
         return this;
     }
