@@ -15,6 +15,9 @@ public interface IDataAdapter<T> {
     //返回当前列表索引位置
     int getIndex();
 
+    //返回前一个播放索引
+    int getPreIndex();
+
     //指定当前列表索引位置
     void setIndex(int index);
 

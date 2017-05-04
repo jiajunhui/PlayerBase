@@ -14,6 +14,7 @@ public abstract class BaseVideoDataAdapter<V> implements IDataAdapter<VideoData>
     protected List<V> mModels;
     protected boolean loop;
     protected int mIndex;
+    protected int mPreIndex;
 
     public BaseVideoDataAdapter(List<V> models, int startIndex){
         this.mModels = models;
@@ -26,12 +27,19 @@ public abstract class BaseVideoDataAdapter<V> implements IDataAdapter<VideoData>
     }
 
     @Override
+    public int getPreIndex() {
+        return mPreIndex;
+    }
+
+    @Override
     public void setIndex(int index) {
+        this.mPreIndex = mIndex;
         this.mIndex = index;
     }
 
     protected int nextIndex(){
         if(getCount() > 0){
+            mPreIndex = mIndex;
             mIndex++;
             mIndex = mIndex%getCount();
             return mIndex;
