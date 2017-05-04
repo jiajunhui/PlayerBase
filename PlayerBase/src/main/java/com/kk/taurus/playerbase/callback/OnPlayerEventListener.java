@@ -32,10 +32,14 @@ public interface OnPlayerEventListener {
     int EVENT_CODE_PLAYER_SEEK_TO = 20011;
     /** when player set data*/
     int EVENT_CODE_PLAYER_ON_SET_DATA_SOURCE = 20012;
+    /** when set video data*/
+    int EVENT_CODE_PLAYER_ON_SET_VIDEO_DATA = 20013;
+    /** when set ad video data*/
+    int EVENT_CODE_PLAYER_ON_SET_AD_DATA = 20014;
     /** when player stop*/
-    int EVENT_CODE_PLAYER_ON_STOP = 20013;
+    int EVENT_CODE_PLAYER_ON_STOP = 20023;
     /** when player destroy*/
-    int EVENT_CODE_PLAYER_ON_DESTROY = 20014;
+    int EVENT_CODE_PLAYER_ON_DESTROY = 20024;
 
     /** when ready to switch player type*/
     int EVENT_CODE_ON_INTENT_TO_SWITCH_PLAYER_TYPE = 20015;

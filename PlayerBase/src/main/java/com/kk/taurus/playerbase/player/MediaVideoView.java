@@ -265,6 +265,7 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
             mMediaPlayer.reset();
             mCurrentState = STATE_IDLE;
             mTargetState = STATE_IDLE;
+            releaseAudioManager();
         }
     }
 
@@ -298,10 +299,7 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
             return;
         }
 
-        if(mAppContext!=null){
-            AudioManager am = (AudioManager) mAppContext.get().getSystemService(Context.AUDIO_SERVICE);
-            am.requestAudioFocus(null, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
-        }
+        requestAudioManager();
 
         try {
             if(mMediaPlayer==null){
@@ -364,6 +362,13 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
             mErrorListener.onError(mMediaPlayer, MediaPlayer.MEDIA_ERROR_UNKNOWN, 0);
         } finally {
             // REMOVED: mPendingSubtitleTracks.clear();
+        }
+    }
+
+    private void requestAudioManager() {
+        if(mAppContext!=null){
+            AudioManager am = (AudioManager) mAppContext.get().getSystemService(Context.AUDIO_SERVICE);
+            am.requestAudioFocus(null, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
         }
     }
 
@@ -644,10 +649,14 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
             if (cleartargetstate) {
                 mTargetState = STATE_END;
             }
-            if(mAppContext!=null){
-                AudioManager am = (AudioManager) mAppContext.get().getSystemService(Context.AUDIO_SERVICE);
-                am.abandonAudioFocus(null);
-            }
+            releaseAudioManager();
+        }
+    }
+
+    private void releaseAudioManager() {
+        if(mAppContext!=null){
+            AudioManager am = (AudioManager) mAppContext.get().getSystemService(Context.AUDIO_SERVICE);
+            am.abandonAudioFocus(null);
         }
     }
 

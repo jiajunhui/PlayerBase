@@ -9,6 +9,7 @@ import android.util.AttributeSet;
 
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.setting.AspectRatio;
+import com.kk.taurus.playerbase.setting.BaseAdVideo;
 import com.kk.taurus.playerbase.setting.DecodeMode;
 import com.kk.taurus.playerbase.setting.Rate;
 import com.kk.taurus.playerbase.setting.VideoData;
@@ -52,7 +53,15 @@ public abstract class BasePlayer extends BaseAdPlayer {
         if(available() && data!=null && data.getData()!=null){
             Bundle bundle = new Bundle();
             bundle.putSerializable(OnPlayerEventListener.BUNDLE_KEY_VIDEO_DATA,data);
+            //on set data source
             onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_ON_SET_DATA_SOURCE,bundle);
+            if(data instanceof BaseAdVideo){
+                //on set ad video data
+                onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_ON_SET_AD_DATA,bundle);
+            }else{
+                //on set video data
+                onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_ON_SET_VIDEO_DATA,bundle);
+            }
             mInternalPlayer.setDataSource(data);
         }
     }
