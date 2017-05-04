@@ -71,11 +71,18 @@ public class MediaSinglePlayer extends BaseSinglePlayer {
             onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PREPARED,null);
 //                //IjkVideoView  ...int STATE_PLAYING = 3;
             if(available() && mTargetStatus==STATUS_STARTED){
+                onStartSeek();
                 start();
             }
-            onStartSeek();
         }
     };
+
+    @Override
+    protected void onStartSeek() {
+        if(startSeekPos >= 0){
+            seekTo(startSeekPos);
+        }
+    }
 
     private IMediaPlayer.OnInfoListener mOnInfoListener = new IMediaPlayer.OnInfoListener() {
         @Override

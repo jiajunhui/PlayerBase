@@ -56,7 +56,7 @@ public abstract class BasePlayerToolsReceiver extends BaseEventReceiver implemen
                 sendPlayMsg();
                 break;
             case OnPlayerEventListener.EVENT_CODE_PLAYER_ON_STOP:
-                removePlayMsg();
+//                removePlayMsg();
                 break;
             case OnPlayerEventListener.EVENT_CODE_PLAYER_ON_DESTROY:
                 onDestroy();
