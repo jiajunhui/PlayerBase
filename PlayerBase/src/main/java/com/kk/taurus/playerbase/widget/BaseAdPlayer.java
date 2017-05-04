@@ -51,16 +51,28 @@ public abstract class BaseAdPlayer extends BaseSettingPlayer {
         onHandleErrorEvent(eventCode, bundle);
     }
 
-    protected boolean isDataSourceAvaliable(){
+    protected boolean isDataSourceAvailable(){
         return dataSource!=null;
+    }
+
+    public void retryPlayData(){
+        prepareStartPlayData();
     }
 
     @Override
     public void playData(@NonNull PlayData data, OnAdListener onAdListener) {
         this.mPlayData = data;
         this.mOnAdListener = onAdListener;
-        if(data.isNeedAdPlay()){
-            this.adVideos = data.getAdVideos();
+        //notify event on set play data
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(OnPlayerEventListener.BUNDLE_KEY_VIDEO_DATA,data);
+        onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_ON_SET_PLAY_DATA,bundle);
+        prepareStartPlayData();
+    }
+
+    private void prepareStartPlayData() {
+        if(this.mPlayData.isNeedAdPlay()){
+            this.adVideos = this.mPlayData.getAdVideos();
             mAdIndex = 0;
             //notify ad prepared
             onNotifyAdPrepared(adVideos);

@@ -36,6 +36,8 @@ public interface OnPlayerEventListener {
     int EVENT_CODE_PLAYER_ON_SET_VIDEO_DATA = 20013;
     /** when set ad video data*/
     int EVENT_CODE_PLAYER_ON_SET_AD_DATA = 20014;
+    /** when set play data include video data and ad data*/
+    int EVENT_CODE_PLAYER_ON_SET_PLAY_DATA = 20015;
     /** when player stop*/
     int EVENT_CODE_PLAYER_ON_STOP = 20023;
     /** when player destroy*/

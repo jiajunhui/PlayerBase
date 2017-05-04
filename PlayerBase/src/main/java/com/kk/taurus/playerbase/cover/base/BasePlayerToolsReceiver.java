@@ -47,7 +47,7 @@ public abstract class BasePlayerToolsReceiver extends BaseEventReceiver implemen
                 removePlayMsg();
                 break;
             case OnPlayerEventListener.EVENT_CODE_RENDER_START:
-                sendPlayMsg();
+                startPlay();
                 break;
             case OnPlayerEventListener.EVENT_CODE_BUFFERING_START:
 
@@ -68,6 +68,11 @@ public abstract class BasePlayerToolsReceiver extends BaseEventReceiver implemen
     protected void sendPlayMsg() {
         removePlayMsg();
         mHandler.sendEmptyMessageDelayed(MSG.MSG_CODE_PLAYING,1000);
+    }
+
+    protected void startPlay(){
+        removePlayMsg();
+        mHandler.sendEmptyMessage(MSG.MSG_CODE_PLAYING);
     }
 
     protected void removePlayMsg() {

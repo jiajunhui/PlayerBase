@@ -134,7 +134,7 @@ public abstract class BasePlayer extends BaseAdPlayer {
 
     @Override
     public void rePlay(int msc) {
-        if(available() && isDataSourceAvaliable()){
+        if(available() && isDataSourceAvailable()){
             stop();
             setDataSource(dataSource);
             start(msc);
