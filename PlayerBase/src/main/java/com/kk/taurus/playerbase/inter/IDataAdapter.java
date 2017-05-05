@@ -9,8 +9,11 @@ public interface IDataAdapter<T> {
     //返回下一个播放实例对象
     T getLoopNextPlayEntity();
 
-    //放回当前播放实例对象
+    //返回当前播放实例对象
     T getPlayEntity();
+
+    //返回指定索引位置的实例对象
+    T getPlayEntity(int index);
 
     //返回当前列表索引位置
     int getIndex();

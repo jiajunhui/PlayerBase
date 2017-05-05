@@ -22,6 +22,25 @@ public abstract class BaseVideoDataAdapter<V> implements IDataAdapter<VideoData>
     }
 
     @Override
+    public VideoData getPlayEntity() {
+        V v = getItemModel();
+        return modelTransEntity(v);
+    }
+
+    @Override
+    public VideoData getPlayEntity(int index) {
+        V v = getItemModel(index);
+        return modelTransEntity(v);
+    }
+
+    @Override
+    public VideoData getLoopNextPlayEntity() {
+        int index = nextIndex();
+        V v = getItemModel(index);
+        return modelTransEntity(v);
+    }
+
+    @Override
     public int getIndex() {
         return mIndex;
     }
@@ -50,6 +69,12 @@ public abstract class BaseVideoDataAdapter<V> implements IDataAdapter<VideoData>
     public V getItemModel(){
         if(getCount() > 0)
             return mModels.get(mIndex);
+        return null;
+    }
+
+    public V getItemModel(int index){
+        if(getCount() > 0 && index < getCount())
+            return mModels.get(index);
         return null;
     }
 
