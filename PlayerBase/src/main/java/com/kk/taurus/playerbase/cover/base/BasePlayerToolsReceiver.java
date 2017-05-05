@@ -3,6 +3,7 @@ package com.kk.taurus.playerbase.cover.base;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Message;
+import android.util.Log;
 
 import com.kk.taurus.playerbase.callback.BaseEventReceiver;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
@@ -18,6 +19,8 @@ import java.util.List;
  */
 
 public abstract class BasePlayerToolsReceiver extends BaseEventReceiver implements IPlayerCoverHandle{
+
+    private final String TAG = "player_tool_receiver";
 
     public BasePlayerToolsReceiver(Context context) {
         super(context);
@@ -44,24 +47,30 @@ public abstract class BasePlayerToolsReceiver extends BaseEventReceiver implemen
         super.onNotifyPlayEvent(eventCode, bundle);
         switch (eventCode){
             case OnPlayerEventListener.EVENT_CODE_PLAYER_ON_SET_DATA_SOURCE:
+                Log.d(TAG,"EVENT_CODE_PLAYER_ON_SET_DATA_SOURCE");
                 removePlayMsg();
                 break;
             case OnPlayerEventListener.EVENT_CODE_PREPARED:
+                Log.d(TAG,"EVENT_CODE_PREPARED");
                 startPlay();
                 break;
             case OnPlayerEventListener.EVENT_CODE_RENDER_START:
+                Log.d(TAG,"EVENT_CODE_RENDER_START");
                 startPlay();
                 break;
             case OnPlayerEventListener.EVENT_CODE_BUFFERING_START:
-
+                Log.d(TAG,"EVENT_CODE_BUFFERING_START");
                 break;
             case OnPlayerEventListener.EVENT_CODE_BUFFERING_END:
+                Log.d(TAG,"EVENT_CODE_BUFFERING_END");
                 sendPlayMsg();
                 break;
             case OnPlayerEventListener.EVENT_CODE_PLAYER_ON_STOP:
+                Log.d(TAG,"EVENT_CODE_PLAYER_ON_STOP");
                 removePlayMsg();
                 break;
             case OnPlayerEventListener.EVENT_CODE_PLAYER_ON_DESTROY:
+                Log.d(TAG,"EVENT_CODE_PLAYER_ON_DESTROY");
                 onDestroy();
                 player = null;
                 break;
