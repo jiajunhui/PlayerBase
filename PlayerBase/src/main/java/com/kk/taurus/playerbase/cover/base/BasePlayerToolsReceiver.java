@@ -37,6 +37,7 @@ public abstract class BasePlayerToolsReceiver extends BaseEventReceiver implemen
                 int bufferPercentage = getBufferPercentage();
                 int bufferPos = bufferPercentage*duration/100;
                 onNotifyPlayTimerCounter(curr,duration,bufferPos);
+                Log.d(TAG,"notifyTimerCounter : curr = " + curr + " duration = " + duration + " bufferPos = " + bufferPos);
                 sendPlayMsg();
                 break;
         }
@@ -47,30 +48,23 @@ public abstract class BasePlayerToolsReceiver extends BaseEventReceiver implemen
         super.onNotifyPlayEvent(eventCode, bundle);
         switch (eventCode){
             case OnPlayerEventListener.EVENT_CODE_PLAYER_ON_SET_DATA_SOURCE:
-                Log.d(TAG,"EVENT_CODE_PLAYER_ON_SET_DATA_SOURCE");
                 removePlayMsg();
                 break;
             case OnPlayerEventListener.EVENT_CODE_PREPARED:
-                Log.d(TAG,"EVENT_CODE_PREPARED");
                 startPlay();
                 break;
             case OnPlayerEventListener.EVENT_CODE_RENDER_START:
-                Log.d(TAG,"EVENT_CODE_RENDER_START");
                 startPlay();
                 break;
             case OnPlayerEventListener.EVENT_CODE_BUFFERING_START:
-                Log.d(TAG,"EVENT_CODE_BUFFERING_START");
                 break;
             case OnPlayerEventListener.EVENT_CODE_BUFFERING_END:
-                Log.d(TAG,"EVENT_CODE_BUFFERING_END");
                 sendPlayMsg();
                 break;
             case OnPlayerEventListener.EVENT_CODE_PLAYER_ON_STOP:
-                Log.d(TAG,"EVENT_CODE_PLAYER_ON_STOP");
                 removePlayMsg();
                 break;
             case OnPlayerEventListener.EVENT_CODE_PLAYER_ON_DESTROY:
-                Log.d(TAG,"EVENT_CODE_PLAYER_ON_DESTROY");
                 onDestroy();
                 player = null;
                 break;

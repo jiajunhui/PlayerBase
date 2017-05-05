@@ -16,6 +16,8 @@ public class TimeUtil {
      * @return
      */
     public static String getTime(long time){
+        if(time <= 0)
+            return "00:00:00";
         int totalSeconds = (int) (time / 1000);
         int seconds = totalSeconds % 60;
         int minutes = (totalSeconds / 60) % 60;
