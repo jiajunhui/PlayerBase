@@ -92,6 +92,7 @@ public class PlayerActivity extends ToolsActivity implements OnPlayerEventListen
     }
 
     private void normalStart(){
+//        videoData.setData("http://221.179.217.9:80/88888888/16/20160710/269132842/269132842.ts/index.m3u8?rrsip=221.179.217.7,rrsip=221.179.217.8&fmt=ts2hls&servicetype=0&icpid=&accounttype=1&limitflux=-1&limitdur=-1&accountinfo=rKlvqC9Bu1OKxWIIyStkN1MZOJYRGRmNIUAvp+MASurCeESoTSlCaVqYoCRBg7TarfZYj4NsETM99SV2RSrK+j4/Y/GvaNspjE62RRfxOV9uRiaw46Nrc2K0k8P7gzfb:20170502102853,08A5C8EFF290,219.141.176.130,20170502102853,00010000000000000000000010922412,AC07C324AB215EE2B1111353ABDE4599,,1,0,-1,294,1,2201300,207,575034,1,END");
         mPlayer.setDataSource(videoData);
         mPlayer.start();
     }

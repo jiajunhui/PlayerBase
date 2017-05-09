@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 
+import com.jiajunhui.xapp.medialoader.bean.VideoItem;
 import com.kk.taurus.baseframe.ui.activity.ToolsActivity;
 import com.taurus.playerbaselibrary.R;
 
@@ -25,7 +26,11 @@ public class SplashActivity extends ToolsActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(getApplicationContext(),HomeActivity.class);
+                Intent intent = new Intent(getApplicationContext(),PlayerActivity.class);
+                VideoItem item = new VideoItem();
+                item.setPath("http://172.16.218.64:8080/luzaihefang.mp4");
+                item.setDisplayName("luzaihefang.mp4");
+                intent.putExtra("data",item);
                 startActivity(intent);
                 finish();
             }

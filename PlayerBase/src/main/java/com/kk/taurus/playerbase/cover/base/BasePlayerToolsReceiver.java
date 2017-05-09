@@ -38,7 +38,11 @@ public abstract class BasePlayerToolsReceiver extends BaseEventReceiver implemen
                 int bufferPos = bufferPercentage*duration/100;
                 onNotifyPlayTimerCounter(curr,duration,bufferPos);
                 Log.d(TAG,"notifyTimerCounter : curr = " + curr + " duration = " + duration + " bufferPos = " + bufferPos);
-                sendPlayMsg();
+                if(duration > 0 && curr >=0){
+                    sendPlayMsg();
+                }else{
+                    removePlayMsg();
+                }
                 break;
         }
     }
