@@ -1,14 +1,27 @@
+/*
+ * Copyright 2017 jiajunhui<junhui_jia@163.com>
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package com.kk.taurus.playerbase.cover.base;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Message;
-import android.util.Log;
 
 import com.kk.taurus.playerbase.callback.BaseEventReceiver;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.inter.IPlayerCoverHandle;
-import com.kk.taurus.playerbase.inter.MSG;
 import com.kk.taurus.playerbase.setting.AspectRatio;
 import com.kk.taurus.playerbase.setting.Rate;
 
@@ -20,79 +33,19 @@ import java.util.List;
 
 public abstract class BasePlayerToolsReceiver extends BaseEventReceiver implements IPlayerCoverHandle{
 
-    private final String TAG = "player_tool_receiver";
-
     public BasePlayerToolsReceiver(Context context) {
         super(context);
-    }
-
-    protected void _handleMessage(Message msg){
-        super._handleMessage(msg);
-        switch (msg.what){
-            case MSG.MSG_CODE_PLAYING:
-                if(player==null)
-                    return;
-                int curr = getCurrentPosition();
-                int duration = getDuration();
-                int bufferPercentage = getBufferPercentage();
-                int bufferPos = bufferPercentage*duration/100;
-                onNotifyPlayTimerCounter(curr,duration,bufferPos);
-                Log.d(TAG,"notifyTimerCounter : curr = " + curr + " duration = " + duration + " bufferPos = " + bufferPos);
-                if(duration > 0 && curr >=0){
-                    sendPlayMsg();
-                }else{
-                    removePlayMsg();
-                }
-                break;
-        }
     }
 
     @Override
     public void onNotifyPlayEvent(int eventCode, Bundle bundle) {
         super.onNotifyPlayEvent(eventCode, bundle);
         switch (eventCode){
-            case OnPlayerEventListener.EVENT_CODE_PLAYER_ON_SET_DATA_SOURCE:
-                removePlayMsg();
-                break;
-            case OnPlayerEventListener.EVENT_CODE_PREPARED:
-                startPlay();
-                break;
-            case OnPlayerEventListener.EVENT_CODE_RENDER_START:
-                startPlay();
-                break;
-            case OnPlayerEventListener.EVENT_CODE_BUFFERING_START:
-                break;
-            case OnPlayerEventListener.EVENT_CODE_BUFFERING_END:
-                sendPlayMsg();
-                break;
-            case OnPlayerEventListener.EVENT_CODE_PLAYER_ON_STOP:
-                removePlayMsg();
-                break;
             case OnPlayerEventListener.EVENT_CODE_PLAYER_ON_DESTROY:
                 onDestroy();
                 player = null;
                 break;
         }
-    }
-
-    protected void sendPlayMsg() {
-        removePlayMsg();
-        mHandler.sendEmptyMessageDelayed(MSG.MSG_CODE_PLAYING,1000);
-    }
-
-    protected void startPlay(){
-        removePlayMsg();
-        mHandler.sendEmptyMessage(MSG.MSG_CODE_PLAYING);
-    }
-
-    protected void removePlayMsg() {
-        mHandler.removeMessages(MSG.MSG_CODE_PLAYING);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mHandler.removeMessages(MSG.MSG_CODE_PLAYING);
     }
 
     //--------------------------------------------------------------------------------------------
@@ -203,6 +156,20 @@ public abstract class BasePlayerToolsReceiver extends BaseEventReceiver implemen
     public void setAspectRatio(AspectRatio aspectRatio) {
         if(getPlayer()!=null){
             getPlayer().setAspectRatio(aspectRatio);
+        }
+    }
+
+    @Override
+    public void sendPlayMsg() {
+        if(getPlayer()!=null){
+            getPlayer().sendPlayMsg();
+        }
+    }
+
+    @Override
+    public void removePlayMsg() {
+        if(getPlayer()!=null){
+            getPlayer().removePlayMsg();
         }
     }
 }
