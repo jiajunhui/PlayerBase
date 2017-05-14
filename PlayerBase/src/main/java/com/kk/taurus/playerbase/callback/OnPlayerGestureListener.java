@@ -23,10 +23,42 @@ import android.view.MotionEvent;
  */
 
 public interface OnPlayerGestureListener {
+    /**
+     * on gesture single tap up
+     * @param event
+     */
     void onSingleTapUp(MotionEvent event);
+
+    /**
+     * on gesture double tap
+     * @param event
+     */
     void onDoubleTap(MotionEvent event);
+
+    /**
+     * on scroll
+     * @param e1
+     * @param e2
+     * @param distanceX
+     * @param distanceY
+     */
     void onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY);
+
+    /**
+     * on gesture horizontal slide
+     * @param percent
+     */
     void onHorizontalSlide(float percent);
+
+    /**
+     * on gesture vertical slide on right side
+     * @param percent
+     */
     void onRightVerticalSlide(float percent);
+
+    /**
+     * on gesture vertical slide on left side
+     * @param percent
+     */
     void onLeftVerticalSlide(float percent);
 }

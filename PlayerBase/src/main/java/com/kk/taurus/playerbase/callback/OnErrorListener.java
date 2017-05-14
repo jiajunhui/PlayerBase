@@ -23,8 +23,8 @@ import android.os.Bundle;
  */
 public interface OnErrorListener {
 
-    int ERROR_CODE_COMMON = 30001;
-    int ERROR_CODE_NET_ERROR = 30002;
+    int ERROR_CODE_COMMON = 37001;
+    int ERROR_CODE_NET_ERROR = 37002;
 
     void onError(int errorCode, Bundle bundle);
 }

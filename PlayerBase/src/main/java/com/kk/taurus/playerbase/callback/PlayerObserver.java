@@ -33,14 +33,62 @@ public interface PlayerObserver {
     int NETWORK_TYPE_MOBILE = 1;
     int NETWORK_TYPE_WIFI = 2;
 
+    /**
+     * on configuration changed,notify some receivers.
+     * @param newConfig
+     */
     void onNotifyConfigurationChanged(Configuration newConfig);
+
+    /**
+     * notify some event to receivers.
+     * @param eventCode event identify.
+     * @param bundle include some data on this event code.
+     */
     void onNotifyPlayEvent(int eventCode, Bundle bundle);
+
+    /**
+     * notify error event on player occur error.
+     * @param eventCode
+     * @param bundle
+     */
     void onNotifyErrorEvent(int eventCode, Bundle bundle);
+
+    /**
+     * notify progress timer.
+     * @param curr current time millions.
+     * @param duration video length millions.
+     * @param bufferPercentage video buffered percentage.
+     */
     void onNotifyPlayTimerCounter(int curr, int duration, int bufferPercentage);
+
+    /**
+     * on network connected,notify receivers.
+     * @param networkType network type.
+     */
     void onNotifyNetWorkConnected(int networkType);
+
+    /**
+     * on network occur error.
+     */
     void onNotifyNetWorkError();
+
+    /**
+     * on ad prepare start,notify receivers.
+     * @param adVideos
+     */
     void onNotifyAdPrepared(List<BaseAdVideo> adVideos);
+
+    /**
+     * on ad video start,notify receivers.
+     * @param adVideo current ad video.
+     */
     void onNotifyAdStart(BaseAdVideo adVideo);
+
+    /**
+     * on ad videos finish,notify receivers.
+     * @param data ad video.
+     * @param isAllFinish when ad video list finish,return true.
+     */
     void onNotifyAdFinish(VideoData data,boolean isAllFinish);
 
 }

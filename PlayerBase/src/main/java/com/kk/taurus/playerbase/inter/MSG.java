@@ -21,7 +21,7 @@ package com.kk.taurus.playerbase.inter;
  */
 
 public interface MSG {
-    int MSG_CODE_PLAYING = 1001;
-    int MSG_CODE_DELAY_HIDDEN_CONTROLLER = 1002;
-    int MSG_CODE_SEEK_TO = 1003;
+    int MSG_CODE_PLAYING = -10241;
+    int MSG_CODE_DELAY_HIDDEN_CONTROLLER = -10242;
+    int MSG_CODE_SEEK_TO = -10243;
 }
