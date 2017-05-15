@@ -159,17 +159,4 @@ public abstract class BasePlayerToolsReceiver extends BaseEventReceiver implemen
         }
     }
 
-    @Override
-    public void sendPlayMsg() {
-        if(getPlayer()!=null){
-            getPlayer().sendPlayMsg();
-        }
-    }
-
-    @Override
-    public void removePlayMsg() {
-        if(getPlayer()!=null){
-            getPlayer().removePlayMsg();
-        }
-    }
 }

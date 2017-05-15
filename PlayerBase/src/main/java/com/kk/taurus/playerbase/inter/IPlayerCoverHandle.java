@@ -40,6 +40,4 @@ public interface IPlayerCoverHandle {
     List<Rate> getVideoDefinitions();
     void changeVideoDefinition(Rate rate);
     void setAspectRatio(AspectRatio aspectRatio);
-    void sendPlayMsg();
-    void removePlayMsg();
 }

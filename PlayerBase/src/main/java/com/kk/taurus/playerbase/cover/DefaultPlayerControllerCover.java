@@ -164,7 +164,7 @@ public class DefaultPlayerControllerCover extends BasePlayerControllerCover {
             Bundle bundle = getBundle();
             bundle.putInt(OnCoverEventListener.KEY_INT_DATA,seekBar.getProgress());
             notifyCoverEvent(OnCoverEventListener.EVENT_CODE_ON_SEEK_BAR_START_TRACKING_TOUCH,bundle);
-            removePlayMsg();
+            setTimerCounterUpdateProgressEnable(false);
             removeDelayHiddenControllerMsg();
         }
         @Override
@@ -223,7 +223,7 @@ public class DefaultPlayerControllerCover extends BasePlayerControllerCover {
                 break;
 
             case OnPlayerEventListener.EVENT_CODE_SEEK_COMPLETE:
-                sendPlayMsg();
+                setTimerCounterUpdateProgressEnable(true);
                 break;
         }
     }

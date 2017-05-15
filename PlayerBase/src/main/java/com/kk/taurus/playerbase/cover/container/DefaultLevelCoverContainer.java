@@ -31,15 +31,15 @@ import com.kk.taurus.playerbase.inter.ICover;
 public class DefaultLevelCoverContainer extends BaseLevelCoverContainer {
 
     /**
-     * the business covers container .
+     * the low level covers container .
      */
     private FrameLayout mLevelLowCoverContainer;
     /**
-     * the state covers container .
+     * the medium level covers container .
      */
     private FrameLayout mLevelMediumCoverContainer;
     /**
-     * the extend covers container .
+     * the high level covers container .
      */
     private FrameLayout mLevelHighCoverContainer;
 
