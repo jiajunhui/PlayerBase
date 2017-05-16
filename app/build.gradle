@@ -30,7 +30,7 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:25.3.0'
     testCompile 'junit:junit:4.12'
-    compile 'com.kk.taurus.baseframe:baseframe:1.0.9'
+    compile 'com.kk.taurus.baseframe:baseframe:1.1.0'
     compile 'com.jiajunhui.xapp.medialoader:medialoader:1.0.0'
     compile 'com.lovedise:permissiongen:0.0.6'
     compile 'com.kk.taurus.http_helper:http-helper:1.0.16'

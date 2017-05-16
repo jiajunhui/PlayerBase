@@ -1,14 +1,13 @@
 package com.taurus.playerbaselibrary.ui.activity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
 
-import com.kk.taurus.baseframe.base.top_bar.BaseTopBarNavigationMenu;
-import com.kk.taurus.baseframe.bean.TopBarMenu;
-import com.kk.taurus.baseframe.ui.activity.TopBarActivity;
+import com.kk.taurus.baseframe.ui.activity.ToolBarActivity;
+import com.taurus.playerbaselibrary.R;
 import com.taurus.playerbaselibrary.bean.VideosInfo;
 import com.taurus.playerbaselibrary.holder.HomeHolder;
 import com.taurus.playerbaselibrary.ui.fragment.LocalVideoFragment;
@@ -19,7 +18,7 @@ import com.taurus.playerbaselibrary.ui.fragment.OnlineVideosFragment;
  * Created by Taurus on 2017/3/28.
  */
 
-public class HomeActivity extends TopBarActivity<VideosInfo,HomeHolder> implements HomeHolder.OnMainPageListener {
+public class HomeActivity extends ToolBarActivity<VideosInfo,HomeHolder> implements HomeHolder.OnMainPageListener {
 
     private OnlineVideosFragment onlineVideosFragment;
     private LocalVideoFragment localVideoFragment;
@@ -38,17 +37,25 @@ public class HomeActivity extends TopBarActivity<VideosInfo,HomeHolder> implemen
     @Override
     public void initData() {
         super.initData();
-        getTopBarNavigationIcon().setVisibility(View.GONE);
-        setTopBarTitle("Videos");
-        setStatusBarColor(Color.parseColor("#f83d46"));
-        setMenuType(BaseTopBarNavigationMenu.MENU_TYPE_TEXT,new TopBarMenu().setMenuText("设置"));
+        setNavigationIcon(null);
+        setCenterTitle("Videos");
     }
 
     @Override
-    public void onNavigationMenuClick() {
-        super.onNavigationMenuClick();
-        Intent intent = new Intent(this,SettingActivity.class);
-        startActivity(intent);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.home_menu,menu);
+        return true;
+    }
+
+    @Override
+    protected boolean onToolBarMenuItemClick(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.setting:
+                Intent intent = new Intent(this,SettingActivity.class);
+                startActivity(intent);
+                break;
+        }
+        return super.onToolBarMenuItemClick(item);
     }
 
     @Override

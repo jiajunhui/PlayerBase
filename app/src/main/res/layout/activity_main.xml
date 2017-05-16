@@ -6,9 +6,14 @@
     android:background="#000000"
     tools:context="com.taurus.playerbaselibrary.ui.activity.PlayerActivity">
 
-    <com.kk.taurus.playerbase.DefaultPlayer
-        android:id="@+id/player"
+    <RelativeLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"></RelativeLayout>
+
+    <!--<com.kk.taurus.playerbase.DefaultPlayer-->
+        <!--android:id="@+id/player"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"/>-->
 
 </RelativeLayout>

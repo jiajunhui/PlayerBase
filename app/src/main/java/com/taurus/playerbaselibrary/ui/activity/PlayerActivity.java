@@ -3,6 +3,8 @@ package com.taurus.playerbaselibrary.ui.activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.jiajunhui.xapp.medialoader.bean.VideoItem;
@@ -14,6 +16,7 @@ import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.cover.DefaultReceiverCollections;
 import com.kk.taurus.playerbase.cover.base.BaseAdCover;
 import com.kk.taurus.playerbase.cover.base.BasePlayerControllerCover;
+import com.kk.taurus.playerbase.cover.base.BasePlayerErrorCover;
 import com.kk.taurus.playerbase.setting.BaseAdVideo;
 import com.kk.taurus.playerbase.setting.PlayData;
 import com.kk.taurus.playerbase.setting.VideoData;
@@ -22,12 +25,14 @@ import com.kk.taurus.playerbase.widget.BasePlayer;
 import com.taurus.playerbaselibrary.R;
 import com.taurus.playerbaselibrary.callback.OnCompleteCallBack;
 import com.taurus.playerbaselibrary.cover.PlayCompleteCover;
+import com.taurus.playerbaselibrary.cover.PlayerErrorCover;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerActivity extends ToolsActivity implements OnPlayerEventListener {
 
+    private RelativeLayout mContainer;
     private BasePlayer mPlayer;
     private DefaultReceiverCollections mCoverCollections;
     private VideoItem item;
@@ -55,10 +60,15 @@ public class PlayerActivity extends ToolsActivity implements OnPlayerEventListen
     public void initData() {
         super.initData();
         fullScreen();
-        mPlayer = (DefaultPlayer) findViewById(R.id.player);
+        mContainer = (RelativeLayout) findViewById(R.id.container);
+
+//        mPlayer = (DefaultPlayer) findViewById(R.id.player);
+        mPlayer = new DefaultPlayer(this);
+        mContainer.addView(mPlayer,new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
         mCoverCollections = new DefaultReceiverCollections(this);
-        mCoverCollections.buildDefault().addCover(PlayCompleteCover.KEY,completeCover = new PlayCompleteCover(this,null));
+        mCoverCollections.buildDefault().addCover(PlayCompleteCover.KEY,completeCover = new PlayCompleteCover(this,null))
+                .addCover(BasePlayerErrorCover.KEY_INT_DATA,new PlayerErrorCover(this));
 
 //        CornerCutCover cornerCutCover = new CornerCutCover(this,null);
 //        cornerCutCover.setCornerRadius(80);
@@ -101,7 +111,7 @@ public class PlayerActivity extends ToolsActivity implements OnPlayerEventListen
         PlayData playData = new PlayData(videoData);
         List<BaseAdVideo> adVideos = new ArrayList<>();
         adVideos.add(new BaseAdVideo("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"));
-        adVideos.add(new BaseAdVideo("http://172.16.218.64:8080/batamu_trans19.mp4"));
+//        adVideos.add(new BaseAdVideo("http://172.16.216.70:8080/batamu_trans19.mp4"));
         playData.setAdVideos(adVideos);
 
         final BaseAdCover adCover = mCoverCollections.getReceiver(BaseAdCover.KEY);

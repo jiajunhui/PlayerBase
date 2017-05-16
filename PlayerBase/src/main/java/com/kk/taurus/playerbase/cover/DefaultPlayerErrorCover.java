@@ -46,8 +46,8 @@ public class DefaultPlayerErrorCover extends BasePlayerErrorCover {
     }
 
     @Override
-    protected void findView() {
-        super.findView();
+    protected void afterFindView() {
+        super.afterFindView();
         mErrorView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -56,7 +56,7 @@ public class DefaultPlayerErrorCover extends BasePlayerErrorCover {
         });
     }
 
-    private void onClickRetry() {
+    protected void onClickRetry() {
         if(player==null)
             return;
         rePlay(0);
