@@ -3,9 +3,10 @@ package com.taurus.playerbaselibrary.ui.activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.jiajunhui.xapp.medialoader.bean.VideoItem;
 import com.kk.taurus.baseframe.ui.activity.ToolsActivity;
 import com.kk.taurus.playerbase.DefaultPlayer;
 import com.kk.taurus.playerbase.callback.OnAdCallBack;
@@ -29,6 +30,7 @@ import java.util.List;
 
 public class VideoDetailActivity extends ToolsActivity implements OnPlayerEventListener {
 
+    private RelativeLayout mContainer;
     private BasePlayer mPlayer;
     private DefaultReceiverCollections mCoverCollections;
     private VideoEntity item;
@@ -56,15 +58,13 @@ public class VideoDetailActivity extends ToolsActivity implements OnPlayerEventL
     public void initData() {
         super.initData();
         fullScreen();
-        mPlayer = (DefaultPlayer) findViewById(R.id.player);
+        mContainer = (RelativeLayout) findViewById(R.id.container);
+
+        mPlayer = new DefaultPlayer(this);
+        mContainer.addView(mPlayer,new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
         mCoverCollections = new DefaultReceiverCollections(this);
         mCoverCollections.buildDefault().addCover(PlayCompleteCover.KEY,completeCover = new PlayCompleteCover(this,null));
-
-//        CornerCutCover cornerCutCover = new CornerCutCover(this,null);
-//        cornerCutCover.setCornerRadius(80);
-//        cornerCutCover.setCornerBgColor(Color.WHITE);
-//        mCoverCollections.addCornerCutCover(cornerCutCover);
 
         mPlayer.bindCoverCollections(mCoverCollections);
 

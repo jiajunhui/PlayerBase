@@ -62,18 +62,12 @@ public class PlayerActivity extends ToolsActivity implements OnPlayerEventListen
         fullScreen();
         mContainer = (RelativeLayout) findViewById(R.id.container);
 
-//        mPlayer = (DefaultPlayer) findViewById(R.id.player);
         mPlayer = new DefaultPlayer(this);
         mContainer.addView(mPlayer,new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
         mCoverCollections = new DefaultReceiverCollections(this);
         mCoverCollections.buildDefault().addCover(PlayCompleteCover.KEY,completeCover = new PlayCompleteCover(this,null))
                 .addCover(BasePlayerErrorCover.KEY_INT_DATA,new PlayerErrorCover(this));
-
-//        CornerCutCover cornerCutCover = new CornerCutCover(this,null);
-//        cornerCutCover.setCornerRadius(80);
-//        cornerCutCover.setCornerBgColor(Color.WHITE);
-//        mCoverCollections.addCornerCutCover(cornerCutCover);
 
         mPlayer.bindCoverCollections(mCoverCollections);
 

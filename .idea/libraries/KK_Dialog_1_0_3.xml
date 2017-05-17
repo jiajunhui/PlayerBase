@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="KK-Dialog-1.0.3">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.android/build-cache/a69e841a04e8c3f6d84a81489760c005e4ddaf31/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/a69e841a04e8c3f6d84a81489760c005e4ddaf31/output/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.kk.taurus.finaldialog/KK-Dialog/1.0.3/d54c7aaaa934379845db08262d7c9530d8622cc9/KK-Dialog-1.0.3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
