@@ -110,6 +110,11 @@ public abstract class BaseSinglePlayer extends FrameLayout implements ISinglePla
     }
 
     @Override
+    public int getAudioSessionId() {
+        return 0;
+    }
+
+    @Override
     public void destroy() {
         mOnErrorListener = null;
         mOnPlayerEventListener = null;

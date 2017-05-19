@@ -761,11 +761,6 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
         return mCanSeekForward;
     }
 
-    @Override
-    public int getAudioSessionId() {
-        return 0;
-    }
-
     // REMOVED: getAudioSessionId();
     // REMOVED: onAttachedToWindow();
     // REMOVED: onDetachedFromWindow();
@@ -882,6 +877,12 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
             return null;
 
         return mMediaPlayer.getTrackInfo();
+    }
+
+    public int getAudioSessionId(){
+        if(mMediaPlayer!=null)
+            return mMediaPlayer.getAudioSessionId();
+        return 0;
     }
 
 }

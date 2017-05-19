@@ -51,6 +51,7 @@ public interface ISinglePlayer {
     int getCurrentPosition();
     int getDuration();
     int getBufferPercentage();
+    int getAudioSessionId();
     int getStatus();
     /** get current playing video definition*/
     Rate getCurrentDefinition();

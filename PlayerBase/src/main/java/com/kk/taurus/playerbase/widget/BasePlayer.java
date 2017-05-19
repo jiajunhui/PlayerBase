@@ -190,6 +190,14 @@ public abstract class BasePlayer extends BaseAdPlayer {
     }
 
     @Override
+    public int getAudioSessionId() {
+        if(available()){
+            return mInternalPlayer.getAudioSessionId();
+        }
+        return 0;
+    }
+
+    @Override
     public Rate getCurrentDefinition() {
         if(available()){
             return mInternalPlayer.getCurrentDefinition();

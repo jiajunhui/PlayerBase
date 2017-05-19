@@ -284,6 +284,13 @@ public class MediaSinglePlayer extends BaseSinglePlayer {
     }
 
     @Override
+    public int getAudioSessionId() {
+        if(mVideoView!=null)
+            return mVideoView.getAudioSessionId();
+        return super.getAudioSessionId();
+    }
+
+    @Override
     public void setAspectRatio(AspectRatio aspectRatio) {
         if(available()){
             if(aspectRatio == AspectRatio.AspectRatio_16_9){
