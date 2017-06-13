@@ -40,7 +40,7 @@ public abstract class BaseAdPlayer extends BaseSettingPlayer {
 
     private PlayData mPlayData;
     private OnAdListener mOnAdListener;
-    private int mAdIndex;
+    private int mAdIndex = -1;
     private List<BaseAdVideo> adVideos;
 
     public BaseAdPlayer(@NonNull Context context) {
@@ -100,6 +100,7 @@ public abstract class BaseAdPlayer extends BaseSettingPlayer {
                 startPlayAdVideo(firstAd);
             }
         }else{
+            mAdIndex = -1;
             //-----call back play all complete-----
             onNotifyAdFinish(null,true);
 
@@ -112,28 +113,44 @@ public abstract class BaseAdPlayer extends BaseSettingPlayer {
         }
     }
 
-    public final void setAndStartVideo(VideoData data) {
+    public final void setAndStartVideo(final VideoData data) {
         stop();
-        updatePlayerType(data.getPlayerType());
-        setDataSource(data);
-        start(data.getStartPos());
+        post(new Runnable() {
+            @Override
+            public void run() {
+                updatePlayerType(data.getPlayerType());
+                setDataSource(data);
+                start(data.getStartPos());
+            }
+        });
     }
 
-    public final void startPlayAdVideo(BaseAdVideo adVideo) {
+    public final void startPlayAdVideo(final BaseAdVideo adVideo) {
         stop();
-        updatePlayerType(adVideo.getPlayerType());
-        setDataSource(adVideo);
-        start(adVideo.getStartPos());
-        onNotifyAdStart(adVideo);
+        post(new Runnable() {
+            @Override
+            public void run() {
+                updatePlayerType(adVideo.getPlayerType());
+                setDataSource(adVideo);
+                start(adVideo.getStartPos());
+                onNotifyAdStart(adVideo);
+            }
+        });
     }
 
 
     private void onHandleAdPlay(int eventCode, Bundle bundle) {
         switch (eventCode){
             case OnPlayerEventListener.EVENT_CODE_PLAY_COMPLETE:
-                judgeAdPlay();
+                if(isAdData()){
+                    judgeAdPlay();
+                }
                 break;
         }
+    }
+
+    private boolean isAdData(){
+        return dataSource!=null && (dataSource instanceof BaseAdVideo);
     }
 
     private void judgeAdPlay() {
@@ -179,7 +196,7 @@ public abstract class BaseAdPlayer extends BaseSettingPlayer {
 
     @Override
     public boolean isAdListFinish(){
-        if(adVideos==null)
+        if(adVideos==null || mAdIndex < 0)
             return true;
         if(adVideos.size()<=0)
             return true;
