@@ -102,8 +102,11 @@ public class PlayCompleteCover extends BaseCover{
 ```
 # Structure
 ![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/screenshot01.png)
+### cover
 ![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/screenshot02.png)
+### EventReceiver
 ![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/screenshot03.png)
+### Event delivery
 ![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/screenshot04.png)
 ## License
 ```
