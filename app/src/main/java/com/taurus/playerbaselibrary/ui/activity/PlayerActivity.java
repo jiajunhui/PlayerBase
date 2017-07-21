@@ -1,7 +1,11 @@
 package com.taurus.playerbaselibrary.ui.activity;
 
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -9,6 +13,7 @@ import android.widget.Toast;
 
 import com.jiajunhui.xapp.medialoader.bean.VideoItem;
 import com.kk.taurus.baseframe.ui.activity.ToolsActivity;
+import com.kk.taurus.filebase.engine.FileEngine;
 import com.kk.taurus.playerbase.DefaultPlayer;
 import com.kk.taurus.playerbase.callback.OnAdCallBack;
 import com.kk.taurus.playerbase.callback.OnAdCoverClickListener;
@@ -20,6 +25,7 @@ import com.kk.taurus.playerbase.cover.base.BasePlayerErrorCover;
 import com.kk.taurus.playerbase.setting.BaseAdVideo;
 import com.kk.taurus.playerbase.setting.PlayData;
 import com.kk.taurus.playerbase.setting.VideoData;
+import com.kk.taurus.playerbase.setting.ViewType;
 import com.kk.taurus.playerbase.widget.BaseAdPlayer;
 import com.kk.taurus.playerbase.widget.BasePlayer;
 import com.taurus.playerbaselibrary.R;
@@ -38,6 +44,33 @@ public class PlayerActivity extends ToolsActivity implements OnPlayerEventListen
     private VideoItem item;
     private VideoData videoData;
     private PlayCompleteCover completeCover;
+
+    private int mCount;
+
+    private Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            mCount++;
+            if(mCount % 5 == 0){
+                screenShot();
+            }
+            mHandler.sendEmptyMessageDelayed(0,1000);
+        }
+    };
+
+    private void screenShot(){
+        View renderView = mPlayer.getRenderView();
+        if(renderView instanceof TextureView){
+            Bitmap bitmap = ((TextureView) renderView).getBitmap();
+            if(bitmap!=null){
+                String info = FileEngine.bitmapToFile(bitmap, getExternalCacheDir(), System.currentTimeMillis() + ".png");
+                System.out.println(info);
+            }
+        }
+
+
+    }
 
     @Override
     public void loadState() {
@@ -63,6 +96,7 @@ public class PlayerActivity extends ToolsActivity implements OnPlayerEventListen
         mContainer = (RelativeLayout) findViewById(R.id.container);
 
         mPlayer = new DefaultPlayer(this);
+        mPlayer.setViewType(ViewType.TEXTUREVIEW);
         mContainer.addView(mPlayer,new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
         mCoverCollections = new DefaultReceiverCollections(this);
@@ -165,14 +199,16 @@ public class PlayerActivity extends ToolsActivity implements OnPlayerEventListen
         if(mPlayer!=null){
             mPlayer.destroy();
         }
+        mHandler.removeMessages(0);
     }
 
     @Override
     public void onPlayerEvent(int eventCode, Bundle bundle) {
         switch (eventCode){
             case OnPlayerEventListener.EVENT_CODE_RENDER_START:
-
+//                mHandler.sendEmptyMessage(0);
                 break;
         }
     }
+
 }

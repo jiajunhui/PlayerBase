@@ -123,6 +123,16 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
         this.useMediaDataSource = useMediaDataSource;
     }
 
+    public void setRenderType(boolean useSurfaceView){
+        mAllRenders.clear();
+        if(useSurfaceView){
+            mAllRenders.add(RENDER_SURFACE_VIEW);
+        }else{
+            mAllRenders.add(RENDER_TEXTURE_VIEW);
+        }
+        updateRender();
+    }
+
     // REMOVED: onMeasure
     // REMOVED: onInitializeAccessibilityEvent
     // REMOVED: onInitializeAccessibilityNodeInfo
@@ -143,6 +153,10 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
         // REMOVED: mPendingSubtitleTracks = new Vector<Pair<InputStream, MediaFormat>>();
         mCurrentState = STATE_IDLE;
         mTargetState = STATE_IDLE;
+    }
+
+    public View getRenderView() {
+        return (View) mRenderView;
     }
 
     public void setRenderView(IRenderView renderView) {
@@ -456,7 +470,7 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
                             Log.d(TAG, "MEDIA_INFO_VIDEO_TRACK_LAGGING:");
                             break;
                         case IMediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START:
-                            Log.d(TAG, "MEDIA_INFO_VIDEO_RENDERING_START:");
+                            Log.d(TAG, "MEDIA_INFO_VIDEO_RENDERING_START:" + " renderView == SurfaceView : " + (mCurrentRender==RENDER_SURFACE_VIEW));
                             mSeekWhenPrepared = 0;
                             break;
                         case IMediaPlayer.MEDIA_INFO_BUFFERING_START:
@@ -838,14 +852,21 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
         setRender(mCurrentRender);
     }
 
-    public int toggleRender() {
-        mCurrentRenderIndex++;
-        mCurrentRenderIndex %= mAllRenders.size();
-
-        mCurrentRender = mAllRenders.get(mCurrentRenderIndex);
+    private void updateRender(){
+        if (mAllRenders.isEmpty())
+            mAllRenders.add(RENDER_SURFACE_VIEW);
+        mCurrentRender = mAllRenders.get(0);
         setRender(mCurrentRender);
-        return mCurrentRender;
     }
+
+//    public int toggleRender() {
+//        mCurrentRenderIndex++;
+//        mCurrentRenderIndex %= mAllRenders.size();
+//
+//        mCurrentRender = mAllRenders.get(mCurrentRenderIndex);
+//        setRender(mCurrentRender);
+//        return mCurrentRender;
+//    }
 
     public IMediaPlayer createPlayer(int playerType) {
         return new AndroidMediaPlayer();

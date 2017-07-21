@@ -69,8 +69,13 @@ public abstract class BaseSinglePlayer extends FrameLayout implements ISinglePla
         this.mDecodeMode = mDecodeMode;
     }
 
-    public void setViewType(ViewType mViewType) {
-        this.mViewType = mViewType;
+    @Override
+    public View getRenderView() {
+        return null;
+    }
+
+    public void setViewType(ViewType viewType) {
+        this.mViewType = viewType;
     }
 
     public DecodeMode getDecodeMode() {

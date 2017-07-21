@@ -22,6 +22,7 @@ import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.View;
 
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.setting.AspectRatio;
@@ -29,6 +30,7 @@ import com.kk.taurus.playerbase.setting.BaseAdVideo;
 import com.kk.taurus.playerbase.setting.DecodeMode;
 import com.kk.taurus.playerbase.setting.Rate;
 import com.kk.taurus.playerbase.setting.VideoData;
+import com.kk.taurus.playerbase.setting.ViewType;
 
 import java.util.List;
 
@@ -230,6 +232,21 @@ public abstract class BasePlayer extends BaseAdPlayer {
         if(available()){
             mInternalPlayer.setDecodeMode(mDecodeMode);
         }
+    }
+
+    @Override
+    public void setViewType(ViewType viewType) {
+        if(available()){
+            mInternalPlayer.setViewType(viewType);
+        }
+    }
+
+    @Override
+    public View getRenderView() {
+        if(available()){
+            return mInternalPlayer.getRenderView();
+        }
+        return null;
     }
 
     @Override

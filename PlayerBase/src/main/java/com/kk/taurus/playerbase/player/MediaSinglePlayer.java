@@ -10,6 +10,7 @@ import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.setting.AspectRatio;
 import com.kk.taurus.playerbase.setting.Rate;
 import com.kk.taurus.playerbase.setting.VideoData;
+import com.kk.taurus.playerbase.setting.ViewType;
 import com.kk.taurus.playerbase.widget.BaseSinglePlayer;
 
 import java.util.List;
@@ -288,6 +289,22 @@ public class MediaSinglePlayer extends BaseSinglePlayer {
         if(mVideoView!=null)
             return mVideoView.getAudioSessionId();
         return super.getAudioSessionId();
+    }
+
+    @Override
+    public void setViewType(ViewType viewType) {
+        super.setViewType(viewType);
+        if(available()){
+            mVideoView.setRenderType(viewType==ViewType.SURFACEVIEW);
+        }
+    }
+
+    @Override
+    public View getRenderView() {
+        if(available()){
+            return mVideoView.getRenderView();
+        }
+        return super.getRenderView();
     }
 
     @Override

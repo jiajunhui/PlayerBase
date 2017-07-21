@@ -16,9 +16,12 @@
 
 package com.kk.taurus.playerbase.inter;
 
+import android.view.View;
+
 import com.kk.taurus.playerbase.setting.AspectRatio;
 import com.kk.taurus.playerbase.setting.Rate;
 import com.kk.taurus.playerbase.setting.VideoData;
+import com.kk.taurus.playerbase.setting.ViewType;
 
 import java.util.List;
 
@@ -61,5 +64,7 @@ public interface ISinglePlayer {
     void changeVideoDefinition(Rate rate);
     /** Switch video fill type , such as 16:9 ,4:3 ,FILL_PARENT , ORIGINAL*/
     void setAspectRatio(AspectRatio aspectRatio);
+    void setViewType(ViewType viewType);
+    View getRenderView();
     void destroy();
 }
