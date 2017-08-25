@@ -25,6 +25,7 @@ import android.widget.FrameLayout;
 import com.kk.taurus.playerbase.callback.OnErrorListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.inter.ISinglePlayer;
+import com.kk.taurus.playerbase.setting.AspectRatio;
 import com.kk.taurus.playerbase.setting.DecodeMode;
 import com.kk.taurus.playerbase.setting.ViewType;
 
@@ -41,6 +42,7 @@ public abstract class BaseSinglePlayer extends FrameLayout implements ISinglePla
     protected int startSeekPos;
     private DecodeMode mDecodeMode;
     private ViewType mViewType;
+    private AspectRatio mAspectRatio = AspectRatio.AspectRatio_ORIGIN;
 
     public BaseSinglePlayer(Context context) {
         super(context);
@@ -84,6 +86,15 @@ public abstract class BaseSinglePlayer extends FrameLayout implements ISinglePla
 
     public ViewType getViewType() {
         return mViewType;
+    }
+
+    @Override
+    public void setAspectRatio(AspectRatio aspectRatio) {
+        mAspectRatio = aspectRatio;
+    }
+
+    public AspectRatio getAspectRatio(){
+        return mAspectRatio;
     }
 
     public void onClickResume() {

@@ -69,7 +69,6 @@ public class PlayerActivity extends ToolsActivity implements OnPlayerEventListen
             }
         }
 
-
     }
 
     @Override
