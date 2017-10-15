@@ -22,6 +22,7 @@ import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.SurfaceHolder;
 import android.view.View;
 
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
@@ -247,6 +248,14 @@ public abstract class BasePlayer extends BaseAdPlayer {
             return mInternalPlayer.getRenderView();
         }
         return null;
+    }
+
+    public void setDisplay(SurfaceHolder surfaceHolder){
+        mInternalPlayer.setDisplay(surfaceHolder);
+    }
+
+    public void setUseDefaultRender(boolean useDefaultRender){
+        mInternalPlayer.setUseDefaultRender(useDefaultRender);
     }
 
     @Override

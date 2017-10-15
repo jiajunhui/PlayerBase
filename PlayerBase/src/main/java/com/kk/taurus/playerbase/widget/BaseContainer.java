@@ -25,16 +25,15 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.kk.taurus.playerbase.view.GestureLayout;
 import com.kk.taurus.playerbase.callback.OnPlayerGestureListener;
 import com.kk.taurus.playerbase.cover.base.BaseCover;
 import com.kk.taurus.playerbase.inter.ICoverContainer;
-import com.kk.taurus.playerbase.setting.PlayerGestureDetector;
 
 
 /**
@@ -70,8 +69,7 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
     /**
      * gesture layout for handle user gesture.
      */
-    private FrameLayout mGestureLayout;
-    private PlayerGestureDetector mPlayerGestureDetector;
+    private GestureLayout mGestureLayout;
 
     public BaseContainer(@NonNull Context context) {
         this(context,null);
@@ -91,8 +89,8 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
         super.onSizeChanged(w, h, oldw, oldh);
         mWidth = w;
         mHeight = h;
-        if(mPlayerGestureDetector!=null){
-            mPlayerGestureDetector.updateWH(w,h);
+        if(mGestureLayout!=null){
+            mGestureLayout.updateWH(w,h);
         }
     }
 
@@ -116,28 +114,10 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
     }
 
     protected void initGesture(Context context){
-        mGestureLayout = new FrameLayout(context);
-        mGestureLayout.setBackgroundColor(Color.TRANSPARENT);
-        addView(mGestureLayout,new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        mPlayerGestureDetector = new PlayerGestureDetector(mWidth,mHeight);
-        mPlayerGestureDetector.setOnPlayerGestureListener(this);
-        final GestureDetector gestureDetector = new GestureDetector(getContext(), mPlayerGestureDetector);
-        mGestureLayout.setClickable(true);
-        mGestureLayout.setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (gestureDetector.onTouchEvent(motionEvent))
-                    return true;
-                // 处理手势结束
-                switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
-                    case MotionEvent.ACTION_UP:
-                        onEndGesture();
-                        break;
-                }
-
-                return false;
-            }
-        });
+        mGestureLayout = new GestureLayout(context, mWidth, mHeight);
+        mGestureLayout.setPlayerGestureListener(this);
+        addView(mGestureLayout,new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
     }
 
     public void setGestureEnable(boolean enable){
@@ -156,7 +136,8 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
     private void initPlayerContainer(Context context) {
         mPlayerContainer = new FrameLayout(context);
         mPlayerContainer.setBackgroundColor(Color.TRANSPARENT);
-        addView(mPlayerContainer,new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        addView(mPlayerContainer,new LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         onPlayerContainerHasInit(context);
         notifyPlayerWidget(context);
     }
@@ -168,7 +149,8 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
     private void initPlayerWidget(Context context) {
         if(mPlayerContainer!=null){
             mPlayerContainer.removeAllViews();
-            mPlayerContainer.addView(getPlayerWidget(context),new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            mPlayerContainer.addView(getPlayerWidget(context),
+                    new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         }
     }
 
@@ -183,7 +165,8 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
         if(mCoverContainer==null){
             throw new NullPointerException("please init cover container !");
         }
-        addView(mCoverContainer.getContainerRoot(),new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        addView(mCoverContainer.getContainerRoot(),
+                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
     }
 
     protected abstract ICoverContainer getCoverContainer(Context context);
@@ -229,40 +212,38 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
     @Override
     public void onDoubleTap(MotionEvent event) {
         Log.d(TAG,"onDoubleTap...");
+    }
 
+    @Override
+    public void onDown(MotionEvent event) {
+        Log.d(TAG,"onDown...");
     }
 
     @Override
     public void onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
         Log.d(TAG,"onScroll...");
-
     }
 
     @Override
     public void onHorizontalSlide(float percent) {
         Log.d(TAG,"onHorizontalSlide...");
-
     }
 
     @Override
     public void onRightVerticalSlide(float percent) {
         Log.d(TAG,"onRightVerticalSlide...");
-
     }
 
     @Override
     public void onLeftVerticalSlide(float percent) {
         Log.d(TAG,"onLeftVerticalSlide...");
+    }
 
+    public void onEndGesture(){
+        Log.d(TAG,"onEndGesture...");
     }
 
     protected void onPlayerGestureEnableChange(boolean enable){
         Log.d(TAG,"onPlayerGestureEnableChange...");
-
-    }
-
-    protected void onEndGesture(){
-        Log.d(TAG,"onEndGesture...");
-
     }
 }

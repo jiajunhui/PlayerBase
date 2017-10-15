@@ -26,9 +26,10 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 
 import com.kk.taurus.playerbase.callback.BaseEventReceiver;
-import com.kk.taurus.playerbase.callback.GestureObserver;
+import com.kk.taurus.playerbase.callback.GestureObserverHandler;
 import com.kk.taurus.playerbase.callback.OnCoverEventListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
+import com.kk.taurus.playerbase.callback.PlayerObserverHandler;
 import com.kk.taurus.playerbase.cover.base.BaseCover;
 import com.kk.taurus.playerbase.cover.base.BaseReceiverCollections;
 import com.kk.taurus.playerbase.callback.PlayerObserver;
@@ -46,10 +47,20 @@ import java.util.List;
  *
  */
 
-public abstract class BaseBindEventReceiver extends BaseContainer implements IEventReceiver, PlayerObserver,GestureObserver,OnCoverEventListener{
+public abstract class BaseBindEventReceiver extends BaseContainer implements IEventReceiver, PlayerObserver,OnCoverEventListener{
 
     private BaseReceiverCollections receiverCollections;
     private OnCoverEventListener mOnCoverEventListener;
+
+    /**
+     * 播放器事件观察者对cover的分发管理
+     */
+    private PlayerObserverHandler mPlayerObserverHandler;
+
+    /**
+     * 手势事件观察者对cover的分发管理
+     */
+    private GestureObserverHandler mGestureObserverHandler;
 
     public BaseBindEventReceiver(@NonNull Context context){
         super(context);
@@ -67,6 +78,8 @@ public abstract class BaseBindEventReceiver extends BaseContainer implements IEv
         if(this.receiverCollections !=null)
             return;
         this.receiverCollections = coverCollections;
+        mPlayerObserverHandler = new PlayerObserverHandler(coverCollections);
+        mGestureObserverHandler = new GestureObserverHandler(coverCollections);
         initCovers(mAppContext);
     }
 
@@ -140,222 +153,120 @@ public abstract class BaseBindEventReceiver extends BaseContainer implements IEv
 
     @Override
     public void onNotifyConfigurationChanged(Configuration newConfig) {
-        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
-            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
-                if(receiver!=null){
-                    receiver.onNotifyConfigurationChanged(newConfig);
-                }
-            }
+        if(mPlayerObserverHandler!=null)
+            mPlayerObserverHandler.onNotifyConfigurationChanged(newConfig);
     }
 
     @Override
     public void onNotifyPlayEvent(int eventCode, Bundle bundle) {
-        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
-            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
-                if(receiver!=null){
-                    receiver.onNotifyPlayEvent(eventCode, bundle);
-                }
-            }
+        if(mPlayerObserverHandler!=null)
+            mPlayerObserverHandler.onNotifyPlayEvent(eventCode, bundle);
     }
 
     @Override
     public void onNotifyErrorEvent(int eventCode, Bundle bundle) {
-        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
-            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
-                if(receiver!=null){
-                    receiver.onNotifyErrorEvent(eventCode, bundle);
-                }
-            }
+        if(mPlayerObserverHandler!=null)
+            mPlayerObserverHandler.onNotifyErrorEvent(eventCode, bundle);
     }
 
     @Override
     public void onNotifyPlayTimerCounter(int curr, int duration, int bufferPercentage) {
-        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
-            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
-                if(receiver!=null){
-                    receiver.onNotifyPlayTimerCounter(curr, duration, bufferPercentage);
-                }
-            }
+        if(mPlayerObserverHandler!=null)
+            mPlayerObserverHandler.onNotifyPlayTimerCounter(curr, duration, bufferPercentage);
     }
 
     @Override
     public void onNotifyNetWorkConnected(int networkType) {
-        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
-            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
-                if(receiver!=null){
-                    receiver.onNotifyNetWorkConnected(networkType);
-                }
-            }
+        if(mPlayerObserverHandler!=null)
+            mPlayerObserverHandler.onNotifyNetWorkConnected(networkType);
     }
 
     @Override
     public void onNotifyNetWorkError() {
-        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
-            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
-                if(receiver!=null){
-                    receiver.onNotifyNetWorkError();
-                }
-            }
+        if(mPlayerObserverHandler!=null)
+            mPlayerObserverHandler.onNotifyNetWorkError();
     }
 
     @Override
     public void onNotifyAdPrepared(List<BaseAdVideo> adVideos) {
-        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
-            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
-                if(receiver!=null){
-                    receiver.onNotifyAdPrepared(adVideos);
-                }
-            }
+        if(mPlayerObserverHandler!=null)
+            mPlayerObserverHandler.onNotifyAdPrepared(adVideos);
     }
 
     @Override
     public void onNotifyAdStart(BaseAdVideo adVideo) {
-        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
-            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
-                if(receiver!=null){
-                    receiver.onNotifyAdStart(adVideo);
-                }
-            }
+        if(mPlayerObserverHandler!=null)
+            mPlayerObserverHandler.onNotifyAdStart(adVideo);
     }
 
     @Override
     public void onNotifyAdFinish(VideoData data, boolean isAllFinish) {
-        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
-            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
-                if(receiver!=null){
-                    receiver.onNotifyAdFinish(data, isAllFinish);
-                }
-            }
+        if(mPlayerObserverHandler!=null)
+            mPlayerObserverHandler.onNotifyAdFinish(data, isAllFinish);
     }
-
-    @Override
-    public void onGestureSingleTab(MotionEvent event) {
-        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
-            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
-                if(receiver instanceof GestureObserver){
-                    ((GestureObserver)receiver).onGestureSingleTab(event);
-                }
-            }
-    }
-
-    @Override
-    public void onGestureDoubleTab(MotionEvent event) {
-        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
-            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
-                if(receiver instanceof GestureObserver){
-                    ((GestureObserver)receiver).onGestureDoubleTab(event);
-                }
-            }
-    }
-
-    @Override
-    public void onGestureScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
-            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
-                if(receiver instanceof GestureObserver){
-                    ((GestureObserver)receiver).onGestureScroll(e1, e2, distanceX, distanceY);
-                }
-            }
-    }
-
-    @Override
-    public void onGestureHorizontalSlide(float percent) {
-        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
-            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
-                if(receiver instanceof GestureObserver){
-                    ((GestureObserver)receiver).onGestureHorizontalSlide(percent);
-                }
-            }
-    }
-
-    @Override
-    public void onGestureRightVerticalSlide(float percent) {
-        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
-            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
-                if(receiver instanceof GestureObserver){
-                    ((GestureObserver)receiver).onGestureRightVerticalSlide(percent);
-                }
-            }
-    }
-
-    @Override
-    public void onGestureLeftVerticalSlide(float percent) {
-        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
-            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
-                if(receiver instanceof GestureObserver){
-                    ((GestureObserver)receiver).onGestureLeftVerticalSlide(percent);
-                }
-            }
-    }
-
-    @Override
-    public void onGestureEnableChange(boolean enable) {
-        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
-            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
-                if(receiver instanceof GestureObserver){
-                    ((GestureObserver)receiver).onGestureEnableChange(enable);
-                }
-            }
-    }
-
-    @Override
-    public void onGestureEnd() {
-        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
-            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
-                if(receiver instanceof GestureObserver){
-                    ((GestureObserver)receiver).onGestureEnd();
-                }
-            }
-    }
-
 
     //gesture handle----------------
 
     @Override
     public void onSingleTapUp(MotionEvent event) {
         super.onSingleTapUp(event);
-        onGestureSingleTab(event);
+        if(mGestureObserverHandler!=null)
+            mGestureObserverHandler.onGestureSingleTab(event);
     }
 
     @Override
     public void onDoubleTap(MotionEvent event) {
         super.onDoubleTap(event);
-        onGestureDoubleTab(event);
+        if(mGestureObserverHandler!=null)
+            mGestureObserverHandler.onGestureDoubleTab(event);
+    }
+
+    @Override
+    public void onDown(MotionEvent event) {
+        super.onDown(event);
+        if(mGestureObserverHandler!=null)
+            mGestureObserverHandler.onGestureDown(event);
     }
 
     @Override
     public void onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
         super.onScroll(e1, e2, distanceX, distanceY);
-        onGestureScroll(e1, e2, distanceX, distanceY);
+        if(mGestureObserverHandler!=null)
+            mGestureObserverHandler.onGestureScroll(e1, e2, distanceX, distanceY);
     }
 
     @Override
     public void onHorizontalSlide(float percent) {
         super.onHorizontalSlide(percent);
-        onGestureHorizontalSlide(percent);
+        if(mGestureObserverHandler!=null)
+            mGestureObserverHandler.onGestureHorizontalSlide(percent);
     }
 
     @Override
     public void onRightVerticalSlide(float percent) {
         super.onRightVerticalSlide(percent);
-        onGestureRightVerticalSlide(percent);
+        if(mGestureObserverHandler!=null)
+            mGestureObserverHandler.onGestureRightVerticalSlide(percent);
     }
 
     @Override
     public void onLeftVerticalSlide(float percent) {
         super.onLeftVerticalSlide(percent);
-        onGestureLeftVerticalSlide(percent);
+        if(mGestureObserverHandler!=null)
+            mGestureObserverHandler.onGestureLeftVerticalSlide(percent);
+    }
+
+    @Override
+    public void onEndGesture() {
+        super.onEndGesture();
+        if(mGestureObserverHandler!=null)
+            mGestureObserverHandler.onGestureEnd();
     }
 
     @Override
     protected void onPlayerGestureEnableChange(boolean enable) {
         super.onPlayerGestureEnableChange(enable);
-        onGestureEnableChange(enable);
-    }
-
-    @Override
-    protected void onEndGesture() {
-        super.onEndGesture();
-        onGestureEnd();
+        if(mGestureObserverHandler!=null)
+            mGestureObserverHandler.onGestureEnableChange(enable);
     }
 }

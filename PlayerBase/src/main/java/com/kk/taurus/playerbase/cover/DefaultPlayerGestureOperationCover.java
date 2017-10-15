@@ -19,6 +19,7 @@ package com.kk.taurus.playerbase.cover;
 import android.app.Activity;
 import android.content.Context;
 import android.media.AudioManager;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 
@@ -153,9 +154,14 @@ public class DefaultPlayerGestureOperationCover extends BaseGestureOperationCove
     }
 
     @Override
+    public void onGestureDown(MotionEvent event) {
+        super.onGestureDown(event);
+        volume = getVolume();
+    }
+
+    @Override
     public void onGestureRightVerticalSlide(float percent) {
         super.onGestureRightVerticalSlide(percent);
-        volume = getVolume();
         int index = (int) (percent * mMaxVolume) + volume;
         if (index > mMaxVolume)
             index = mMaxVolume;

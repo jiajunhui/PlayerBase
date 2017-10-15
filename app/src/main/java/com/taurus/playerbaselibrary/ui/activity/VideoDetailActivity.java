@@ -58,6 +58,7 @@ public class VideoDetailActivity extends ToolsActivity implements OnPlayerEventL
     public void initData() {
         super.initData();
         fullScreen();
+        keepScreenOn();
         mContainer = (RelativeLayout) findViewById(R.id.container);
 
         mPlayer = new DefaultPlayer(this);

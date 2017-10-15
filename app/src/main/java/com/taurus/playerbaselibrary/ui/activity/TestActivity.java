@@ -14,23 +14,26 @@
  *    limitations under the License.
  */
 
-package com.kk.taurus.playerbase.callback;
+package com.taurus.playerbaselibrary.ui.activity;
 
-import android.view.MotionEvent;
+import android.os.Bundle;
+
+import com.kk.taurus.baseframe.base.ContentHolder;
+import com.kk.taurus.baseframe.base.HolderData;
+import com.kk.taurus.baseframe.ui.activity.StateActivity;
 
 /**
- * Created by Taurus on 2017/3/27.
+ * Created by Taurus on 2017/9/30.
  */
 
-public interface GestureObserver {
-    void onGestureSingleTab(MotionEvent event);
-    void onGestureDoubleTab(MotionEvent event);
-    void onGestureDown(MotionEvent event);
-    void onGestureScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY);
-    void onGestureHorizontalSlide(float percent);
-    void onGestureRightVerticalSlide(float percent);
-    void onGestureLeftVerticalSlide(float percent);
+public class TestActivity extends StateActivity<HolderData,ContentHolder<HolderData>> {
+    @Override
+    public ContentHolder getContentViewHolder(Bundle savedInstanceState) {
+        return new ContentHolder(this) {
+            @Override
+            public void onCreate() {
 
-    void onGestureEnableChange(boolean enable);
-    void onGestureEnd();
+            }
+        };
+    }
 }

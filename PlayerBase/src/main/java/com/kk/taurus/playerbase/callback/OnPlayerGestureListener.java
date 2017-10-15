@@ -35,6 +35,8 @@ public interface OnPlayerGestureListener {
      */
     void onDoubleTap(MotionEvent event);
 
+    void onDown(MotionEvent event);
+
     /**
      * on scroll
      * @param e1
@@ -61,4 +63,6 @@ public interface OnPlayerGestureListener {
      * @param percent
      */
     void onLeftVerticalSlide(float percent);
+
+    void onEndGesture();
 }

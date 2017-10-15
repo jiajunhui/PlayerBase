@@ -155,6 +155,11 @@ public abstract class BaseGestureOperationCover extends BaseCover implements IGe
     }
 
     @Override
+    public void onGestureDown(MotionEvent event) {
+
+    }
+
+    @Override
     public void onGestureScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
 
     }

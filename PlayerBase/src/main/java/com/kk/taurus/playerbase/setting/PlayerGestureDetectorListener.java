@@ -25,7 +25,7 @@ import com.kk.taurus.playerbase.callback.OnPlayerGestureListener;
  * Created by Taurus on 2017/3/26.
  */
 
-public class PlayerGestureDetector extends GestureDetector.SimpleOnGestureListener {
+public class PlayerGestureDetectorListener extends GestureDetector.SimpleOnGestureListener {
 
     private int mWidth;
     private int mHeight;
@@ -35,7 +35,7 @@ public class PlayerGestureDetector extends GestureDetector.SimpleOnGestureListen
     private boolean horizontalSlide;
     private boolean rightVerticalSlide;
 
-    public PlayerGestureDetector(int width, int height){
+    public PlayerGestureDetectorListener(int width, int height){
         this.mWidth = width;
         this.mHeight = height;
     }
@@ -68,6 +68,9 @@ public class PlayerGestureDetector extends GestureDetector.SimpleOnGestureListen
     @Override
     public boolean onDown(MotionEvent e) {
         firstTouch = true;
+        if(mOnPlayerGestureListener!=null){
+            mOnPlayerGestureListener.onDown(e);
+        }
         return super.onDown(e);
     }
 
@@ -90,6 +93,8 @@ public class PlayerGestureDetector extends GestureDetector.SimpleOnGestureListen
                 mOnPlayerGestureListener.onHorizontalSlide(-deltaX / mWidth);
             }
         }else{
+            if(Math.abs(deltaY) > mHeight)
+                return super.onScroll(e1, e2, distanceX, distanceY);
             if(rightVerticalSlide){
                 if(mOnPlayerGestureListener!=null){
                     mOnPlayerGestureListener.onRightVerticalSlide(deltaY / mHeight);
@@ -101,5 +106,11 @@ public class PlayerGestureDetector extends GestureDetector.SimpleOnGestureListen
             }
         }
         return super.onScroll(e1, e2, distanceX, distanceY);
+    }
+
+    public void onEndGesture(){
+        if(mOnPlayerGestureListener!=null){
+            mOnPlayerGestureListener.onEndGesture();
+        }
     }
 }

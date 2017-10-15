@@ -18,6 +18,7 @@ package com.kk.taurus.playerbase.widget;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -43,6 +44,7 @@ public abstract class BaseSinglePlayer extends FrameLayout implements ISinglePla
     private DecodeMode mDecodeMode;
     private ViewType mViewType;
     private AspectRatio mAspectRatio = AspectRatio.AspectRatio_ORIGIN;
+    protected boolean useDefaultRender = true;
 
     public BaseSinglePlayer(Context context) {
         super(context);
@@ -63,6 +65,14 @@ public abstract class BaseSinglePlayer extends FrameLayout implements ISinglePla
 
     private void initPlayerView(Context context) {
         addView(getPlayerView(context),new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+    }
+
+    public void setDisplay(SurfaceHolder surfaceHolder){
+
+    }
+
+    public void setUseDefaultRender(boolean useDefaultRender){
+        this.useDefaultRender = useDefaultRender;
     }
 
     public abstract View getPlayerView(Context context);

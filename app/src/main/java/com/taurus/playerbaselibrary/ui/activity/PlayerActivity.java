@@ -92,6 +92,7 @@ public class PlayerActivity extends ToolsActivity implements OnPlayerEventListen
     public void initData() {
         super.initData();
         fullScreen();
+        keepScreenOn();
         mContainer = (RelativeLayout) findViewById(R.id.container);
 
         mPlayer = new DefaultPlayer(this);

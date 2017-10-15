@@ -11,6 +11,7 @@ import com.taurus.playerbaselibrary.R;
 import com.taurus.playerbaselibrary.bean.VideosInfo;
 import com.taurus.playerbaselibrary.holder.HomeHolder;
 import com.taurus.playerbaselibrary.ui.fragment.LocalVideoFragment;
+import com.taurus.playerbaselibrary.ui.fragment.LocalVideoListFragment;
 import com.taurus.playerbaselibrary.ui.fragment.OnlineVideosFragment;
 
 
@@ -22,6 +23,7 @@ public class HomeActivity extends ToolBarActivity<VideosInfo,HomeHolder> impleme
 
     private OnlineVideosFragment onlineVideosFragment;
     private LocalVideoFragment localVideoFragment;
+    private LocalVideoListFragment localVideoListFragment;
 
     @Override
     public HomeHolder getContentViewHolder(Bundle savedInstanceState) {
@@ -70,6 +72,15 @@ public class HomeActivity extends ToolBarActivity<VideosInfo,HomeHolder> impleme
         }else{
             ft.show(onlineVideosFragment);
         }
+//        if(localVideoListFragment!=null){
+//            ft.hide(localVideoListFragment);
+//        }
+//        if(onlineVideosFragment==null){
+//            onlineVideosFragment = new OnlineVideosFragment();
+//            ft.add(mContentHolder.getContainer().getId(),onlineVideosFragment);
+//        }else{
+//            ft.show(onlineVideosFragment);
+//        }
         ft.commitAllowingStateLoss();
     }
 
@@ -85,6 +96,15 @@ public class HomeActivity extends ToolBarActivity<VideosInfo,HomeHolder> impleme
         }else{
             ft.show(localVideoFragment);
         }
+//        if(onlineVideosFragment!=null){
+//            ft.hide(onlineVideosFragment);
+//        }
+//        if(localVideoListFragment==null){
+//            localVideoListFragment = new LocalVideoListFragment();
+//            ft.add(mContentHolder.getContainer().getId(),localVideoListFragment);
+//        }else{
+//            ft.show(localVideoListFragment);
+//        }
         ft.commitAllowingStateLoss();
     }
 }

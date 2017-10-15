@@ -35,7 +35,8 @@ public class PlayerType {
 
     private PlayerType(){
         playerTypes = new HashMap<>();
-        addPlayerType(TYPE_PLAYER_DEFAULT,new PlayerTypeEntity("原生解码","com.kk.taurus.playerbase.player.MediaSinglePlayer"));
+//        addPlayerType(TYPE_PLAYER_DEFAULT,new PlayerTypeEntity("原生解码","com.kk.taurus.playerbase.player.MediaSinglePlayer"));
+        addPlayerType(TYPE_PLAYER_DEFAULT,new PlayerTypeEntity("原生解码","com.kk.taurus.playerbase.player.DefaultSinglePlayer"));
     }
 
     public static PlayerType getInstance(){
