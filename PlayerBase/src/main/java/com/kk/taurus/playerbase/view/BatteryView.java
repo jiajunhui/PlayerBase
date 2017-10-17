@@ -87,9 +87,9 @@ public class BatteryView extends View {
         super(context, attrs, defStyleAttr);
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.BatteryView);
         if (typedArray != null) {
-            mBorderColor = typedArray.getColor(R.styleable.BatteryView_border_color, DEFAULT_BORDER_COLOR);
+            mBorderColor = typedArray.getColor(R.styleable.BatteryView_borderColor, DEFAULT_BORDER_COLOR);
             mProgressColor = typedArray.getColor(R.styleable.BatteryView_progress_color, DEFAULT_BORDER_COLOR);
-            mBorderWidth = (int) typedArray.getDimension(R.styleable.BatteryView_border_width, DEFAULT_BORDER_WIDTH);
+            mBorderWidth = (int) typedArray.getDimension(R.styleable.BatteryView_borderWidth, DEFAULT_BORDER_WIDTH);
             mNumberTextSize = (int) typedArray.getDimension(R.styleable.BatteryView_number_text_size, DEFAULT_NUMBER_TEXT_SIZE);
             mHeadOrientation = typedArray.getInt(R.styleable.BatteryView_head_orientation, HEAD_ORIENTATION_LEFT);
             mShowType = typedArray.getInt(R.styleable.BatteryView_show_type, SHOW_TYPE_FILL);
