@@ -3,7 +3,7 @@ a base player widget library,The library layered the player business. Between th
 # Dependency
 ```gradle
 dependencies {
-  compile 'com.kk.taurus.playerbase:PlayerBase:1.0.78'
+  compile 'com.kk.taurus.playerbase:PlayerBase:1.2.0'
 }
 ```
 # Use
