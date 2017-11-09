@@ -26,6 +26,6 @@ import com.kk.taurus.playerbase.widget.BaseAdPlayer;
 
 public interface OnAdListener {
     void onAdPlay(BaseAdPlayer adPlayer, BaseAdVideo adVideo);
-    void onAdPlayComplete(BaseAdVideo adVideo,boolean isAllComplete);
+    void onAdPlayComplete(BaseAdVideo adVideo, boolean isAllComplete);
     void onVideoStart(BaseAdPlayer adPlayer, VideoData data);
 }

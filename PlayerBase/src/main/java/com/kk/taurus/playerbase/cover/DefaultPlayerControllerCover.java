@@ -258,8 +258,9 @@ public class DefaultPlayerControllerCover extends BasePlayerControllerCover {
     }
 
     @Override
-    public void onGestureSingleTab(MotionEvent event) {
+    public boolean onGestureSingleTab(MotionEvent event) {
         switchControllerState();
+        return false;
     }
 
     private void initBatteryReceiver(Context context) {

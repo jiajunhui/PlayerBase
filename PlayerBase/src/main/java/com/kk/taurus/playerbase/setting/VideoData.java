@@ -30,6 +30,9 @@ public class VideoData implements Serializable {
     private Rate rate;
     private int startPos;
 
+    public VideoData() {
+    }
+
     public VideoData(String data) {
         this.data = data;
     }

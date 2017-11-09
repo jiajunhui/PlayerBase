@@ -68,6 +68,12 @@ public interface PlayerObserver {
     void onNotifyNetWorkConnected(int networkType);
 
     /**
+     * on network connected change
+     * @param networkType
+     */
+    void onNotifyNetWorkChanged(int networkType);
+
+    /**
      * on network occur error.
      */
     void onNotifyNetWorkError();
@@ -89,6 +95,6 @@ public interface PlayerObserver {
      * @param data ad video.
      * @param isAllFinish when ad video list finish,return true.
      */
-    void onNotifyAdFinish(VideoData data,boolean isAllFinish);
+    void onNotifyAdFinish(VideoData data, boolean isAllFinish);
 
 }

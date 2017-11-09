@@ -23,13 +23,13 @@ import android.view.MotionEvent;
  */
 
 public interface GestureObserver {
-    void onGestureSingleTab(MotionEvent event);
-    void onGestureDoubleTab(MotionEvent event);
-    void onGestureDown(MotionEvent event);
-    void onGestureScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY);
-    void onGestureHorizontalSlide(float percent);
-    void onGestureRightVerticalSlide(float percent);
-    void onGestureLeftVerticalSlide(float percent);
+    boolean onGestureSingleTab(MotionEvent event);
+    boolean onGestureDoubleTab(MotionEvent event);
+    boolean onGestureDown(MotionEvent event);
+    boolean onGestureScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY);
+    void onGestureHorizontalSlide(float percent, MotionEvent e1, MotionEvent e2, float distanceX, float distanceY);
+    void onGestureRightVerticalSlide(float percent, MotionEvent e1, MotionEvent e2, float distanceX, float distanceY);
+    void onGestureLeftVerticalSlide(float percent, MotionEvent e1, MotionEvent e2, float distanceX, float distanceY);
 
     void onGestureEnableChange(boolean enable);
     void onGestureEnd();

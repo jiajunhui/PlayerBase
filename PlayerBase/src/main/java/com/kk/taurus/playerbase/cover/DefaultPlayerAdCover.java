@@ -49,11 +49,11 @@ public class DefaultPlayerAdCover extends BaseAdCover {
     }
 
     @Override
-    public void onGestureSingleTab(MotionEvent event) {
-        super.onGestureSingleTab(event);
+    public boolean onGestureSingleTab(MotionEvent event) {
         if(onAdCoverClickListener!=null){
             onAdCoverClickListener.onAdCoverClick(adVideo);
         }
+        return false;
     }
 
     @Override

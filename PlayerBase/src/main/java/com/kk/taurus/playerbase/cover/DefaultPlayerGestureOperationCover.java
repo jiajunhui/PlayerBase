@@ -96,8 +96,13 @@ public class DefaultPlayerGestureOperationCover extends BaseGestureOperationCove
     }
 
     @Override
-    public void onGestureHorizontalSlide(float percent) {
-        super.onGestureHorizontalSlide(percent);
+    public boolean onGestureDown(MotionEvent event) {
+        return false;
+    }
+
+    @Override
+    public void onGestureHorizontalSlide(float percent,MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        super.onGestureHorizontalSlide(percent,e1, e2, distanceX, distanceY);
         if(!adListFinish)
             return;
         if(player==null)
@@ -126,8 +131,8 @@ public class DefaultPlayerGestureOperationCover extends BaseGestureOperationCove
     }
 
     @Override
-    public void onGestureLeftVerticalSlide(float percent) {
-        super.onGestureLeftVerticalSlide(percent);
+    public void onGestureLeftVerticalSlide(float percent,MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        super.onGestureLeftVerticalSlide(percent,e1, e2, distanceX, distanceY);
         Activity activity = getActivity();
         if(activity==null)
             return;
@@ -154,14 +159,9 @@ public class DefaultPlayerGestureOperationCover extends BaseGestureOperationCove
     }
 
     @Override
-    public void onGestureDown(MotionEvent event) {
-        super.onGestureDown(event);
+    public void onGestureRightVerticalSlide(float percent,MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        super.onGestureRightVerticalSlide(percent,e1, e2, distanceX, distanceY);
         volume = getVolume();
-    }
-
-    @Override
-    public void onGestureRightVerticalSlide(float percent) {
-        super.onGestureRightVerticalSlide(percent);
         int index = (int) (percent * mMaxVolume) + volume;
         if (index > mMaxVolume)
             index = mMaxVolume;

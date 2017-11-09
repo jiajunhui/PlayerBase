@@ -98,6 +98,11 @@ public abstract class BaseCoverObserver<T extends CoverData> implements CoverObs
     }
 
     @Override
+    public void onNotifyNetWorkChanged(int networkType) {
+
+    }
+
+    @Override
     public void onNotifyNetWorkError() {
 
     }

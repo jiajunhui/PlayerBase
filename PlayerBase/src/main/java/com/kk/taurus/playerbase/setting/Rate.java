@@ -27,6 +27,7 @@ public class Rate implements Serializable{
 
     private String rate_key;
     private String rate_value;
+    private String rate_data;
 
     public Rate() {
     }
@@ -70,4 +71,11 @@ public class Rate implements Serializable{
         return rate_value;
     }
 
+    public String getRate_data() {
+        return rate_data;
+    }
+
+    public void setRate_data(String rate_data) {
+        this.rate_data = rate_data;
+    }
 }

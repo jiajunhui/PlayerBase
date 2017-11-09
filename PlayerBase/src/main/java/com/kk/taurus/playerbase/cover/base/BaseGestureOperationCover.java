@@ -125,18 +125,23 @@ public abstract class BaseGestureOperationCover extends BaseCover implements IGe
     }
 
     @Override
-    public void onGestureHorizontalSlide(float percent) {
+    public void onGestureHorizontalSlide(float percent, MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
 
     }
 
     @Override
-    public void onGestureLeftVerticalSlide(float percent) {
+    public void onGestureLeftVerticalSlide(float percent, MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
 
     }
 
     @Override
-    public void onGestureRightVerticalSlide(float percent) {
+    public void onGestureRightVerticalSlide(float percent, MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
 
+    }
+
+    @Override
+    public boolean onGestureDown(MotionEvent event) {
+        return false;
     }
 
     @Override
@@ -145,23 +150,18 @@ public abstract class BaseGestureOperationCover extends BaseCover implements IGe
     }
 
     @Override
-    public void onGestureSingleTab(MotionEvent event) {
-
+    public boolean onGestureSingleTab(MotionEvent event) {
+        return false;
     }
 
     @Override
-    public void onGestureDoubleTab(MotionEvent event) {
-
+    public boolean onGestureDoubleTab(MotionEvent event) {
+        return false;
     }
 
     @Override
-    public void onGestureDown(MotionEvent event) {
-
-    }
-
-    @Override
-    public void onGestureScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-
+    public boolean onGestureScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        return false;
     }
 
     @Override

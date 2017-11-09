@@ -37,7 +37,10 @@ import com.kk.taurus.playerbase.inter.IDpadFocusCover;
 import com.kk.taurus.playerbase.inter.IEventReceiver;
 import com.kk.taurus.playerbase.setting.BaseAdVideo;
 import com.kk.taurus.playerbase.setting.VideoData;
+import com.kk.taurus.playerbase.utils.EventLog;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -50,7 +53,7 @@ import java.util.List;
 public abstract class BaseBindEventReceiver extends BaseContainer implements IEventReceiver, PlayerObserver,OnCoverEventListener{
 
     private BaseReceiverCollections receiverCollections;
-    private OnCoverEventListener mOnCoverEventListener;
+    private List<OnCoverEventListener> mCoverEventListenerList = new ArrayList<>();
 
     /**
      * 播放器事件观察者对cover的分发管理
@@ -113,20 +116,34 @@ public abstract class BaseBindEventReceiver extends BaseContainer implements IEv
     }
 
     public void setOnCoverEventListener(OnCoverEventListener onCoverEventListener){
-        this.mOnCoverEventListener = onCoverEventListener;
+        this.mCoverEventListenerList.add(onCoverEventListener);
+    }
+
+    public void removeCoverEventListener(OnCoverEventListener onCoverEventListener){
+        this.mCoverEventListenerList.remove(onCoverEventListener);
     }
 
     @Override
     public void onCoverEvent(int eventCode, Bundle bundle) {
-        if(mOnCoverEventListener!=null){
-            mOnCoverEventListener.onCoverEvent(eventCode, bundle);
-        }
+        callBackCoverEventListener(eventCode, bundle);
         if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
             for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
                 if(receiver!=null){
                     receiver.onCoverEvent(eventCode, bundle);
                 }
             }
+    }
+
+    private void callBackCoverEventListener(int eventCode, Bundle bundle){
+        if(mCoverEventListenerList==null)
+            return;
+        Iterator<OnCoverEventListener> iterator = mCoverEventListenerList.iterator();
+        while (iterator.hasNext()){
+            OnCoverEventListener onCoverEventListener = iterator.next();
+            if(onCoverEventListener!=null){
+                onCoverEventListener.onCoverEvent(eventCode, bundle);
+            }
+        }
     }
 
     /**
@@ -171,6 +188,7 @@ public abstract class BaseBindEventReceiver extends BaseContainer implements IEv
 
     @Override
     public void onNotifyPlayTimerCounter(int curr, int duration, int bufferPercentage) {
+        EventLog.onNotifyPlayTimerCounter(curr, duration, bufferPercentage);
         if(mPlayerObserverHandler!=null)
             mPlayerObserverHandler.onNotifyPlayTimerCounter(curr, duration, bufferPercentage);
     }
@@ -179,6 +197,12 @@ public abstract class BaseBindEventReceiver extends BaseContainer implements IEv
     public void onNotifyNetWorkConnected(int networkType) {
         if(mPlayerObserverHandler!=null)
             mPlayerObserverHandler.onNotifyNetWorkConnected(networkType);
+    }
+
+    @Override
+    public void onNotifyNetWorkChanged(int networkType) {
+        if(mPlayerObserverHandler!=null)
+            mPlayerObserverHandler.onNotifyNetWorkChanged(networkType);
     }
 
     @Override
@@ -208,52 +232,52 @@ public abstract class BaseBindEventReceiver extends BaseContainer implements IEv
     //gesture handle----------------
 
     @Override
-    public void onSingleTapUp(MotionEvent event) {
-        super.onSingleTapUp(event);
+    public boolean onSingleTapUp(MotionEvent event) {
         if(mGestureObserverHandler!=null)
-            mGestureObserverHandler.onGestureSingleTab(event);
+            return mGestureObserverHandler.onGestureSingleTab(event);
+        return false;
     }
 
     @Override
-    public void onDoubleTap(MotionEvent event) {
-        super.onDoubleTap(event);
+    public boolean onDoubleTap(MotionEvent event) {
         if(mGestureObserverHandler!=null)
-            mGestureObserverHandler.onGestureDoubleTab(event);
+            return mGestureObserverHandler.onGestureDoubleTab(event);
+        return false;
     }
 
     @Override
-    public void onDown(MotionEvent event) {
-        super.onDown(event);
+    public boolean onDown(MotionEvent event) {
         if(mGestureObserverHandler!=null)
-            mGestureObserverHandler.onGestureDown(event);
+            return mGestureObserverHandler.onGestureDown(event);
+        return false;
     }
 
     @Override
-    public void onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        super.onScroll(e1, e2, distanceX, distanceY);
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
         if(mGestureObserverHandler!=null)
-            mGestureObserverHandler.onGestureScroll(e1, e2, distanceX, distanceY);
+            return mGestureObserverHandler.onGestureScroll(e1, e2, distanceX, distanceY);
+        return false;
     }
 
     @Override
-    public void onHorizontalSlide(float percent) {
-        super.onHorizontalSlide(percent);
+    public void onHorizontalSlide(float percent, MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        super.onHorizontalSlide(percent,e1, e2, distanceX, distanceY);
         if(mGestureObserverHandler!=null)
-            mGestureObserverHandler.onGestureHorizontalSlide(percent);
+            mGestureObserverHandler.onGestureHorizontalSlide(percent,e1, e2, distanceX, distanceY);
     }
 
     @Override
-    public void onRightVerticalSlide(float percent) {
-        super.onRightVerticalSlide(percent);
+    public void onRightVerticalSlide(float percent, MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        super.onRightVerticalSlide(percent, e1, e2, distanceX, distanceY);
         if(mGestureObserverHandler!=null)
-            mGestureObserverHandler.onGestureRightVerticalSlide(percent);
+            mGestureObserverHandler.onGestureRightVerticalSlide(percent,e1, e2, distanceX, distanceY);
     }
 
     @Override
-    public void onLeftVerticalSlide(float percent) {
-        super.onLeftVerticalSlide(percent);
+    public void onLeftVerticalSlide(float percent, MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        super.onLeftVerticalSlide(percent, e1, e2, distanceX, distanceY);
         if(mGestureObserverHandler!=null)
-            mGestureObserverHandler.onGestureLeftVerticalSlide(percent);
+            mGestureObserverHandler.onGestureLeftVerticalSlide(percent,e1, e2, distanceX, distanceY);
     }
 
     @Override

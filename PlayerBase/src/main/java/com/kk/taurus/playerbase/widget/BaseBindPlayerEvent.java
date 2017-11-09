@@ -27,7 +27,9 @@ import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 
+import com.kk.taurus.playerbase.callback.OnErrorListener;
 import com.kk.taurus.playerbase.inter.IPlayer;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.callback.PlayerObserver;
@@ -58,6 +60,7 @@ public abstract class BaseBindPlayerEvent extends BaseBindEventReceiver implemen
     protected void initBaseInfo(Context context) {
         super.initBaseInfo(context);
         registerNetChangeReceiver();
+        mNetError = !CommonUtils.isNetworkConnected(context);
     }
 
     private void registerNetChangeReceiver() {
@@ -84,6 +87,9 @@ public abstract class BaseBindPlayerEvent extends BaseBindEventReceiver implemen
     }
 
     protected void onErrorEvent(int eventCode, Bundle bundle){
+        if(mNetError){
+            eventCode = OnErrorListener.ERROR_CODE_NET_ERROR;
+        }
         onNotifyErrorEvent(eventCode, bundle);
     }
 
@@ -104,10 +110,14 @@ public abstract class BaseBindPlayerEvent extends BaseBindEventReceiver implemen
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
+                Log.d("NetChangeReceiver","CONNECTIVITY_ACTION");
                 if(CommonUtils.isNetworkConnected(context)){
+                    int networkType = CommonUtils.isWifi(context)? PlayerObserver.NETWORK_TYPE_WIFI:PlayerObserver.NETWORK_TYPE_MOBILE;
                     if(mNetError){
                         mNetError = false;
-                        onNotifyNetWorkConnected(CommonUtils.isWifi(context)? PlayerObserver.NETWORK_TYPE_WIFI:PlayerObserver.NETWORK_TYPE_MOBILE);
+                        onNotifyNetWorkConnected(networkType);
+                    }else{
+                        onNotifyNetWorkChanged(networkType);
                     }
                 }else{
                     mNetError = true;

@@ -80,6 +80,16 @@ public abstract class BaseCover extends BasePlayerToolsReceiver implements ICove
         }else{
             mCoverView = initCoverLayout(context);
         }
+        mCoverView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(View v) {
+                onCoverViewAttachedToWindow(v);
+            }
+            @Override
+            public void onViewDetachedFromWindow(View v) {
+                onCoverViewDetachedFromWindow(v);
+            }
+        });
     }
 
     protected abstract void findView();
@@ -90,6 +100,14 @@ public abstract class BaseCover extends BasePlayerToolsReceiver implements ICove
 
     @Override
     public abstract View initCoverLayout(Context context);
+
+    protected void onCoverViewAttachedToWindow(View v){
+
+    }
+
+    protected void onCoverViewDetachedFromWindow(View v){
+
+    }
 
     public void setCoverEnable(boolean enable) {
         if(!enable){
@@ -104,10 +122,15 @@ public abstract class BaseCover extends BasePlayerToolsReceiver implements ICove
             return;
         if(mCoverView!=null){
             mCoverView.setVisibility(visibility);
+            onCoverVisibilityChange(visibility);
             if(coverObserver!=null){
                 coverObserver.onCoverVisibilityChange(getView(),visibility);
             }
         }
+    }
+
+    protected void onCoverVisibilityChange(int visibility){
+
     }
 
     public void onRefreshDataAdapter(BaseVideoDataAdapter dataAdapter){

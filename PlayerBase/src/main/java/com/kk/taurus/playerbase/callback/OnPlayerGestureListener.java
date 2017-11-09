@@ -27,15 +27,15 @@ public interface OnPlayerGestureListener {
      * on gesture single tap up
      * @param event
      */
-    void onSingleTapUp(MotionEvent event);
+    boolean onSingleTapUp(MotionEvent event);
 
     /**
      * on gesture double tap
      * @param event
      */
-    void onDoubleTap(MotionEvent event);
+    boolean onDoubleTap(MotionEvent event);
 
-    void onDown(MotionEvent event);
+    boolean onDown(MotionEvent event);
 
     /**
      * on scroll
@@ -44,25 +44,25 @@ public interface OnPlayerGestureListener {
      * @param distanceX
      * @param distanceY
      */
-    void onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY);
+    boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY);
 
     /**
      * on gesture horizontal slide
      * @param percent
      */
-    void onHorizontalSlide(float percent);
+    void onHorizontalSlide(float percent, MotionEvent e1, MotionEvent e2, float distanceX, float distanceY);
 
     /**
      * on gesture vertical slide on right side
      * @param percent
      */
-    void onRightVerticalSlide(float percent);
+    void onRightVerticalSlide(float percent, MotionEvent e1, MotionEvent e2, float distanceX, float distanceY);
 
     /**
      * on gesture vertical slide on left side
      * @param percent
      */
-    void onLeftVerticalSlide(float percent);
+    void onLeftVerticalSlide(float percent, MotionEvent e1, MotionEvent e2, float distanceX, float distanceY);
 
     void onEndGesture();
 }

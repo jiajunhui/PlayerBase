@@ -41,6 +41,15 @@ public class TimeUtil {
         return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
 
+    public static String getTimeMinSecond(long time){
+        if(time <= 0)
+            return "00:00";
+        int totalSeconds = (int) (time / 1000);
+        int seconds = totalSeconds % 60;
+        int minutes = totalSeconds / 60;
+        return String.format("%02d:%02d", minutes, seconds);
+    }
+
     public static String getNowTime(){
         SimpleDateFormat format = new SimpleDateFormat("HH:mm");
         return format.format(new Date());

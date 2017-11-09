@@ -37,6 +37,11 @@ public class GestureLayout extends FrameLayout implements View.OnTouchListener {
     private int mGestureW, mGestureH;
     private PlayerGestureDetectorListener mPlayerGestureDetectorListener;
 
+    public GestureLayout(Context context){
+        super(context);
+        init(context);
+    }
+
     public GestureLayout(@NonNull Context context, int gestureWidth, int gestureHeight) {
         super(context);
         mGestureW = gestureWidth;
@@ -50,6 +55,14 @@ public class GestureLayout extends FrameLayout implements View.OnTouchListener {
         setBackgroundColor(Color.TRANSPARENT);
         setClickable(true);
         setOnTouchListener(this);
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        mGestureW = w;
+        mGestureH = h;
+        mPlayerGestureDetectorListener.updateWH(w, h);
     }
 
     public void updateWH(int width, int height){

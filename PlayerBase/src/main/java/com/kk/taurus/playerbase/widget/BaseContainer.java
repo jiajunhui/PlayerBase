@@ -30,6 +30,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.kk.taurus.playerbase.cover.GestureCover;
 import com.kk.taurus.playerbase.view.GestureLayout;
 import com.kk.taurus.playerbase.callback.OnPlayerGestureListener;
 import com.kk.taurus.playerbase.cover.base.BaseCover;
@@ -114,10 +115,13 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
     }
 
     protected void initGesture(Context context){
-        mGestureLayout = new GestureLayout(context, mWidth, mHeight);
-        mGestureLayout.setPlayerGestureListener(this);
-        addView(mGestureLayout,new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+//        mGestureLayout = new GestureLayout(context, mWidth, mHeight);
+//        mGestureLayout.setPlayerGestureListener(this);
+//        addView(mGestureLayout,new ViewGroup.LayoutParams(
+//                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        GestureCover gestureCover = new GestureCover(context,this);
+        mGestureLayout = gestureCover.getGestureLayout();
+        addCover(gestureCover);
     }
 
     public void setGestureEnable(boolean enable){
@@ -205,37 +209,41 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
     }
 
     @Override
-    public void onSingleTapUp(MotionEvent event) {
+    public boolean onSingleTapUp(MotionEvent event) {
         Log.d(TAG,"onSingleTapUp...");
+        return false;
     }
 
     @Override
-    public void onDoubleTap(MotionEvent event) {
+    public boolean onDoubleTap(MotionEvent event) {
         Log.d(TAG,"onDoubleTap...");
+        return false;
     }
 
     @Override
-    public void onDown(MotionEvent event) {
+    public boolean onDown(MotionEvent event) {
         Log.d(TAG,"onDown...");
+        return false;
     }
 
     @Override
-    public void onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
         Log.d(TAG,"onScroll...");
+        return false;
     }
 
     @Override
-    public void onHorizontalSlide(float percent) {
+    public void onHorizontalSlide(float percent, MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
         Log.d(TAG,"onHorizontalSlide...");
     }
 
     @Override
-    public void onRightVerticalSlide(float percent) {
+    public void onRightVerticalSlide(float percent, MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
         Log.d(TAG,"onRightVerticalSlide...");
     }
 
     @Override
-    public void onLeftVerticalSlide(float percent) {
+    public void onLeftVerticalSlide(float percent, MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
         Log.d(TAG,"onLeftVerticalSlide...");
     }
 

@@ -33,71 +33,91 @@ public class GestureObserverHandler implements GestureObserver{
     }
 
     @Override
-    public void onGestureSingleTab(MotionEvent event) {
+    public boolean onGestureSingleTab(MotionEvent event) {
+        boolean result = false;
         if(mReceiverCollections!=null && mReceiverCollections.getReceivers()!=null)
             for(BaseEventReceiver receiver:mReceiverCollections.getReceivers()){
                 if(receiver instanceof GestureObserver){
-                    ((GestureObserver)receiver).onGestureSingleTab(event);
+                    result = ((GestureObserver)receiver).onGestureSingleTab(event);
+                    if(result){
+                        break;
+                    }
+                }
+            }
+        return result;
+    }
+
+    @Override
+    public boolean onGestureDoubleTab(MotionEvent event) {
+        boolean result = false;
+        if(mReceiverCollections!=null && mReceiverCollections.getReceivers()!=null)
+            for(BaseEventReceiver receiver:mReceiverCollections.getReceivers()){
+                if(receiver instanceof GestureObserver){
+                    result = ((GestureObserver)receiver).onGestureDoubleTab(event);
+                    if(result){
+                        break;
+                    }
+                }
+            }
+        return result;
+    }
+
+    @Override
+    public boolean onGestureDown(MotionEvent event) {
+        boolean result = false;
+        if(mReceiverCollections!=null && mReceiverCollections.getReceivers()!=null)
+            for(BaseEventReceiver receiver:mReceiverCollections.getReceivers()){
+                if(receiver instanceof GestureObserver){
+                    result = ((GestureObserver)receiver).onGestureDown(event);
+                    if(result){
+                        break;
+                    }
+                }
+            }
+        return result;
+    }
+
+    @Override
+    public boolean onGestureScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        boolean result = false;
+        if(mReceiverCollections!=null && mReceiverCollections.getReceivers()!=null)
+            for(BaseEventReceiver receiver:mReceiverCollections.getReceivers()){
+                if(receiver instanceof GestureObserver){
+                    result = ((GestureObserver)receiver).onGestureScroll(e1, e2, distanceX, distanceY);
+                    if(result){
+                        break;
+                    }
+                }
+            }
+        return result;
+    }
+
+    @Override
+    public void onGestureHorizontalSlide(float percent, MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        if(mReceiverCollections!=null && mReceiverCollections.getReceivers()!=null)
+            for(BaseEventReceiver receiver:mReceiverCollections.getReceivers()){
+                if(receiver instanceof GestureObserver){
+                    ((GestureObserver)receiver).onGestureHorizontalSlide(percent,e1, e2, distanceX, distanceY);
                 }
             }
     }
 
     @Override
-    public void onGestureDoubleTab(MotionEvent event) {
+    public void onGestureRightVerticalSlide(float percent, MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
         if(mReceiverCollections!=null && mReceiverCollections.getReceivers()!=null)
             for(BaseEventReceiver receiver:mReceiverCollections.getReceivers()){
                 if(receiver instanceof GestureObserver){
-                    ((GestureObserver)receiver).onGestureDoubleTab(event);
+                    ((GestureObserver)receiver).onGestureRightVerticalSlide(percent,e1, e2, distanceX, distanceY);
                 }
             }
     }
 
     @Override
-    public void onGestureDown(MotionEvent event) {
+    public void onGestureLeftVerticalSlide(float percent, MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
         if(mReceiverCollections!=null && mReceiverCollections.getReceivers()!=null)
             for(BaseEventReceiver receiver:mReceiverCollections.getReceivers()){
                 if(receiver instanceof GestureObserver){
-                    ((GestureObserver)receiver).onGestureDown(event);
-                }
-            }
-    }
-
-    @Override
-    public void onGestureScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        if(mReceiverCollections!=null && mReceiverCollections.getReceivers()!=null)
-            for(BaseEventReceiver receiver:mReceiverCollections.getReceivers()){
-                if(receiver instanceof GestureObserver){
-                    ((GestureObserver)receiver).onGestureScroll(e1, e2, distanceX, distanceY);
-                }
-            }
-    }
-
-    @Override
-    public void onGestureHorizontalSlide(float percent) {
-        if(mReceiverCollections!=null && mReceiverCollections.getReceivers()!=null)
-            for(BaseEventReceiver receiver:mReceiverCollections.getReceivers()){
-                if(receiver instanceof GestureObserver){
-                    ((GestureObserver)receiver).onGestureHorizontalSlide(percent);
-                }
-            }
-    }
-
-    @Override
-    public void onGestureRightVerticalSlide(float percent) {
-        if(mReceiverCollections!=null && mReceiverCollections.getReceivers()!=null)
-            for(BaseEventReceiver receiver:mReceiverCollections.getReceivers()){
-                if(receiver instanceof GestureObserver){
-                    ((GestureObserver)receiver).onGestureRightVerticalSlide(percent);
-                }
-            }
-    }
-
-    @Override
-    public void onGestureLeftVerticalSlide(float percent) {
-        if(mReceiverCollections!=null && mReceiverCollections.getReceivers()!=null)
-            for(BaseEventReceiver receiver:mReceiverCollections.getReceivers()){
-                if(receiver instanceof GestureObserver){
-                    ((GestureObserver)receiver).onGestureLeftVerticalSlide(percent);
+                    ((GestureObserver)receiver).onGestureLeftVerticalSlide(percent,e1, e2, distanceX, distanceY);
                 }
             }
     }

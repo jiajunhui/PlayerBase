@@ -20,6 +20,7 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -31,8 +32,8 @@ import com.kk.taurus.playerbase.callback.OnErrorListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.setting.Rate;
 import com.kk.taurus.playerbase.setting.VideoData;
-import com.kk.taurus.playerbase.widget.BaseSinglePlayer;
 import com.kk.taurus.playerbase.view.MSurfaceView;
+import com.kk.taurus.playerbase.widget.BaseSinglePlayer;
 
 import java.io.File;
 import java.util.HashMap;
@@ -65,7 +66,7 @@ public class DefaultSinglePlayer extends BaseSinglePlayer implements MSurfaceVie
             if(mMediaPlayer==null){
                 mMediaPlayer = createMediaPlayer();
             }else{
-                reset();
+//                reset();
                 resetListener();
             }
             openVideo(data);
@@ -100,12 +101,24 @@ public class DefaultSinglePlayer extends BaseSinglePlayer implements MSurfaceVie
             } else {
                 mMediaPlayer.setDataSource(mUri.toString());
             }
+
+            if(useDefaultRender){
+                attachSurfaceView();
+            }
+
             mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mMediaPlayer.setScreenOnWhilePlaying(true);
             mMediaPlayer.prepareAsync();
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    private void attachSurfaceView(){
+        MSurfaceView surfaceView = new MSurfaceView(getContext(),this);
+        mRenderContainer.removeAllViews();
+        mRenderContainer.addView(surfaceView,
+                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
     }
 
     private boolean available(){
@@ -254,9 +267,7 @@ public class DefaultSinglePlayer extends BaseSinglePlayer implements MSurfaceVie
     @Override
     public View getPlayerView(Context context) {
         mRenderContainer = new FrameLayout(context);
-        MSurfaceView surfaceView = new MSurfaceView(context,this);
-        mRenderContainer.addView(surfaceView,
-                new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        mMediaPlayer = createMediaPlayer();
         return mRenderContainer;
     }
 
@@ -408,7 +419,9 @@ public class DefaultSinglePlayer extends BaseSinglePlayer implements MSurfaceVie
                     }
 
                     /* If an error handler has been supplied, use it and finish. */
-                    onErrorEvent(OnErrorListener.ERROR_CODE_COMMON,null);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(OnErrorListener.KEY_EXTRA,framework_err);
+                    onErrorEvent(OnErrorListener.ERROR_CODE_COMMON,bundle);
                     return true;
                 }
             };

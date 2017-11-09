@@ -3,6 +3,7 @@ package com.taurus.playerbaselibrary.ui.fragment;
 import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.jiajunhui.xapp.medialoader.bean.VideoItem;
 import com.jiajunhui.xapp.medialoader.callback.OnVideoLoaderCallBack;
@@ -44,6 +45,11 @@ public class LocalVideoFragment extends StateFragment<VideosInfo,LocalVideoHolde
     }
 
     @Override
+    public void initData(Bundle savedInstanceState) {
+        super.initData(savedInstanceState);
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions,
                                            int[] grantResults) {
         PermissionGen.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
@@ -59,6 +65,12 @@ public class LocalVideoFragment extends StateFragment<VideosInfo,LocalVideoHolde
                 mContentHolder.setOnLocalVideoListener(LocalVideoFragment.this);
                 setData(videosInfo);
                 setPageState(PageState.success());
+
+//                Intent intent = new Intent(getApplicationContext(),PlayerActivity.class);
+//                VideoItem item = new VideoItem();
+//                item.setPath("http://vfx.mtime.cn/Video/2015/03/13/mp4/150313150746828551.mp4");
+//                intent.putExtra("data",item);
+//                startActivity(intent);
             }
         });
     }

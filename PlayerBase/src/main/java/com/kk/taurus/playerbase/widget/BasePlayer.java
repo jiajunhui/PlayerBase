@@ -62,6 +62,15 @@ public abstract class BasePlayer extends BaseAdPlayer {
         onBindPlayer(this,this);
     }
 
+    /**
+     * send some event by player,all receivers can receive this event.
+     * @param eventCode
+     * @param bundle
+     */
+    public void sendEvent(int eventCode, Bundle bundle){
+        onPlayerEvent(eventCode, bundle);
+    }
+
     private boolean available(){
         return mInternalPlayer !=null;
     }
@@ -118,10 +127,10 @@ public abstract class BasePlayer extends BaseAdPlayer {
     @Override
     public void resume() {
         if(available()){
-            mInternalPlayer.resume();
             Bundle bundle = new Bundle();
             bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_POSITION,getCurrentPosition());
             onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAY_RESUME,bundle);
+            mInternalPlayer.resume();
         }
     }
 

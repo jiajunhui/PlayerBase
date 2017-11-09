@@ -31,9 +31,14 @@ import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.config.ConfigLoader;
 import com.kk.taurus.playerbase.cover.container.DefaultLevelCoverContainer;
 import com.kk.taurus.playerbase.inter.ICoverContainer;
-import com.kk.taurus.playerbase.setting.PlayerType;
+import com.kk.taurus.playerbase.inter.IDataProvider;
+import com.kk.taurus.playerbase.setting.Rate;
+import com.kk.taurus.playerbase.setting.VideoData;
 import com.kk.taurus.playerbase.widget.BasePlayer;
 import com.kk.taurus.playerbase.widget.BaseSinglePlayer;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
  *
@@ -41,9 +46,13 @@ import com.kk.taurus.playerbase.widget.BaseSinglePlayer;
  *
  */
 
-public class DefaultPlayer extends BasePlayer {
+public class DefaultPlayer extends BasePlayer implements IDataProvider.OnProviderListener {
 
     private final String TAG = "DefaultPlayer";
+
+    private IDataProvider mDataProvider;
+    protected List<Rate> mRateList;
+    protected VideoData mProviderData;
 
     public DefaultPlayer(@NonNull Context context) {
         super(context);
@@ -58,11 +67,78 @@ public class DefaultPlayer extends BasePlayer {
     }
 
     @Override
+    public void setDataSource(VideoData data) {
+        if(mDataProvider!=null){
+            dataSource = null;
+            mProviderData = data;
+            mDataProvider.handleSourceData(data);
+            return;
+        }
+        super.setDataSource(data);
+    }
+
+    public void setDataProvider(IDataProvider dataProvider){
+        this.mDataProvider = dataProvider;
+        this.mDataProvider.bindPlayer(this);
+        this.mDataProvider.setOnProviderListener(this);
+    }
+
+    @Override
+    public void onProvideDataSource(VideoData data) {
+        super.setDataSource(data);
+    }
+
+    @Override
+    public void onProvideDefinitionList(List<Rate> rates) {
+        this.mRateList = rates;
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(OnPlayerEventListener.BUNDLE_KEY_RATE_DATA, (Serializable) rates);
+        sendEvent(OnPlayerEventListener.EVENT_CODE_ON_DEFINITION_LIST_READY,bundle);
+    }
+
+    @Override
+    public void onProvideError(int type, String message) {
+        Bundle bundle = new Bundle();
+        bundle.putInt(OnErrorListener.KEY_EXTRA,type);
+        bundle.putString(OnErrorListener.KEY_MESSAGE,message);
+        onErrorEvent(OnErrorListener.ERROR_CODE_COMMON,bundle);
+    }
+
+    @Override
+    public List<Rate> getVideoDefinitions() {
+        if(mDataProvider!=null && mRateList!=null){
+            return mRateList;
+        }
+        return super.getVideoDefinitions();
+    }
+
+    @Override
+    public Rate getCurrentDefinition() {
+        if(dataSource!=null){
+            Rate rate = dataSource.getRate();
+            return rate;
+        }
+        return super.getCurrentDefinition();
+    }
+
+    @Override
+    public void rePlay(int msc) {
+        if(mProviderData==null){
+            //当provider未取到数据时的重试
+            stop();
+            setDataSource(mProviderData);
+            start(msc);
+        }else{
+            super.rePlay(msc);
+        }
+    }
+
+    @Override
     protected View getPlayerWidget(Context context) {
         destroyInternalPlayer();
-        Log.d(TAG,"init player : " + PlayerType.getInstance().getPlayerPath(getPlayerType()));
         mInternalPlayer = (BaseSinglePlayer) ConfigLoader.getPlayerInstance(mAppContext,getPlayerType());
         if(mInternalPlayer !=null){
+            Log.d(TAG,"init player : " + mInternalPlayer.getClass().getName());
             mInternalPlayer.setDecodeMode(getDecodeMode());
             mInternalPlayer.setAspectRatio(getAspectRatio());
             mInternalPlayer.setOnErrorListener(new OnErrorListener() {
@@ -77,6 +153,16 @@ public class DefaultPlayer extends BasePlayer {
                     DefaultPlayer.this.onPlayerEvent(eventCode,bundle);
                 }
             });
+            mInternalPlayer.addOnAttachStateChangeListener(new OnAttachStateChangeListener() {
+                @Override
+                public void onViewAttachedToWindow(View v) {
+                    onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_PLAYER_PREPARING,null);
+                }
+                @Override
+                public void onViewDetachedFromWindow(View v) {
+
+                }
+            });
         }else{
             return new FrameLayout(mAppContext);
         }
@@ -87,4 +173,5 @@ public class DefaultPlayer extends BasePlayer {
     protected ICoverContainer getCoverContainer(Context context) {
         return new DefaultLevelCoverContainer(context);
     }
+
 }

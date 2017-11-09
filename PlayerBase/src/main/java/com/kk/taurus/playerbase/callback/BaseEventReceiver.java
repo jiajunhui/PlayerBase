@@ -53,6 +53,8 @@ public abstract class BaseEventReceiver implements IEventReceiver, PlayerObserve
     private OnCoverEventListener onCoverEventListener;
     protected boolean adListFinish = true;
     protected boolean isNetError = false;
+    protected boolean isOccurError = false;
+    protected boolean isWifi;
     private Bundle mBundle;
 
     protected Handler mHandler = new Handler(){
@@ -152,7 +154,11 @@ public abstract class BaseEventReceiver implements IEventReceiver, PlayerObserve
 
     @Override
     public void onNotifyPlayEvent(int eventCode, Bundle bundle) {
-
+        switch (eventCode){
+            case OnPlayerEventListener.EVENT_CODE_RENDER_START:
+                isOccurError = false;
+                break;
+        }
     }
 
     protected void notifyCoverEvent(int eventCode, Bundle bundle){
@@ -168,7 +174,7 @@ public abstract class BaseEventReceiver implements IEventReceiver, PlayerObserve
 
     @Override
     public void onNotifyErrorEvent(int eventCode, Bundle bundle) {
-
+        isOccurError = true;
     }
 
     @Override
@@ -178,7 +184,13 @@ public abstract class BaseEventReceiver implements IEventReceiver, PlayerObserve
 
     @Override
     public void onNotifyNetWorkConnected(int networkType) {
+        isWifi = (networkType==PlayerObserver.NETWORK_TYPE_WIFI);
         isNetError = false;
+    }
+
+    @Override
+    public void onNotifyNetWorkChanged(int networkType) {
+        isWifi = (networkType==PlayerObserver.NETWORK_TYPE_WIFI);
     }
 
     @Override

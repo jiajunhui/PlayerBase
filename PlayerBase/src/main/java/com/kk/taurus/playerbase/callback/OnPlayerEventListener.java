@@ -22,6 +22,7 @@ import android.os.Bundle;
  * Created by Taurus on 2016/8/30.
  */
 public interface OnPlayerEventListener {
+    int EVENT_CODE_ON_PLAYER_PREPARING = 90041000;
     /** when player ready to start*/
     int EVENT_CODE_ON_INTENT_TO_START = 90041001;
     /** when player prepared*/
@@ -64,7 +65,10 @@ public interface OnPlayerEventListener {
 
     int EVENT_CODE_PLAYER_FULL_SCREEN = 90041020;
     int EVENT_CODE_PLAYER_QUIT_FULL_SCREEN = 90041021;
+
     int EVENT_CODE_PLAYER_DPAD_REQUEST_FOCUS = 90041022;
+
+    int EVENT_CODE_ON_DEFINITION_LIST_READY = 90041023;
 
 
     String BUNDLE_KEY_POSITION = "position";

@@ -38,6 +38,10 @@ import com.kk.taurus.playerbase.setting.PlayerType;
 import com.kk.taurus.playerbase.setting.Rate;
 import com.kk.taurus.playerbase.setting.VideoData;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 /**
  * Created by Taurus on 2017/3/25.
  */
@@ -53,8 +57,8 @@ public abstract class BaseSettingPlayer extends BaseBindPlayerEvent {
     private DecodeMode mDecodeMode = DecodeMode.SOFT;
     private AspectRatio aspectRatio = AspectRatio.AspectRatio_FILL_PARENT;
 
-    private OnPlayerEventListener mOnPlayerEventListener;
-    private OnErrorListener mOnErrorListener;
+    private List<OnPlayerEventListener> mPlayerEventListenerList = new ArrayList<>();
+    private List<OnErrorListener> mErrorEventListenerList = new ArrayList<>();
 
     private Handler mHandler = new Handler(){
         @Override
@@ -67,7 +71,6 @@ public abstract class BaseSettingPlayer extends BaseBindPlayerEvent {
                     int bufferPercentage = getBufferPercentage();
                     int bufferPos = bufferPercentage*duration/100;
                     onNotifyPlayTimerCounter(curr,duration,bufferPos);
-                    Log.d(TAG,"notifyTimerCounter : curr = " + curr + " duration = " + duration + " bufferPos = " + bufferPos);
                     if(duration > 0 && curr >=0){
                         sendPlayMsg();
                     }else{
@@ -110,8 +113,18 @@ public abstract class BaseSettingPlayer extends BaseBindPlayerEvent {
     protected void onPlayerEvent(int eventCode, Bundle bundle){
         onHandleStatus(eventCode,bundle);
         super.onPlayerEvent(eventCode, bundle);
-        if(mOnPlayerEventListener!=null){
-            mOnPlayerEventListener.onPlayerEvent(eventCode, bundle);
+        callBackPlayerEventListener(eventCode, bundle);
+    }
+
+    private void callBackPlayerEventListener(int eventCode, Bundle bundle){
+        if(mPlayerEventListenerList==null)
+            return;
+        Iterator<OnPlayerEventListener> iterator = mPlayerEventListenerList.iterator();
+        while (iterator.hasNext()){
+            OnPlayerEventListener onPlayerEventListener = iterator.next();
+            if(onPlayerEventListener!=null){
+                onPlayerEventListener.onPlayerEvent(eventCode, bundle);
+            }
         }
     }
 
@@ -161,8 +174,18 @@ public abstract class BaseSettingPlayer extends BaseBindPlayerEvent {
     protected void onErrorEvent(int eventCode, Bundle bundle){
         onHandleErrorStatus(eventCode, bundle);
         super.onErrorEvent(eventCode, bundle);
-        if(mOnErrorListener!=null){
-            mOnErrorListener.onError(eventCode,bundle);
+        callBackErrorEventListener(eventCode, bundle);
+    }
+
+    private void callBackErrorEventListener(int eventCode, Bundle bundle) {
+        if(mErrorEventListenerList==null)
+            return;
+        Iterator<OnErrorListener> iterator = mErrorEventListenerList.iterator();
+        while (iterator.hasNext()){
+            OnErrorListener onErrorListener = iterator.next();
+            if(onErrorListener!=null){
+                onErrorListener.onError(eventCode,bundle);
+            }
         }
     }
 
@@ -175,11 +198,24 @@ public abstract class BaseSettingPlayer extends BaseBindPlayerEvent {
     }
 
     public void setOnPlayerEventListener(OnPlayerEventListener onPlayerEventListener) {
-        this.mOnPlayerEventListener = onPlayerEventListener;
+        this.mPlayerEventListenerList.add(onPlayerEventListener);
     }
 
     public void setOnErrorListener(OnErrorListener onErrorListener) {
-        this.mOnErrorListener = onErrorListener;
+        this.mErrorEventListenerList.add(onErrorListener);
+    }
+
+    public void removePlayerEventListener(OnPlayerEventListener onPlayerEventListener){
+        mPlayerEventListenerList.remove(onPlayerEventListener);
+    }
+
+    public void removeErrorEventListener(OnErrorListener onErrorListener){
+        mErrorEventListenerList.remove(onErrorListener);
+    }
+
+    private void clearEventListener(){
+        mPlayerEventListenerList.clear();
+        mErrorEventListenerList.clear();
     }
 
     public void setDecodeMode(DecodeMode decodeMode) {
@@ -234,5 +270,6 @@ public abstract class BaseSettingPlayer extends BaseBindPlayerEvent {
     public void destroy() {
         super.destroy();
         removePlayMsg();
+        clearEventListener();
     }
 }

@@ -52,7 +52,7 @@ public class PlayerGestureDetectorListener extends GestureDetector.SimpleOnGestu
     @Override
     public boolean onSingleTapUp(MotionEvent e) {
         if(mOnPlayerGestureListener!=null){
-            mOnPlayerGestureListener.onSingleTapUp(e);
+            return mOnPlayerGestureListener.onSingleTapUp(e);
         }
         return super.onSingleTapUp(e);
     }
@@ -60,7 +60,7 @@ public class PlayerGestureDetectorListener extends GestureDetector.SimpleOnGestu
     @Override
     public boolean onDoubleTap(MotionEvent e) {
         if(mOnPlayerGestureListener!=null){
-            mOnPlayerGestureListener.onDoubleTap(e);
+            return mOnPlayerGestureListener.onDoubleTap(e);
         }
         return super.onDoubleTap(e);
     }
@@ -69,16 +69,13 @@ public class PlayerGestureDetectorListener extends GestureDetector.SimpleOnGestu
     public boolean onDown(MotionEvent e) {
         firstTouch = true;
         if(mOnPlayerGestureListener!=null){
-            mOnPlayerGestureListener.onDown(e);
+            return mOnPlayerGestureListener.onDown(e);
         }
         return super.onDown(e);
     }
 
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        if(mOnPlayerGestureListener!=null){
-            mOnPlayerGestureListener.onScroll(e1, e2, distanceX, distanceY);
-        }
         float mOldX = e1.getX(), mOldY = e1.getY();
         float deltaY = mOldY - e2.getY();
         float deltaX = mOldX - e2.getX();
@@ -90,20 +87,23 @@ public class PlayerGestureDetectorListener extends GestureDetector.SimpleOnGestu
 
         if(horizontalSlide){
             if(mOnPlayerGestureListener!=null){
-                mOnPlayerGestureListener.onHorizontalSlide(-deltaX / mWidth);
+                mOnPlayerGestureListener.onHorizontalSlide(-deltaX / mWidth ,e1, e2, distanceX, distanceY);
             }
         }else{
             if(Math.abs(deltaY) > mHeight)
                 return super.onScroll(e1, e2, distanceX, distanceY);
             if(rightVerticalSlide){
                 if(mOnPlayerGestureListener!=null){
-                    mOnPlayerGestureListener.onRightVerticalSlide(deltaY / mHeight);
+                    mOnPlayerGestureListener.onRightVerticalSlide(deltaY / mHeight, e1, e2, distanceX, distanceY);
                 }
             }else{
                 if(mOnPlayerGestureListener!=null){
-                    mOnPlayerGestureListener.onLeftVerticalSlide(deltaY / mHeight);
+                    mOnPlayerGestureListener.onLeftVerticalSlide(deltaY / mHeight, e1, e2, distanceX, distanceY);
                 }
             }
+        }
+        if(mOnPlayerGestureListener!=null){
+            return mOnPlayerGestureListener.onScroll(e1, e2, distanceX, distanceY);
         }
         return super.onScroll(e1, e2, distanceX, distanceY);
     }
