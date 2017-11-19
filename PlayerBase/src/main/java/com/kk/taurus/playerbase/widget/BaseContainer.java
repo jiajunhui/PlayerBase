@@ -16,7 +16,6 @@
 
 package com.kk.taurus.playerbase.widget;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
@@ -91,8 +90,6 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
     }
 
     private void initContainer(Context context) {
-        if(!(context instanceof Activity))
-            throw new IllegalArgumentException("please set activity context !");
         this.mAppContext = context;
         setBackgroundColor(Color.TRANSPARENT);
         initBaseInfo(context);

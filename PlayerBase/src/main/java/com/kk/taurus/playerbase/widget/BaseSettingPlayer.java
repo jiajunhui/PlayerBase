@@ -16,9 +16,7 @@
 
 package com.kk.taurus.playerbase.widget;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -215,11 +213,11 @@ public abstract class BaseSettingPlayer extends BaseBindEventReceiver implements
          * */
         int code = landscape?OnPlayerEventListener.EVENT_CODE_ON_INTENT_SET_SCREEN_ORIENTATION_LANDSCAPE:OnPlayerEventListener.EVENT_CODE_ON_INTENT_SET_SCREEN_ORIENTATION_PORTRAIT;
         onPlayerEvent(code,null);
-        try {
-            ((Activity)mAppContext).setRequestedOrientation(landscape? ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE:ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+//        try {
+//            ((Activity)mAppContext).setRequestedOrientation(landscape? ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE:ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
     }
 
     public boolean isLandscape() {
