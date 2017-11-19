@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="com.kk.taurus.filebase:FileBase-1.1.3">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.android/build-cache/36eaf87f893c9068fdf6de8c78d9128edb09b61b/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/36eaf87f893c9068fdf6de8c78d9128edb09b61b/output/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.kk.taurus.filebase/FileBase/1.1.3/5446963f60508817651993f2abfa58478df26d5a/FileBase-1.1.3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -9,13 +9,11 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.jiajunhui.xapp.medialoader.bean.VideoItem;
 import com.kk.taurus.baseframe.ui.activity.ToolsActivity;
 import com.kk.taurus.filebase.engine.FileEngine;
 import com.kk.taurus.playerbase.DefaultPlayer;
-import com.kk.taurus.playerbase.callback.OnAdCallBack;
 import com.kk.taurus.playerbase.callback.OnAdCoverClickListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.cover.DefaultReceiverCollections;
@@ -26,7 +24,6 @@ import com.kk.taurus.playerbase.setting.BaseAdVideo;
 import com.kk.taurus.playerbase.setting.PlayData;
 import com.kk.taurus.playerbase.setting.VideoData;
 import com.kk.taurus.playerbase.setting.ViewType;
-import com.kk.taurus.playerbase.widget.BaseAdPlayer;
 import com.kk.taurus.playerbase.widget.BasePlayer;
 import com.taurus.playerbaselibrary.R;
 import com.taurus.playerbaselibrary.callback.OnCompleteCallBack;
@@ -149,24 +146,6 @@ public class PlayerActivity extends ToolsActivity implements OnPlayerEventListen
                 showToast("click : " + adVideo.getData());
             }
         });
-
-        mPlayer.playData(playData,new OnAdCallBack(){
-            @Override
-            public void onAdPlay(BaseAdPlayer adPlayer, BaseAdVideo adVideo) {
-                super.onAdPlay(adPlayer, adVideo);
-            }
-
-            @Override
-            public void onAdPlayComplete(BaseAdVideo adVideo, boolean isAllComplete) {
-                Toast.makeText(PlayerActivity.this, adVideo.getData(), Toast.LENGTH_SHORT).show();
-                super.onAdPlayComplete(adVideo, isAllComplete);
-            }
-
-            @Override
-            public void onVideoStart(BaseAdPlayer adPlayer,VideoData data) {
-                super.onVideoStart(adPlayer,data);
-            }
-        });
     }
 
     @Override
@@ -197,7 +176,7 @@ public class PlayerActivity extends ToolsActivity implements OnPlayerEventListen
     protected void onDestroy() {
         super.onDestroy();
         if(mPlayer!=null){
-            mPlayer.destroy();
+            mPlayer.destroy(true);
         }
         mHandler.removeMessages(0);
     }

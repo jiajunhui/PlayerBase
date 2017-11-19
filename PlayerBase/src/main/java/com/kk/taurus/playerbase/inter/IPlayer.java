@@ -16,18 +16,23 @@
 
 package com.kk.taurus.playerbase.inter;
 
-import android.content.res.Configuration;
+import android.view.View;
 
-import com.kk.taurus.playerbase.callback.OnAdListener;
-import com.kk.taurus.playerbase.setting.PlayData;
+import com.kk.taurus.playerbase.setting.AspectRatio;
+import com.kk.taurus.playerbase.setting.ViewType;
+import com.kk.taurus.playerbase.widget.plan.IDecoder;
 
 /**
  * Created by Taurus on 2016/8/29.
  */
-public interface IPlayer extends ISinglePlayer{
-    void playData(PlayData data, OnAdListener onAdListener);
-    boolean isAdListFinish();
-    void doConfigChange(Configuration newConfig);
-    void setScreenOrientationLandscape(boolean landscape);
-    boolean isLandscape();
+public interface IPlayer extends IDecoder{
+
+    int WIDGET_MODE_VIDEO_VIEW = 2;
+    int WIDGET_MODE_DECODER = 4;
+
+    void setDataProvider(IDataProvider dataProvider);
+    void updatePlayerType(int type);
+    void setViewType(ViewType viewType);
+    void setAspectRatio(AspectRatio aspectRatio);
+    View getRenderView();
 }

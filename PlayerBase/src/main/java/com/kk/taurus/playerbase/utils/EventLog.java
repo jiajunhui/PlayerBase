@@ -1,3 +1,19 @@
+/*
+ * Copyright 2017 jiajunhui<junhui_jia@163.com>
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package com.kk.taurus.playerbase.utils;
 
 import android.os.Bundle;
@@ -107,8 +123,29 @@ public class EventLog {
             case OnPlayerEventListener.EVENT_CODE_ON_DEFINITION_LIST_READY:
                 Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_DEFINITION_LIST_READY");
                 break;
-            default:
-                Log.d(TAG_PLAYER_EVENT,String.valueOf(eventCode));
+            case OnPlayerEventListener.EVENT_CODE_ON_INTENT_SET_SCREEN_ORIENTATION_PORTRAIT:
+                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_INTENT_SET_SCREEN_ORIENTATION_PORTRAIT");
+                break;
+            case OnPlayerEventListener.EVENT_CODE_ON_INTENT_SET_SCREEN_ORIENTATION_LANDSCAPE:
+                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_INTENT_SET_SCREEN_ORIENTATION_LANDSCAPE");
+                break;
+            case OnPlayerEventListener.EVENT_CODE_ON_RECEIVER_COLLECTIONS_NEW_BIND:
+                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_RECEIVER_COLLECTIONS_NEW_BIND");
+                break;
+            case OnPlayerEventListener.EVENT_CODE_ON_SURFACE_HOLDER_UPDATE:
+                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_SURFACE_HOLDER_UPDATE");
+                break;
+            case OnPlayerEventListener.EVENT_CODE_ON_NETWORK_ERROR:
+                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_NETWORK_ERROR");
+                break;
+            case OnPlayerEventListener.EVENT_CODE_ON_NETWORK_CHANGE:
+                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_NETWORK_CHANGE");
+                break;
+            case OnPlayerEventListener.EVENT_CODE_ON_NETWORK_CONNECTED:
+                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_NETWORK_CONNECTED");
+                break;
+            case OnPlayerEventListener.EVENT_CODE_PLAYER_CONTAINER_ON_DESTROY:
+                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_PLAYER_CONTAINER_ON_DESTROY");
                 break;
         }
     }

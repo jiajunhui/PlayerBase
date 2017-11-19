@@ -42,6 +42,7 @@ public abstract class BasePlayerToolsReceiver extends BaseEventReceiver implemen
         super.onNotifyPlayEvent(eventCode, bundle);
         switch (eventCode){
             case OnPlayerEventListener.EVENT_CODE_PLAYER_ON_DESTROY:
+            case OnPlayerEventListener.EVENT_CODE_PLAYER_CONTAINER_ON_DESTROY:
                 onDestroy();
                 player = null;
                 break;

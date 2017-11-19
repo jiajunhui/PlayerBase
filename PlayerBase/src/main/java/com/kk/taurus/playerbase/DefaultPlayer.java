@@ -18,27 +18,15 @@ package com.kk.taurus.playerbase;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.AttrRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
-import android.widget.FrameLayout;
 
-import com.kk.taurus.playerbase.callback.OnErrorListener;
-import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
-import com.kk.taurus.playerbase.config.ConfigLoader;
 import com.kk.taurus.playerbase.cover.container.DefaultLevelCoverContainer;
 import com.kk.taurus.playerbase.inter.ICoverContainer;
-import com.kk.taurus.playerbase.inter.IDataProvider;
-import com.kk.taurus.playerbase.setting.Rate;
-import com.kk.taurus.playerbase.setting.VideoData;
+import com.kk.taurus.playerbase.setting.BaseExtendEventBox;
+import com.kk.taurus.playerbase.setting.InternalPlayerManager;
 import com.kk.taurus.playerbase.widget.BasePlayer;
-import com.kk.taurus.playerbase.widget.BaseSinglePlayer;
-
-import java.io.Serializable;
-import java.util.List;
+import com.kk.taurus.playerbase.widget.plan.IEventBinder;
 
 /**
  *
@@ -46,127 +34,30 @@ import java.util.List;
  *
  */
 
-public class DefaultPlayer extends BasePlayer implements IDataProvider.OnProviderListener {
+public class DefaultPlayer extends BasePlayer implements IEventBinder, InternalPlayerManager.OnInternalPlayerListener {
 
     private final String TAG = "DefaultPlayer";
+    private BaseExtendEventBox extendEventBox;
 
-    private IDataProvider mDataProvider;
-    protected List<Rate> mRateList;
-    protected VideoData mProviderData;
-
-    public DefaultPlayer(@NonNull Context context) {
+    public DefaultPlayer(Context context) {
         super(context);
     }
 
-    public DefaultPlayer(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public DefaultPlayer(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public DefaultPlayer(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-    }
-
     @Override
-    public void setDataSource(VideoData data) {
-        if(mDataProvider!=null){
-            dataSource = null;
-            mProviderData = data;
-            mDataProvider.handleSourceData(data);
-            return;
-        }
-        super.setDataSource(data);
-    }
-
-    public void setDataProvider(IDataProvider dataProvider){
-        this.mDataProvider = dataProvider;
-        this.mDataProvider.bindPlayer(this);
-        this.mDataProvider.setOnProviderListener(this);
-    }
-
-    @Override
-    public void onProvideDataSource(VideoData data) {
-        super.setDataSource(data);
-    }
-
-    @Override
-    public void onProvideDefinitionList(List<Rate> rates) {
-        this.mRateList = rates;
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(OnPlayerEventListener.BUNDLE_KEY_RATE_DATA, (Serializable) rates);
-        sendEvent(OnPlayerEventListener.EVENT_CODE_ON_DEFINITION_LIST_READY,bundle);
-    }
-
-    @Override
-    public void onProvideError(int type, String message) {
-        Bundle bundle = new Bundle();
-        bundle.putInt(OnErrorListener.KEY_EXTRA,type);
-        bundle.putString(OnErrorListener.KEY_MESSAGE,message);
-        onErrorEvent(OnErrorListener.ERROR_CODE_COMMON,bundle);
-    }
-
-    @Override
-    public List<Rate> getVideoDefinitions() {
-        if(mDataProvider!=null && mRateList!=null){
-            return mRateList;
-        }
-        return super.getVideoDefinitions();
-    }
-
-    @Override
-    public Rate getCurrentDefinition() {
-        if(dataSource!=null){
-            Rate rate = dataSource.getRate();
-            return rate;
-        }
-        return super.getCurrentDefinition();
-    }
-
-    @Override
-    public void rePlay(int msc) {
-        if(mProviderData==null){
-            //当provider未取到数据时的重试
-            stop();
-            setDataSource(mProviderData);
-            start(msc);
-        }else{
-            super.rePlay(msc);
-        }
+    protected void initBaseInfo(Context context) {
+        super.initBaseInfo(context);
+        extendEventBox = getExtendEventBox();
     }
 
     @Override
     protected View getPlayerWidget(Context context) {
-        destroyInternalPlayer();
-        mInternalPlayer = (BaseSinglePlayer) ConfigLoader.getPlayerInstance(mAppContext,getPlayerType());
-        if(mInternalPlayer !=null){
-            Log.d(TAG,"init player : " + mInternalPlayer.getClass().getName());
-            mInternalPlayer.setDecodeMode(getDecodeMode());
-            mInternalPlayer.setAspectRatio(getAspectRatio());
-            mInternalPlayer.setOnErrorListener(new OnErrorListener() {
-                @Override
-                public void onError(int errorCode, Bundle bundle) {
-                    onErrorEvent(errorCode,bundle);
-                }
-            });
-            mInternalPlayer.setOnPlayerEventListener(new OnPlayerEventListener() {
-                @Override
-                public void onPlayerEvent(int eventCode, Bundle bundle) {
-                    DefaultPlayer.this.onPlayerEvent(eventCode,bundle);
-                }
-            });
-            mInternalPlayer.addOnAttachStateChangeListener(new OnAttachStateChangeListener() {
-                @Override
-                public void onViewAttachedToWindow(View v) {
-                    onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_PLAYER_PREPARING,null);
-                }
-                @Override
-                public void onViewDetachedFromWindow(View v) {
-
-                }
-            });
-        }else{
-            return new FrameLayout(mAppContext);
-        }
-        return mInternalPlayer;
+        InternalPlayerManager.get().updateWidgetMode(context,getWidgetMode());
+        InternalPlayerManager.get().setOnInternalPlayerListener(this);
+        return InternalPlayerManager.get().getRenderView();
     }
 
     @Override
@@ -174,4 +65,35 @@ public class DefaultPlayer extends BasePlayer implements IDataProvider.OnProvide
         return new DefaultLevelCoverContainer(context);
     }
 
+    protected BaseExtendEventBox getExtendEventBox() {
+        return new BaseExtendEventBox(mAppContext,this);
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        if(extendEventBox!=null){
+            extendEventBox.destroyExtendBox();
+        }
+    }
+
+    @Override
+    public void onBindPlayerEvent(int eventCode, Bundle bundle) {
+        sendEvent(eventCode, bundle);
+    }
+
+    @Override
+    public void onBindErrorEvent(int eventCode, Bundle bundle) {
+        onErrorEvent(eventCode, bundle);
+    }
+
+    @Override
+    public void onInternalPlayerEvent(int eventCode, Bundle bundle) {
+        sendEvent(eventCode, bundle);
+    }
+
+    @Override
+    public void onInternalErrorEvent(int errorCode, Bundle bundle) {
+        onErrorEvent(errorCode, bundle);
+    }
 }

@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="com.kk.taurus.animeffect:Anim-Effect-1.0.2">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.android/build-cache/4ce02e090877e500857d5886bb18a2fe7006867a/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/4ce02e090877e500857d5886bb18a2fe7006867a/output/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.kk.taurus.animeffect/Anim-Effect/1.0.2/df9008694546d6c965f2844d89ede382d6e8f3d/Anim-Effect-1.0.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

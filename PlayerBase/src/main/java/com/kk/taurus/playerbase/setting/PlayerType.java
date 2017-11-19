@@ -21,6 +21,7 @@ import java.util.Map;
 
 /**
  * Created by Taurus on 2016/11/14.
+ * 该类为包含渲染视图的解码器类型管理（注：此处的解码器为包含渲染视图的解码器，如系统的VideoView。）
  */
 
 public class PlayerType {
@@ -35,8 +36,7 @@ public class PlayerType {
 
     private PlayerType(){
         playerTypes = new HashMap<>();
-//        addPlayerType(TYPE_PLAYER_DEFAULT,new PlayerTypeEntity("原生解码","com.kk.taurus.playerbase.player.MediaSinglePlayer"));
-        addPlayerType(TYPE_PLAYER_DEFAULT,new PlayerTypeEntity("原生解码","com.kk.taurus.playerbase.player.DefaultSinglePlayer"));
+        addPlayerType(TYPE_PLAYER_DEFAULT,new PlayerTypeEntity("原生解码VideoView","com.kk.taurus.playerbase.player.DefaultRenderWidget"));
     }
 
     public static PlayerType getInstance(){

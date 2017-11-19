@@ -18,20 +18,26 @@ package com.kk.taurus.playerbase.widget;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.View;
 
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
+import com.kk.taurus.playerbase.config.ConfigLoader;
+import com.kk.taurus.playerbase.inter.IDataProvider;
+import com.kk.taurus.playerbase.inter.IRender;
+import com.kk.taurus.playerbase.inter.IRenderProxyGetter;
 import com.kk.taurus.playerbase.setting.AspectRatio;
-import com.kk.taurus.playerbase.setting.BaseAdVideo;
 import com.kk.taurus.playerbase.setting.DecodeMode;
+import com.kk.taurus.playerbase.setting.InternalPlayerManager;
 import com.kk.taurus.playerbase.setting.Rate;
+import com.kk.taurus.playerbase.setting.RenderCallbackProxy;
 import com.kk.taurus.playerbase.setting.VideoData;
 import com.kk.taurus.playerbase.setting.ViewType;
+import com.kk.taurus.playerbase.view.RenderSurfaceView;
 
 import java.util.List;
 
@@ -39,10 +45,15 @@ import java.util.List;
  * Created by Taurus on 2017/3/28.
  */
 
-public abstract class BasePlayer extends BaseAdPlayer {
+public abstract class BasePlayer extends BaseSettingPlayer implements IRenderProxyGetter {
 
     private final String TAG = "BasePlayer";
-    protected BaseSinglePlayer mInternalPlayer;
+
+    private int mWidgetMode;
+    private boolean needProxyRenderEvent;
+    private RenderCallbackProxy mRenderCallbackProxy;
+
+    private boolean isRenderAvailable;
 
     public BasePlayer(@NonNull Context context) {
         super(context);
@@ -52,8 +63,10 @@ public abstract class BasePlayer extends BaseAdPlayer {
         super(context, attrs);
     }
 
-    public BasePlayer(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+    @Override
+    protected void onPlayerContainerHasInit(Context context) {
+        super.onPlayerContainerHasInit(context);
+        setWidgetMode(ConfigLoader.getWidgetMode());
     }
 
     @Override
@@ -62,230 +75,233 @@ public abstract class BasePlayer extends BaseAdPlayer {
         onBindPlayer(this,this);
     }
 
+    @Override
+    public void setDataProvider(IDataProvider dataProvider){
+        InternalPlayerManager.get().setDataProvider(dataProvider);
+    }
+
+    protected void setWidgetMode(int widgetMode){
+        this.mWidgetMode = widgetMode;
+        InternalPlayerManager.get().updateWidgetMode(mAppContext,mWidgetMode);
+    }
+
+    /**
+     * 传入一个可用的渲染视图，RenderSurfaceView或者RenderTextureView.
+     * 如果使用了VideoView类型的解码器，请不要调用此方法.
+     * @param render
+     */
+    public void setRenderViewForDecoder(IRender render){
+        setRenderViewForDecoder(render,false);
+    }
+
+    private void setRenderViewForDecoder(IRender render, boolean hasPrepared){
+        if(getWidgetMode()==WIDGET_MODE_VIDEO_VIEW)
+            return;
+        if(mRenderCallbackProxy!=null){
+            mRenderCallbackProxy.destroy();
+        }
+        mRenderCallbackProxy = new RenderCallbackProxy(this,render,this);
+        mRenderCallbackProxy.proxy(hasPrepared);
+        if(render instanceof View){
+            addViewToPlayerContainer((View) render,true);
+            needProxyRenderEvent = true;
+            isRenderAvailable = true;
+        }
+    }
+
+    @Override
+    public AspectRatio getRenderAspectRatio() {
+        return super.getAspectRatio();
+    }
+
+    @Override
+    public int getSourceVideoWidth() {
+        return getVideoWidth();
+    }
+
+    @Override
+    public int getSourceVideoHeight() {
+        return getVideoHeight();
+    }
+
     /**
      * send some event by player,all receivers can receive this event.
      * @param eventCode
      * @param bundle
      */
     public void sendEvent(int eventCode, Bundle bundle){
+        if(needProxyRenderEvent){
+            mRenderCallbackProxy.proxyEvent(eventCode, bundle);
+        }
         onPlayerEvent(eventCode, bundle);
     }
 
-    private boolean available(){
-        return mInternalPlayer !=null;
+    @Override
+    protected void onPlayerEvent(int eventCode, Bundle bundle) {
+        super.onPlayerEvent(eventCode, bundle);
+        switch (eventCode){
+            case OnPlayerEventListener.EVENT_CODE_PREPARED:
+                //当组件模式设置为decoder模式时，且没有设置渲染视图时，此处自动为decoder设置一个渲染视图。
+                if(getWidgetMode()==WIDGET_MODE_DECODER && !isRenderAvailable){
+                    setRenderViewForDecoder(new RenderSurfaceView(mAppContext), true);
+                }
+                break;
+        }
+    }
+
+    public int getWidgetMode() {
+        return mWidgetMode;
     }
 
     @Override
     public void setDataSource(VideoData data) {
         super.setDataSource(data);
-        if(available() && data!=null && data.getData()!=null){
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(OnPlayerEventListener.BUNDLE_KEY_VIDEO_DATA,data);
-            //on set data source
-            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_ON_SET_DATA_SOURCE,bundle);
-            if(data instanceof BaseAdVideo){
-                //on set ad video data
-                onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_ON_SET_AD_DATA,bundle);
-            }else{
-                //on set video data
-                onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_ON_SET_VIDEO_DATA,bundle);
-            }
-            mInternalPlayer.setDataSource(data);
-        }
+        InternalPlayerManager.get().setDataSource(data);
+    }
+
+    @Override
+    public void updatePlayerType(int type) {
+        InternalPlayerManager.get().updatePlayerType(type);
     }
 
     @Override
     public void start() {
-        if(available()){
-            startPos = 0;
-            mInternalPlayer.start();
-            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_INTENT_TO_START,null);
-        }
+        InternalPlayerManager.get().start();
     }
 
     @Override
     public void start(int msc) {
-        if(available()){
-            startPos = msc;
-            mInternalPlayer.start(msc);
-            Bundle bundle = new Bundle();
-            bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_POSITION,msc);
-            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_INTENT_TO_START,bundle);
-        }
+        InternalPlayerManager.get().start(msc);
     }
 
     @Override
     public void pause() {
-        if(available()){
-            mInternalPlayer.pause();
-            Bundle bundle = new Bundle();
-            bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_POSITION,getCurrentPosition());
-            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAY_PAUSE,bundle);
-        }
+        InternalPlayerManager.get().pause();
     }
 
     @Override
     public void resume() {
-        if(available()){
-            Bundle bundle = new Bundle();
-            bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_POSITION,getCurrentPosition());
-            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAY_RESUME,bundle);
-            mInternalPlayer.resume();
-        }
+        InternalPlayerManager.get().resume();
     }
 
     @Override
     public void seekTo(int msc) {
-        if(available()){
-            mInternalPlayer.seekTo(msc);
-            Bundle bundle = new Bundle();
-            bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_POSITION,msc);
-            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_SEEK_TO,bundle);
-        }
+        InternalPlayerManager.get().seekTo(msc);
     }
 
     @Override
     public void stop() {
-        if(available()){
-            mInternalPlayer.stop();
-            reset();
-            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_ON_STOP,null);
-        }
+        InternalPlayerManager.get().stop();
     }
 
     @Override
     public void reset() {
-        if(available()){
-            mInternalPlayer.reset();
-        }
+        InternalPlayerManager.get().reset();
     }
 
     @Override
     public void rePlay(int msc) {
-        if(available() && isDataSourceAvailable()){
-            stop();
-            setDataSource(dataSource);
-            start(msc);
-        }
+        InternalPlayerManager.get().rePlay(msc);
     }
 
     @Override
     public boolean isPlaying() {
-        if(available()){
-            return mInternalPlayer.isPlaying();
-        }
-        return false;
+        return InternalPlayerManager.get().isPlaying();
     }
 
     @Override
     public int getCurrentPosition() {
-        if(available()){
-            return mInternalPlayer.getCurrentPosition();
-        }
-        return 0;
+        return InternalPlayerManager.get().getCurrentPosition();
     }
 
     @Override
     public int getDuration() {
-        if(available()){
-            return mInternalPlayer.getDuration();
-        }
-        return 0;
+        return InternalPlayerManager.get().getDuration();
     }
 
     @Override
     public int getBufferPercentage() {
-        if(available()){
-            return mInternalPlayer.getBufferPercentage();
-        }
-        return 0;
+        return InternalPlayerManager.get().getBufferPercentage();
     }
 
     @Override
     public int getAudioSessionId() {
-        if(available()){
-            return mInternalPlayer.getAudioSessionId();
-        }
-        return 0;
+        return InternalPlayerManager.get().getAudioSessionId();
+    }
+
+    @Override
+    public int getVideoWidth() {
+        return InternalPlayerManager.get().getVideoWidth();
+    }
+
+    @Override
+    public int getVideoHeight() {
+        return InternalPlayerManager.get().getVideoHeight();
     }
 
     @Override
     public Rate getCurrentDefinition() {
-        if(available()){
-            return mInternalPlayer.getCurrentDefinition();
-        }
-        return null;
+        return InternalPlayerManager.get().getCurrentDefinition();
     }
 
     @Override
     public List<Rate> getVideoDefinitions() {
-        if(available()){
-            return mInternalPlayer.getVideoDefinitions();
-        }
-        return null;
+        return InternalPlayerManager.get().getVideoDefinitions();
     }
 
     @Override
     public void changeVideoDefinition(Rate rate) {
         super.changeVideoDefinition(rate);
-        if(available() && rate!=null){
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(OnPlayerEventListener.BUNDLE_KEY_RATE_DATA,rate);
-            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_CHANGE_DEFINITION,bundle);
-            mInternalPlayer.changeVideoDefinition(rate);
-        }
+        InternalPlayerManager.get().changeVideoDefinition(rate);
     }
 
     @Override
-    public void setDecodeMode(DecodeMode mDecodeMode) {
-        super.setDecodeMode(mDecodeMode);
-        if(available()){
-            mInternalPlayer.setDecodeMode(mDecodeMode);
-        }
+    public void setDecodeMode(DecodeMode decodeMode) {
+        super.setDecodeMode(decodeMode);
+        InternalPlayerManager.get().setDecodeMode(decodeMode);
     }
 
     @Override
     public void setViewType(ViewType viewType) {
-        if(available()){
-            mInternalPlayer.setViewType(viewType);
-        }
+        InternalPlayerManager.get().setViewType(viewType);
     }
 
     @Override
-    public View getRenderView() {
-        if(available()){
-            return mInternalPlayer.getRenderView();
-        }
-        return null;
-    }
-
     public void setDisplay(SurfaceHolder surfaceHolder){
-        mInternalPlayer.setDisplay(surfaceHolder);
+        isRenderAvailable = surfaceHolder!=null;
+        InternalPlayerManager.get().setDisplay(surfaceHolder);
     }
 
-    public void setUseDefaultRender(boolean useDefaultRender){
-        mInternalPlayer.setUseDefaultRender(useDefaultRender);
+    @Override
+    public void setSurface(Surface surface) {
+        isRenderAvailable = surface!=null;
+        InternalPlayerManager.get().setSurface(surface);
     }
 
     @Override
     public void setAspectRatio(AspectRatio aspectRatio) {
         super.setAspectRatio(aspectRatio);
-        if(available()){
-            mInternalPlayer.setAspectRatio(aspectRatio);
+        if(mRenderCallbackProxy!=null){
+            mRenderCallbackProxy.onAspectUpdate(aspectRatio);
         }
+        InternalPlayerManager.get().setAspectRatio(aspectRatio);
+    }
+
+    @Override
+    public View getRenderView() {
+        return InternalPlayerManager.get().getRenderView();
     }
 
     @Override
     public void destroy() {
+        sendEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_CONTAINER_ON_DESTROY,null);
         super.destroy();
-        destroyInternalPlayer();
     }
 
-    protected void destroyInternalPlayer() {
-        if(available()){
-            mInternalPlayer.setOnErrorListener(null);
-            mInternalPlayer.setOnPlayerEventListener(null);
-            mInternalPlayer.destroy();
+    public void destroy(boolean destroyInternalPlayer) {
+        this.destroy();
+        if(destroyInternalPlayer){
+            InternalPlayerManager.get().destroy();
         }
     }
 }

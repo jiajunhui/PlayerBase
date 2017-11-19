@@ -27,7 +27,6 @@ import com.kk.taurus.playerbase.DefaultPlayer;
 import com.kk.taurus.playerbase.cover.DefaultReceiverCollections;
 import com.kk.taurus.playerbase.widget.BasePlayer;
 import com.taurus.playerbaselibrary.R;
-import com.taurus.playerbaselibrary.adapter.VideoListAdapter;
 import com.taurus.playerbaselibrary.adapter.VideoListAdapter2;
 import com.taurus.playerbaselibrary.bean.VideosInfo;
 
@@ -69,8 +68,6 @@ public class LocalVideoListHolder extends ContentHolder<VideosInfo> implements V
         DefaultReceiverCollections receiverCollections = new DefaultReceiverCollections(mContext);
         receiverCollections.buildDefault();
         mPlayer.bindCoverCollections(receiverCollections);
-        mPlayer.setUseDefaultRender(false);
-
 
         mRecycler.setLayoutManager(new LinearLayoutManager(mContext,LinearLayoutManager.VERTICAL,false));
         mAdapter = new VideoListAdapter2(mContext,videoItems, mRecycler);

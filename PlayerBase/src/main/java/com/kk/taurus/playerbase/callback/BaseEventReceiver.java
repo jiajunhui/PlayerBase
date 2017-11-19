@@ -57,7 +57,7 @@ public abstract class BaseEventReceiver implements IEventReceiver, PlayerObserve
     protected boolean isWifi;
     private Bundle mBundle;
 
-    protected Handler mHandler = new Handler(){
+    protected MyHandler mHandler = new MyHandler(){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -211,5 +211,12 @@ public abstract class BaseEventReceiver implements IEventReceiver, PlayerObserve
     @Override
     public void onNotifyAdFinish(VideoData data, boolean isAllFinish) {
         adListFinish = isAllFinish;
+    }
+
+    public static class MyHandler extends Handler{
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+        }
     }
 }

@@ -19,7 +19,6 @@ package com.kk.taurus.playerbase.widget;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
-import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -48,7 +47,7 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
 
     private final String TAG = "_BaseContainer";
     /**
-     * the app context , must set activity context.
+     * the app context.
      */
     protected Context mAppContext;
     /**
@@ -77,11 +76,7 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
     }
 
     public BaseContainer(@NonNull Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs, 0);
-    }
-
-    public BaseContainer(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+        super(context, attrs);
         initContainer(context);
     }
 
@@ -99,7 +94,7 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
         if(!(context instanceof Activity))
             throw new IllegalArgumentException("please set activity context !");
         this.mAppContext = context;
-        setBackgroundColor(Color.BLACK);
+        setBackgroundColor(Color.TRANSPARENT);
         initBaseInfo(context);
         //init render container
         initPlayerContainer(context);
@@ -151,11 +146,27 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
     }
 
     private void initPlayerWidget(Context context) {
-        if(mPlayerContainer!=null){
+        View widget = getPlayerWidget(context);
+        if(widget==null)
+            return;
+        addViewToPlayerContainer(widget,true);
+    }
+
+    protected void addViewToPlayerContainer(View view, boolean removeAll){
+        if(mPlayerContainer==null)
+            return;
+        if(removeAll){
             mPlayerContainer.removeAllViews();
-            mPlayerContainer.addView(getPlayerWidget(context),
-                    new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         }
+        mPlayerContainer.addView(view,
+                new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+    }
+
+    protected boolean isPlayerContainerHasChild(){
+        if(mPlayerContainer!=null){
+            return mPlayerContainer.getChildCount() >= 0;
+        }
+        return false;
     }
 
     protected void notifyPlayerWidget(Context context){
@@ -179,6 +190,10 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
         if(mCoverContainer!=null){
             mCoverContainer.addCover(cover);
         }
+    }
+
+    public ICoverContainer getCoverContainer(){
+        return mCoverContainer;
     }
 
     private boolean isContainCoverView(BaseCover cover){

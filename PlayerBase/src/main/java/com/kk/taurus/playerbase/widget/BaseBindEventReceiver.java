@@ -19,7 +19,6 @@ package com.kk.taurus.playerbase.widget;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -73,26 +72,33 @@ public abstract class BaseBindEventReceiver extends BaseContainer implements IEv
         super(context, attrs);
     }
 
-    public BaseBindEventReceiver(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-    }
-
+    @Deprecated
     public void bindCoverCollections(BaseReceiverCollections coverCollections){
-        if(this.receiverCollections !=null)
-            return;
-        this.receiverCollections = coverCollections;
-        mPlayerObserverHandler = new PlayerObserverHandler(coverCollections);
-        mGestureObserverHandler = new GestureObserverHandler(coverCollections);
-        initCovers(mAppContext);
+        bindReceiverCollections(coverCollections);
     }
 
+    public void bindReceiverCollections(BaseReceiverCollections receiverCollections){
+        this.receiverCollections = receiverCollections;
+        mPlayerObserverHandler = new PlayerObserverHandler(receiverCollections);
+        mGestureObserverHandler = new GestureObserverHandler(receiverCollections);
+        initCovers(mAppContext);
+        onReceiverCollectionsHasBind();
+    }
+
+    @Deprecated
     public void unbindCoverCollections(){
+        unbindReceiverCollections();
+    }
+
+    public void unbindReceiverCollections(){
         if(receiverCollections !=null){
             receiverCollections.clear();
-            receiverCollections = null;
         }
         removeAllCovers();
-        removeAllContainers();
+    }
+
+    protected void onReceiverCollectionsHasBind(){
+        onNotifyPlayEvent(OnPlayerEventListener.EVENT_CODE_ON_RECEIVER_COLLECTIONS_NEW_BIND,null);
     }
 
     private void initCovers(Context context) {
@@ -293,4 +299,5 @@ public abstract class BaseBindEventReceiver extends BaseContainer implements IEv
         if(mGestureObserverHandler!=null)
             mGestureObserverHandler.onGestureEnableChange(enable);
     }
+
 }

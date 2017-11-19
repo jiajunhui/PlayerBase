@@ -33,10 +33,10 @@ import com.kk.taurus.playerbase.callback.OnCoverEventListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.cover.base.BaseCoverObserver;
 import com.kk.taurus.playerbase.cover.base.BasePlayerControllerCover;
-import com.kk.taurus.playerbase.inter.ISinglePlayer;
 import com.kk.taurus.playerbase.inter.MSG;
 import com.kk.taurus.playerbase.setting.BaseAdVideo;
 import com.kk.taurus.playerbase.setting.VideoData;
+import com.kk.taurus.playerbase.widget.plan.IDecoder;
 
 import java.util.List;
 
@@ -74,7 +74,7 @@ public class DefaultPlayerControllerCover extends BasePlayerControllerCover {
                 public void onClick(View v) {
                     if(player==null)
                         return;
-                    if(getStatus()==ISinglePlayer.STATUS_STARTED){
+                    if(getStatus()== IDecoder.STATUS_STARTED){
                         pause();
                         setPlayState(false);
                     }else{
@@ -188,7 +188,7 @@ public class DefaultPlayerControllerCover extends BasePlayerControllerCover {
         Message message = Message.obtain();
         message.what = MSG.MSG_CODE_SEEK_TO;
         message.obj = progress;
-        if(getStatus() == ISinglePlayer.STATUS_PAUSED){
+        if(getStatus() == IDecoder.STATUS_PAUSED){
             mHandler.sendMessage(message);
         }else{
             mHandler.sendMessageDelayed(message,600);

@@ -1,18 +1,17 @@
 /*
- * Copyright (C) 2006 The Android Open Source Project
- * Copyright (C) 2013 Zhang Rui <bbcallen@gmail.com>
+ * Copyright 2017 jiajunhui<junhui_jia@163.com>
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *        http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
  */
 
 package com.kk.taurus.playerbase.player;
@@ -156,22 +155,38 @@ public class AndroidMediaPlayer extends AbstractMediaPlayer {
 
     @Override
     public void prepareAsync() throws IllegalStateException {
-        mInternalMediaPlayer.prepareAsync();
+        try {
+            mInternalMediaPlayer.prepareAsync();
+        }catch (IllegalStateException e){
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void start() throws IllegalStateException {
-        mInternalMediaPlayer.start();
+        try {
+            mInternalMediaPlayer.start();
+        }catch (IllegalStateException e){
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void stop() throws IllegalStateException {
-        mInternalMediaPlayer.stop();
+        try {
+            mInternalMediaPlayer.stop();
+        }catch (IllegalStateException e){
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void pause() throws IllegalStateException {
-        mInternalMediaPlayer.pause();
+        try {
+            mInternalMediaPlayer.pause();
+        }catch (IllegalStateException e){
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -216,7 +231,11 @@ public class AndroidMediaPlayer extends AbstractMediaPlayer {
 
     @Override
     public void seekTo(long msec) throws IllegalStateException {
-        mInternalMediaPlayer.seekTo((int) msec);
+        try {
+            mInternalMediaPlayer.seekTo((int) msec);
+        }catch (IllegalStateException e){
+            e.printStackTrace();
+        }
     }
 
     @Override

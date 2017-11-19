@@ -5,11 +5,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.kk.taurus.baseframe.ui.activity.ToolsActivity;
 import com.kk.taurus.playerbase.DefaultPlayer;
-import com.kk.taurus.playerbase.callback.OnAdCallBack;
 import com.kk.taurus.playerbase.callback.OnAdCoverClickListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.cover.DefaultReceiverCollections;
@@ -18,7 +16,6 @@ import com.kk.taurus.playerbase.cover.base.BasePlayerControllerCover;
 import com.kk.taurus.playerbase.setting.BaseAdVideo;
 import com.kk.taurus.playerbase.setting.PlayData;
 import com.kk.taurus.playerbase.setting.VideoData;
-import com.kk.taurus.playerbase.widget.BaseAdPlayer;
 import com.kk.taurus.playerbase.widget.BasePlayer;
 import com.taurus.playerbaselibrary.R;
 import com.taurus.playerbaselibrary.bean.VideoEntity;
@@ -113,23 +110,6 @@ public class VideoDetailActivity extends ToolsActivity implements OnPlayerEventL
             }
         });
 
-        mPlayer.playData(playData,new OnAdCallBack(){
-            @Override
-            public void onAdPlay(BaseAdPlayer adPlayer, BaseAdVideo adVideo) {
-                super.onAdPlay(adPlayer, adVideo);
-            }
-
-            @Override
-            public void onAdPlayComplete(BaseAdVideo adVideo, boolean isAllComplete) {
-                Toast.makeText(VideoDetailActivity.this, adVideo.getData(), Toast.LENGTH_SHORT).show();
-                super.onAdPlayComplete(adVideo, isAllComplete);
-            }
-
-            @Override
-            public void onVideoStart(BaseAdPlayer adPlayer,VideoData data) {
-                super.onVideoStart(adPlayer,data);
-            }
-        });
     }
 
     @Override
@@ -160,7 +140,7 @@ public class VideoDetailActivity extends ToolsActivity implements OnPlayerEventL
     protected void onDestroy() {
         super.onDestroy();
         if(mPlayer!=null){
-            mPlayer.destroy();
+            mPlayer.destroy(true);
         }
     }
 

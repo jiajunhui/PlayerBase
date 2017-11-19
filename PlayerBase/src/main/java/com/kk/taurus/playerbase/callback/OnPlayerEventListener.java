@@ -1,5 +1,5 @@
 /*
- *    Copyright 2017 jiajunhui<junhui_jia@163.com>
+ * Copyright 2017 jiajunhui<junhui_jia@163.com>
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -70,7 +70,29 @@ public interface OnPlayerEventListener {
 
     int EVENT_CODE_ON_DEFINITION_LIST_READY = 90041023;
 
+    /** when screen orientation portrait*/
+    int EVENT_CODE_ON_INTENT_SET_SCREEN_ORIENTATION_PORTRAIT = 90041024;
 
+    /** when screen orientation landscape*/
+    int EVENT_CODE_ON_INTENT_SET_SCREEN_ORIENTATION_LANDSCAPE = 90041025;
+
+    /** when player has bind receiver collections*/
+    int EVENT_CODE_ON_RECEIVER_COLLECTIONS_NEW_BIND = 90041026;
+
+    int EVENT_CODE_ON_SURFACE_HOLDER_UPDATE = 90041027;
+
+    int EVENT_CODE_ON_PLAYER_TIMER_UPDATE = 90041028;
+
+    int EVENT_CODE_ON_NETWORK_ERROR = 90041029;
+    int EVENT_CODE_ON_NETWORK_CHANGE = 90041030;
+    int EVENT_CODE_ON_NETWORK_CONNECTED = 90041031;
+
+    int EVENT_CODE_PLAYER_CONTAINER_ON_DESTROY = 90041032;
+
+    int EVENT_CODE_ON_SURFACE_UPDATE = 90041033;
+
+
+    String BUNDLE_KEY_INT_DATA = "int_data";
     String BUNDLE_KEY_POSITION = "position";
     String BUNDLE_KEY_VIDEO_DATA = "video_data";
     String BUNDLE_KEY_RATE_DATA = "rate_data";

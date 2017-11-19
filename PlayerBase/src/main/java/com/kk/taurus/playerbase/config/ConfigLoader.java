@@ -18,7 +18,9 @@ package com.kk.taurus.playerbase.config;
 
 import android.content.Context;
 
+import com.kk.taurus.playerbase.setting.DecoderType;
 import com.kk.taurus.playerbase.setting.PlayerType;
+import com.kk.taurus.playerbase.widget.BasePlayer;
 
 import java.lang.reflect.Constructor;
 
@@ -28,10 +30,36 @@ import java.lang.reflect.Constructor;
 
 public class ConfigLoader {
 
+    private static int mWidgetMode = BasePlayer.WIDGET_MODE_VIDEO_VIEW;
+
+    public static void setDefaultWidgetMode(int widgetMode){
+        mWidgetMode = widgetMode;
+    }
+
+    public static int getWidgetMode(){
+        return mWidgetMode;
+    }
+
     public static Object getPlayerInstance(Context context, int playerType){
         Object instance = null;
         try{
             Class clz = getSDKClass(PlayerType.getInstance().getPlayerPath(playerType));
+            if(clz!=null){
+                Constructor constructor = getConstructor(clz);
+                if(constructor!=null){
+                    instance = constructor.newInstance(context);
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return instance;
+    }
+
+    public static Object getDecoderInstance(Context context, int decoderType){
+        Object instance = null;
+        try{
+            Class clz = getSDKClass(DecoderType.getInstance().getDecoderPath(decoderType));
             if(clz!=null){
                 Constructor constructor = getConstructor(clz);
                 if(constructor!=null){

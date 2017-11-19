@@ -21,23 +21,20 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
 
 import com.kk.taurus.playerbase.callback.OnErrorListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
-import com.kk.taurus.playerbase.inter.MSG;
+import com.kk.taurus.playerbase.inter.IPlayer;
+import com.kk.taurus.playerbase.inter.ITimerGetter;
 import com.kk.taurus.playerbase.setting.AspectRatio;
 import com.kk.taurus.playerbase.setting.DecodeMode;
-import com.kk.taurus.playerbase.setting.PlayerType;
 import com.kk.taurus.playerbase.setting.Rate;
 import com.kk.taurus.playerbase.setting.VideoData;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -46,40 +43,17 @@ import java.util.List;
  * Created by Taurus on 2017/3/25.
  */
 
-public abstract class BaseSettingPlayer extends BaseBindPlayerEvent {
+public abstract class BaseSettingPlayer extends BaseBindEventReceiver implements IPlayer {
 
     private final String TAG = "BaseSettingPlayer";
     protected VideoData dataSource;
     protected Rate rate;
-    private int mPlayerType;
-    protected int startPos;
     protected int mStatus = STATUS_IDLE;
     private DecodeMode mDecodeMode = DecodeMode.SOFT;
     private AspectRatio aspectRatio = AspectRatio.AspectRatio_FILL_PARENT;
 
-    private List<OnPlayerEventListener> mPlayerEventListenerList = new ArrayList<>();
-    private List<OnErrorListener> mErrorEventListenerList = new ArrayList<>();
-
-    private Handler mHandler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what){
-                case MSG.MSG_CODE_PLAYING:
-                    int curr = getCurrentPosition();
-                    int duration = getDuration();
-                    int bufferPercentage = getBufferPercentage();
-                    int bufferPos = bufferPercentage*duration/100;
-                    onNotifyPlayTimerCounter(curr,duration,bufferPos);
-                    if(duration > 0 && curr >=0){
-                        sendPlayMsg();
-                    }else{
-                        removePlayMsg();
-                    }
-                    break;
-            }
-        }
-    };
+    private List<WeakReference<OnPlayerEventListener>> mPlayerEventListenerList = new ArrayList<>();
+    private List<WeakReference<OnErrorListener>> mErrorEventListenerList = new ArrayList<>();
 
     public BaseSettingPlayer(@NonNull Context context) {
         super(context);
@@ -87,10 +61,6 @@ public abstract class BaseSettingPlayer extends BaseBindPlayerEvent {
 
     public BaseSettingPlayer(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-    }
-
-    public BaseSettingPlayer(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
     }
 
     @Override
@@ -103,42 +73,37 @@ public abstract class BaseSettingPlayer extends BaseBindPlayerEvent {
         this.rate = rate;
     }
 
-    @Override
-    protected void onPlayerContainerHasInit(Context context) {
-        super.onPlayerContainerHasInit(context);
-        this.mPlayerType = PlayerType.getInstance().getDefaultPlayerType();
-    }
-
-    @Override
     protected void onPlayerEvent(int eventCode, Bundle bundle){
         onHandleStatus(eventCode,bundle);
-        super.onPlayerEvent(eventCode, bundle);
         callBackPlayerEventListener(eventCode, bundle);
+        onNotifyPlayEvent(eventCode, bundle);
     }
 
     private void callBackPlayerEventListener(int eventCode, Bundle bundle){
         if(mPlayerEventListenerList==null)
             return;
-        Iterator<OnPlayerEventListener> iterator = mPlayerEventListenerList.iterator();
+        Iterator<WeakReference<OnPlayerEventListener>> iterator = mPlayerEventListenerList.iterator();
         while (iterator.hasNext()){
-            OnPlayerEventListener onPlayerEventListener = iterator.next();
+            WeakReference<OnPlayerEventListener> onPlayerEventListener = iterator.next();
             if(onPlayerEventListener!=null){
-                onPlayerEventListener.onPlayerEvent(eventCode, bundle);
+                OnPlayerEventListener eventListener = onPlayerEventListener.get();
+                if(eventListener!=null){
+                    eventListener.onPlayerEvent(eventCode, bundle);
+                }
             }
         }
     }
 
     private void onHandleStatus(int eventCode, Bundle bundle) {
         switch (eventCode){
-            case OnPlayerEventListener.EVENT_CODE_PLAYER_ON_SET_DATA_SOURCE:
-                removePlayMsg();
-                break;
-            case OnPlayerEventListener.EVENT_CODE_PREPARED:
-                startPlay();
-                break;
             case OnPlayerEventListener.EVENT_CODE_RENDER_START:
                 mStatus = STATUS_STARTED;
-                startPlay();
+                break;
+            case OnPlayerEventListener.EVENT_CODE_ON_PLAYER_TIMER_UPDATE:
+                int curr = bundle.getInt(ITimerGetter.KEY_TIMER_CURRENT_POSITION);
+                int duration = bundle.getInt(ITimerGetter.KEY_TIMER_DURATION);
+                int bufferPos = bundle.getInt(ITimerGetter.KEY_TIMER_BUFFER_POSITION);
+                onNotifyPlayTimerCounter(curr,duration,bufferPos);
                 break;
             case OnPlayerEventListener.EVENT_CODE_PLAY_PAUSE:
                 mStatus = STATUS_PAUSED;
@@ -146,45 +111,42 @@ public abstract class BaseSettingPlayer extends BaseBindPlayerEvent {
             case OnPlayerEventListener.EVENT_CODE_PLAY_RESUME:
                 mStatus = STATUS_STARTED;
                 break;
-            case OnPlayerEventListener.EVENT_CODE_BUFFERING_END:
-                sendPlayMsg();
-                break;
             case OnPlayerEventListener.EVENT_CODE_PLAYER_ON_STOP:
                 mStatus = STATUS_STOPPED;
-                removePlayMsg();
+                break;
+            case OnPlayerEventListener.EVENT_CODE_ON_NETWORK_ERROR:
+                onNotifyNetWorkError();
+                break;
+            case OnPlayerEventListener.EVENT_CODE_ON_NETWORK_CHANGE:
+                onNotifyNetWorkChanged(bundle.getInt(OnPlayerEventListener.BUNDLE_KEY_INT_DATA));
+                break;
+            case OnPlayerEventListener.EVENT_CODE_ON_NETWORK_CONNECTED:
+                onNotifyNetWorkConnected(bundle.getInt(OnPlayerEventListener.BUNDLE_KEY_INT_DATA));
                 break;
         }
     }
 
-    public void sendPlayMsg() {
-        removePlayMsg();
-        mHandler.sendEmptyMessageDelayed(MSG.MSG_CODE_PLAYING,1000);
-    }
-
-    protected void startPlay(){
-        removePlayMsg();
-        mHandler.sendEmptyMessage(MSG.MSG_CODE_PLAYING);
-    }
-
-    public void removePlayMsg() {
-        mHandler.removeMessages(MSG.MSG_CODE_PLAYING);
-    }
-
-    @Override
     protected void onErrorEvent(int eventCode, Bundle bundle){
         onHandleErrorStatus(eventCode, bundle);
-        super.onErrorEvent(eventCode, bundle);
         callBackErrorEventListener(eventCode, bundle);
+        onNotifyErrorEvent(eventCode, bundle);
+    }
+
+    public void doConfigChange(Configuration newConfig) {
+        onNotifyConfigurationChanged(newConfig);
     }
 
     private void callBackErrorEventListener(int eventCode, Bundle bundle) {
         if(mErrorEventListenerList==null)
             return;
-        Iterator<OnErrorListener> iterator = mErrorEventListenerList.iterator();
+        Iterator<WeakReference<OnErrorListener>> iterator = mErrorEventListenerList.iterator();
         while (iterator.hasNext()){
-            OnErrorListener onErrorListener = iterator.next();
+            WeakReference<OnErrorListener> onErrorListener = iterator.next();
             if(onErrorListener!=null){
-                onErrorListener.onError(eventCode,bundle);
+                OnErrorListener errorListener = onErrorListener.get();
+                if(errorListener!=null){
+                    errorListener.onError(eventCode,bundle);
+                }
             }
         }
     }
@@ -198,19 +160,19 @@ public abstract class BaseSettingPlayer extends BaseBindPlayerEvent {
     }
 
     public void setOnPlayerEventListener(OnPlayerEventListener onPlayerEventListener) {
-        this.mPlayerEventListenerList.add(onPlayerEventListener);
+        this.mPlayerEventListenerList.add(new WeakReference<>(onPlayerEventListener));
     }
 
     public void setOnErrorListener(OnErrorListener onErrorListener) {
-        this.mErrorEventListenerList.add(onErrorListener);
+        this.mErrorEventListenerList.add(new WeakReference<>(onErrorListener));
     }
 
     public void removePlayerEventListener(OnPlayerEventListener onPlayerEventListener){
-        mPlayerEventListenerList.remove(onPlayerEventListener);
+        mPlayerEventListenerList.remove(new WeakReference<>(onPlayerEventListener));
     }
 
     public void removeErrorEventListener(OnErrorListener onErrorListener){
-        mErrorEventListenerList.remove(onErrorListener);
+        mErrorEventListenerList.remove(new WeakReference<>(onErrorListener));
     }
 
     private void clearEventListener(){
@@ -218,6 +180,7 @@ public abstract class BaseSettingPlayer extends BaseBindPlayerEvent {
         mErrorEventListenerList.clear();
     }
 
+    @Override
     public void setDecodeMode(DecodeMode decodeMode) {
         this.mDecodeMode = decodeMode;
     }
@@ -244,32 +207,28 @@ public abstract class BaseSettingPlayer extends BaseBindPlayerEvent {
         return (getBufferPercentage()*getDuration()/100) > getCurrentPosition();
     }
 
-    public void updatePlayerType(int playerType){
-        if(mPlayerType!=playerType){
-            this.mPlayerType = playerType;
-            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_INTENT_TO_SWITCH_PLAYER_TYPE,null);
-            notifyPlayerWidget(mAppContext);
+    public void setScreenOrientationLandscape(boolean landscape) {
+        /** modify 2017/11/17
+         *
+         *  this operation is not dependent on Activity context as much as possible.
+         *
+         * */
+        int code = landscape?OnPlayerEventListener.EVENT_CODE_ON_INTENT_SET_SCREEN_ORIENTATION_LANDSCAPE:OnPlayerEventListener.EVENT_CODE_ON_INTENT_SET_SCREEN_ORIENTATION_PORTRAIT;
+        onPlayerEvent(code,null);
+        try {
+            ((Activity)mAppContext).setRequestedOrientation(landscape? ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE:ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 
-    public int getPlayerType() {
-        return mPlayerType;
-    }
-
-    @Override
-    public void setScreenOrientationLandscape(boolean landscape) {
-        ((Activity)mAppContext).setRequestedOrientation(landscape? ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE:ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-    }
-
-    @Override
     public boolean isLandscape() {
         return mAppContext.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
 
     @Override
     public void destroy() {
-        super.destroy();
-        removePlayMsg();
         clearEventListener();
+        unbindReceiverCollections();
     }
 }
