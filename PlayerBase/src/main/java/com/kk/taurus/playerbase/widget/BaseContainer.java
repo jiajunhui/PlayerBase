@@ -153,10 +153,16 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
         if(mPlayerContainer==null)
             return;
         if(removeAll){
-            mPlayerContainer.removeAllViews();
+            clearPlayerContainer();
         }
         mPlayerContainer.addView(view,
                 new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+    }
+
+    protected void clearPlayerContainer(){
+        if(mPlayerContainer!=null){
+            mPlayerContainer.removeAllViews();
+        }
     }
 
     protected boolean isPlayerContainerHasChild(){

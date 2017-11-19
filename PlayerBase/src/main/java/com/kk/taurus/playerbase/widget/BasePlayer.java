@@ -294,6 +294,9 @@ public abstract class BasePlayer extends BaseSettingPlayer implements IRenderPro
 
     @Override
     public void destroy() {
+        if(getWidgetMode()==WIDGET_MODE_DECODER){
+            clearPlayerContainer();
+        }
         sendEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_CONTAINER_ON_DESTROY,null);
         super.destroy();
     }
