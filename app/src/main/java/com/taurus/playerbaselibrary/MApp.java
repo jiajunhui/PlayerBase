@@ -32,7 +32,7 @@ public class MApp extends FrameApplication {
 
         XHTTP.init(this,null);
 //        ConfigLoader.setDefaultWidgetMode(IPlayer.WIDGET_MODE_VIDEO_VIEW);
-        ConfigLoader.setDefaultWidgetMode(IPlayer.WIDGET_MODE_DECODER);
+        ConfigLoader.setDefaultWidgetMode(this, IPlayer.WIDGET_MODE_DECODER);
         DecoderType.getInstance().setDefaultDecoderType(0);
 //        PlayerType.getInstance().addPlayerType(1,new PlayerTypeEntity("IJK播放器","com.kk.taurus.ijkplayer.IJKRenderWidgetPlayer"));
 //        PlayerType.getInstance().setDefaultPlayerType(0);

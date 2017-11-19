@@ -16,11 +16,14 @@
 
 package com.kk.taurus.playerbase.config;
 
+import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
+import com.kk.taurus.playerbase.inter.IPlayer;
 import com.kk.taurus.playerbase.setting.DecoderType;
+import com.kk.taurus.playerbase.setting.InternalPlayerManager;
 import com.kk.taurus.playerbase.setting.PlayerType;
-import com.kk.taurus.playerbase.widget.BasePlayer;
 
 import java.lang.reflect.Constructor;
 
@@ -30,10 +33,16 @@ import java.lang.reflect.Constructor;
 
 public class ConfigLoader {
 
-    private static int mWidgetMode = BasePlayer.WIDGET_MODE_VIDEO_VIEW;
+    private static final String TAG = "ConfigLoader";
 
-    public static void setDefaultWidgetMode(int widgetMode){
+    private static int mWidgetMode = IPlayer.WIDGET_MODE_VIDEO_VIEW;
+
+    public static void setDefaultWidgetMode(Application application, int widgetMode){
         mWidgetMode = widgetMode;
+        //当组件类型为decoder时，可直接初始化decoder解码器
+        if(mWidgetMode==IPlayer.WIDGET_MODE_DECODER){
+            InternalPlayerManager.get().updateWidgetMode(application.getApplicationContext(),mWidgetMode);
+        }
     }
 
     public static int getWidgetMode(){
@@ -50,6 +59,7 @@ public class ConfigLoader {
                     instance = constructor.newInstance(context);
                 }
             }
+            Log.d(TAG,"init VideoView instance ...");
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -66,6 +76,7 @@ public class ConfigLoader {
                     instance = constructor.newInstance(context);
                 }
             }
+            Log.d(TAG,"init Decoder instance ...");
         }catch (Exception e){
             e.printStackTrace();
         }

@@ -19,6 +19,7 @@ package com.taurus.playerbaselibrary.ui.activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.kk.taurus.playerbase.DefaultPlayer;
 import com.kk.taurus.playerbase.setting.VideoData;
@@ -36,6 +37,8 @@ public class TestPlayerActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_player);
+
+        Log.d("ConfigLoader","onCreate TestPlayerActivity");
 
         mPlayer = (DefaultPlayer) findViewById(R.id.player);
 

@@ -91,7 +91,7 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
 
     private void initContainer(Context context) {
         this.mAppContext = context;
-        setBackgroundColor(Color.TRANSPARENT);
+        setBackgroundColor(Color.BLACK);
         initBaseInfo(context);
         //init render container
         initPlayerContainer(context);
