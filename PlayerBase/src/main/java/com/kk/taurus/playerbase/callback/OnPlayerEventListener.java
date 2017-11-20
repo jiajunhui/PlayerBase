@@ -22,6 +22,7 @@ import android.os.Bundle;
  * Created by Taurus on 2016/8/30.
  */
 public interface OnPlayerEventListener {
+
     int EVENT_CODE_ON_PLAYER_PREPARING = 90041000;
     /** when player ready to start*/
     int EVENT_CODE_ON_INTENT_TO_START = 90041001;
@@ -68,6 +69,7 @@ public interface OnPlayerEventListener {
 
     int EVENT_CODE_PLAYER_DPAD_REQUEST_FOCUS = 90041022;
 
+    /** on user player video definition list get*/
     int EVENT_CODE_ON_DEFINITION_LIST_READY = 90041023;
 
     /** when screen orientation portrait*/
@@ -79,20 +81,31 @@ public interface OnPlayerEventListener {
     /** when player has bind receiver collections*/
     int EVENT_CODE_ON_RECEIVER_COLLECTIONS_NEW_BIND = 90041026;
 
+    /** on decoder render surface holder update*/
     int EVENT_CODE_ON_SURFACE_HOLDER_UPDATE = 90041027;
 
+    /** on player timer counter update*/
     int EVENT_CODE_ON_PLAYER_TIMER_UPDATE = 90041028;
 
-    int EVENT_CODE_ON_NETWORK_ERROR = 90041029;
-    int EVENT_CODE_ON_NETWORK_CHANGE = 90041030;
-    int EVENT_CODE_ON_NETWORK_CONNECTED = 90041031;
-
+    /** on player container destroy, contain cover receiver collections*/
     int EVENT_CODE_PLAYER_CONTAINER_ON_DESTROY = 90041032;
 
+    /** on decoder render surface update*/
     int EVENT_CODE_ON_SURFACE_UPDATE = 90041033;
+
+    int EVENT_CODE_ON_RENDER_VIEW_TYPE_UPDATE = 90041034;
+    int EVENT_CODE_ON_RENDER_ASPECT_RATIO_UPDATE = 90041035;
+
+    /** network event code*/
+    int EVENT_CODE_ON_NETWORK_ERROR = 90042000;
+    int EVENT_CODE_ON_NETWORK_CHANGE = 90042001;
+    int EVENT_CODE_ON_NETWORK_CONNECTED = 90042002;
+    /** network event code*/
 
 
     String BUNDLE_KEY_INT_DATA = "int_data";
+    String BUNDLE_KEY_STRING_DATA = "string_data";
+    String BUNDLE_KEY_SERIALIZABLE_DATA = "serializable_data";
     String BUNDLE_KEY_POSITION = "position";
     String BUNDLE_KEY_VIDEO_DATA = "video_data";
     String BUNDLE_KEY_RATE_DATA = "rate_data";

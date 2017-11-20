@@ -14,15 +14,18 @@
  *    limitations under the License.
  */
 
-package com.kk.taurus.playerbase.setting;
+package com.kk.taurus.playerbase.inter;
 
-import java.io.Serializable;
+import android.view.MotionEvent;
 
 /**
- * ------------------------------------
- * Created by Taurus on 2016/8/2.
- * ------------------------------------
+ * Created by Taurus on 2017/11/20.
  */
-public enum  ViewType implements Serializable{
-    SURFACEVIEW,TEXTUREVIEW
+
+public interface IGestureHelper {
+
+    void onSizeChanged(int w, int h, int oldw, int oldh);
+    void setGestureEnable(boolean enable);
+    void onEndGesture(MotionEvent event);
+
 }

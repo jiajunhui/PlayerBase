@@ -22,7 +22,6 @@ import android.os.Bundle;
 import com.kk.taurus.playerbase.callback.OnErrorListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.config.ConfigLoader;
-import com.kk.taurus.playerbase.setting.BaseAdVideo;
 import com.kk.taurus.playerbase.setting.Rate;
 import com.kk.taurus.playerbase.setting.VideoData;
 
@@ -67,17 +66,6 @@ public abstract class DelegateVideoView extends BaseVideoView {
         super.setDataSource(data);
         if(isLegalState()){
             mRenderWidget.setDataSource(data);
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(OnPlayerEventListener.BUNDLE_KEY_VIDEO_DATA,data);
-            //on set data source
-            onBindPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_ON_SET_DATA_SOURCE,bundle);
-            if(data instanceof BaseAdVideo){
-                //on set ad video data
-                onBindPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_ON_SET_AD_DATA,bundle);
-            }else{
-                //on set video data
-                onBindPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_ON_SET_VIDEO_DATA,bundle);
-            }
         }
     }
 
@@ -85,7 +73,6 @@ public abstract class DelegateVideoView extends BaseVideoView {
     public void start() {
         if(isLegalState()){
             mRenderWidget.start();
-            onBindPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_INTENT_TO_START,null);
         }
     }
 
@@ -93,9 +80,6 @@ public abstract class DelegateVideoView extends BaseVideoView {
     public void start(int msc) {
         if(isLegalState()){
             mRenderWidget.start(msc);
-            Bundle bundle = new Bundle();
-            bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_POSITION,msc);
-            onBindPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_INTENT_TO_START,bundle);
         }
     }
 
@@ -103,9 +87,6 @@ public abstract class DelegateVideoView extends BaseVideoView {
     public void pause() {
         if(isLegalState()){
             mRenderWidget.pause();
-            Bundle bundle = new Bundle();
-            bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_POSITION,getCurrentPosition());
-            onBindPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAY_PAUSE,bundle);
         }
     }
 
@@ -113,9 +94,6 @@ public abstract class DelegateVideoView extends BaseVideoView {
     public void resume() {
         if(isLegalState()){
             mRenderWidget.resume();
-            Bundle bundle = new Bundle();
-            bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_POSITION,getCurrentPosition());
-            onBindPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAY_RESUME,bundle);
         }
     }
 
@@ -123,9 +101,6 @@ public abstract class DelegateVideoView extends BaseVideoView {
     public void seekTo(int msc) {
         if(isLegalState()){
             mRenderWidget.seekTo(msc);
-            Bundle bundle = new Bundle();
-            bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_POSITION,msc);
-            onBindPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_SEEK_TO,bundle);
         }
     }
 
@@ -134,7 +109,6 @@ public abstract class DelegateVideoView extends BaseVideoView {
         if(isLegalState()){
             mRenderWidget.stop();
             reset();
-            onBindPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_ON_STOP,null);
         }
     }
 
@@ -221,9 +195,6 @@ public abstract class DelegateVideoView extends BaseVideoView {
     @Override
     public void changeVideoDefinition(Rate rate) {
         if(isLegalState()){
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(OnPlayerEventListener.BUNDLE_KEY_RATE_DATA,rate);
-            onBindPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_CHANGE_DEFINITION,bundle);
             mRenderWidget.changeVideoDefinition(rate);
         }
     }
@@ -232,7 +203,6 @@ public abstract class DelegateVideoView extends BaseVideoView {
     public void destroy() {
         if(isLegalState()){
             mRenderWidget.destroy();
-            onBindPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_ON_DESTROY,null);
             setOnPlayerEventListener(null);
             setOnErrorListener(null);
         }

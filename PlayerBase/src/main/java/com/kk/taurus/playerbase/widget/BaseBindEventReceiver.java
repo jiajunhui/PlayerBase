@@ -182,6 +182,7 @@ public abstract class BaseBindEventReceiver extends BaseContainer implements IEv
 
     @Override
     public void onNotifyPlayEvent(int eventCode, Bundle bundle) {
+        EventLog.onNotifyPlayerEvent(eventCode, bundle);
         if(mPlayerObserverHandler!=null)
             mPlayerObserverHandler.onNotifyPlayEvent(eventCode, bundle);
     }
@@ -267,28 +268,24 @@ public abstract class BaseBindEventReceiver extends BaseContainer implements IEv
 
     @Override
     public void onHorizontalSlide(float percent, MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        super.onHorizontalSlide(percent,e1, e2, distanceX, distanceY);
         if(mGestureObserverHandler!=null)
             mGestureObserverHandler.onGestureHorizontalSlide(percent,e1, e2, distanceX, distanceY);
     }
 
     @Override
     public void onRightVerticalSlide(float percent, MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        super.onRightVerticalSlide(percent, e1, e2, distanceX, distanceY);
         if(mGestureObserverHandler!=null)
             mGestureObserverHandler.onGestureRightVerticalSlide(percent,e1, e2, distanceX, distanceY);
     }
 
     @Override
     public void onLeftVerticalSlide(float percent, MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        super.onLeftVerticalSlide(percent, e1, e2, distanceX, distanceY);
         if(mGestureObserverHandler!=null)
             mGestureObserverHandler.onGestureLeftVerticalSlide(percent,e1, e2, distanceX, distanceY);
     }
 
     @Override
     public void onEndGesture() {
-        super.onEndGesture();
         if(mGestureObserverHandler!=null)
             mGestureObserverHandler.onGestureEnd();
     }

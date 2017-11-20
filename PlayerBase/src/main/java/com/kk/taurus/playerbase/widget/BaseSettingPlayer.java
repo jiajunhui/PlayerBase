@@ -30,7 +30,6 @@ import com.kk.taurus.playerbase.inter.ITimerGetter;
 import com.kk.taurus.playerbase.setting.AspectRatio;
 import com.kk.taurus.playerbase.setting.DecodeMode;
 import com.kk.taurus.playerbase.setting.Rate;
-import com.kk.taurus.playerbase.setting.VideoData;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -44,7 +43,7 @@ import java.util.List;
 public abstract class BaseSettingPlayer extends BaseBindEventReceiver implements IPlayer {
 
     private final String TAG = "BaseSettingPlayer";
-    protected VideoData dataSource;
+
     protected Rate rate;
     protected int mStatus = STATUS_IDLE;
     private DecodeMode mDecodeMode = DecodeMode.SOFT;
@@ -59,11 +58,6 @@ public abstract class BaseSettingPlayer extends BaseBindEventReceiver implements
 
     public BaseSettingPlayer(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-    }
-
-    @Override
-    public void setDataSource(VideoData dataSource) {
-        this.dataSource = dataSource;
     }
 
     @Override
@@ -213,11 +207,6 @@ public abstract class BaseSettingPlayer extends BaseBindEventReceiver implements
          * */
         int code = landscape?OnPlayerEventListener.EVENT_CODE_ON_INTENT_SET_SCREEN_ORIENTATION_LANDSCAPE:OnPlayerEventListener.EVENT_CODE_ON_INTENT_SET_SCREEN_ORIENTATION_PORTRAIT;
         onPlayerEvent(code,null);
-//        try {
-//            ((Activity)mAppContext).setRequestedOrientation(landscape? ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE:ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
     }
 
     public boolean isLandscape() {

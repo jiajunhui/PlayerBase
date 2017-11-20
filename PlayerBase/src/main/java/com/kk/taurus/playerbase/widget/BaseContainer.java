@@ -28,8 +28,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.kk.taurus.playerbase.cover.GestureCover;
-import com.kk.taurus.playerbase.view.GestureLayout;
+import com.kk.taurus.playerbase.callback.BaseGestureCallbackHandler;
+import com.kk.taurus.playerbase.setting.ContainerTouchHelper;
 import com.kk.taurus.playerbase.callback.OnPlayerGestureListener;
 import com.kk.taurus.playerbase.cover.base.BaseCover;
 import com.kk.taurus.playerbase.inter.ICoverContainer;
@@ -66,9 +66,9 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
      */
     protected int mScreenW, mScreenH;
     /**
-     * gesture layout for handle user gesture.
+     * for handle user gesture.
      */
-    private GestureLayout mGestureLayout;
+    private ContainerTouchHelper mTouchHelper;
 
     public BaseContainer(@NonNull Context context) {
         this(context,null);
@@ -84,9 +84,7 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
         super.onSizeChanged(w, h, oldw, oldh);
         mWidth = w;
         mHeight = h;
-        if(mGestureLayout!=null){
-            mGestureLayout.updateWH(w,h);
-        }
+        mTouchHelper.onSizeChanged(w, h, oldw, oldh);
     }
 
     private void initContainer(Context context) {
@@ -107,20 +105,19 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
     }
 
     protected void initGesture(Context context){
-//        mGestureLayout = new GestureLayout(context, mWidth, mHeight);
-//        mGestureLayout.setPlayerGestureListener(this);
-//        addView(mGestureLayout,new ViewGroup.LayoutParams(
-//                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        GestureCover gestureCover = new GestureCover(context,this);
-        mGestureLayout = gestureCover.getGestureLayout();
-        addCover(gestureCover);
+        mTouchHelper = new ContainerTouchHelper(context,getGestureCallBackHandler());
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return mTouchHelper.onTouch(event);
+    }
+
+    protected abstract BaseGestureCallbackHandler getGestureCallBackHandler();
+
     public void setGestureEnable(boolean enable){
-        if(mGestureLayout!=null){
-            mGestureLayout.setEnabled(enable);
-            onPlayerGestureEnableChange(enable);
-        }
+        mTouchHelper.setGestureEnable(enable);
+        onPlayerGestureEnableChange(enable);
     }
 
     protected void initBaseInfo(Context context) {
@@ -220,53 +217,9 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
 
     protected void removeAllContainers(){
         removeView(mPlayerContainer);
-        removeView(mGestureLayout);
         if(mCoverContainer!=null){
             removeView(mCoverContainer.getContainerRoot());
         }
-    }
-
-    @Override
-    public boolean onSingleTapUp(MotionEvent event) {
-        Log.d(TAG,"onSingleTapUp...");
-        return false;
-    }
-
-    @Override
-    public boolean onDoubleTap(MotionEvent event) {
-        Log.d(TAG,"onDoubleTap...");
-        return false;
-    }
-
-    @Override
-    public boolean onDown(MotionEvent event) {
-        Log.d(TAG,"onDown...");
-        return false;
-    }
-
-    @Override
-    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        Log.d(TAG,"onScroll...");
-        return false;
-    }
-
-    @Override
-    public void onHorizontalSlide(float percent, MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        Log.d(TAG,"onHorizontalSlide...");
-    }
-
-    @Override
-    public void onRightVerticalSlide(float percent, MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        Log.d(TAG,"onRightVerticalSlide...");
-    }
-
-    @Override
-    public void onLeftVerticalSlide(float percent, MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        Log.d(TAG,"onLeftVerticalSlide...");
-    }
-
-    public void onEndGesture(){
-        Log.d(TAG,"onEndGesture...");
     }
 
     protected void onPlayerGestureEnableChange(boolean enable){

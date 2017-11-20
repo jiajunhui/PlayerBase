@@ -49,6 +49,7 @@ public abstract class BasePlayer extends BaseSettingPlayer implements IRenderPro
 
     private final String TAG = "BasePlayer";
 
+    protected VideoData dataSource;
     private int mWidgetMode;
     private boolean needProxyRenderEvent;
     private RenderCallbackProxy mRenderCallbackProxy;
@@ -142,7 +143,7 @@ public abstract class BasePlayer extends BaseSettingPlayer implements IRenderPro
         switch (eventCode){
             case OnPlayerEventListener.EVENT_CODE_PREPARED:
                 //当组件模式设置为decoder模式时，且没有设置渲染视图时，此处自动为decoder设置一个渲染视图。
-                if(getWidgetMode()==WIDGET_MODE_DECODER && !isRenderAvailable){
+                if(getWidgetMode()==WIDGET_MODE_DECODER && isDataSourceAvailable() && !isRenderAvailable){
                     setRenderViewForDecoder(new RenderSurfaceView(mAppContext), true);
                 }
                 break;
@@ -153,10 +154,19 @@ public abstract class BasePlayer extends BaseSettingPlayer implements IRenderPro
         return mWidgetMode;
     }
 
+    protected boolean isDataSourceAvailable(){
+        return dataSource!=null;
+    }
+
     @Override
     public void setDataSource(VideoData data) {
-        super.setDataSource(data);
+        this.dataSource = data;
+        onDataSourceAvailable();
         InternalPlayerManager.get().setDataSource(data);
+    }
+
+    protected void onDataSourceAvailable() {
+
     }
 
     @Override
@@ -295,6 +305,7 @@ public abstract class BasePlayer extends BaseSettingPlayer implements IRenderPro
     @Override
     public void destroy() {
         if(getWidgetMode()==WIDGET_MODE_DECODER){
+            dataSource = null;
             clearPlayerContainer();
         }
         sendEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_CONTAINER_ON_DESTROY,null);

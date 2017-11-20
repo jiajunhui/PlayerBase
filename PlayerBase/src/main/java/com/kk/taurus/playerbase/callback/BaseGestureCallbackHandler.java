@@ -14,39 +14,34 @@
  *    limitations under the License.
  */
 
-package com.kk.taurus.playerbase.setting;
+package com.kk.taurus.playerbase.callback;
 
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
-import com.kk.taurus.playerbase.callback.OnPlayerGestureListener;
-
 /**
- * Created by Taurus on 2017/3/26.
+ * Created by Taurus on 2017/11/20.
  */
 
-public class PlayerGestureDetectorListener extends GestureDetector.SimpleOnGestureListener {
+public class BaseGestureCallbackHandler extends GestureDetector.SimpleOnGestureListener {
 
-    private int mWidth;
-    private int mHeight;
+    private final String TAG = "GestureCallbackHandler";
+    protected OnPlayerGestureListener mOnPlayerGestureListener;
 
-    private OnPlayerGestureListener mOnPlayerGestureListener;
-    private boolean firstTouch;
-    private boolean horizontalSlide;
-    private boolean rightVerticalSlide;
+    protected int mWidth, mHeight;
+    protected boolean firstTouch;
+    protected boolean horizontalSlide;
+    protected boolean rightVerticalSlide;
 
-    public PlayerGestureDetectorListener(int width, int height){
-        this.mWidth = width;
-        this.mHeight = height;
-    }
-
-    public void updateWH(int width, int height){
-        this.mWidth = width;
-        this.mHeight = height;
-    }
-
-    public void setOnPlayerGestureListener(OnPlayerGestureListener onPlayerGestureListener) {
+    public BaseGestureCallbackHandler(OnPlayerGestureListener onPlayerGestureListener){
         this.mOnPlayerGestureListener = onPlayerGestureListener;
+    }
+
+    public void onLayoutSizeChanged(int w, int h, int oldw, int oldh){
+        mWidth = w;
+        mHeight = h;
+        Log.d(TAG,"width = " + mWidth + " height = " + mHeight);
     }
 
     @Override
@@ -67,6 +62,7 @@ public class PlayerGestureDetectorListener extends GestureDetector.SimpleOnGestu
 
     @Override
     public boolean onDown(MotionEvent e) {
+        Log.d(TAG,"onDown...");
         firstTouch = true;
         if(mOnPlayerGestureListener!=null){
             return mOnPlayerGestureListener.onDown(e);
@@ -108,7 +104,7 @@ public class PlayerGestureDetectorListener extends GestureDetector.SimpleOnGestu
         return super.onScroll(e1, e2, distanceX, distanceY);
     }
 
-    public void onEndGesture(){
+    public void onEndGesture(MotionEvent event){
         if(mOnPlayerGestureListener!=null){
             mOnPlayerGestureListener.onEndGesture();
         }

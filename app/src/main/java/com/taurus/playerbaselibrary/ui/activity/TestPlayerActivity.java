@@ -42,7 +42,7 @@ public class TestPlayerActivity extends AppCompatActivity {
 
         mPlayer = (DefaultPlayer) findViewById(R.id.player);
 
-        VideoData data = new VideoData("http://192.168.217.38:8080/cymatics.mp4");
+        VideoData data = new VideoData("http://192.168.1.3:8080/cymatics.mp4");
         mPlayer.setDataSource(data);
         mPlayer.start();
 

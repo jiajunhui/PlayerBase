@@ -60,10 +60,12 @@ public class DefaultDecoder extends BaseDecoder{
     public void setDataSource(VideoData data) {
         if(data!=null){
             this.mDataSource = data;
-            if(mMediaPlayer==null){
-                mMediaPlayer = createMediaPlayer();
-            }
-            reset();
+            //-----send event-----
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(OnPlayerEventListener.BUNDLE_KEY_VIDEO_DATA,data);
+            //on set data source
+            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_ON_SET_DATA_SOURCE,bundle);
+            //-----send event-----
             openVideo(data);
         }
     }
@@ -74,6 +76,13 @@ public class DefaultDecoder extends BaseDecoder{
 
     private void openVideo(VideoData data) {
         try {
+            if(mMediaPlayer==null){
+                mMediaPlayer = createMediaPlayer();
+            }else{
+                mMediaPlayer.reset();
+                mStatus = STATUS_IDLE;
+                resetListener();
+            }
             Uri mUri = Uri.parse(data.getData());
             Map<String, String> mHeaders = new HashMap<>();
             // REMOVED: mAudioSession
@@ -85,6 +94,7 @@ public class DefaultDecoder extends BaseDecoder{
             mMediaPlayer.setOnSeekCompleteListener(mOnSeekCompleteListener);
             mMediaPlayer.setOnBufferingUpdateListener(mBufferingUpdateListener);
             mCurrentBufferPercentage = 0;
+            mStatus = STATUS_INITIALIZED;
             String scheme = mUri.getScheme();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
                     useMediaDataSource &&
@@ -102,6 +112,8 @@ public class DefaultDecoder extends BaseDecoder{
             mMediaPlayer.prepareAsync();
         }catch (Exception e){
             e.printStackTrace();
+            mStatus = STATUS_ERROR;
+            mTargetStatus = STATUS_ERROR;
         }
     }
 
@@ -126,6 +138,9 @@ public class DefaultDecoder extends BaseDecoder{
                         || mStatus==STATUS_PLAYBACK_COMPLETE)){
             mMediaPlayer.start();
             mStatus = STATUS_STARTED;
+            Bundle bundle = new Bundle();
+            bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_POSITION,startSeekPos);
+            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_INTENT_TO_START,bundle);
         }
         mTargetStatus = STATUS_STARTED;
         Log.d(TAG,"start...");
@@ -146,6 +161,9 @@ public class DefaultDecoder extends BaseDecoder{
         if(available() && mStatus==STATUS_STARTED){
             mMediaPlayer.pause();
             mStatus = STATUS_PAUSED;
+            Bundle bundle = new Bundle();
+            bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_POSITION,getCurrentPosition());
+            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAY_PAUSE,bundle);
         }
         mTargetStatus = STATUS_PAUSED;
         Log.d(TAG,"pause...");
@@ -156,6 +174,9 @@ public class DefaultDecoder extends BaseDecoder{
         if(available() && mStatus == STATUS_PAUSED){
             mMediaPlayer.start();
             mStatus = STATUS_STARTED;
+            Bundle bundle = new Bundle();
+            bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_POSITION,getCurrentPosition());
+            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAY_RESUME,bundle);
         }
         mTargetStatus = STATUS_STARTED;
         Log.d(TAG,"resume...");
@@ -169,6 +190,9 @@ public class DefaultDecoder extends BaseDecoder{
                         || mStatus==STATUS_PAUSED
                         || mStatus==STATUS_PLAYBACK_COMPLETE)){
             mMediaPlayer.seekTo(msc);
+            Bundle bundle = new Bundle();
+            bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_POSITION,msc);
+            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_SEEK_TO,bundle);
         }
     }
 
@@ -181,6 +205,7 @@ public class DefaultDecoder extends BaseDecoder{
                         || mStatus==STATUS_PLAYBACK_COMPLETE)){
             mMediaPlayer.stop();
             mStatus = STATUS_STOPPED;
+            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_ON_STOP,null);
         }
         mTargetStatus = STATUS_STOPPED;
     }
@@ -198,7 +223,7 @@ public class DefaultDecoder extends BaseDecoder{
 
     @Override
     public boolean isPlaying() {
-        if(available()){
+        if(available() && mStatus!=STATUS_ERROR){
             return mMediaPlayer.isPlaying();
         }
         return false;
@@ -206,7 +231,11 @@ public class DefaultDecoder extends BaseDecoder{
 
     @Override
     public int getCurrentPosition() {
-        if(available()){
+        if(available()
+                && (mStatus==STATUS_PREPARED
+                || mStatus==STATUS_STARTED
+                || mStatus==STATUS_PAUSED
+                || mStatus==STATUS_PLAYBACK_COMPLETE)){
             return (int) mMediaPlayer.getCurrentPosition();
         }
         return 0;
@@ -214,7 +243,10 @@ public class DefaultDecoder extends BaseDecoder{
 
     @Override
     public int getDuration() {
-        if(available()){
+        if(available()
+                && mStatus!=STATUS_ERROR
+                && mStatus!=STATUS_INITIALIZED
+                && mStatus!=STATUS_IDLE){
             return (int) mMediaPlayer.getDuration();
         }
         return 0;
@@ -258,9 +290,9 @@ public class DefaultDecoder extends BaseDecoder{
 
     @Override
     public void destroy() {
-        super.destroy();
         if(available()){
             mMediaPlayer.release();
+            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_ON_DESTROY,null);
         }
     }
 
@@ -268,6 +300,7 @@ public class DefaultDecoder extends BaseDecoder{
     public void setDisplay(SurfaceHolder surfaceHolder) {
         if(surfaceHolder!=null && mMediaPlayer!=null){
             mMediaPlayer.setDisplay(surfaceHolder);
+            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_SURFACE_HOLDER_UPDATE,null);
         }
     }
 
@@ -275,6 +308,7 @@ public class DefaultDecoder extends BaseDecoder{
     public void setSurface(Surface surface) {
         if(surface!=null && mMediaPlayer!=null){
             mMediaPlayer.setSurface(surface);
+            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_SURFACE_UPDATE,null);
         }
     }
 
@@ -300,6 +334,8 @@ public class DefaultDecoder extends BaseDecoder{
             Log.d(TAG,"onPrepared...");
             mStatus = STATUS_PREPARED;
 
+            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PREPARED,null);
+
             // Get the capabilities of the player for this stream
             // REMOVED: Metadata
 
@@ -310,13 +346,13 @@ public class DefaultDecoder extends BaseDecoder{
             if (seekToPosition != 0) {
                 seekTo(seekToPosition);
             }
+
             // We don't know the video size yet, but should start anyway.
             // The video size might be reported to us later.
             Log.d(TAG,"mTargetStatus = " + mTargetStatus);
             if (mTargetStatus == STATUS_STARTED) {
                 start();
             }
-            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PREPARED,null);
         }
     };
 

@@ -22,7 +22,6 @@ import android.os.Bundle;
 import com.kk.taurus.playerbase.cover.base.BaseReceiverCollections;
 import com.kk.taurus.playerbase.setting.BaseAdVideo;
 import com.kk.taurus.playerbase.setting.VideoData;
-import com.kk.taurus.playerbase.utils.EventLog;
 
 import java.util.List;
 
@@ -50,7 +49,6 @@ public class PlayerObserverHandler implements PlayerObserver{
 
     @Override
     public void onNotifyPlayEvent(int eventCode, Bundle bundle) {
-        EventLog.onNotifyPlayerEvent(eventCode, bundle);
         if(mReceiverCollections!=null && mReceiverCollections.getReceivers()!=null)
             for(BaseEventReceiver receiver:mReceiverCollections.getReceivers()){
                 if(receiver!=null){

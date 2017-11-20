@@ -24,7 +24,6 @@ import android.view.SurfaceHolder;
 import com.kk.taurus.playerbase.callback.OnErrorListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.config.ConfigLoader;
-import com.kk.taurus.playerbase.setting.BaseAdVideo;
 import com.kk.taurus.playerbase.setting.Rate;
 import com.kk.taurus.playerbase.setting.VideoData;
 
@@ -69,17 +68,6 @@ public abstract class DelegateDecoderPlayer extends BaseMediaPlayer{
         super.setDataSource(data);
         if(isLegalState()){
             mDecoder.setDataSource(data);
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(OnPlayerEventListener.BUNDLE_KEY_VIDEO_DATA,data);
-            //on set data source
-            onBindPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_ON_SET_DATA_SOURCE,bundle);
-            if(data instanceof BaseAdVideo){
-                //on set ad video data
-                onBindPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_ON_SET_AD_DATA,bundle);
-            }else{
-                //on set video data
-                onBindPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_ON_SET_VIDEO_DATA,bundle);
-            }
         }
     }
 
@@ -87,7 +75,6 @@ public abstract class DelegateDecoderPlayer extends BaseMediaPlayer{
     public void setDisplay(SurfaceHolder surfaceHolder) {
         if(isLegalState()){
             mDecoder.setDisplay(surfaceHolder);
-            onBindPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_SURFACE_HOLDER_UPDATE,null);
         }
     }
 
@@ -95,7 +82,6 @@ public abstract class DelegateDecoderPlayer extends BaseMediaPlayer{
     public void setSurface(Surface surface) {
         if(isLegalState()){
             mDecoder.setSurface(surface);
-            onBindPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_SURFACE_UPDATE,null);
         }
     }
 
@@ -103,7 +89,6 @@ public abstract class DelegateDecoderPlayer extends BaseMediaPlayer{
     public void start() {
         if(isLegalState()){
             mDecoder.start();
-            onBindPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_INTENT_TO_START,null);
         }
     }
 
@@ -111,9 +96,6 @@ public abstract class DelegateDecoderPlayer extends BaseMediaPlayer{
     public void start(int msc) {
         if(isLegalState()){
             mDecoder.start(msc);
-            Bundle bundle = new Bundle();
-            bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_POSITION,msc);
-            onBindPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_INTENT_TO_START,bundle);
         }
     }
 
@@ -121,9 +103,6 @@ public abstract class DelegateDecoderPlayer extends BaseMediaPlayer{
     public void pause() {
         if(isLegalState()){
             mDecoder.pause();
-            Bundle bundle = new Bundle();
-            bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_POSITION,getCurrentPosition());
-            onBindPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAY_PAUSE,bundle);
         }
     }
 
@@ -131,9 +110,6 @@ public abstract class DelegateDecoderPlayer extends BaseMediaPlayer{
     public void resume() {
         if(isLegalState()){
             mDecoder.resume();
-            Bundle bundle = new Bundle();
-            bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_POSITION,getCurrentPosition());
-            onBindPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAY_RESUME,bundle);
         }
     }
 
@@ -141,9 +117,6 @@ public abstract class DelegateDecoderPlayer extends BaseMediaPlayer{
     public void seekTo(int msc) {
         if(isLegalState()){
             mDecoder.seekTo(msc);
-            Bundle bundle = new Bundle();
-            bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_POSITION,msc);
-            onBindPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_SEEK_TO,bundle);
         }
     }
 
@@ -152,7 +125,6 @@ public abstract class DelegateDecoderPlayer extends BaseMediaPlayer{
         if(isLegalState()){
             mDecoder.stop();
             reset();
-            onBindPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_ON_STOP,null);
         }
     }
 
@@ -255,9 +227,6 @@ public abstract class DelegateDecoderPlayer extends BaseMediaPlayer{
     @Override
     public void changeVideoDefinition(Rate rate) {
         if(isLegalState()){
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(OnPlayerEventListener.BUNDLE_KEY_RATE_DATA,rate);
-            onBindPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_CHANGE_DEFINITION,bundle);
             mDecoder.changeVideoDefinition(rate);
         }
     }
@@ -266,7 +235,6 @@ public abstract class DelegateDecoderPlayer extends BaseMediaPlayer{
     public void destroy() {
         if(isLegalState()){
             mDecoder.destroy();
-            onBindPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_ON_DESTROY,null);
             setOnPlayerEventListener(null);
             setOnErrorListener(null);
         }

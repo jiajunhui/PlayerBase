@@ -143,9 +143,4 @@ public abstract class BaseRenderWidget extends FrameLayout implements IRenderWid
         return 0;
     }
 
-    @Override
-    public void destroy() {
-        mOnErrorListener = null;
-        mOnPlayerEventListener = null;
-    }
 }

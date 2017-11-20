@@ -18,6 +18,7 @@ package com.kk.taurus.playerbase.player;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
@@ -174,6 +175,12 @@ public class DefaultRenderWidget extends BaseRenderWidget {
             mStatus = STATUS_INITIALIZED;
             this.dataSource = data;
             startSeekPos = -1;
+            //-----send event-----
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(OnPlayerEventListener.BUNDLE_KEY_VIDEO_DATA,data);
+            //on set data source
+            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_ON_SET_DATA_SOURCE,bundle);
+            //-----send event-----
             mVideoView.setVideoPath(data.getData());
             initPlayerListener();
         }
@@ -197,6 +204,9 @@ public class DefaultRenderWidget extends BaseRenderWidget {
                         || mStatus==STATUS_PLAYBACK_COMPLETE)){
             mVideoView.start();
             mStatus = STATUS_STARTED;
+            Bundle bundle = new Bundle();
+            bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_POSITION,startSeekPos);
+            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_INTENT_TO_START,bundle);
         }
         mTargetStatus = STATUS_STARTED;
     }
@@ -216,6 +226,9 @@ public class DefaultRenderWidget extends BaseRenderWidget {
         if(available() && mStatus==STATUS_STARTED){
             mVideoView.pause();
             mStatus = STATUS_PAUSED;
+            Bundle bundle = new Bundle();
+            bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_POSITION,getCurrentPosition());
+            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAY_PAUSE,bundle);
         }
         mTargetStatus = STATUS_PAUSED;
     }
@@ -225,6 +238,9 @@ public class DefaultRenderWidget extends BaseRenderWidget {
         if(available() && mStatus == STATUS_PAUSED){
             mVideoView.start();
             mStatus = STATUS_STARTED;
+            Bundle bundle = new Bundle();
+            bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_POSITION,getCurrentPosition());
+            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAY_RESUME,bundle);
         }
         mTargetStatus = STATUS_STARTED;
     }
@@ -237,6 +253,9 @@ public class DefaultRenderWidget extends BaseRenderWidget {
                         || mStatus==STATUS_PAUSED
                         || mStatus==STATUS_PLAYBACK_COMPLETE)){
             mVideoView.seekTo(msc);
+            Bundle bundle = new Bundle();
+            bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_POSITION,msc);
+            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_SEEK_TO,bundle);
         }
     }
 
@@ -249,6 +268,7 @@ public class DefaultRenderWidget extends BaseRenderWidget {
                         || mStatus==STATUS_PLAYBACK_COMPLETE)){
             mVideoView.stop();
             mStatus = STATUS_STOPPED;
+            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_ON_STOP,null);
         }
         mTargetStatus = STATUS_STOPPED;
     }
@@ -307,6 +327,9 @@ public class DefaultRenderWidget extends BaseRenderWidget {
         super.setViewType(viewType);
         if(available()){
             mVideoView.setRenderType(viewType==ViewType.SURFACEVIEW);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(OnPlayerEventListener.BUNDLE_KEY_SERIALIZABLE_DATA,viewType);
+            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_RENDER_VIEW_TYPE_UPDATE,bundle);
         }
     }
 
@@ -330,12 +353,14 @@ public class DefaultRenderWidget extends BaseRenderWidget {
             }else if(aspectRatio == AspectRatio.AspectRatio_ORIGIN){
                 mVideoView.setAspectRatio(IRenderView.AR_ASPECT_WRAP_CONTENT);
             }
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(OnPlayerEventListener.BUNDLE_KEY_SERIALIZABLE_DATA,aspectRatio);
+            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_RENDER_ASPECT_RATIO_UPDATE,bundle);
         }
     }
 
     @Override
     public void destroy() {
-        super.destroy();
         try{
             mStatus = STATUS_END;
             mTargetStatus = STATUS_IDLE;
@@ -343,6 +368,7 @@ public class DefaultRenderWidget extends BaseRenderWidget {
                 mVideoView.release(true);
                 mVideoView = null;
             }
+            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_ON_DESTROY,null);
         }catch (Exception e){
             e.printStackTrace();
         }

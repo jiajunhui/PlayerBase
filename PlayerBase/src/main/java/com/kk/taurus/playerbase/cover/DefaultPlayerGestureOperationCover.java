@@ -97,7 +97,7 @@ public class DefaultPlayerGestureOperationCover extends BaseGestureOperationCove
 
     @Override
     public boolean onGestureDown(MotionEvent event) {
-        return false;
+        return true;
     }
 
     @Override

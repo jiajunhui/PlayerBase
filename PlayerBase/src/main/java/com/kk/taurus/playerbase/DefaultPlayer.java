@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.kk.taurus.playerbase.callback.BaseGestureCallbackHandler;
 import com.kk.taurus.playerbase.cover.container.DefaultLevelCoverContainer;
 import com.kk.taurus.playerbase.inter.ICoverContainer;
 import com.kk.taurus.playerbase.setting.BaseExtendEventBox;
@@ -56,8 +57,13 @@ public class DefaultPlayer extends BasePlayer implements IEventBinder, InternalP
     @Override
     protected View getPlayerWidget(Context context) {
         InternalPlayerManager.get().updateWidgetMode(context,getWidgetMode());
-        InternalPlayerManager.get().setOnInternalPlayerListener(this);
         return InternalPlayerManager.get().getRenderView();
+    }
+
+    @Override
+    protected void onDataSourceAvailable() {
+        super.onDataSourceAvailable();
+        InternalPlayerManager.get().setOnInternalPlayerListener(this);
     }
 
     @Override
@@ -67,6 +73,11 @@ public class DefaultPlayer extends BasePlayer implements IEventBinder, InternalP
 
     protected BaseExtendEventBox getExtendEventBox() {
         return new BaseExtendEventBox(mAppContext,this);
+    }
+
+    @Override
+    protected BaseGestureCallbackHandler getGestureCallBackHandler() {
+        return new BaseGestureCallbackHandler(this);
     }
 
     @Override

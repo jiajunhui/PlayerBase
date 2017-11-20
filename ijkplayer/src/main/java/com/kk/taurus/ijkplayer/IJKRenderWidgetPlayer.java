@@ -313,7 +313,6 @@ public class IJKRenderWidgetPlayer extends BaseRenderWidget {
 
     @Override
     public void destroy() {
-        super.destroy();
         try{
             mStatus = STATUS_END;
             mTargetStatus = STATUS_IDLE;

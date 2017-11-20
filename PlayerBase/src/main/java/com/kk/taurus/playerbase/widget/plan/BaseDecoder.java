@@ -78,10 +78,4 @@ public abstract class BaseDecoder implements IDecoder {
         return 0;
     }
 
-    @Override
-    public void destroy() {
-        mOnErrorListener = null;
-        mOnPlayerEventListener = null;
-    }
-
 }
