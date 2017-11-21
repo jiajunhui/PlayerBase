@@ -14,24 +14,18 @@ import com.jiajunhui.xapp.medialoader.bean.VideoItem;
 import com.kk.taurus.baseframe.ui.activity.ToolsActivity;
 import com.kk.taurus.filebase.engine.FileEngine;
 import com.kk.taurus.playerbase.DefaultPlayer;
-import com.kk.taurus.playerbase.callback.OnAdCoverClickListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.cover.DefaultReceiverCollections;
-import com.kk.taurus.playerbase.cover.base.BaseAdCover;
 import com.kk.taurus.playerbase.cover.base.BasePlayerControllerCover;
 import com.kk.taurus.playerbase.cover.base.BasePlayerErrorCover;
-import com.kk.taurus.playerbase.setting.BaseAdVideo;
-import com.kk.taurus.playerbase.setting.PlayData;
 import com.kk.taurus.playerbase.setting.VideoData;
-import com.kk.taurus.playerbase.setting.ViewType;
+import com.kk.taurus.playerbase.view.RenderSurfaceView;
+import com.kk.taurus.playerbase.view.RenderTextureView;
 import com.kk.taurus.playerbase.widget.BasePlayer;
 import com.taurus.playerbaselibrary.R;
 import com.taurus.playerbaselibrary.callback.OnCompleteCallBack;
 import com.taurus.playerbaselibrary.cover.PlayCompleteCover;
 import com.taurus.playerbaselibrary.cover.PlayerErrorCover;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class PlayerActivity extends ToolsActivity implements OnPlayerEventListener {
 
@@ -93,7 +87,6 @@ public class PlayerActivity extends ToolsActivity implements OnPlayerEventListen
         mContainer = (RelativeLayout) findViewById(R.id.container);
 
         mPlayer = new DefaultPlayer(this);
-        mPlayer.setViewType(ViewType.TEXTUREVIEW);
         mContainer.addView(mPlayer,new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
         mCoverCollections = new DefaultReceiverCollections(this);
@@ -123,29 +116,12 @@ public class PlayerActivity extends ToolsActivity implements OnPlayerEventListen
 
         mPlayer.setOnPlayerEventListener(this);
         normalStart();
-//        testAdStart();
     }
 
     private void normalStart(){
-//        videoData.setData("http://221.179.217.9:80/88888888/16/20160710/269132842/269132842.ts/index.m3u8?rrsip=221.179.217.7,rrsip=221.179.217.8&fmt=ts2hls&servicetype=0&icpid=&accounttype=1&limitflux=-1&limitdur=-1&accountinfo=rKlvqC9Bu1OKxWIIyStkN1MZOJYRGRmNIUAvp+MASurCeESoTSlCaVqYoCRBg7TarfZYj4NsETM99SV2RSrK+j4/Y/GvaNspjE62RRfxOV9uRiaw46Nrc2K0k8P7gzfb:20170502102853,08A5C8EFF290,219.141.176.130,20170502102853,00010000000000000000000010922412,AC07C324AB215EE2B1111353ABDE4599,,1,0,-1,294,1,2201300,207,575034,1,END");
+        mPlayer.setRenderViewForDecoder(new RenderSurfaceView(this));
         mPlayer.setDataSource(videoData);
         mPlayer.start();
-    }
-
-    private void testAdStart(){
-        PlayData playData = new PlayData(videoData);
-        List<BaseAdVideo> adVideos = new ArrayList<>();
-        adVideos.add(new BaseAdVideo("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"));
-//        adVideos.add(new BaseAdVideo("http://172.16.216.70:8080/batamu_trans19.mp4"));
-        playData.setAdVideos(adVideos);
-
-        final BaseAdCover adCover = mCoverCollections.getReceiver(BaseAdCover.KEY);
-        adCover.setOnAdCoverClickListener(new OnAdCoverClickListener() {
-            @Override
-            public void onAdCoverClick(BaseAdVideo adVideo) {
-                showToast("click : " + adVideo.getData());
-            }
-        });
     }
 
     @Override

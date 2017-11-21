@@ -329,6 +329,7 @@ public class DefaultDecoder extends BaseDecoder{
 
     private int mVideoWidth;
     private int mVideoHeight;
+
     IMediaPlayer.OnPreparedListener mPreparedListener = new IMediaPlayer.OnPreparedListener() {
         public void onPrepared(IMediaPlayer mp) {
             Log.d(TAG,"onPrepared...");
@@ -361,10 +362,10 @@ public class DefaultDecoder extends BaseDecoder{
                 public void onVideoSizeChanged(IMediaPlayer mp, int width, int height, int sarNum, int sarDen) {
                     mVideoWidth = mp.getVideoWidth();
                     mVideoHeight = mp.getVideoHeight();
-                    if (mVideoWidth != 0 && mVideoHeight != 0) {
-                        // REMOVED: getHolder().setFixedSize(mVideoWidth, mVideoHeight);
-//                        requestLayout();
-                    }
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_VIDEO_WIDTH,mVideoWidth);
+                    bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_VIDEO_HEIGHT,mVideoHeight);
+                    onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_VIDEO_SIZE_CHANGE,bundle);
                 }
             };
 
@@ -419,9 +420,9 @@ public class DefaultDecoder extends BaseDecoder{
                             break;
                         case IMediaPlayer.MEDIA_INFO_VIDEO_ROTATION_CHANGED:
                             Log.d(TAG, "MEDIA_INFO_VIDEO_ROTATION_CHANGED: " + arg2);
-//                            mVideoRotationDegree = arg2;
-//                            if (mRenderView != null)
-//                                mRenderView.setVideoRotation(arg2);
+                            Bundle bundle = new Bundle();
+                            bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_INT_DATA,arg2);
+                            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_VIDEO_ROTATION_CHANGED,bundle);
                             break;
                         case IMediaPlayer.MEDIA_INFO_AUDIO_RENDERING_START:
                             Log.d(TAG, "MEDIA_INFO_AUDIO_RENDERING_START:");

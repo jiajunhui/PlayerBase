@@ -25,6 +25,7 @@ import android.view.SurfaceView;
 import com.kk.taurus.playerbase.inter.IRender;
 import com.kk.taurus.playerbase.inter.IUseSurfaceHolder;
 import com.kk.taurus.playerbase.setting.AspectRatio;
+import com.kk.taurus.playerbase.setting.RenderMeasure;
 
 /**
  * Created by Taurus on 2017/11/19.
@@ -33,6 +34,7 @@ import com.kk.taurus.playerbase.setting.AspectRatio;
 public class RenderSurfaceView extends SurfaceView implements IUseSurfaceHolder, IRender, SurfaceHolder.Callback {
 
     private IRenderSurfaceHolderCallback mSurfaceHolderCallback;
+    private RenderMeasure mRenderMeasure;
 
     public RenderSurfaceView(Context context) {
         this(context, null);
@@ -40,7 +42,15 @@ public class RenderSurfaceView extends SurfaceView implements IUseSurfaceHolder,
 
     public RenderSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.mRenderMeasure = new RenderMeasure();
         getHolder().addCallback(this);
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        mRenderMeasure.doMeasure(widthMeasureSpec, heightMeasureSpec);
+        setMeasuredDimension(mRenderMeasure.getMeasureWidth(),mRenderMeasure.getMeasureHeight());
     }
 
     @Override
@@ -51,8 +61,16 @@ public class RenderSurfaceView extends SurfaceView implements IUseSurfaceHolder,
     }
 
     @Override
-    public void onUpdateAspectRatio(AspectRatio aspectRatio, int width, int height, int videoWidth, int videoHeight) {
-        Log.d(TAG,"onUpdateAspectRatio : width = " + width + " height = " + height + " videoWidth = " + videoWidth + " videoHeight = " + videoHeight);
+    public void onUpdateAspectRatio(AspectRatio aspectRatio) {
+        Log.d(TAG,"onUpdateAspectRatio ... ");
+        mRenderMeasure.setAspectRatio(aspectRatio);
+        requestLayout();
+    }
+
+    @Override
+    public void onUpdateVideoSize(int videoWidth, int videoHeight) {
+        Log.d(TAG,"onUpdateVideoSize : videoWidth = " + videoWidth + " videoHeight = " + videoHeight);
+        mRenderMeasure.setVideoSize(videoWidth, videoHeight);
     }
 
     @Override

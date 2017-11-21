@@ -75,6 +75,7 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
     private int mVideoRotationDegree;
     private IMediaPlayer.OnCompletionListener mOnCompletionListener;
     private IMediaPlayer.OnPreparedListener mOnPreparedListener;
+    private IMediaPlayer.OnVideoSizeChangedListener mOnVideoSizeChangedListener;
     private int mCurrentBufferPercentage;
     private IMediaPlayer.OnErrorListener mOnErrorListener;
     private IMediaPlayer.OnInfoListener mOnInfoListener;
@@ -389,6 +390,9 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
     IMediaPlayer.OnVideoSizeChangedListener mSizeChangedListener =
             new IMediaPlayer.OnVideoSizeChangedListener() {
                 public void onVideoSizeChanged(IMediaPlayer mp, int width, int height, int sarNum, int sarDen) {
+                    if(mOnVideoSizeChangedListener!=null){
+                        mOnVideoSizeChangedListener.onVideoSizeChanged(mp, width, height, sarNum, sarDen);
+                    }
                     mVideoWidth = mp.getVideoWidth();
                     mVideoHeight = mp.getVideoHeight();
                     mVideoSarNum = mp.getVideoSarNum();
@@ -540,6 +544,10 @@ public class MediaVideoView extends FrameLayout implements MediaController.Media
                     mCurrentBufferPercentage = percent;
                 }
             };
+
+    public void setOnVideoSizeChangedListener(IMediaPlayer.OnVideoSizeChangedListener l) {
+        mOnVideoSizeChangedListener = l;
+    }
 
     /**
      * Register a callback to be invoked when the media file

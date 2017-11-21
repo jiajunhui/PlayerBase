@@ -96,11 +96,18 @@ public interface OnPlayerEventListener {
     int EVENT_CODE_ON_RENDER_VIEW_TYPE_UPDATE = 90041034;
     int EVENT_CODE_ON_RENDER_ASPECT_RATIO_UPDATE = 90041035;
 
+    int EVENT_CODE_ON_VIDEO_SIZE_CHANGE = 90041036;
+    int EVENT_CODE_ON_VIDEO_ROTATION_CHANGED = 90041037;
+
     /** network event code*/
     int EVENT_CODE_ON_NETWORK_ERROR = 90042000;
     int EVENT_CODE_ON_NETWORK_CHANGE = 90042001;
     int EVENT_CODE_ON_NETWORK_CONNECTED = 90042002;
     /** network event code*/
+
+
+    String BUNDLE_KEY_VIDEO_WIDTH = "video_width";
+    String BUNDLE_KEY_VIDEO_HEIGHT = "video_height";
 
 
     String BUNDLE_KEY_INT_DATA = "int_data";

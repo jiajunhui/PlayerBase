@@ -29,8 +29,8 @@ import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.config.ConfigLoader;
 import com.kk.taurus.playerbase.inter.IDataProvider;
 import com.kk.taurus.playerbase.inter.IRender;
-import com.kk.taurus.playerbase.inter.IRenderProxyGetter;
 import com.kk.taurus.playerbase.setting.AspectRatio;
+import com.kk.taurus.playerbase.setting.BaseExtendEventBox;
 import com.kk.taurus.playerbase.setting.DecodeMode;
 import com.kk.taurus.playerbase.setting.InternalPlayerManager;
 import com.kk.taurus.playerbase.setting.Rate;
@@ -45,12 +45,13 @@ import java.util.List;
  * Created by Taurus on 2017/3/28.
  */
 
-public abstract class BasePlayer extends BaseSettingPlayer implements IRenderProxyGetter {
-
-    private final String TAG = "BasePlayer";
+public abstract class BasePlayer extends BaseSettingPlayer {
 
     protected VideoData dataSource;
     private int mWidgetMode;
+
+    private BaseExtendEventBox extendEventBox;
+
     private boolean needProxyRenderEvent;
     private RenderCallbackProxy mRenderCallbackProxy;
 
@@ -63,6 +64,14 @@ public abstract class BasePlayer extends BaseSettingPlayer implements IRenderPro
     public BasePlayer(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
+
+    @Override
+    protected void initBaseInfo(Context context) {
+        super.initBaseInfo(context);
+        extendEventBox = getExtendEventBox();
+    }
+
+    protected abstract BaseExtendEventBox getExtendEventBox();
 
     @Override
     protected void onPlayerContainerHasInit(Context context) {
@@ -101,28 +110,13 @@ public abstract class BasePlayer extends BaseSettingPlayer implements IRenderPro
         if(mRenderCallbackProxy!=null){
             mRenderCallbackProxy.destroy();
         }
-        mRenderCallbackProxy = new RenderCallbackProxy(this,render,this);
+        mRenderCallbackProxy = new RenderCallbackProxy(this,render);
         mRenderCallbackProxy.proxy(hasPrepared);
         if(render instanceof View){
             addViewToPlayerContainer((View) render,true);
             needProxyRenderEvent = true;
             isRenderAvailable = true;
         }
-    }
-
-    @Override
-    public AspectRatio getRenderAspectRatio() {
-        return super.getAspectRatio();
-    }
-
-    @Override
-    public int getSourceVideoWidth() {
-        return getVideoWidth();
-    }
-
-    @Override
-    public int getSourceVideoHeight() {
-        return getVideoHeight();
     }
 
     /**
@@ -304,6 +298,24 @@ public abstract class BasePlayer extends BaseSettingPlayer implements IRenderPro
 
     @Override
     public void destroy() {
+        destroyExtendBox();
+        destroyContainer();
+        destroyInternalPlayer(true);
+    }
+
+    public void destroy(boolean destroyInternalPlayer) {
+        destroyExtendBox();
+        destroyContainer();
+        destroyInternalPlayer(destroyInternalPlayer);
+    }
+
+    private void destroyInternalPlayer(boolean destroyInternalPlayer) {
+        if(destroyInternalPlayer || getWidgetMode()==WIDGET_MODE_VIDEO_VIEW){
+            InternalPlayerManager.get().destroy();
+        }
+    }
+
+    private void destroyContainer() {
         if(getWidgetMode()==WIDGET_MODE_DECODER){
             dataSource = null;
             clearPlayerContainer();
@@ -312,10 +324,10 @@ public abstract class BasePlayer extends BaseSettingPlayer implements IRenderPro
         super.destroy();
     }
 
-    public void destroy(boolean destroyInternalPlayer) {
-        this.destroy();
-        if(destroyInternalPlayer){
-            InternalPlayerManager.get().destroy();
+    private void destroyExtendBox(){
+        if(extendEventBox!=null){
+            extendEventBox.destroyExtendBox();
         }
     }
+
 }

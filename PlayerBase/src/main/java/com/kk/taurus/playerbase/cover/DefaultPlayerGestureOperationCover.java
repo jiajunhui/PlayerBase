@@ -97,6 +97,7 @@ public class DefaultPlayerGestureOperationCover extends BaseGestureOperationCove
 
     @Override
     public boolean onGestureDown(MotionEvent event) {
+        volume = getVolume();
         return true;
     }
 
@@ -161,7 +162,6 @@ public class DefaultPlayerGestureOperationCover extends BaseGestureOperationCove
     @Override
     public void onGestureRightVerticalSlide(float percent,MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
         super.onGestureRightVerticalSlide(percent,e1, e2, distanceX, distanceY);
-        volume = getVolume();
         int index = (int) (percent * mMaxVolume) + volume;
         if (index > mMaxVolume)
             index = mMaxVolume;

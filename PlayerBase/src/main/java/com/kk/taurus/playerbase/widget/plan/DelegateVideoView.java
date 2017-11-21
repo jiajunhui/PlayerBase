@@ -107,7 +107,6 @@ public abstract class DelegateVideoView extends BaseVideoView {
     @Override
     public void stop() {
         if(isLegalState()){
-            mRenderWidget.stop();
             reset();
         }
     }

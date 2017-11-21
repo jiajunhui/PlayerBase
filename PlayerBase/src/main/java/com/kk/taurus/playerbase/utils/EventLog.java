@@ -135,6 +135,17 @@ public class EventLog {
             case OnPlayerEventListener.EVENT_CODE_ON_SURFACE_HOLDER_UPDATE:
                 Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_SURFACE_HOLDER_UPDATE");
                 break;
+            case OnPlayerEventListener.EVENT_CODE_ON_SURFACE_UPDATE:
+                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_SURFACE_UPDATE");
+                break;
+            case OnPlayerEventListener.EVENT_CODE_ON_VIDEO_SIZE_CHANGE:
+                int width = bundle.getInt(OnPlayerEventListener.BUNDLE_KEY_VIDEO_WIDTH);
+                int height = bundle.getInt(OnPlayerEventListener.BUNDLE_KEY_VIDEO_HEIGHT);
+                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_VIDEO_SIZE_CHANGE : videoW = " + width + " videoH = " + height);
+                break;
+            case OnPlayerEventListener.EVENT_CODE_ON_VIDEO_ROTATION_CHANGED:
+                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_VIDEO_ROTATION_CHANGED");
+                break;
             case OnPlayerEventListener.EVENT_CODE_ON_NETWORK_ERROR:
                 Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_NETWORK_ERROR");
                 break;

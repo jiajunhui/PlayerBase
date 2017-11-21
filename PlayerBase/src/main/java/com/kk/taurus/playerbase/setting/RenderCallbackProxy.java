@@ -24,7 +24,6 @@ import android.view.SurfaceHolder;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.inter.IPlayer;
 import com.kk.taurus.playerbase.inter.IRender;
-import com.kk.taurus.playerbase.inter.IRenderProxyGetter;
 import com.kk.taurus.playerbase.inter.IUseSurface;
 import com.kk.taurus.playerbase.inter.IUseSurfaceHolder;
 
@@ -36,16 +35,12 @@ public class RenderCallbackProxy {
 
     private IPlayer mPlayer;
     private IRender mRender;
-    private IRenderProxyGetter mProxyGetter;
     private OnPreparedListener mOnPreparedListener;
     private boolean hasPrepared;
 
-    private int mWidth, mHeight;
-
-    public RenderCallbackProxy(IPlayer player, IRender render, IRenderProxyGetter proxyGetter){
+    public RenderCallbackProxy(IPlayer player, IRender render){
         this.mPlayer = player;
         this.mRender = render;
-        this.mProxyGetter = proxyGetter;
     }
 
     public void proxy(boolean hasPrepared){
@@ -67,11 +62,8 @@ public class RenderCallbackProxy {
     }
 
     public void onAspectUpdate(AspectRatio aspectRatio){
-        if(aspectRatio!=null && mRender!=null && mProxyGetter!=null){
-            if(mWidth > 0 && mHeight > 0){
-                mRender.onUpdateAspectRatio(aspectRatio,mWidth,mHeight
-                        , mProxyGetter.getSourceVideoWidth(),mProxyGetter.getSourceVideoHeight());
-            }
+        if(aspectRatio!=null && mRender!=null){
+            mRender.onUpdateAspectRatio(aspectRatio);
         }
     }
 
@@ -108,13 +100,9 @@ public class RenderCallbackProxy {
 
                 @Override
                 public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-                    mWidth = width;
-                    mHeight = height;
-                    if(mRender!=null && mProxyGetter!=null){
-                        mRender.onUpdateAspectRatio(mProxyGetter.getRenderAspectRatio()
-                                ,width,height
-                                ,mProxyGetter.getSourceVideoWidth(),mProxyGetter.getSourceVideoHeight());
-                    }
+                    int videoWidth = mPlayer.getVideoWidth();
+                    int videoHeight = mPlayer.getVideoHeight();
+                    mRender.onUpdateVideoSize(videoWidth,videoHeight);
                 }
 
                 @Override
@@ -142,12 +130,16 @@ public class RenderCallbackProxy {
                             mPlayer.setSurface(new Surface(surface));
                         }
                     });
+                    int videoWidth = mPlayer.getVideoWidth();
+                    int videoHeight = mPlayer.getVideoHeight();
+                    mRender.onUpdateVideoSize(videoWidth,videoHeight);
                 }
 
                 @Override
                 public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-                    mWidth = width;
-                    mHeight = height;
+                    int videoWidth = mPlayer.getVideoWidth();
+                    int videoHeight = mPlayer.getVideoHeight();
+                    mRender.onUpdateVideoSize(videoWidth,videoHeight);
                 }
 
                 @Override
@@ -176,7 +168,5 @@ public class RenderCallbackProxy {
     interface OnPreparedListener{
         void onPrepared();
     }
-
-
 
 }

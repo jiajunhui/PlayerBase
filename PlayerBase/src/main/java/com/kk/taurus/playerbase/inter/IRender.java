@@ -32,7 +32,9 @@ public interface IRender {
 
     void setRenderCallback(IRenderCallback renderCallback);
 
-    void onUpdateAspectRatio(AspectRatio aspectRatio, int width, int height, int videoWidth, int videoHeight);
+    void onUpdateAspectRatio(AspectRatio aspectRatio);
+
+    void onUpdateVideoSize(int videoWidth, int videoHeight);
 
 
     interface IRenderCallback{

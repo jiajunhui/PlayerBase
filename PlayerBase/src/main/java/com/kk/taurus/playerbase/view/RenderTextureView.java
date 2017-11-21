@@ -25,6 +25,7 @@ import android.view.TextureView;
 import com.kk.taurus.playerbase.inter.IRender;
 import com.kk.taurus.playerbase.inter.IUseSurface;
 import com.kk.taurus.playerbase.setting.AspectRatio;
+import com.kk.taurus.playerbase.setting.RenderMeasure;
 
 /**
  * Created by Taurus on 2017/11/19.
@@ -33,6 +34,7 @@ import com.kk.taurus.playerbase.setting.AspectRatio;
 public class RenderTextureView extends TextureView implements IUseSurface, IRender, TextureView.SurfaceTextureListener {
 
     private IRenderSurfaceTextureCallback mSurfaceTextureCallback;
+    private RenderMeasure mRenderMeasure;
 
     public RenderTextureView(Context context) {
         this(context, null);
@@ -40,7 +42,14 @@ public class RenderTextureView extends TextureView implements IUseSurface, IRend
 
     public RenderTextureView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        mRenderMeasure = new RenderMeasure();
         setSurfaceTextureListener(this);
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        mRenderMeasure.doMeasure(widthMeasureSpec, heightMeasureSpec);
+        setMeasuredDimension(mRenderMeasure.getMeasureWidth(),mRenderMeasure.getMeasureHeight());
     }
 
     @Override
@@ -51,8 +60,15 @@ public class RenderTextureView extends TextureView implements IUseSurface, IRend
     }
 
     @Override
-    public void onUpdateAspectRatio(AspectRatio aspectRatio, int width, int height, int videoWidth, int videoHeight) {
+    public void onUpdateAspectRatio(AspectRatio aspectRatio) {
+        mRenderMeasure.setAspectRatio(aspectRatio);
+        requestLayout();
+    }
 
+    @Override
+    public void onUpdateVideoSize(int videoWidth, int videoHeight) {
+        Log.d(TAG,"onUpdateVideoSize : videoWidth = " + videoWidth + " videoHeight = " + videoHeight);
+        mRenderMeasure.setVideoSize(videoWidth, videoHeight);
     }
 
     @Override

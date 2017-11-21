@@ -23,6 +23,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -152,8 +153,11 @@ public abstract class BaseContainer extends FrameLayout implements OnPlayerGestu
         if(removeAll){
             clearPlayerContainer();
         }
-        mPlayerContainer.addView(view,
-                new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        LayoutParams lp = new LayoutParams(
+                LayoutParams.WRAP_CONTENT,
+                LayoutParams.WRAP_CONTENT,
+                Gravity.CENTER);
+        mPlayerContainer.addView(view,lp);
     }
 
     protected void clearPlayerContainer(){

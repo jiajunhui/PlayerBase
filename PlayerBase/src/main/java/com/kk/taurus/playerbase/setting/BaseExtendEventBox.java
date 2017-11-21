@@ -38,8 +38,6 @@ public class BaseExtendEventBox {
     private Context mContext;
     private IEventBinder mEventBinder;
     private NetChangeReceiver mNetChangeReceiver;
-    private boolean mNetError;
-    private Bundle mBundle;
 
     public BaseExtendEventBox(Context context, IEventBinder eventBinder){
         this.mContext = context;
@@ -52,9 +50,9 @@ public class BaseExtendEventBox {
     }
 
     private void registerNetChangeReceiver() {
-        mNetError = !CommonUtils.isNetworkConnected(mContext);
+
         if(mContext!=null){
-            mNetChangeReceiver = new NetChangeReceiver();
+            mNetChangeReceiver = new NetChangeReceiver(mContext,mEventBinder);
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
             mContext.registerReceiver(mNetChangeReceiver,intentFilter);
@@ -68,6 +66,7 @@ public class BaseExtendEventBox {
     private void unRegisterNetChangeReceiver(){
         try {
             if(mContext!=null && mNetChangeReceiver !=null){
+                mNetChangeReceiver.destroy();
                 mContext.unregisterReceiver(mNetChangeReceiver);
             }
         }catch (Exception e){
@@ -75,15 +74,41 @@ public class BaseExtendEventBox {
         }
     }
 
-    protected Bundle getBundle(){
-        if(mBundle==null){
-            mBundle = new Bundle();
+    protected void onPlayerEvent(int eventCode, Bundle bundle){
+        if(mEventBinder!=null){
+            mEventBinder.onBindPlayerEvent(eventCode, bundle);
         }
-        mBundle.clear();
-        return mBundle;
     }
 
-    private class NetChangeReceiver extends BroadcastReceiver {
+    public static class NetChangeReceiver extends BroadcastReceiver {
+
+        private boolean mNetError;
+        private IEventBinder eventBinder;
+        private Bundle mBundle;
+
+        public NetChangeReceiver(Context context, IEventBinder eventBinder){
+            this.eventBinder = eventBinder;
+            mNetError = !CommonUtils.isNetworkConnected(context.getApplicationContext());
+        }
+
+        private void onPlayerEvent(int eventCode, Bundle bundle){
+            if(eventBinder!=null){
+                eventBinder.onBindPlayerEvent(eventCode, bundle);
+            }
+        }
+
+        public void destroy(){
+            eventBinder = null;
+        }
+
+        protected Bundle getBundle(){
+            if(mBundle==null){
+                mBundle = new Bundle();
+            }
+            mBundle.clear();
+            return mBundle;
+        }
+
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -95,15 +120,15 @@ public class BaseExtendEventBox {
                         mNetError = false;
                         Bundle bundle = getBundle();
                         bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_INT_DATA,networkType);
-                        mEventBinder.onBindPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_NETWORK_CONNECTED,bundle);
+                        onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_NETWORK_CONNECTED,bundle);
                     }else{
                         Bundle bundle = getBundle();
                         bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_INT_DATA,networkType);
-                        mEventBinder.onBindPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_NETWORK_CHANGE,bundle);
+                        onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_NETWORK_CHANGE,bundle);
                     }
                 }else{
                     mNetError = true;
-                    mEventBinder.onBindPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_NETWORK_ERROR,null);
+                    onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_NETWORK_ERROR,null);
                 }
             }
         }

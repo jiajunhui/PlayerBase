@@ -59,6 +59,7 @@ public class DefaultRenderWidget extends BaseRenderWidget {
         if(mVideoView==null)
             return;
         mVideoView.setOnPreparedListener(mOnPreparedListener);
+        mVideoView.setOnVideoSizeChangedListener(mOnVideoSizeChangedListener);
         mVideoView.setOnInfoListener(mOnInfoListener);
         mVideoView.setOnCompletionListener(mOnCompletionListener);
         mVideoView.setOnErrorListener(mOnErrorListener);
@@ -97,6 +98,16 @@ public class DefaultRenderWidget extends BaseRenderWidget {
         }
     };
 
+    private IMediaPlayer.OnVideoSizeChangedListener mOnVideoSizeChangedListener = new IMediaPlayer.OnVideoSizeChangedListener() {
+        @Override
+        public void onVideoSizeChanged(IMediaPlayer mp, int width, int height, int sar_num, int sar_den) {
+            Bundle bundle = new Bundle();
+            bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_VIDEO_WIDTH,width);
+            bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_VIDEO_HEIGHT,height);
+            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_VIDEO_SIZE_CHANGE,bundle);
+        }
+    };
+
     private IMediaPlayer.OnInfoListener mOnInfoListener = new IMediaPlayer.OnInfoListener() {
         @Override
         public boolean onInfo(IMediaPlayer mp, int what, int extra) {
@@ -112,6 +123,11 @@ public class DefaultRenderWidget extends BaseRenderWidget {
                 case IMediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START:
                     Log.d(TAG,"EVENT_CODE_RENDER_START");
                     onPlayerEvent(OnPlayerEventListener.EVENT_CODE_RENDER_START,null);
+                    break;
+                case IMediaPlayer.MEDIA_INFO_VIDEO_ROTATION_CHANGED:
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_INT_DATA,extra);
+                    onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_VIDEO_ROTATION_CHANGED,bundle);
                     break;
             }
             return false;
@@ -365,7 +381,7 @@ public class DefaultRenderWidget extends BaseRenderWidget {
             mStatus = STATUS_END;
             mTargetStatus = STATUS_IDLE;
             if(mVideoView!=null){
-                mVideoView.release(true);
+                mVideoView.stopPlayback();
                 mVideoView = null;
             }
             onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_ON_DESTROY,null);

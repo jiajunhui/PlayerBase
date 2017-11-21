@@ -123,16 +123,22 @@ public class AndroidMediaPlayer extends AbstractMediaPlayer {
 
         @Override
         public int readAt(long position, byte[] buffer, int offset, int size) throws IOException {
+            if(mMediaDataSource==null)
+                return 0;
             return mMediaDataSource.readAt(position, buffer, offset, size);
         }
 
         @Override
         public long getSize() throws IOException {
+            if(mMediaDataSource==null)
+                return 0;
             return mMediaDataSource.getSize();
         }
 
         @Override
         public void close() throws IOException {
+            if(mMediaDataSource==null)
+                return;
             mMediaDataSource.close();
         }
     }
