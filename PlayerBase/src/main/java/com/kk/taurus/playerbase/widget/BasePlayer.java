@@ -38,6 +38,7 @@ import com.kk.taurus.playerbase.setting.RenderCallbackProxy;
 import com.kk.taurus.playerbase.setting.VideoData;
 import com.kk.taurus.playerbase.setting.ViewType;
 import com.kk.taurus.playerbase.view.RenderSurfaceView;
+import com.kk.taurus.playerbase.view.RenderTextureView;
 
 import java.util.List;
 
@@ -45,7 +46,7 @@ import java.util.List;
  * Created by Taurus on 2017/3/28.
  */
 
-public abstract class BasePlayer extends BaseSettingPlayer {
+public abstract class BasePlayer extends BaseBindPlayerEventReceiver {
 
     protected VideoData dataSource;
     private int mWidgetMode;
@@ -138,7 +139,13 @@ public abstract class BasePlayer extends BaseSettingPlayer {
             case OnPlayerEventListener.EVENT_CODE_PREPARED:
                 //当组件模式设置为decoder模式时，且没有设置渲染视图时，此处自动为decoder设置一个渲染视图。
                 if(getWidgetMode()==WIDGET_MODE_DECODER && isDataSourceAvailable() && !isRenderAvailable){
-                    setRenderViewForDecoder(new RenderSurfaceView(mAppContext), true);
+                    IRender render;
+                    if(getViewType()==ViewType.TEXTUREVIEW){
+                        render = new RenderTextureView(mAppContext);
+                    }else{
+                        render = new RenderSurfaceView(mAppContext);
+                    }
+                    setRenderViewForDecoder(render, true);
                 }
                 break;
         }
@@ -267,6 +274,7 @@ public abstract class BasePlayer extends BaseSettingPlayer {
 
     @Override
     public void setViewType(ViewType viewType) {
+        super.setViewType(viewType);
         InternalPlayerManager.get().setViewType(viewType);
     }
 

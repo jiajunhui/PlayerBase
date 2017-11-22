@@ -26,7 +26,7 @@ import android.os.Message;
 import android.util.DisplayMetrics;
 
 import com.kk.taurus.playerbase.adapter.BaseVideoDataAdapter;
-import com.kk.taurus.playerbase.inter.IEventReceiver;
+import com.kk.taurus.playerbase.inter.IBindPlayer;
 import com.kk.taurus.playerbase.inter.IRefreshData;
 import com.kk.taurus.playerbase.inter.ITools;
 import com.kk.taurus.playerbase.setting.BaseAdVideo;
@@ -45,7 +45,7 @@ import java.util.List;
  *
  */
 
-public abstract class BaseEventReceiver implements IEventReceiver, PlayerObserver, OnCoverEventListener ,IRefreshData, ITools {
+public abstract class BaseEventReceiver implements IBindPlayer, PlayerObserver, OnCoverEventListener ,IRefreshData, ITools {
 
     protected Context mContext;
     protected int mScreenW,mScreenH;

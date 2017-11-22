@@ -29,6 +29,7 @@ public class EventLog {
 
     private static final String TAG_PLAYER_EVENT = "PlayerEventLog";
     private static final String TAG_TIMER_COUNTER = "TimerEventLog";
+    private static final String TAG_NETWORK_EVENT = "NetWorkEventLog";
 
     public static void onNotifyPlayerEvent(int eventCode, Bundle bundle){
         switch (eventCode){
@@ -163,6 +164,18 @@ public class EventLog {
 
     public static void onNotifyPlayTimerCounter(int curr, int duration, int bufferPercentage){
         Log.d(TAG_TIMER_COUNTER,"curr = " + curr + " duration = " + duration + " bufferPercentagePos = " + bufferPercentage);
+    }
+
+    public static void onNotifyNetWorkError(){
+        Log.e(TAG_NETWORK_EVENT,"onNotifyNetWorkError");
+    }
+
+    public static void onNotifyNetWorkChanged(){
+        Log.e(TAG_NETWORK_EVENT,"onNotifyNetWorkChanged");
+    }
+
+    public static void onNotifyNetWorkConnected(){
+        Log.e(TAG_NETWORK_EVENT,"onNotifyNetWorkConnected");
     }
     
 }

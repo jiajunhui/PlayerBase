@@ -102,7 +102,7 @@ public class DefaultPlayer extends BasePlayer implements IEventBinder, InternalP
      * @return
      */
     protected BaseGestureCallbackHandler getGestureCallBackHandler() {
-        return new BaseGestureCallbackHandler(this);
+        return new BaseGestureCallbackHandler(getPlayerGestureListener());
     }
 
     @Override

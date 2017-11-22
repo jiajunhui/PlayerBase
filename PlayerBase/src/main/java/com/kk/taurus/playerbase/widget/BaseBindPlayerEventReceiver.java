@@ -23,13 +23,21 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
+import com.kk.taurus.playerbase.callback.BaseEventReceiver;
+import com.kk.taurus.playerbase.callback.OnCoverEventListener;
 import com.kk.taurus.playerbase.callback.OnErrorListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
+import com.kk.taurus.playerbase.callback.OnPlayerGestureListener;
+import com.kk.taurus.playerbase.cover.base.BaseCover;
+import com.kk.taurus.playerbase.cover.base.BaseReceiverCollections;
+import com.kk.taurus.playerbase.inter.IBindPlayer;
+import com.kk.taurus.playerbase.inter.IDpadFocusCover;
 import com.kk.taurus.playerbase.inter.IPlayer;
-import com.kk.taurus.playerbase.inter.ITimerGetter;
 import com.kk.taurus.playerbase.setting.AspectRatio;
 import com.kk.taurus.playerbase.setting.DecodeMode;
+import com.kk.taurus.playerbase.setting.EventDistributionHandler;
 import com.kk.taurus.playerbase.setting.Rate;
+import com.kk.taurus.playerbase.setting.ViewType;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -40,23 +48,26 @@ import java.util.List;
  * Created by Taurus on 2017/3/25.
  */
 
-public abstract class BaseSettingPlayer extends BaseBindEventReceiver implements IPlayer {
-
-    private final String TAG = "BaseSettingPlayer";
+public abstract class BaseBindPlayerEventReceiver extends BaseContainer implements IPlayer, IBindPlayer, OnCoverEventListener {
 
     protected Rate rate;
     protected int mStatus = STATUS_IDLE;
     private DecodeMode mDecodeMode = DecodeMode.SOFT;
-    private AspectRatio aspectRatio = AspectRatio.AspectRatio_FILL_PARENT;
+    private ViewType mViewType = ViewType.TEXTUREVIEW;
+    private AspectRatio aspectRatio = AspectRatio.AspectRatio_FIT_PARENT;
 
     private List<WeakReference<OnPlayerEventListener>> mPlayerEventListenerList = new ArrayList<>();
     private List<WeakReference<OnErrorListener>> mErrorEventListenerList = new ArrayList<>();
+    private List<OnCoverEventListener> mCoverEventListenerList = new ArrayList<>();
 
-    public BaseSettingPlayer(@NonNull Context context) {
+    private BaseReceiverCollections mReceiverCollections;
+    private EventDistributionHandler mEventDistributionHandler;
+
+    public BaseBindPlayerEventReceiver(@NonNull Context context) {
         super(context);
     }
 
-    public BaseSettingPlayer(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public BaseBindPlayerEventReceiver(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
@@ -68,7 +79,13 @@ public abstract class BaseSettingPlayer extends BaseBindEventReceiver implements
     protected void onPlayerEvent(int eventCode, Bundle bundle){
         onHandleStatus(eventCode,bundle);
         callBackPlayerEventListener(eventCode, bundle);
-        onNotifyPlayEvent(eventCode, bundle);
+        distributionPlayerEvent(eventCode, bundle);
+    }
+
+    private void distributionPlayerEvent(int eventCode, Bundle bundle){
+        if(mEventDistributionHandler!=null){
+            mEventDistributionHandler.onDistributionPlayerEvent(eventCode, bundle);
+        }
     }
 
     private void callBackPlayerEventListener(int eventCode, Bundle bundle){
@@ -91,12 +108,6 @@ public abstract class BaseSettingPlayer extends BaseBindEventReceiver implements
             case OnPlayerEventListener.EVENT_CODE_RENDER_START:
                 mStatus = STATUS_STARTED;
                 break;
-            case OnPlayerEventListener.EVENT_CODE_ON_PLAYER_TIMER_UPDATE:
-                int curr = bundle.getInt(ITimerGetter.KEY_TIMER_CURRENT_POSITION);
-                int duration = bundle.getInt(ITimerGetter.KEY_TIMER_DURATION);
-                int bufferPos = bundle.getInt(ITimerGetter.KEY_TIMER_BUFFER_POSITION);
-                onNotifyPlayTimerCounter(curr,duration,bufferPos);
-                break;
             case OnPlayerEventListener.EVENT_CODE_PLAY_PAUSE:
                 mStatus = STATUS_PAUSED;
                 break;
@@ -106,26 +117,25 @@ public abstract class BaseSettingPlayer extends BaseBindEventReceiver implements
             case OnPlayerEventListener.EVENT_CODE_PLAYER_ON_STOP:
                 mStatus = STATUS_STOPPED;
                 break;
-            case OnPlayerEventListener.EVENT_CODE_ON_NETWORK_ERROR:
-                onNotifyNetWorkError();
-                break;
-            case OnPlayerEventListener.EVENT_CODE_ON_NETWORK_CHANGE:
-                onNotifyNetWorkChanged(bundle.getInt(OnPlayerEventListener.BUNDLE_KEY_INT_DATA));
-                break;
-            case OnPlayerEventListener.EVENT_CODE_ON_NETWORK_CONNECTED:
-                onNotifyNetWorkConnected(bundle.getInt(OnPlayerEventListener.BUNDLE_KEY_INT_DATA));
-                break;
         }
     }
 
     protected void onErrorEvent(int eventCode, Bundle bundle){
         onHandleErrorStatus(eventCode, bundle);
         callBackErrorEventListener(eventCode, bundle);
-        onNotifyErrorEvent(eventCode, bundle);
+        distributionErrorEvent(eventCode, bundle);
+    }
+
+    private void distributionErrorEvent(int eventCode, Bundle bundle){
+        if(mEventDistributionHandler!=null){
+            mEventDistributionHandler.onDistributionErrorEvent(eventCode, bundle);
+        }
     }
 
     public void doConfigChange(Configuration newConfig) {
-        onNotifyConfigurationChanged(newConfig);
+        if(mEventDistributionHandler!=null){
+            mEventDistributionHandler.doConfigChange(newConfig);
+        }
     }
 
     private void callBackErrorEventListener(int eventCode, Bundle bundle) {
@@ -170,6 +180,7 @@ public abstract class BaseSettingPlayer extends BaseBindEventReceiver implements
     private void clearEventListener(){
         mPlayerEventListenerList.clear();
         mErrorEventListenerList.clear();
+        mCoverEventListenerList.clear();
     }
 
     @Override
@@ -179,6 +190,14 @@ public abstract class BaseSettingPlayer extends BaseBindEventReceiver implements
 
     public DecodeMode getDecodeMode() {
         return mDecodeMode;
+    }
+
+    public ViewType getViewType() {
+        return mViewType;
+    }
+
+    public void setViewType(ViewType viewType) {
+        this.mViewType = viewType;
     }
 
     @Override
@@ -211,6 +230,119 @@ public abstract class BaseSettingPlayer extends BaseBindEventReceiver implements
 
     public boolean isLandscape() {
         return mAppContext.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+    }
+
+    @Deprecated
+    public void bindCoverCollections(BaseReceiverCollections coverCollections){
+        bindReceiverCollections(coverCollections);
+    }
+
+    @Override
+    protected void initBaseInfo(Context context) {
+        super.initBaseInfo(context);
+        mEventDistributionHandler = new EventDistributionHandler();
+    }
+
+    public void bindReceiverCollections(BaseReceiverCollections receiverCollections){
+        this.mReceiverCollections = receiverCollections;
+        mEventDistributionHandler.bindEventReceiverCollections(mReceiverCollections);
+        initCovers(mAppContext);
+        onReceiverCollectionsHasBind();
+    }
+
+    protected OnPlayerGestureListener getPlayerGestureListener(){
+        return mEventDistributionHandler;
+    }
+
+    @Deprecated
+    public void unbindCoverCollections(){
+        unbindReceiverCollections();
+    }
+
+    public void unbindReceiverCollections(){
+        if(mReceiverCollections !=null){
+            mReceiverCollections.clear();
+        }
+        removeAllCovers();
+    }
+
+    protected void onReceiverCollectionsHasBind(){
+        onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_RECEIVER_COLLECTIONS_NEW_BIND,null);
+    }
+
+    private void initCovers(Context context) {
+        if(mReceiverCollections ==null)
+            return;
+        List<BaseEventReceiver> covers = mReceiverCollections.getReceivers();
+        for(BaseEventReceiver cover : covers){
+            if(cover instanceof BaseCover){
+                addCover((BaseCover) cover);
+            }
+        }
+        onCoversHasInit(context);
+    }
+
+    public BaseReceiverCollections getReceiverCollections(){
+        return mReceiverCollections;
+    }
+
+    protected void onCoversHasInit(Context context) {
+
+    }
+
+    public void setOnCoverEventListener(OnCoverEventListener onCoverEventListener){
+        this.mCoverEventListenerList.add(onCoverEventListener);
+    }
+
+    public void removeCoverEventListener(OnCoverEventListener onCoverEventListener){
+        this.mCoverEventListenerList.remove(onCoverEventListener);
+    }
+
+    @Override
+    public void onCoverEvent(int eventCode, Bundle bundle) {
+        callBackCoverEventListener(eventCode, bundle);
+        if(mReceiverCollections !=null && mReceiverCollections.getReceivers()!=null)
+            for(BaseEventReceiver receiver: mReceiverCollections.getReceivers()){
+                if(receiver!=null){
+                    receiver.onCoverEvent(eventCode, bundle);
+                }
+            }
+    }
+
+    private void callBackCoverEventListener(int eventCode, Bundle bundle){
+        if(mCoverEventListenerList==null)
+            return;
+        Iterator<OnCoverEventListener> iterator = mCoverEventListenerList.iterator();
+        while (iterator.hasNext()){
+            OnCoverEventListener onCoverEventListener = iterator.next();
+            if(onCoverEventListener!=null){
+                onCoverEventListener.onCoverEvent(eventCode, bundle);
+            }
+        }
+    }
+
+    /**
+     * 当cover集合中存在Dpad控制层时，将焦点控制权交给它。
+     */
+    public void dPadRequestFocus(){
+        if(mReceiverCollections !=null && mReceiverCollections.getReceivers()!=null)
+            for(BaseEventReceiver receiver: mReceiverCollections.getReceivers()){
+                if(receiver!=null && receiver instanceof IDpadFocusCover){
+                    receiver.onNotifyPlayEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_DPAD_REQUEST_FOCUS, null);
+                }
+            }
+    }
+
+    @Override
+    public void onBindPlayer(BasePlayer player, OnCoverEventListener onCoverEventListener) {
+        mEventDistributionHandler.onBindPlayer(player, onCoverEventListener);
+    }
+
+    @Override
+    protected void onPlayerGestureEnableChange(boolean enable) {
+        super.onPlayerGestureEnableChange(enable);
+        if(mEventDistributionHandler!=null)
+            mEventDistributionHandler.onPlayerGestureEnableChange(enable);
     }
 
     @Override

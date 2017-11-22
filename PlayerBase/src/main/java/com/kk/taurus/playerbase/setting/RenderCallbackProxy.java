@@ -85,6 +85,12 @@ public class RenderCallbackProxy {
         }
     }
 
+    private void updateVideoSize(){
+        int videoWidth = mPlayer.getVideoWidth();
+        int videoHeight = mPlayer.getVideoHeight();
+        mRender.onUpdateVideoSize(videoWidth,videoHeight);
+    }
+
     private void attachCallback(){
         if(this.mRender instanceof IUseSurfaceHolder){
             this.mRender.setRenderCallback(new IRender.IRenderSurfaceHolderCallback() {
@@ -94,15 +100,15 @@ public class RenderCallbackProxy {
                         @Override
                         public void onPrepared() {
                             mPlayer.setDisplay(holder);
+                            updateVideoSize();
                         }
                     });
+                    updateVideoSize();
                 }
 
                 @Override
                 public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-                    int videoWidth = mPlayer.getVideoWidth();
-                    int videoHeight = mPlayer.getVideoHeight();
-                    mRender.onUpdateVideoSize(videoWidth,videoHeight);
+                    updateVideoSize();
                 }
 
                 @Override
@@ -128,18 +134,15 @@ public class RenderCallbackProxy {
                         @Override
                         public void onPrepared() {
                             mPlayer.setSurface(new Surface(surface));
+                            updateVideoSize();
                         }
                     });
-                    int videoWidth = mPlayer.getVideoWidth();
-                    int videoHeight = mPlayer.getVideoHeight();
-                    mRender.onUpdateVideoSize(videoWidth,videoHeight);
+                    updateVideoSize();
                 }
 
                 @Override
                 public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-                    int videoWidth = mPlayer.getVideoWidth();
-                    int videoHeight = mPlayer.getVideoHeight();
-                    mRender.onUpdateVideoSize(videoWidth,videoHeight);
+                    updateVideoSize();
                 }
 
                 @Override

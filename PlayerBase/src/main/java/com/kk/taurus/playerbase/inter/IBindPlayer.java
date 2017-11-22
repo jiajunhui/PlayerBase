@@ -23,6 +23,6 @@ import com.kk.taurus.playerbase.widget.BasePlayer;
  * Created by Taurus on 2017/4/28.
  */
 
-public interface IEventReceiver {
+public interface IBindPlayer {
     void onBindPlayer(BasePlayer player, OnCoverEventListener onCoverEventListener);
 }

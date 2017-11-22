@@ -69,6 +69,7 @@ public class RenderTextureView extends TextureView implements IUseSurface, IRend
     public void onUpdateVideoSize(int videoWidth, int videoHeight) {
         Log.d(TAG,"onUpdateVideoSize : videoWidth = " + videoWidth + " videoHeight = " + videoHeight);
         mRenderMeasure.setVideoSize(videoWidth, videoHeight);
+        requestLayout();
     }
 
     @Override

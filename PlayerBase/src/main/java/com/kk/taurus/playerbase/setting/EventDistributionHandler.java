@@ -14,45 +14,35 @@
  *    limitations under the License.
  */
 
-package com.kk.taurus.playerbase.widget;
+package com.kk.taurus.playerbase.setting;
 
-import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.util.AttributeSet;
 import android.view.MotionEvent;
 
 import com.kk.taurus.playerbase.callback.BaseEventReceiver;
 import com.kk.taurus.playerbase.callback.GestureObserverHandler;
 import com.kk.taurus.playerbase.callback.OnCoverEventListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
-import com.kk.taurus.playerbase.callback.PlayerObserverHandler;
-import com.kk.taurus.playerbase.cover.base.BaseCover;
-import com.kk.taurus.playerbase.cover.base.BaseReceiverCollections;
+import com.kk.taurus.playerbase.callback.OnPlayerGestureListener;
 import com.kk.taurus.playerbase.callback.PlayerObserver;
+import com.kk.taurus.playerbase.callback.PlayerObserverHandler;
+import com.kk.taurus.playerbase.cover.base.BaseReceiverCollections;
+import com.kk.taurus.playerbase.inter.IBindPlayer;
 import com.kk.taurus.playerbase.inter.IDpadFocusCover;
-import com.kk.taurus.playerbase.inter.IEventReceiver;
-import com.kk.taurus.playerbase.setting.BaseAdVideo;
-import com.kk.taurus.playerbase.setting.VideoData;
+import com.kk.taurus.playerbase.inter.ITimerGetter;
 import com.kk.taurus.playerbase.utils.EventLog;
+import com.kk.taurus.playerbase.widget.BasePlayer;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
- * Created by Taurus on 2017/3/24.
- *
- * 绑定receiver集合，负责分发和中转player或者cover消息。
- *
+ * Created by Taurus on 2017/11/22.
  */
 
-public abstract class BaseBindEventReceiver extends BaseContainer implements IEventReceiver, PlayerObserver,OnCoverEventListener{
+public class EventDistributionHandler implements PlayerObserver, IBindPlayer, OnPlayerGestureListener {
 
-    private BaseReceiverCollections receiverCollections;
-    private List<OnCoverEventListener> mCoverEventListenerList = new ArrayList<>();
+    private BaseReceiverCollections mReceiverCollections;
 
     /**
      * 播放器事件观察者对cover的分发管理
@@ -64,110 +54,62 @@ public abstract class BaseBindEventReceiver extends BaseContainer implements IEv
      */
     private GestureObserverHandler mGestureObserverHandler;
 
-    public BaseBindEventReceiver(@NonNull Context context){
-        super(context);
+    public EventDistributionHandler(){
+
     }
 
-    public BaseBindEventReceiver(@NonNull Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    @Deprecated
-    public void bindCoverCollections(BaseReceiverCollections coverCollections){
-        bindReceiverCollections(coverCollections);
-    }
-
-    public void bindReceiverCollections(BaseReceiverCollections receiverCollections){
-        this.receiverCollections = receiverCollections;
+    public void bindEventReceiverCollections(BaseReceiverCollections receiverCollections){
+        this.mReceiverCollections = receiverCollections;
         mPlayerObserverHandler = new PlayerObserverHandler(receiverCollections);
         mGestureObserverHandler = new GestureObserverHandler(receiverCollections);
-        initCovers(mAppContext);
-        onReceiverCollectionsHasBind();
     }
 
-    @Deprecated
-    public void unbindCoverCollections(){
-        unbindReceiverCollections();
-    }
-
-    public void unbindReceiverCollections(){
-        if(receiverCollections !=null){
-            receiverCollections.clear();
+    public void onDistributionPlayerEvent(int eventCode, Bundle bundle){
+        switch (eventCode){
+            case OnPlayerEventListener.EVENT_CODE_ON_PLAYER_TIMER_UPDATE:
+                int curr = bundle.getInt(ITimerGetter.KEY_TIMER_CURRENT_POSITION);
+                int duration = bundle.getInt(ITimerGetter.KEY_TIMER_DURATION);
+                int bufferPos = bundle.getInt(ITimerGetter.KEY_TIMER_BUFFER_POSITION);
+                onNotifyPlayTimerCounter(curr,duration,bufferPos);
+                break;
+            case OnPlayerEventListener.EVENT_CODE_ON_NETWORK_ERROR:
+                onNotifyNetWorkError();
+                break;
+            case OnPlayerEventListener.EVENT_CODE_ON_NETWORK_CHANGE:
+                onNotifyNetWorkChanged(bundle.getInt(OnPlayerEventListener.BUNDLE_KEY_INT_DATA));
+                break;
+            case OnPlayerEventListener.EVENT_CODE_ON_NETWORK_CONNECTED:
+                onNotifyNetWorkConnected(bundle.getInt(OnPlayerEventListener.BUNDLE_KEY_INT_DATA));
+                break;
+            default:
+                onNotifyPlayEvent(eventCode, bundle);
+                break;
         }
-        removeAllCovers();
     }
 
-    protected void onReceiverCollectionsHasBind(){
-        onNotifyPlayEvent(OnPlayerEventListener.EVENT_CODE_ON_RECEIVER_COLLECTIONS_NEW_BIND,null);
+    public void onDistributionErrorEvent(int eventCode, Bundle bundle){
+        onNotifyErrorEvent(eventCode, bundle);
     }
 
-    private void initCovers(Context context) {
-        if(receiverCollections ==null)
-            return;
-        List<BaseEventReceiver> covers = receiverCollections.getReceivers();
-        for(BaseEventReceiver cover : covers){
-            if(cover instanceof BaseCover){
-                addCover((BaseCover) cover);
-            }
-        }
-        onCoversHasInit(context);
-    }
-
-    public BaseReceiverCollections getReceiverCollections(){
-        return receiverCollections;
-    }
-
-    protected void onCoversHasInit(Context context) {
-
-    }
-
-    public void setOnCoverEventListener(OnCoverEventListener onCoverEventListener){
-        this.mCoverEventListenerList.add(onCoverEventListener);
-    }
-
-    public void removeCoverEventListener(OnCoverEventListener onCoverEventListener){
-        this.mCoverEventListenerList.remove(onCoverEventListener);
-    }
-
-    @Override
-    public void onCoverEvent(int eventCode, Bundle bundle) {
-        callBackCoverEventListener(eventCode, bundle);
-        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
-            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
-                if(receiver!=null){
-                    receiver.onCoverEvent(eventCode, bundle);
-                }
-            }
-    }
-
-    private void callBackCoverEventListener(int eventCode, Bundle bundle){
-        if(mCoverEventListenerList==null)
-            return;
-        Iterator<OnCoverEventListener> iterator = mCoverEventListenerList.iterator();
-        while (iterator.hasNext()){
-            OnCoverEventListener onCoverEventListener = iterator.next();
-            if(onCoverEventListener!=null){
-                onCoverEventListener.onCoverEvent(eventCode, bundle);
-            }
-        }
+    public void doConfigChange(Configuration newConfig) {
+        onNotifyConfigurationChanged(newConfig);
     }
 
     /**
      * 当cover集合中存在Dpad控制层时，将焦点控制权交给它。
      */
     public void dPadRequestFocus(){
-        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
-            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
+        if(mReceiverCollections!=null && mReceiverCollections.getReceivers()!=null)
+            for(BaseEventReceiver receiver:mReceiverCollections.getReceivers()){
                 if(receiver!=null && receiver instanceof IDpadFocusCover){
                     receiver.onNotifyPlayEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_DPAD_REQUEST_FOCUS, null);
                 }
             }
     }
 
-    @Override
     public void onBindPlayer(BasePlayer player, OnCoverEventListener onCoverEventListener) {
-        if(receiverCollections!=null && receiverCollections.getReceivers()!=null)
-            for(BaseEventReceiver receiver:receiverCollections.getReceivers()){
+        if(mReceiverCollections!=null && mReceiverCollections.getReceivers()!=null)
+            for(BaseEventReceiver receiver:mReceiverCollections.getReceivers()){
                 if(receiver!=null){
                     receiver.onBindPlayer(player,onCoverEventListener);
                 }
@@ -202,18 +144,21 @@ public abstract class BaseBindEventReceiver extends BaseContainer implements IEv
 
     @Override
     public void onNotifyNetWorkConnected(int networkType) {
+        EventLog.onNotifyNetWorkConnected();
         if(mPlayerObserverHandler!=null)
             mPlayerObserverHandler.onNotifyNetWorkConnected(networkType);
     }
 
     @Override
     public void onNotifyNetWorkChanged(int networkType) {
+        EventLog.onNotifyNetWorkChanged();
         if(mPlayerObserverHandler!=null)
             mPlayerObserverHandler.onNotifyNetWorkChanged(networkType);
     }
 
     @Override
     public void onNotifyNetWorkError() {
+        EventLog.onNotifyNetWorkError();
         if(mPlayerObserverHandler!=null)
             mPlayerObserverHandler.onNotifyNetWorkError();
     }
@@ -236,7 +181,7 @@ public abstract class BaseBindEventReceiver extends BaseContainer implements IEv
             mPlayerObserverHandler.onNotifyAdFinish(data, isAllFinish);
     }
 
-    //gesture handle----------------
+    //-------------------------------OnPlayerGestureListener-----------------------------
 
     @Override
     public boolean onSingleTapUp(MotionEvent event) {
@@ -290,11 +235,8 @@ public abstract class BaseBindEventReceiver extends BaseContainer implements IEv
             mGestureObserverHandler.onGestureEnd();
     }
 
-    @Override
-    protected void onPlayerGestureEnableChange(boolean enable) {
-        super.onPlayerGestureEnableChange(enable);
+    public void onPlayerGestureEnableChange(boolean enable) {
         if(mGestureObserverHandler!=null)
             mGestureObserverHandler.onGestureEnableChange(enable);
     }
-
 }

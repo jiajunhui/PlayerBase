@@ -71,6 +71,7 @@ public class RenderSurfaceView extends SurfaceView implements IUseSurfaceHolder,
     public void onUpdateVideoSize(int videoWidth, int videoHeight) {
         Log.d(TAG,"onUpdateVideoSize : videoWidth = " + videoWidth + " videoHeight = " + videoHeight);
         mRenderMeasure.setVideoSize(videoWidth, videoHeight);
+        requestLayout();
     }
 
     @Override

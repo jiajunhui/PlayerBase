@@ -31,7 +31,6 @@ import android.widget.FrameLayout;
 
 import com.kk.taurus.playerbase.callback.BaseGestureCallbackHandler;
 import com.kk.taurus.playerbase.setting.ContainerTouchHelper;
-import com.kk.taurus.playerbase.callback.OnPlayerGestureListener;
 import com.kk.taurus.playerbase.cover.base.BaseCover;
 import com.kk.taurus.playerbase.inter.ICoverContainer;
 
@@ -43,7 +42,7 @@ import com.kk.taurus.playerbase.inter.ICoverContainer;
  *
  */
 
-public abstract class BaseContainer extends FrameLayout implements OnPlayerGestureListener {
+public abstract class BaseContainer extends FrameLayout {
 
     private final String TAG = "_BaseContainer";
     /**

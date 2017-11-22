@@ -22,6 +22,7 @@ import android.os.Bundle;
 import com.kk.taurus.playerbase.callback.OnErrorListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.config.ConfigLoader;
+import com.kk.taurus.playerbase.setting.AspectRatio;
 import com.kk.taurus.playerbase.setting.Rate;
 import com.kk.taurus.playerbase.setting.VideoData;
 
@@ -195,6 +196,14 @@ public abstract class DelegateVideoView extends BaseVideoView {
     public void changeVideoDefinition(Rate rate) {
         if(isLegalState()){
             mRenderWidget.changeVideoDefinition(rate);
+        }
+    }
+
+    @Override
+    public void setAspectRatio(AspectRatio aspectRatio) {
+        super.setAspectRatio(aspectRatio);
+        if(isLegalState()){
+            mRenderWidget.setAspectRatio(aspectRatio);
         }
     }
 

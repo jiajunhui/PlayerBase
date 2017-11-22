@@ -16,6 +16,7 @@
 
 package com.kk.taurus.playerbase.setting;
 
+import android.util.Log;
 import android.view.View;
 
 /**
@@ -24,13 +25,15 @@ import android.view.View;
 
 public class RenderMeasure {
 
+    private final String TAG = "RenderMeasure";
+
     private int mVideoWidth;
     private int mVideoHeight;
 
     private int mMeasureWidth;
     private int mMeasureHeight;
 
-    private AspectRatio mCurrAspectRatio = AspectRatio.AspectRatio_16_9;
+    private AspectRatio mCurrAspectRatio = AspectRatio.AspectRatio_FIT_PARENT;
 
     public void doMeasure(int widthMeasureSpec, int heightMeasureSpec){
         int width = View.getDefaultSize(mVideoWidth, widthMeasureSpec);
@@ -51,9 +54,10 @@ public class RenderMeasure {
                         displayAspectRatio = 4.0f / 3.0f;
                         break;
                     case AspectRatio_FILL_PARENT:
+                    case AspectRatio_FIT_PARENT:
                     case AspectRatio_ORIGIN:
                     default:
-                        displayAspectRatio = mVideoWidth / mVideoHeight;
+                        displayAspectRatio = (float) mVideoWidth / (float) mVideoHeight;
                         break;
                 }
                 boolean shouldBeWidth = displayAspectRatio > specAspectRatio;
@@ -61,6 +65,7 @@ public class RenderMeasure {
                 switch (mCurrAspectRatio){
                     case AspectRatio_16_9:
                     case AspectRatio_4_3:
+                    case AspectRatio_FIT_PARENT:
                         if (shouldBeWidth) {
                             // too wide, fix width
                             width = widthSpecSize;
@@ -145,16 +150,13 @@ public class RenderMeasure {
     }
 
     public void setVideoSize(int videoWidth, int videoHeight){
+        Log.d(TAG,"videoWidth = " + videoWidth + " videoHeight = " + videoHeight);
         this.mVideoWidth = videoWidth;
         this.mVideoHeight = videoHeight;
     }
 
     public void setAspectRatio(AspectRatio aspectRatio){
-        boolean needUpdate = mCurrAspectRatio!=aspectRatio;
         this.mCurrAspectRatio = aspectRatio;
-        if(needUpdate){
-            //TODO
-        }
     }
 
     public int getMeasureWidth() {

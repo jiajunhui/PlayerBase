@@ -26,6 +26,7 @@ import android.view.WindowManager;
 import com.kk.taurus.playerbase.R;
 import com.kk.taurus.playerbase.cover.base.BaseCoverObserver;
 import com.kk.taurus.playerbase.cover.base.BaseGestureOperationCover;
+import com.kk.taurus.playerbase.setting.AspectRatio;
 import com.kk.taurus.playerbase.utils.TimeUtil;
 
 import static android.media.AudioManager.AUDIOFOCUS_LOSS_TRANSIENT;
@@ -99,6 +100,12 @@ public class DefaultPlayerGestureOperationCover extends BaseGestureOperationCove
     public boolean onGestureDown(MotionEvent event) {
         volume = getVolume();
         return true;
+    }
+
+    @Override
+    public boolean onGestureDoubleTab(MotionEvent event) {
+        getPlayer().setAspectRatio(AspectRatio.AspectRatio_ORIGIN);
+        return super.onGestureDoubleTab(event);
     }
 
     @Override

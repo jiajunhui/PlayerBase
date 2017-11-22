@@ -19,6 +19,7 @@ import com.kk.taurus.playerbase.cover.DefaultReceiverCollections;
 import com.kk.taurus.playerbase.cover.base.BasePlayerControllerCover;
 import com.kk.taurus.playerbase.cover.base.BasePlayerErrorCover;
 import com.kk.taurus.playerbase.setting.VideoData;
+import com.kk.taurus.playerbase.setting.ViewType;
 import com.kk.taurus.playerbase.view.RenderSurfaceView;
 import com.kk.taurus.playerbase.view.RenderTextureView;
 import com.kk.taurus.playerbase.widget.BasePlayer;
@@ -119,7 +120,7 @@ public class PlayerActivity extends ToolsActivity implements OnPlayerEventListen
     }
 
     private void normalStart(){
-        mPlayer.setRenderViewForDecoder(new RenderSurfaceView(this));
+        mPlayer.setViewType(ViewType.SURFACEVIEW);
         mPlayer.setDataSource(videoData);
         mPlayer.start();
     }
