@@ -275,6 +275,7 @@ public class DefaultPlayerControllerCover extends BasePlayerControllerCover {
         if(batteryReceiver !=null && mContext!=null){
             try {
                 mContext.unregisterReceiver(batteryReceiver);
+                batteryReceiver = null;
             }catch (Exception e){
                 e.printStackTrace();
             }

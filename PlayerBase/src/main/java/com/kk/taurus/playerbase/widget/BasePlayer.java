@@ -32,7 +32,9 @@ import com.kk.taurus.playerbase.inter.IRender;
 import com.kk.taurus.playerbase.setting.AspectRatio;
 import com.kk.taurus.playerbase.setting.BaseExtendEventBox;
 import com.kk.taurus.playerbase.setting.DecodeMode;
+import com.kk.taurus.playerbase.setting.DecoderType;
 import com.kk.taurus.playerbase.setting.InternalPlayerManager;
+import com.kk.taurus.playerbase.setting.PlayerType;
 import com.kk.taurus.playerbase.setting.Rate;
 import com.kk.taurus.playerbase.setting.RenderCallbackProxy;
 import com.kk.taurus.playerbase.setting.VideoData;
@@ -46,7 +48,7 @@ import java.util.List;
  * Created by Taurus on 2017/3/28.
  */
 
-public abstract class BasePlayer extends BaseBindPlayerEventReceiver {
+public abstract class BasePlayer extends BaseBindPlayerEventReceiver implements InternalPlayerManager.OnInternalPlayerListener {
 
     protected VideoData dataSource;
     private int mWidgetMode;
@@ -70,6 +72,34 @@ public abstract class BasePlayer extends BaseBindPlayerEventReceiver {
     protected void initBaseInfo(Context context) {
         super.initBaseInfo(context);
         extendEventBox = getExtendEventBox();
+    }
+
+    /**
+     * 该方法会返回一个View（仅当组件类型WIDGET_MODE为VideoView类型时）。
+     *
+     * 通过{@link InternalPlayerManager}统一控制。
+     *
+     * 通过{@link PlayerType}进行设置VideoView类型。
+     * WIDGET_MODE为VideoView类型时，通过InternalPlayerManager会初始化你设置好的VideoView类型的对象，并返回给上层。
+     *
+     * 通过{@link DecoderType}进行设置Decoder类型。
+     * WIDGET_MODE为DECODER类型时，InternalPlayerManager只是初始化了你设置好的解码器类型。并没有View返回。
+     * @param context
+     * @return
+     */
+    protected View getPlayerWidget(Context context) {
+        InternalPlayerManager.get().updateWidgetMode(context,getWidgetMode());
+        return InternalPlayerManager.get().getRenderView();
+    }
+
+    private void onDataSourceAvailable() {
+        InternalPlayerManager.get().setOnInternalPlayerListener(this);
+    }
+
+    @Override
+    protected void onReceiverCollectionsHasBind() {
+        super.onReceiverCollectionsHasBind();
+        InternalPlayerManager.get().setOnInternalPlayerListener(this);
     }
 
     protected abstract BaseExtendEventBox getExtendEventBox();
@@ -102,22 +132,28 @@ public abstract class BasePlayer extends BaseBindPlayerEventReceiver {
      * @param render
      */
     public void setRenderViewForDecoder(IRender render){
-        setRenderViewForDecoder(render,false);
-    }
-
-    private void setRenderViewForDecoder(IRender render, boolean hasPrepared){
         if(getWidgetMode()==WIDGET_MODE_VIDEO_VIEW)
             return;
         if(mRenderCallbackProxy!=null){
             mRenderCallbackProxy.destroy();
         }
         mRenderCallbackProxy = new RenderCallbackProxy(this,render);
-        mRenderCallbackProxy.proxy(hasPrepared);
+        mRenderCallbackProxy.proxy();
         if(render instanceof View){
             addViewToPlayerContainer((View) render,true);
             needProxyRenderEvent = true;
             isRenderAvailable = true;
         }
+    }
+
+    @Override
+    public void onInternalPlayerEvent(int eventCode, Bundle bundle) {
+        onPlayerEvent(eventCode, bundle);
+    }
+
+    @Override
+    public void onInternalErrorEvent(int errorCode, Bundle bundle) {
+        onErrorEvent(errorCode, bundle);
     }
 
     /**
@@ -126,14 +162,14 @@ public abstract class BasePlayer extends BaseBindPlayerEventReceiver {
      * @param bundle
      */
     public void sendEvent(int eventCode, Bundle bundle){
-        if(needProxyRenderEvent){
-            mRenderCallbackProxy.proxyEvent(eventCode, bundle);
-        }
         onPlayerEvent(eventCode, bundle);
     }
 
     @Override
     protected void onPlayerEvent(int eventCode, Bundle bundle) {
+        if(needProxyRenderEvent){
+            mRenderCallbackProxy.proxyEvent(eventCode, bundle);
+        }
         super.onPlayerEvent(eventCode, bundle);
         switch (eventCode){
             case OnPlayerEventListener.EVENT_CODE_PREPARED:
@@ -145,7 +181,7 @@ public abstract class BasePlayer extends BaseBindPlayerEventReceiver {
                     }else{
                         render = new RenderSurfaceView(mAppContext);
                     }
-                    setRenderViewForDecoder(render, true);
+                    setRenderViewForDecoder(render);
                 }
                 break;
         }
@@ -164,10 +200,6 @@ public abstract class BasePlayer extends BaseBindPlayerEventReceiver {
         this.dataSource = data;
         onDataSourceAvailable();
         InternalPlayerManager.get().setDataSource(data);
-    }
-
-    protected void onDataSourceAvailable() {
-
     }
 
     @Override
@@ -317,21 +349,34 @@ public abstract class BasePlayer extends BaseBindPlayerEventReceiver {
         destroyInternalPlayer(destroyInternalPlayer);
     }
 
+    /**
+     * 是否销毁播放核心
+     * @param destroyInternalPlayer
+     */
     private void destroyInternalPlayer(boolean destroyInternalPlayer) {
+        //当明确要销毁播放核心，或者组件模式为VideoView类型时，销毁播放核心。
         if(destroyInternalPlayer || getWidgetMode()==WIDGET_MODE_VIDEO_VIEW){
             InternalPlayerManager.get().destroy();
         }
     }
 
     private void destroyContainer() {
+        //先发出一个容器销毁的event事件
+        sendEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_CONTAINER_ON_DESTROY,null);
         if(getWidgetMode()==WIDGET_MODE_DECODER){
             dataSource = null;
+            //组件模式为解码器时，同时要清掉RenderView
             clearPlayerContainer();
         }
-        sendEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_CONTAINER_ON_DESTROY,null);
+        //然后移除容器的播放核心的事件监听器
+        InternalPlayerManager.get().removeOnInternalPlayerListener(this);
+        //最后清除所有事件监听器，解除已绑定的receiver集合.
         super.destroy();
     }
 
+    /**
+     * 销毁扩展事件盒子
+     */
     private void destroyExtendBox(){
         if(extendEventBox!=null){
             extendEventBox.destroyExtendBox();

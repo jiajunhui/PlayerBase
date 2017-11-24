@@ -18,6 +18,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".ui.activity.SplashActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
             >
             <intent-filter>
@@ -44,6 +45,10 @@
             android:screenOrientation="sensor">
 
         </activity>
+        <activity android:name=".ui.activity.SecondActivity"/>
+        <activity
+            android:screenOrientation="landscape"
+            android:name=".ui.activity.FullScreenActivity"/>
     </application>
 
 </manifest>

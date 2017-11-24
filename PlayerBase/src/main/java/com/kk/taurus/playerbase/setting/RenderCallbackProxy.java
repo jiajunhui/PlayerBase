@@ -16,48 +16,35 @@
 
 package com.kk.taurus.playerbase.setting;
 
-import android.graphics.SurfaceTexture;
 import android.os.Bundle;
 import android.view.Surface;
-import android.view.SurfaceHolder;
+import android.view.View;
 
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.inter.IPlayer;
 import com.kk.taurus.playerbase.inter.IRender;
-import com.kk.taurus.playerbase.inter.IUseSurface;
-import com.kk.taurus.playerbase.inter.IUseSurfaceHolder;
 
 /**
  * Created by Taurus on 2017/11/19.
  */
 
-public class RenderCallbackProxy {
+public class RenderCallbackProxy implements IRender.IRenderCallback {
 
     private IPlayer mPlayer;
     private IRender mRender;
-    private OnPreparedListener mOnPreparedListener;
-    private boolean hasPrepared;
 
     public RenderCallbackProxy(IPlayer player, IRender render){
         this.mPlayer = player;
         this.mRender = render;
     }
 
-    public void proxy(boolean hasPrepared){
-        this.hasPrepared = hasPrepared;
-        attachCallback();
+    public void proxy(){
+        mRender.setRenderCallback(this);
     }
 
     public void destroy(){
         if(this.mRender!=null){
             this.mRender.setRenderCallback(null);
-        }
-    }
-
-    private void setOnPreparedListener(OnPreparedListener onPreparedListener) {
-        this.mOnPreparedListener = onPreparedListener;
-        if(hasPrepared && mOnPreparedListener!=null){
-            mOnPreparedListener.onPrepared();
         }
     }
 
@@ -69,18 +56,8 @@ public class RenderCallbackProxy {
 
     public void proxyEvent(int eventCode, Bundle bundle){
         switch (eventCode){
-            case OnPlayerEventListener.EVENT_CODE_PLAYER_ON_SET_DATA_SOURCE:
-                hasPrepared = false;
-                break;
             case OnPlayerEventListener.EVENT_CODE_PREPARED:
-                if(mOnPreparedListener!=null){
-                    mOnPreparedListener.onPrepared();
-                }
-                hasPrepared = true;
-                break;
-            case OnPlayerEventListener.EVENT_CODE_PLAYER_CONTAINER_ON_DESTROY:
-                hasPrepared = false;
-                destroy();
+                updateVideoSize();
                 break;
         }
     }
@@ -91,85 +68,29 @@ public class RenderCallbackProxy {
         mRender.onUpdateVideoSize(videoWidth,videoHeight);
     }
 
-    private void attachCallback(){
-        if(this.mRender instanceof IUseSurfaceHolder){
-            this.mRender.setRenderCallback(new IRender.IRenderSurfaceHolderCallback() {
-                @Override
-                public void onSurfaceCreated(final SurfaceHolder holder) {
-                    setOnPreparedListener(new OnPreparedListener() {
-                        @Override
-                        public void onPrepared() {
-                            mPlayer.setDisplay(holder);
-                            updateVideoSize();
-                        }
-                    });
-                    updateVideoSize();
-                }
-
-                @Override
-                public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-                    updateVideoSize();
-                }
-
-                @Override
-                public void onSurfaceDestroyed(SurfaceHolder holder) {
-
-                }
-
-                @Override
-                public void onSurfaceViewAttachedToWindow() {
-
-                }
-
-                @Override
-                public void onSurfaceViewDetachedFromWindow() {
-
-                }
-            });
-        }else if(this.mRender instanceof IUseSurface){
-            this.mRender.setRenderCallback(new IRender.IRenderSurfaceTextureCallback() {
-                @Override
-                public void onSurfaceTextureAvailable(final SurfaceTexture surface, int width, int height) {
-                    setOnPreparedListener(new OnPreparedListener() {
-                        @Override
-                        public void onPrepared() {
-                            mPlayer.setSurface(new Surface(surface));
-                            updateVideoSize();
-                        }
-                    });
-                    updateVideoSize();
-                }
-
-                @Override
-                public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-                    updateVideoSize();
-                }
-
-                @Override
-                public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-                    return false;
-                }
-
-                @Override
-                public void onSurfaceTextureUpdated(SurfaceTexture surface) {
-
-                }
-
-                @Override
-                public void onSurfaceTextureAttachedToWindow() {
-
-                }
-
-                @Override
-                public void onSurfaceTextureDetachedFromWindow() {
-
-                }
-            });
-        }
+    @Override
+    public void onSurfaceCreated(IRender render, Surface surface, int width, int height) {
+        mPlayer.setSurface(surface);
+        updateVideoSize();
     }
 
-    interface OnPreparedListener{
-        void onPrepared();
+    @Override
+    public void onSurfaceChanged(IRender render, Surface surface, int width, int height) {
+        updateVideoSize();
     }
 
+    @Override
+    public void onSurfaceDestroy(IRender render, Surface surface) {
+
+    }
+
+    @Override
+    public void onRenderViewAttachedToWindow(IRender render) {
+        ((View)mRender).requestLayout();
+    }
+
+    @Override
+    public void onRenderViewDetachedFromWindow(IRender render) {
+
+    }
 }

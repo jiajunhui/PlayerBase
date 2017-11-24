@@ -119,7 +119,9 @@ public abstract class BaseEventReceiver implements IBindPlayer, PlayerObserver, 
     }
 
     protected void onDestroy(){
-        player.clear();
+        if(player!=null){
+            player.clear();
+        }
         mHandler.removeCallbacks(null);
     }
 

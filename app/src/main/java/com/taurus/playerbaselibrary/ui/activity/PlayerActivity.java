@@ -121,6 +121,7 @@ public class PlayerActivity extends ToolsActivity implements OnPlayerEventListen
 
     private void normalStart(){
         mPlayer.setViewType(ViewType.SURFACEVIEW);
+//        mPlayer.setRenderViewForDecoder(new RenderTextureView(this));
         mPlayer.setDataSource(videoData);
         mPlayer.start();
     }

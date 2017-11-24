@@ -16,6 +16,7 @@ import com.kk.taurus.playerbase.cover.base.BasePlayerControllerCover;
 import com.kk.taurus.playerbase.setting.BaseAdVideo;
 import com.kk.taurus.playerbase.setting.PlayData;
 import com.kk.taurus.playerbase.setting.VideoData;
+import com.kk.taurus.playerbase.view.RenderSurfaceView;
 import com.kk.taurus.playerbase.widget.BasePlayer;
 import com.taurus.playerbaselibrary.R;
 import com.taurus.playerbaselibrary.bean.VideoEntity;
@@ -91,6 +92,7 @@ public class VideoDetailActivity extends ToolsActivity implements OnPlayerEventL
     }
 
     private void normalStart(){
+//        mPlayer.setRenderViewForDecoder(new RenderSurfaceView(this));
         mPlayer.setDataSource(videoData);
         mPlayer.start();
     }

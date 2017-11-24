@@ -19,18 +19,14 @@ package com.kk.taurus.playerbase;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.AttributeSet;
-import android.view.View;
 
 import com.kk.taurus.playerbase.callback.BaseGestureCallbackHandler;
 import com.kk.taurus.playerbase.cover.container.DefaultLevelCoverContainer;
 import com.kk.taurus.playerbase.cover.DefaultPlayerGestureOperationCover;
 import com.kk.taurus.playerbase.inter.ICoverContainer;
 import com.kk.taurus.playerbase.setting.BaseExtendEventBox;
-import com.kk.taurus.playerbase.setting.InternalPlayerManager;
 import com.kk.taurus.playerbase.widget.BasePlayer;
 import com.kk.taurus.playerbase.widget.plan.IEventBinder;
-import com.kk.taurus.playerbase.setting.PlayerType;
-import com.kk.taurus.playerbase.setting.DecoderType;
 
 /**
  *
@@ -38,7 +34,7 @@ import com.kk.taurus.playerbase.setting.DecoderType;
  *
  */
 
-public class DefaultPlayer extends BasePlayer implements IEventBinder, InternalPlayerManager.OnInternalPlayerListener {
+public class DefaultPlayer extends BasePlayer implements IEventBinder {
 
     public DefaultPlayer(Context context) {
         super(context);
@@ -46,30 +42,6 @@ public class DefaultPlayer extends BasePlayer implements IEventBinder, InternalP
 
     public DefaultPlayer(Context context, AttributeSet attrs) {
         super(context, attrs);
-    }
-
-    /**
-     * 该方法会返回一个View（仅当组件类型WIDGET_MODE为VideoView类型时）。
-     *
-     * 通过{@link InternalPlayerManager}统一控制。
-     *
-     * 通过{@link PlayerType}进行设置VideoView类型。
-     * WIDGET_MODE为VideoView类型时，通过InternalPlayerManager会初始化你设置好的VideoView类型的对象，并返回给上层。
-     *
-     * 通过{@link DecoderType}进行设置Decoder类型。
-     * WIDGET_MODE为DECODER类型时，InternalPlayerManager只是初始化了你设置好的解码器类型。并没有View返回。
-     * @param context
-     * @return
-     */
-    protected View getPlayerWidget(Context context) {
-        InternalPlayerManager.get().updateWidgetMode(context,getWidgetMode());
-        return InternalPlayerManager.get().getRenderView();
-    }
-
-    @Override
-    protected void onDataSourceAvailable() {
-        super.onDataSourceAvailable();
-        InternalPlayerManager.get().setOnInternalPlayerListener(this);
     }
 
     /**
@@ -115,13 +87,4 @@ public class DefaultPlayer extends BasePlayer implements IEventBinder, InternalP
         onErrorEvent(eventCode, bundle);
     }
 
-    @Override
-    public void onInternalPlayerEvent(int eventCode, Bundle bundle) {
-        sendEvent(eventCode, bundle);
-    }
-
-    @Override
-    public void onInternalErrorEvent(int errorCode, Bundle bundle) {
-        onErrorEvent(errorCode, bundle);
-    }
 }

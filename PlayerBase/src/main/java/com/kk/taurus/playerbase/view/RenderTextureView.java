@@ -20,10 +20,10 @@ import android.content.Context;
 import android.graphics.SurfaceTexture;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Surface;
 import android.view.TextureView;
 
 import com.kk.taurus.playerbase.inter.IRender;
-import com.kk.taurus.playerbase.inter.IUseSurface;
 import com.kk.taurus.playerbase.setting.AspectRatio;
 import com.kk.taurus.playerbase.setting.RenderMeasure;
 
@@ -31,9 +31,9 @@ import com.kk.taurus.playerbase.setting.RenderMeasure;
  * Created by Taurus on 2017/11/19.
  */
 
-public class RenderTextureView extends TextureView implements IUseSurface, IRender, TextureView.SurfaceTextureListener {
+public class RenderTextureView extends TextureView implements IRender, TextureView.SurfaceTextureListener {
 
-    private IRenderSurfaceTextureCallback mSurfaceTextureCallback;
+    private IRenderCallback mRenderCallback;
     private RenderMeasure mRenderMeasure;
 
     public RenderTextureView(Context context) {
@@ -54,9 +54,7 @@ public class RenderTextureView extends TextureView implements IUseSurface, IRend
 
     @Override
     public void setRenderCallback(IRenderCallback renderCallback) {
-        if(renderCallback instanceof IRenderSurfaceTextureCallback){
-            this.mSurfaceTextureCallback = (IRenderSurfaceTextureCallback) renderCallback;
-        }
+        this.mRenderCallback = renderCallback;
     }
 
     @Override
@@ -76,8 +74,8 @@ public class RenderTextureView extends TextureView implements IUseSurface, IRend
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         Log.d(TAG,"onTextureViewAttachedToWindow");
-        if(mSurfaceTextureCallback!=null){
-            mSurfaceTextureCallback.onSurfaceTextureAttachedToWindow();
+        if(mRenderCallback!=null){
+            mRenderCallback.onRenderViewAttachedToWindow(this);
         }
     }
 
@@ -85,37 +83,38 @@ public class RenderTextureView extends TextureView implements IUseSurface, IRend
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         Log.d(TAG,"onTextureViewDetachedFromWindow");
-        if(mSurfaceTextureCallback!=null){
-            mSurfaceTextureCallback.onSurfaceTextureDetachedFromWindow();
+        if(mRenderCallback!=null){
+            mRenderCallback.onRenderViewDetachedFromWindow(this);
         }
     }
 
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
         Log.d(TAG,"<---onSurfaceTextureAvailable---> : width = " + width + " height = " + height);
-        if(mSurfaceTextureCallback!=null){
-            mSurfaceTextureCallback.onSurfaceTextureAvailable(surface, width, height);
+        if(mRenderCallback!=null){
+            mRenderCallback.onSurfaceCreated(this, new Surface(surface), width, height);
         }
     }
 
     @Override
     public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
         Log.d(TAG,"onSurfaceTextureSizeChanged : width = " + width + " height = " + height);
-        if(mSurfaceTextureCallback!=null){
-            mSurfaceTextureCallback.onSurfaceTextureSizeChanged(surface, width, height);
+        if(mRenderCallback!=null){
+            mRenderCallback.onSurfaceChanged(this, new Surface(surface), width, height);
         }
     }
 
     @Override
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
         Log.d(TAG,"***onSurfaceTextureDestroyed***");
-        return mSurfaceTextureCallback.onSurfaceTextureDestroyed(surface);
+        if(mRenderCallback!=null){
+            mRenderCallback.onSurfaceDestroy(this, new Surface(surface));
+        }
+        return false;
     }
 
     @Override
     public void onSurfaceTextureUpdated(SurfaceTexture surface) {
-        if(mSurfaceTextureCallback!=null){
-            mSurfaceTextureCallback.onSurfaceTextureUpdated(surface);
-        }
+
     }
 }

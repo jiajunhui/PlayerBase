@@ -16,8 +16,7 @@
 
 package com.kk.taurus.playerbase.inter;
 
-import android.graphics.SurfaceTexture;
-import android.view.SurfaceHolder;
+import android.view.Surface;
 
 import com.kk.taurus.playerbase.setting.AspectRatio;
 
@@ -38,27 +37,11 @@ public interface IRender {
 
 
     interface IRenderCallback{
-
-    }
-
-
-    interface IRenderSurfaceHolderCallback extends IRenderCallback{
-        void onSurfaceCreated(SurfaceHolder holder);
-        void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height);
-        void onSurfaceDestroyed(SurfaceHolder holder);
-
-        void onSurfaceViewAttachedToWindow();
-        void onSurfaceViewDetachedFromWindow();
-    }
-
-    interface IRenderSurfaceTextureCallback extends IRenderCallback{
-        void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height);
-        void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height);
-        boolean onSurfaceTextureDestroyed(SurfaceTexture surface);
-        void onSurfaceTextureUpdated(SurfaceTexture surface);
-
-        void onSurfaceTextureAttachedToWindow();
-        void onSurfaceTextureDetachedFromWindow();
+        void onSurfaceCreated(IRender render, Surface surface, int width, int height);
+        void onSurfaceChanged(IRender render, Surface surface, int width, int height);
+        void onSurfaceDestroy(IRender render,Surface surface);
+        void onRenderViewAttachedToWindow(IRender render);
+        void onRenderViewDetachedFromWindow(IRender render);
     }
 
 }

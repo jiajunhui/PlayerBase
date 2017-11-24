@@ -30,6 +30,7 @@ import com.kk.taurus.playerbase.inter.IPlayer;
 import com.kk.taurus.playerbase.widget.plan.MixMediaPlayer;
 import com.kk.taurus.playerbase.widget.plan.MixVideoView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -55,13 +56,24 @@ public class InternalPlayerManager implements IPlayer {
         return instance;
     }
 
-    private OnInternalPlayerListener mOnInternalPlayerListener;
+    private List<OnInternalPlayerListener> mOnInternalPlayerListeners;
     private MixMediaPlayer mMediaPlayer;
     private MixVideoView mVideoView;
     private int mWidgetMode;
 
     public void setOnInternalPlayerListener(OnInternalPlayerListener onInternalPlayerListener) {
-        this.mOnInternalPlayerListener = onInternalPlayerListener;
+        if(mOnInternalPlayerListeners==null){
+            mOnInternalPlayerListeners = new ArrayList<>();
+        }
+        if(mOnInternalPlayerListeners.contains(onInternalPlayerListener))
+            return;
+        this.mOnInternalPlayerListeners.add(onInternalPlayerListener);
+    }
+
+    public void removeOnInternalPlayerListener(OnInternalPlayerListener onInternalPlayerListener){
+        if(mOnInternalPlayerListeners!=null){
+            mOnInternalPlayerListeners.remove(onInternalPlayerListener);
+        }
     }
 
     public void updateWidgetMode(Context context, int widgetMode){
@@ -103,16 +115,20 @@ public class InternalPlayerManager implements IPlayer {
             mMediaPlayer.setOnPlayerEventListener(new OnPlayerEventListener() {
                 @Override
                 public void onPlayerEvent(int eventCode, Bundle bundle) {
-                    if(mOnInternalPlayerListener!=null){
-                        mOnInternalPlayerListener.onInternalPlayerEvent(eventCode, bundle);
+                    for(OnInternalPlayerListener onInternalPlayerListener : mOnInternalPlayerListeners){
+                        if(onInternalPlayerListener!=null){
+                            onInternalPlayerListener.onInternalPlayerEvent(eventCode, bundle);
+                        }
                     }
                 }
             });
             mMediaPlayer.setOnErrorListener(new OnErrorListener() {
                 @Override
                 public void onError(int errorCode, Bundle bundle) {
-                    if(mOnInternalPlayerListener!=null){
-                        mOnInternalPlayerListener.onInternalErrorEvent(errorCode, bundle);
+                    for(OnInternalPlayerListener onInternalPlayerListener : mOnInternalPlayerListeners){
+                        if(onInternalPlayerListener!=null){
+                            onInternalPlayerListener.onInternalErrorEvent(errorCode, bundle);
+                        }
                     }
                 }
             });
@@ -131,16 +147,20 @@ public class InternalPlayerManager implements IPlayer {
             mVideoView.setOnPlayerEventListener(new OnPlayerEventListener() {
                 @Override
                 public void onPlayerEvent(int eventCode, Bundle bundle) {
-                    if(mOnInternalPlayerListener!=null){
-                        mOnInternalPlayerListener.onInternalPlayerEvent(eventCode, bundle);
+                    for(OnInternalPlayerListener onInternalPlayerListener : mOnInternalPlayerListeners){
+                        if(onInternalPlayerListener!=null){
+                            onInternalPlayerListener.onInternalPlayerEvent(eventCode, bundle);
+                        }
                     }
                 }
             });
             mVideoView.setOnErrorListener(new OnErrorListener() {
                 @Override
                 public void onError(int errorCode, Bundle bundle) {
-                    if(mOnInternalPlayerListener!=null){
-                        mOnInternalPlayerListener.onInternalErrorEvent(errorCode, bundle);
+                    for(OnInternalPlayerListener onInternalPlayerListener : mOnInternalPlayerListeners){
+                        if(onInternalPlayerListener!=null){
+                            onInternalPlayerListener.onInternalErrorEvent(errorCode, bundle);
+                        }
                     }
                 }
             });
