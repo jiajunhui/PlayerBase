@@ -58,6 +58,12 @@ public class RenderTextureView extends TextureView implements IRender, TextureVi
     }
 
     @Override
+    public void setVideoRotation(int degree) {
+        mRenderMeasure.setVideoRotation(degree);
+        setRotation(degree);
+    }
+
+    @Override
     public void onUpdateAspectRatio(AspectRatio aspectRatio) {
         mRenderMeasure.setAspectRatio(aspectRatio);
         requestLayout();

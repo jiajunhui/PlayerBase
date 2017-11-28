@@ -47,6 +47,9 @@
         </activity>
         <activity android:name=".ui.activity.SecondActivity"/>
         <activity
+            android:screenOrientation="portrait"
+            android:name=".ui.activity.TestListVideoPlayActivity"/>
+        <activity
             android:screenOrientation="landscape"
             android:name=".ui.activity.FullScreenActivity"/>
     </application>

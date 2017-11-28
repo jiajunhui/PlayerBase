@@ -97,15 +97,13 @@ public class DefaultPlayerGestureOperationCover extends BaseGestureOperationCove
     }
 
     @Override
-    public boolean onGestureDown(MotionEvent event) {
+    public void onGestureDown(MotionEvent event) {
         volume = getVolume();
-        return true;
     }
 
     @Override
-    public boolean onGestureDoubleTab(MotionEvent event) {
+    public void onGestureDoubleTab(MotionEvent event) {
         getPlayer().setAspectRatio(AspectRatio.AspectRatio_ORIGIN);
-        return super.onGestureDoubleTab(event);
     }
 
     @Override

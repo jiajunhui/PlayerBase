@@ -27,15 +27,15 @@ public interface OnPlayerGestureListener {
      * on gesture single tap up
      * @param event
      */
-    boolean onSingleTapUp(MotionEvent event);
+    void onSingleTapUp(MotionEvent event);
 
     /**
      * on gesture double tap
      * @param event
      */
-    boolean onDoubleTap(MotionEvent event);
+    void onDoubleTap(MotionEvent event);
 
-    boolean onDown(MotionEvent event);
+    void onDown(MotionEvent event);
 
     /**
      * on scroll
@@ -44,7 +44,7 @@ public interface OnPlayerGestureListener {
      * @param distanceX
      * @param distanceY
      */
-    boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY);
+    void onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY);
 
     /**
      * on gesture horizontal slide

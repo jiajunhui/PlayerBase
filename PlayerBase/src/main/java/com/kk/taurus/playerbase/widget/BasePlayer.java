@@ -146,6 +146,13 @@ public abstract class BasePlayer extends BaseBindPlayerEventReceiver implements 
         }
     }
 
+    public void setDisplayRotation(float rotation){
+        View renderView = getRenderView();
+        if(renderView!=null){
+            renderView.setRotation(rotation);
+        }
+    }
+
     @Override
     public void onInternalPlayerEvent(int eventCode, Bundle bundle) {
         onPlayerEvent(eventCode, bundle);
@@ -174,7 +181,9 @@ public abstract class BasePlayer extends BaseBindPlayerEventReceiver implements 
         switch (eventCode){
             case OnPlayerEventListener.EVENT_CODE_PREPARED:
                 //当组件模式设置为decoder模式时，且没有设置渲染视图时，此处自动为decoder设置一个渲染视图。
-                if(getWidgetMode()==WIDGET_MODE_DECODER && isDataSourceAvailable() && !isRenderAvailable){
+                if(getWidgetMode()==WIDGET_MODE_DECODER
+                        && isDataSourceAvailable()
+                        && !isRenderAvailable){
                     IRender render;
                     if(getViewType()==ViewType.TEXTUREVIEW){
                         render = new RenderTextureView(mAppContext);
@@ -333,6 +342,9 @@ public abstract class BasePlayer extends BaseBindPlayerEventReceiver implements 
 
     @Override
     public View getRenderView() {
+        if(getWidgetMode()==WIDGET_MODE_DECODER){
+            return getPlayerRenderView();
+        }
         return InternalPlayerManager.get().getRenderView();
     }
 

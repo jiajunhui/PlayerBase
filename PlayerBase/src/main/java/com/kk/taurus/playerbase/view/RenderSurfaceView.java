@@ -58,6 +58,11 @@ public class RenderSurfaceView extends SurfaceView implements IRender, SurfaceHo
     }
 
     @Override
+    public void setVideoRotation(int degree) {
+        Log.d(TAG,"surface view not support rotation ... ");
+    }
+
+    @Override
     public void onUpdateAspectRatio(AspectRatio aspectRatio) {
         Log.d(TAG,"onUpdateAspectRatio ... ");
         mRenderMeasure.setAspectRatio(aspectRatio);

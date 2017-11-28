@@ -23,6 +23,7 @@ import com.kk.taurus.baseframe.ui.activity.ToolsActivity;
 import com.kk.taurus.playerbase.DefaultPlayer;
 import com.kk.taurus.playerbase.cover.DefaultReceiverCollections;
 import com.kk.taurus.playerbase.view.RenderSurfaceView;
+import com.kk.taurus.playerbase.view.RenderTextureView;
 import com.taurus.playerbaselibrary.R;
 
 /**
@@ -39,12 +40,20 @@ public class SecondActivity extends ToolsActivity {
 
         keepScreenOn();
         mPlayer = (DefaultPlayer) findViewById(R.id.player);
+//        mPlayer.setGestureEnable(false);
 
         DefaultReceiverCollections receiverCollections = new DefaultReceiverCollections(this);
         receiverCollections.setDefaultPlayerControllerCover().setDefaultPlayerGestureCover().setDefaultPlayerLoadingCover().build();
         mPlayer.bindReceiverCollections(receiverCollections);
 
         mPlayer.setRenderViewForDecoder(new RenderSurfaceView(getApplicationContext()));
+
+//        mPlayer.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                mPlayer.setDisplayRotation(90);
+//            }
+//        }, 2000);
     }
 
     @Override

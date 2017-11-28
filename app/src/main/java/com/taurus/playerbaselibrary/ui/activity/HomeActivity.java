@@ -53,7 +53,7 @@ public class HomeActivity extends ToolBarActivity<VideosInfo,HomeHolder> impleme
     protected boolean onToolBarMenuItemClick(MenuItem item) {
         switch (item.getItemId()){
             case R.id.setting:
-                Intent intent = new Intent(this,SettingActivity.class);
+                Intent intent = new Intent(this,TestListVideoPlayActivity.class);
                 startActivity(intent);
                 break;
         }

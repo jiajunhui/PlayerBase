@@ -32,6 +32,7 @@ public class RenderCallbackProxy implements IRender.IRenderCallback {
 
     private IPlayer mPlayer;
     private IRender mRender;
+    private OnPreparedListener mOnPreparedListener;
 
     public RenderCallbackProxy(IPlayer player, IRender render){
         this.mPlayer = player;
@@ -48,6 +49,10 @@ public class RenderCallbackProxy implements IRender.IRenderCallback {
         }
     }
 
+    public void setOnPreparedListener(OnPreparedListener onPreparedListener) {
+        this.mOnPreparedListener = onPreparedListener;
+    }
+
     public void onAspectUpdate(AspectRatio aspectRatio){
         if(aspectRatio!=null && mRender!=null){
             mRender.onUpdateAspectRatio(aspectRatio);
@@ -58,6 +63,11 @@ public class RenderCallbackProxy implements IRender.IRenderCallback {
         switch (eventCode){
             case OnPlayerEventListener.EVENT_CODE_PREPARED:
                 updateVideoSize();
+                if(mOnPreparedListener!=null){
+                    mOnPreparedListener.onPrepared();
+                }
+                break;
+            case OnPlayerEventListener.EVENT_CODE_PLAYER_ON_SET_DATA_SOURCE:
                 break;
         }
     }
@@ -65,11 +75,20 @@ public class RenderCallbackProxy implements IRender.IRenderCallback {
     private void updateVideoSize(){
         int videoWidth = mPlayer.getVideoWidth();
         int videoHeight = mPlayer.getVideoHeight();
-        mRender.onUpdateVideoSize(videoWidth,videoHeight);
+        if(mRender!=null){
+            mRender.onUpdateVideoSize(videoWidth,videoHeight);
+        }
     }
 
     @Override
-    public void onSurfaceCreated(IRender render, Surface surface, int width, int height) {
+    public void onSurfaceCreated(IRender render, final Surface surface, int width, int height) {
+        setOnPreparedListener(new OnPreparedListener() {
+            @Override
+            public void onPrepared() {
+                mPlayer.setSurface(surface);
+                updateVideoSize();
+            }
+        });
         mPlayer.setSurface(surface);
         updateVideoSize();
     }
@@ -86,11 +105,17 @@ public class RenderCallbackProxy implements IRender.IRenderCallback {
 
     @Override
     public void onRenderViewAttachedToWindow(IRender render) {
-        ((View)mRender).requestLayout();
+        if(mRender!=null && mRender instanceof View){
+            ((View)mRender).requestLayout();
+        }
     }
 
     @Override
     public void onRenderViewDetachedFromWindow(IRender render) {
 
+    }
+
+    public interface OnPreparedListener{
+        void onPrepared();
     }
 }

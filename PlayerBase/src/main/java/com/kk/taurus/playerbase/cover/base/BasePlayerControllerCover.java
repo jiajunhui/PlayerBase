@@ -225,18 +225,15 @@ public abstract class BasePlayerControllerCover extends BaseCover implements IPl
     }
 
     @Override
-    public boolean onGestureDoubleTab(MotionEvent event) {
-        return false;
+    public void onGestureDoubleTab(MotionEvent event) {
     }
 
     @Override
-    public boolean onGestureDown(MotionEvent event) {
-        return false;
+    public void onGestureDown(MotionEvent event) {
     }
 
     @Override
-    public boolean onGestureScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        return false;
+    public void onGestureScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
     }
 
     @Override

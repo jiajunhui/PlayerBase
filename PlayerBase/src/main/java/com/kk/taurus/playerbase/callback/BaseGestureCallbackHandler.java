@@ -33,6 +33,7 @@ public class BaseGestureCallbackHandler extends GestureDetector.SimpleOnGestureL
     protected boolean firstTouch;
     protected boolean horizontalSlide;
     protected boolean rightVerticalSlide;
+    private boolean mGestureEnable = true;
 
     public BaseGestureCallbackHandler(OnPlayerGestureListener onPlayerGestureListener){
         this.mOnPlayerGestureListener = onPlayerGestureListener;
@@ -44,10 +45,14 @@ public class BaseGestureCallbackHandler extends GestureDetector.SimpleOnGestureL
         Log.d(TAG,"width = " + mWidth + " height = " + mHeight);
     }
 
+    public void setGestureEnable(boolean enable){
+        this.mGestureEnable = enable;
+    }
+
     @Override
     public boolean onSingleTapUp(MotionEvent e) {
         if(mOnPlayerGestureListener!=null){
-            return mOnPlayerGestureListener.onSingleTapUp(e);
+            mOnPlayerGestureListener.onSingleTapUp(e);
         }
         return super.onSingleTapUp(e);
     }
@@ -55,7 +60,7 @@ public class BaseGestureCallbackHandler extends GestureDetector.SimpleOnGestureL
     @Override
     public boolean onDoubleTap(MotionEvent e) {
         if(mOnPlayerGestureListener!=null){
-            return mOnPlayerGestureListener.onDoubleTap(e);
+            mOnPlayerGestureListener.onDoubleTap(e);
         }
         return super.onDoubleTap(e);
     }
@@ -65,9 +70,9 @@ public class BaseGestureCallbackHandler extends GestureDetector.SimpleOnGestureL
         Log.d(TAG,"onDown...");
         firstTouch = true;
         if(mOnPlayerGestureListener!=null){
-            return mOnPlayerGestureListener.onDown(e);
+            mOnPlayerGestureListener.onDown(e);
         }
-        return super.onDown(e);
+        return mGestureEnable;
     }
 
     @Override
@@ -99,7 +104,7 @@ public class BaseGestureCallbackHandler extends GestureDetector.SimpleOnGestureL
             }
         }
         if(mOnPlayerGestureListener!=null){
-            return mOnPlayerGestureListener.onScroll(e1, e2, distanceX, distanceY);
+            mOnPlayerGestureListener.onScroll(e1, e2, distanceX, distanceY);
         }
         return super.onScroll(e1, e2, distanceX, distanceY);
     }

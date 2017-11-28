@@ -31,6 +31,8 @@ public interface IRender {
 
     void setRenderCallback(IRenderCallback renderCallback);
 
+    void setVideoRotation(int degree);
+
     void onUpdateAspectRatio(AspectRatio aspectRatio);
 
     void onUpdateVideoSize(int videoWidth, int videoHeight);

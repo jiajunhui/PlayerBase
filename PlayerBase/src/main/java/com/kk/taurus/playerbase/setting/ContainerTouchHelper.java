@@ -31,7 +31,6 @@ public class ContainerTouchHelper implements IGestureHelper{
 
     private GestureDetector mGestureDetector;
     private BaseGestureCallbackHandler mGestureCallback;
-    private boolean mGestureEnable = true;
 
     public ContainerTouchHelper(Context context, BaseGestureCallbackHandler gestureCallback){
         this.mGestureCallback = gestureCallback;
@@ -39,9 +38,6 @@ public class ContainerTouchHelper implements IGestureHelper{
     }
 
     public boolean onTouch(MotionEvent event){
-        if(!mGestureEnable){
-            return false;
-        }
         switch (event.getAction()){
             case MotionEvent.ACTION_UP:
                 onEndGesture(event);
@@ -56,7 +52,7 @@ public class ContainerTouchHelper implements IGestureHelper{
 
     @Override
     public void setGestureEnable(boolean enable) {
-        this.mGestureEnable = enable;
+        this.mGestureCallback.setGestureEnable(enable);
     }
 
     @Override

@@ -106,7 +106,7 @@ public abstract class BaseCover extends BasePlayerToolsReceiver implements ICove
     }
 
     protected void onCoverViewDetachedFromWindow(View v){
-
+        onDestroy();
     }
 
     public void setCoverEnable(boolean enable) {

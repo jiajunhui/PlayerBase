@@ -32,6 +32,7 @@ import com.kk.taurus.playerbase.setting.VideoData;
 import com.kk.taurus.playerbase.view.RenderSurfaceView;
 import com.kk.taurus.playerbase.view.RenderTextureView;
 import com.taurus.playerbaselibrary.R;
+import com.taurus.playerbaselibrary.cover.PlayCompleteCover;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,8 +62,17 @@ public class ListVideoAdapter extends RecyclerView.Adapter<ListVideoAdapter.Vide
         this.mContext = context;
         this.mItems = items;
         receiverCollections = new DefaultReceiverCollections(context);
-        receiverCollections.buildDefault();
         setHasStableIds(true);
+    }
+
+    private void buildReceivers(){
+        if(receiverCollections!=null){
+            receiverCollections.clear();
+        }
+        receiverCollections = new DefaultReceiverCollections(mContext);
+        receiverCollections
+                .setDefaultPlayerLoadingCover()
+                .setDefaultPlayerControllerCover().build();
     }
 
     public void setRecycler(RecyclerView recycler){
@@ -104,8 +114,7 @@ public class ListVideoAdapter extends RecyclerView.Adapter<ListVideoAdapter.Vide
             public void onClick(View v) {
                 final DefaultPlayer player = new DefaultPlayer(mContext);
                 addPlayer(player);
-                receiverCollections = new DefaultReceiverCollections(mContext);
-                receiverCollections.buildDefault();
+                buildReceivers();
                 player.bindReceiverCollections(receiverCollections);
                 player.stop();
                 player.setDataSource(new VideoData(item.getPath()));

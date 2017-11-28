@@ -184,31 +184,27 @@ public class EventDistributionHandler implements PlayerObserver, IBindPlayer, On
     //-------------------------------OnPlayerGestureListener-----------------------------
 
     @Override
-    public boolean onSingleTapUp(MotionEvent event) {
+    public void onSingleTapUp(MotionEvent event) {
         if(mGestureObserverHandler!=null)
-            return mGestureObserverHandler.onGestureSingleTab(event);
-        return false;
+            mGestureObserverHandler.onGestureSingleTab(event);
     }
 
     @Override
-    public boolean onDoubleTap(MotionEvent event) {
+    public void onDoubleTap(MotionEvent event) {
         if(mGestureObserverHandler!=null)
-            return mGestureObserverHandler.onGestureDoubleTab(event);
-        return false;
+            mGestureObserverHandler.onGestureDoubleTab(event);
     }
 
     @Override
-    public boolean onDown(MotionEvent event) {
+    public void onDown(MotionEvent event) {
         if(mGestureObserverHandler!=null)
-            return mGestureObserverHandler.onGestureDown(event);
-        return false;
+            mGestureObserverHandler.onGestureDown(event);
     }
 
     @Override
-    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+    public void onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
         if(mGestureObserverHandler!=null)
-            return mGestureObserverHandler.onGestureScroll(e1, e2, distanceX, distanceY);
-        return false;
+            mGestureObserverHandler.onGestureScroll(e1, e2, distanceX, distanceY);
     }
 
     @Override

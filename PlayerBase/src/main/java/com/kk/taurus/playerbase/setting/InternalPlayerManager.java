@@ -86,7 +86,8 @@ public class InternalPlayerManager implements IPlayer {
     }
 
     private boolean isNeedInitInternalPlayer(){
-        return (mMediaPlayer==null && mWidgetMode==WIDGET_MODE_DECODER) || (mVideoView==null && mWidgetMode==WIDGET_MODE_VIDEO_VIEW);
+        return (mMediaPlayer==null && mWidgetMode==WIDGET_MODE_DECODER)
+                || (mVideoView==null && mWidgetMode==WIDGET_MODE_VIDEO_VIEW);
     }
 
     private void initInternalPlayer(Context context){

@@ -33,63 +33,43 @@ public class GestureObserverHandler implements GestureObserver{
     }
 
     @Override
-    public boolean onGestureSingleTab(MotionEvent event) {
-        boolean result = false;
+    public void onGestureSingleTab(MotionEvent event) {
         if(mReceiverCollections!=null && mReceiverCollections.getReceivers()!=null)
             for(BaseEventReceiver receiver:mReceiverCollections.getReceivers()){
                 if(receiver instanceof GestureObserver){
-                    result = ((GestureObserver)receiver).onGestureSingleTab(event);
-                    if(result){
-                        break;
-                    }
+                    ((GestureObserver)receiver).onGestureSingleTab(event);
                 }
             }
-        return result;
     }
 
     @Override
-    public boolean onGestureDoubleTab(MotionEvent event) {
-        boolean result = false;
+    public void onGestureDoubleTab(MotionEvent event) {
         if(mReceiverCollections!=null && mReceiverCollections.getReceivers()!=null)
             for(BaseEventReceiver receiver:mReceiverCollections.getReceivers()){
                 if(receiver instanceof GestureObserver){
-                    result = ((GestureObserver)receiver).onGestureDoubleTab(event);
-                    if(result){
-                        break;
-                    }
+                    ((GestureObserver)receiver).onGestureDoubleTab(event);
                 }
             }
-        return result;
     }
 
     @Override
-    public boolean onGestureDown(MotionEvent event) {
-        boolean result = false;
+    public void onGestureDown(MotionEvent event) {
         if(mReceiverCollections!=null && mReceiverCollections.getReceivers()!=null)
             for(BaseEventReceiver receiver:mReceiverCollections.getReceivers()){
                 if(receiver instanceof GestureObserver){
-                    result = ((GestureObserver)receiver).onGestureDown(event);
-                    if(result){
-                        break;
-                    }
+                    ((GestureObserver)receiver).onGestureDown(event);
                 }
             }
-        return result;
     }
 
     @Override
-    public boolean onGestureScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        boolean result = false;
+    public void onGestureScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
         if(mReceiverCollections!=null && mReceiverCollections.getReceivers()!=null)
             for(BaseEventReceiver receiver:mReceiverCollections.getReceivers()){
                 if(receiver instanceof GestureObserver){
-                    result = ((GestureObserver)receiver).onGestureScroll(e1, e2, distanceX, distanceY);
-                    if(result){
-                        break;
-                    }
+                    ((GestureObserver)receiver).onGestureScroll(e1, e2, distanceX, distanceY);
                 }
             }
-        return result;
     }
 
     @Override

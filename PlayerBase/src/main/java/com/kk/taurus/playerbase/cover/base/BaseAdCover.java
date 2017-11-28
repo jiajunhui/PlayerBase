@@ -117,23 +117,19 @@ public abstract class BaseAdCover extends BaseCover implements IAdCover,GestureO
     }
 
     @Override
-    public boolean onGestureSingleTab(MotionEvent event) {
-        return false;
+    public void onGestureSingleTab(MotionEvent event) {
     }
 
     @Override
-    public boolean onGestureDoubleTab(MotionEvent event) {
-        return false;
+    public void onGestureDoubleTab(MotionEvent event) {
     }
 
     @Override
-    public boolean onGestureDown(MotionEvent event) {
-        return false;
+    public void onGestureDown(MotionEvent event) {
     }
 
     @Override
-    public boolean onGestureScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        return false;
+    public void onGestureScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
     }
 
     @Override

@@ -69,6 +69,7 @@ public abstract class BaseContainer extends FrameLayout {
      * for handle user gesture.
      */
     private ContainerTouchHelper mTouchHelper;
+    private boolean mGestureEnable = true;
 
     public BaseContainer(@NonNull Context context) {
         this(context,null);
@@ -106,6 +107,7 @@ public abstract class BaseContainer extends FrameLayout {
 
     protected void initGesture(Context context){
         mTouchHelper = new ContainerTouchHelper(context,getGestureCallBackHandler());
+        setGestureEnable(true);
     }
 
     @Override
@@ -116,8 +118,13 @@ public abstract class BaseContainer extends FrameLayout {
     protected abstract BaseGestureCallbackHandler getGestureCallBackHandler();
 
     public void setGestureEnable(boolean enable){
+        mGestureEnable = enable;
         mTouchHelper.setGestureEnable(enable);
         onPlayerGestureEnableChange(enable);
+    }
+
+    public boolean isGestureEnable() {
+        return mGestureEnable;
     }
 
     protected void initBaseInfo(Context context) {
@@ -174,6 +181,13 @@ public abstract class BaseContainer extends FrameLayout {
 
     protected void notifyPlayerWidget(Context context){
         initPlayerWidget(context);
+    }
+
+    protected View getPlayerRenderView(){
+        if(mPlayerContainer!=null && mPlayerContainer.getChildCount()>0){
+            return mPlayerContainer.getChildAt(0);
+        }
+        return null;
     }
 
     protected abstract View getPlayerWidget(Context context);

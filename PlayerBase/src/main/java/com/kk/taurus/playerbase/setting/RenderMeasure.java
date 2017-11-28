@@ -34,8 +34,16 @@ public class RenderMeasure {
     private int mMeasureHeight;
 
     private AspectRatio mCurrAspectRatio = AspectRatio.AspectRatio_FIT_PARENT;
+    private int mVideoRotationDegree;
 
     public void doMeasure(int widthMeasureSpec, int heightMeasureSpec){
+
+        if (mVideoRotationDegree == 90 || mVideoRotationDegree == 270) {
+            int tempSpec = widthMeasureSpec;
+            widthMeasureSpec  = heightMeasureSpec;
+            heightMeasureSpec = tempSpec;
+        }
+
         int width = View.getDefaultSize(mVideoWidth, widthMeasureSpec);
         int height = View.getDefaultSize(mVideoHeight, heightMeasureSpec);
         int widthSpecMode = View.MeasureSpec.getMode(widthMeasureSpec);
@@ -49,9 +57,13 @@ public class RenderMeasure {
                 switch (mCurrAspectRatio){
                     case AspectRatio_16_9:
                         displayAspectRatio = 16.0f / 9.0f;
+                        if (mVideoRotationDegree == 90 || mVideoRotationDegree == 270)
+                            displayAspectRatio = 1.0f / displayAspectRatio;
                         break;
                     case AspectRatio_4_3:
                         displayAspectRatio = 4.0f / 3.0f;
+                        if (mVideoRotationDegree == 90 || mVideoRotationDegree == 270)
+                            displayAspectRatio = 1.0f / displayAspectRatio;
                         break;
                     case AspectRatio_FILL_PARENT:
                     case AspectRatio_FIT_PARENT:
@@ -153,6 +165,10 @@ public class RenderMeasure {
         Log.d(TAG,"videoWidth = " + videoWidth + " videoHeight = " + videoHeight);
         this.mVideoWidth = videoWidth;
         this.mVideoHeight = videoHeight;
+    }
+
+    public void setVideoRotation(int videoRotationDegree) {
+        mVideoRotationDegree = videoRotationDegree;
     }
 
     public void setAspectRatio(AspectRatio aspectRatio){
