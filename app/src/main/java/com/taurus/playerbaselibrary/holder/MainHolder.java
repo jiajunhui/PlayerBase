@@ -25,15 +25,13 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.SurfaceHolder;
 import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.jiajunhui.xapp.medialoader.bean.VideoItem;
-import com.kk.taurus.baseframe.base.ContentHolder;
-import com.kk.taurus.baseframe.base.HolderData;
 import com.kk.taurus.playerbase.DefaultPlayer;
-import com.kk.taurus.playerbase.view.RenderSurfaceView;
+import com.kk.taurus.uiframe.i.HolderData;
+import com.kk.taurus.uiframe.v.ContentHolder;
 import com.taurus.playerbaselibrary.R;
 import com.taurus.playerbaselibrary.adapter.ListVideoAdapter;
 import com.taurus.playerbaselibrary.ui.activity.FullScreenActivity;
@@ -65,8 +63,8 @@ public class MainHolder extends ContentHolder<HolderData> implements ListVideoAd
     }
 
     @Override
-    public void onHolderCreated(Bundle bundle) {
-        super.onHolderCreated(bundle);
+    public void onHolderCreated() {
+        super.onHolderCreated();
         mRecycler = getViewById(R.id.recycler);
         mRenderContainer = getViewById(R.id.renderViewContainer);
         mRootView.post(new Runnable() {
@@ -124,24 +122,7 @@ public class MainHolder extends ContentHolder<HolderData> implements ListVideoAd
     }
 
     @Override
-    public void onFullScreen(final DefaultPlayer player, int[] location) {
-        Log.d("MainHolder","location[0] = " + location[0] + " location[1] = " + location[1]);
-//        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mRenderContainer.getLayoutParams();
-//        layoutParams.topMargin = location[1] - rootLocation[1];
-//        RenderSurfaceView renderSurfaceView = new RenderSurfaceView(mContext){
-//            @Override
-//            public void surfaceCreated(SurfaceHolder holder) {
-//                super.surfaceCreated(holder);
-//                player.setDisplay(holder);
-//                setOrientation(true);
-//            }
-//        };
-//        mRenderContainer.setLayoutParams(layoutParams);
-//        mRenderContainer.addView(renderSurfaceView
-//                ,new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT
-//                        , RelativeLayout.LayoutParams.MATCH_PARENT));
-//        mRenderContainer.setVisibility(View.VISIBLE);
-
+    public void onFullScreen() {
         Intent intent = new Intent(mContext, FullScreenActivity.class);
         mContext.startActivity(intent);
     }

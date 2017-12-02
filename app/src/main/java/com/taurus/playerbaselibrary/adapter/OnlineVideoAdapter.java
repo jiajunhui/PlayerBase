@@ -7,10 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.taurus.playerbaselibrary.R;
-import com.taurus.playerbaselibrary.bean.VideoEntity;
-import com.taurus.playerbaselibrary.widget.CircleImageView;
+import com.taurus.playerbaselibrary.bean.OnlineVideoItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +20,10 @@ import java.util.List;
 public class OnlineVideoAdapter extends RecyclerView.Adapter<OnlineVideoAdapter.VideoItemHolder>{
 
     private Context mContext;
-    private List<VideoEntity> videoEntities = new ArrayList<>();
+    private List<OnlineVideoItem> videoEntities = new ArrayList<>();
     private OnItemClickListener onItemClickListener;
 
-    public OnlineVideoAdapter(Context context, List<VideoEntity> videoEntities){
+    public OnlineVideoAdapter(Context context, List<OnlineVideoItem> videoEntities){
         this.mContext = context;
         this.videoEntities = videoEntities;
     }
@@ -41,23 +39,9 @@ public class OnlineVideoAdapter extends RecyclerView.Adapter<OnlineVideoAdapter.
 
     @Override
     public void onBindViewHolder(final VideoItemHolder holder, final int position) {
-        VideoEntity entity = videoEntities.get(position);
-        holder.title.setText(entity.getTitle());
-        Glide.with(mContext)
-                .load(entity.getCover())
-                .centerCrop()
-                .placeholder(R.mipmap.ic_cover_default2)
-                .crossFade()
-                .into(holder.cover);
-        VideoEntity.VideoTopic videoTopic = entity.getVideoTopic();
-        if(videoTopic!=null){
-            Glide.with(mContext)
-                    .load(videoTopic.getTopic_icons())
-                    .centerCrop()
-                    .placeholder(R.mipmap.ic_launcher)
-                    .crossFade()
-                    .into(holder.topicImg);
-        }
+        OnlineVideoItem onlineVideoItem = videoEntities.get(position);
+        holder.title.setText(onlineVideoItem.getUrl());
+        holder.cover.setImageResource(onlineVideoItem.getResId());
 
         if(onItemClickListener!=null){
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -77,15 +61,11 @@ public class OnlineVideoAdapter extends RecyclerView.Adapter<OnlineVideoAdapter.
     public static class VideoItemHolder extends RecyclerView.ViewHolder{
 
         ImageView cover;
-        ImageView topicImg;
         TextView title;
-        TextView timeLength;
-        TextView videoSource;
 
         public VideoItemHolder(View itemView) {
             super(itemView);
             cover = (ImageView) itemView.findViewById(R.id.cover);
-            topicImg = (ImageView) itemView.findViewById(R.id.topic_image);
             title = (TextView) itemView.findViewById(R.id.title);
         }
     }

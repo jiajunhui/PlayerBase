@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 
-import com.kk.taurus.baseframe.ui.activity.ToolsActivity;
+import com.kk.taurus.uiframe.a.ToolsActivity;
 import com.taurus.playerbaselibrary.R;
 
 /**
@@ -13,14 +13,15 @@ import com.taurus.playerbaselibrary.R;
  */
 
 public class SplashActivity extends ToolsActivity {
+
     @Override
-    public void loadState() {
+    protected void onLoadState() {
 
     }
 
     @Override
-    public void initData() {
-        super.initData();
+    protected void onInit(Bundle savedInstanceState) {
+        super.onInit(savedInstanceState);
         fullScreen();
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -33,7 +34,7 @@ public class SplashActivity extends ToolsActivity {
     }
 
     @Override
-    public View getContentView(Bundle savedInstanceState) {
+    public View getContentView() {
         return View.inflate(this, R.layout.activity_splash,null);
     }
 }

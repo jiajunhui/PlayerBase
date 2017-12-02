@@ -1,7 +1,7 @@
 package com.taurus.playerbaselibrary.bean;
 
 import com.jiajunhui.xapp.medialoader.bean.VideoItem;
-import com.kk.taurus.baseframe.base.HolderData;
+import com.kk.taurus.uiframe.i.HolderData;
 
 import java.io.Serializable;
 import java.util.ArrayList;

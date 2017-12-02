@@ -8,8 +8,9 @@ import android.view.View;
 import com.jiajunhui.xapp.medialoader.bean.VideoItem;
 import com.jiajunhui.xapp.medialoader.callback.OnVideoLoaderCallBack;
 import com.jiajunhui.xapp.medialoader.loader.MediaLoader;
-import com.kk.taurus.baseframe.bean.PageState;
-import com.kk.taurus.baseframe.ui.fragment.StateFragment;
+import com.kk.taurus.uiframe.d.BaseState;
+import com.kk.taurus.uiframe.f.StateFragment;
+import com.kk.taurus.uiframe.v.ContentHolder;
 import com.taurus.playerbaselibrary.bean.VideosInfo;
 import com.taurus.playerbaselibrary.holder.LocalVideoHolder;
 import com.taurus.playerbaselibrary.ui.activity.PlayerActivity;
@@ -27,14 +28,15 @@ import kr.co.namee.permissiongen.PermissionSuccess;
  */
 
 public class LocalVideoFragment extends StateFragment<VideosInfo,LocalVideoHolder> implements LocalVideoHolder.OnLocalVideoListener {
+
     @Override
-    public LocalVideoHolder getContentViewHolder(Bundle savedInstanceState) {
+    public ContentHolder onBindContentHolder() {
         return new LocalVideoHolder(mContext);
     }
 
     @Override
-    public void loadState() {
-        setPageState(PageState.loading());
+    public void onLoadState() {
+        setPageState(BaseState.LOADING);
         PermissionGen.with(this)
                 .addRequestCode(100)
                 .permissions(
@@ -42,11 +44,6 @@ public class LocalVideoFragment extends StateFragment<VideosInfo,LocalVideoHolde
                         Manifest.permission.WRITE_EXTERNAL_STORAGE
                 )
                 .request();
-    }
-
-    @Override
-    public void initData(Bundle savedInstanceState) {
-        super.initData(savedInstanceState);
     }
 
     @Override
@@ -62,9 +59,9 @@ public class LocalVideoFragment extends StateFragment<VideosInfo,LocalVideoHolde
             public void onResultList(List<VideoItem> items) {
                 Collections.sort(items,new LocalVideoFragment.MCompartor());
                 VideosInfo videosInfo = new VideosInfo(items);
-                mContentHolder.setOnLocalVideoListener(LocalVideoFragment.this);
+                getUserContentHolder().setOnLocalVideoListener(LocalVideoFragment.this);
                 setData(videosInfo);
-                setPageState(PageState.success());
+                setPageState(BaseState.SUCCESS);
 
 //                Intent intent = new Intent(getApplicationContext(),PlayerActivity.class);
 //                VideoItem item = new VideoItem();
@@ -77,8 +74,7 @@ public class LocalVideoFragment extends StateFragment<VideosInfo,LocalVideoHolde
 
     @PermissionFail(requestCode = 100)
     public void permissionFailure(){
-        showSnackBar("permission deny",null,null);
-        setPageState(PageState.success());
+        setPageState(BaseState.ERROR);
     }
 
     @Override

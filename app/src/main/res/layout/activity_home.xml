@@ -13,7 +13,7 @@
     <RadioGroup
         android:id="@+id/radioGroup"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:background="#efefef"
         android:orientation="horizontal">
         <RadioButton
@@ -22,24 +22,44 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/selector_tabs"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textColor="#333333"
             android:checked="true"
             android:gravity="center"
             android:button="@null"
-            android:text="热点视频"/>
+            android:text="在线视频"/>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#ffffff"/>
         <RadioButton
             android:id="@+id/rb_local_video"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@drawable/selector_tabs"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textColor="#333333"
             android:checked="false"
             android:gravity="center"
             android:button="@null"
-            android:text="本地视频"/>
+            android:text="本地"/>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#ffffff"/>
+        <RadioButton
+            android:id="@+id/rb_local_video_play_go"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_tabs"
+            android:textSize="16sp"
+            android:textColor="#333333"
+            android:checked="false"
+            android:gravity="center"
+            android:button="@null"
+            android:text="本地无缝续播"/>
     </RadioGroup>
 
 </LinearLayout>

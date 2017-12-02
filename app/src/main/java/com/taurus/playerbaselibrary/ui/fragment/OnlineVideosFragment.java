@@ -3,82 +3,61 @@ package com.taurus.playerbaselibrary.ui.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.kk.taurus.baseframe.bean.PageState;
-import com.kk.taurus.baseframe.ui.fragment.StateFragment;
-import com.kk.taurus.http_helper.bean.XResponse;
-import com.kk.taurus.http_helper.callback.BeanCallBack;
-import com.kk.taurus.http_helper.callback.HttpCallBack;
-import com.taurus.playerbaselibrary.bean.VideoEntity;
-import com.taurus.playerbaselibrary.bean.VideoResult;
-import com.taurus.playerbaselibrary.engine.API;
-import com.taurus.playerbaselibrary.engine.DataEngine;
+import com.kk.taurus.uiframe.f.StateFragment;
+import com.kk.taurus.uiframe.i.HolderData;
+import com.taurus.playerbaselibrary.R;
+import com.taurus.playerbaselibrary.bean.OnlineVideoItem;
 import com.taurus.playerbaselibrary.holder.OnlineVideosHolder;
 import com.taurus.playerbaselibrary.ui.activity.VideoDetailActivity;
 
-import okhttp3.Call;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Taurus on 2017/4/30.
  */
 
-public class OnlineVideosFragment extends StateFragment<VideoResult,OnlineVideosHolder> implements OnlineVideosHolder.OnlineHolderListener {
+public class OnlineVideosFragment extends StateFragment<HolderData,OnlineVideosHolder> implements OnlineVideosHolder.OnlineHolderListener {
 
-    private int pageIndex;
-    private Call mCall;
+    private String[] mUrls = {
+            "https://media.w3.org/2010/05/sintel/trailer.mp4",
+            "http://www.w3school.com.cn/example/html5/mov_bbb.mp4",
+            "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"
+    };
+
+    private int[] mIds = {
+            R.mipmap.icon_trailer,
+            R.mipmap.icon_mov_bbb,
+            R.mipmap.icon_big_buck_bunny
+    };
 
     @Override
-    public OnlineVideosHolder getContentViewHolder(Bundle savedInstanceState) {
+    public OnlineVideosHolder onBindContentHolder() {
         return new OnlineVideosHolder(mContext);
     }
 
     @Override
-    public void initData(Bundle savedInstanceState) {
-        super.initData(savedInstanceState);
-        mContentHolder.setOnlineHolderListener(this);
+    protected void onInit(Bundle savedInstanceState) {
+        super.onInit(savedInstanceState);
+        getUserContentHolder().setOnlineHolderListener(this);
     }
 
     @Override
-    public void loadState() {
-        setPageState(PageState.loading());
-        loadData();
-    }
-
-    private void loadData(){
-        mCall = DataEngine.loadVideos(API.VIDEO_TYPE_HOT_ID, pageIndex, new BeanCallBack<VideoResult>() {
-            @Override
-            public void onResponseBean(VideoResult result) {
-                if(result!=null){
-                    setData(result);
-                    setPageState(PageState.success());
-                }
-            }
-
-            @Override
-            public void onError(int errorType, XResponse response) {
-                super.onError(errorType, response);
-                if(errorType== HttpCallBack.ERROR_TYPE_NETWORK){
-                    setPageState(PageState.errorNetWork());
-                }else{
-                    setPageState(PageState.error());
-                }
-            }
-        });
+    public void onLoadState() {
+        super.onLoadState();
+        OnlineVideoItem videoItem;
+        List<OnlineVideoItem> result = new ArrayList<>();
+        for(int i=0;i<3;i++){
+            videoItem = new OnlineVideoItem();
+            videoItem.setUrl(mUrls[i]);
+            videoItem.setResId(mIds[i]);
+            result.add(videoItem);
+        }
+        getUserContentHolder().refreshList(result);
     }
 
     @Override
-    public void onRefresh() {
-        pageIndex = 0;
-        loadData();
-    }
-
-    @Override
-    public void onLoadMore() {
-        pageIndex++;
-        loadData();
-    }
-
-    @Override
-    public void onItemClick(VideoEntity videoEntity) {
+    public void onItemClick(OnlineVideoItem videoEntity) {
         Intent intent = new Intent(mContext, VideoDetailActivity.class);
         intent.putExtra("data",videoEntity);
         startActivity(intent);
@@ -87,8 +66,5 @@ public class OnlineVideosFragment extends StateFragment<VideoResult,OnlineVideos
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(mCall!=null){
-            mCall.cancel();
-        }
     }
 }

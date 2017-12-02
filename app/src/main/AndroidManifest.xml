@@ -31,9 +31,6 @@
             android:name=".ui.activity.HomeActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".ui.activity.SettingActivity"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name=".ui.activity.PlayerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="sensor">

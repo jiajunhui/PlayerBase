@@ -18,7 +18,9 @@ package com.kk.taurus.playerbase.provider;
 
 import android.os.Bundle;
 
+import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.inter.IDataProvider;
+import com.kk.taurus.playerbase.setting.VideoData;
 import com.kk.taurus.playerbase.widget.plan.IEventBinder;
 
 /**
@@ -33,6 +35,13 @@ public abstract class BaseDataProvider implements IDataProvider {
     @Override
     public void setEventBinder(IEventBinder eventBinder) {
         this.eventBinder = eventBinder;
+    }
+
+    @Override
+    public void handleSourceData(VideoData data) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(OnPlayerEventListener.BUNDLE_KEY_SERIALIZABLE_DATA,data);
+        sendPlayerEvent(EVENT_CODE_START_HANDLE_SOURCE_DATA,bundle);
     }
 
     @Override

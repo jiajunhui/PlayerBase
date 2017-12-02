@@ -1,6 +1,6 @@
 package com.taurus.playerbaselibrary.bean;
 
-import com.kk.taurus.baseframe.base.HolderData;
+import com.kk.taurus.uiframe.i.HolderData;
 
 import java.io.Serializable;
 import java.util.List;

@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="BaseFrameTheme.ActivityAnimation">
+    <style name="AppTheme" parent="BaseUIFrameTheme">
         <!-- Customize your theme here. -->
     </style>
 

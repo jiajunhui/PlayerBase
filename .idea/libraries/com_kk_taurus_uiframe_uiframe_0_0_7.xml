@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="com.kk.taurus.uiframe:uiframe-0.0.7">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.android/build-cache/b10bd19606acbc0b7b5f4df3c2e0f9e05c06dc19/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/b10bd19606acbc0b7b5f4df3c2e0f9e05c06dc19/output/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.kk.taurus.uiframe/uiframe/0.0.7/8e4c5f0c03a36d5bdea558cef5f79ae76c6c39f2/uiframe-0.0.7-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

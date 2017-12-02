@@ -5,16 +5,6 @@
     android:background="#FFFFFF"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:padding="6dp"
-        android:textSize="15sp"
-        android:textColor="#666666"
-        android:text=""/>
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="201dp"
@@ -25,6 +15,18 @@
             android:layout_height="match_parent">
 
         </RelativeLayout>
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#44000000"
+            android:gravity="center_vertical"
+            android:padding="6dp"
+            android:textSize="15sp"
+            android:textColor="#EEEEEE"
+            android:text=""/>
+
         <ImageView
             android:id="@+id/start"
             android:layout_width="match_parent"
@@ -37,6 +39,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
+            android:layout_marginBottom="30dp"
+            android:background="#44000000"
             android:padding="5dp"
             android:orientation="horizontal">
             <TextView
@@ -62,6 +66,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="#8ff74e"/>
+        android:background="#d5f4c1"/>
 
 </LinearLayout>

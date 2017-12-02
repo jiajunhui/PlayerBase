@@ -25,10 +25,9 @@ import android.widget.Toast;
 import com.jiajunhui.xapp.medialoader.bean.VideoItem;
 import com.jiajunhui.xapp.medialoader.callback.OnVideoLoaderCallBack;
 import com.jiajunhui.xapp.medialoader.loader.MediaLoader;
-import com.kk.taurus.baseframe.base.HolderData;
-import com.kk.taurus.baseframe.bean.PageState;
-import com.kk.taurus.baseframe.ui.activity.StateActivity;
-import com.kk.taurus.playerbase.setting.InternalPlayerManager;
+import com.kk.taurus.uiframe.a.StateActivity;
+import com.kk.taurus.uiframe.d.BaseState;
+import com.kk.taurus.uiframe.i.HolderData;
 import com.taurus.playerbaselibrary.holder.MainHolder;
 
 import java.util.Collections;
@@ -42,8 +41,8 @@ import kr.co.namee.permissiongen.PermissionSuccess;
 public class TestListVideoPlayActivity extends StateActivity<HolderData,MainHolder> {
 
     @Override
-    public void loadState() {
-        setPageState(PageState.loading());
+    public void onLoadState() {
+        setPageState(BaseState.LOADING);
         PermissionGen.with(this)
                 .addRequestCode(100)
                 .permissions(
@@ -65,8 +64,8 @@ public class TestListVideoPlayActivity extends StateActivity<HolderData,MainHold
             @Override
             public void onResultList(List<VideoItem> items) {
                 Collections.sort(items,new MCompartor());
-                mContentHolder.updateItems(items);
-                setPageState(PageState.success());
+                getUserContentHolder().updateItems(items);
+                setPageState(BaseState.SUCCESS);
             }
         });
     }
@@ -74,7 +73,7 @@ public class TestListVideoPlayActivity extends StateActivity<HolderData,MainHold
     @PermissionFail(requestCode = 100)
     public void permissionFailure(){
         Toast.makeText(this, "permission deny", Toast.LENGTH_SHORT).show();
-        setPageState(PageState.success());
+        setPageState(BaseState.ERROR);
     }
 
     public class MCompartor implements Comparator<VideoItem> {
@@ -91,19 +90,19 @@ public class TestListVideoPlayActivity extends StateActivity<HolderData,MainHold
     }
 
     @Override
-    public MainHolder getContentViewHolder(Bundle savedInstanceState) {
+    public MainHolder onBindContentHolder() {
         return new MainHolder(this);
     }
 
     @Override
-    public void initData() {
-        super.initData();
+    protected void onInit(Bundle savedInstanceState) {
+        super.onInit(savedInstanceState);
         keepScreenOn();
     }
 
     @Override
     public void onBackPressed() {
-        if(mContentHolder.onBackPressed()){
+        if(getUserContentHolder().onBackPressed()){
             return;
         }
         super.onBackPressed();

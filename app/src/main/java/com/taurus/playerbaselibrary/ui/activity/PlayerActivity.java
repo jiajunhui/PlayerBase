@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.jiajunhui.xapp.medialoader.bean.VideoItem;
-import com.kk.taurus.baseframe.ui.activity.ToolsActivity;
 import com.kk.taurus.filebase.engine.FileEngine;
 import com.kk.taurus.playerbase.DefaultPlayer;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
@@ -20,9 +19,8 @@ import com.kk.taurus.playerbase.cover.base.BasePlayerControllerCover;
 import com.kk.taurus.playerbase.cover.base.BasePlayerErrorCover;
 import com.kk.taurus.playerbase.setting.VideoData;
 import com.kk.taurus.playerbase.setting.ViewType;
-import com.kk.taurus.playerbase.view.RenderSurfaceView;
-import com.kk.taurus.playerbase.view.RenderTextureView;
 import com.kk.taurus.playerbase.widget.BasePlayer;
+import com.kk.taurus.uiframe.a.ToolsActivity;
 import com.taurus.playerbaselibrary.R;
 import com.taurus.playerbaselibrary.callback.OnCompleteCallBack;
 import com.taurus.playerbaselibrary.cover.PlayCompleteCover;
@@ -64,25 +62,25 @@ public class PlayerActivity extends ToolsActivity implements OnPlayerEventListen
     }
 
     @Override
-    public void loadState() {
+    public void onLoadState() {
 
     }
 
     @Override
-    public View getContentView(Bundle savedInstanceState) {
+    public View getContentView() {
         return View.inflate(this,R.layout.activity_main,null);
     }
 
     @Override
-    public void parseIntent() {
-        super.parseIntent();
+    protected void onParseIntent() {
+        super.onParseIntent();
         item = (VideoItem) getIntent().getSerializableExtra("data");
         videoData = new VideoData(item.getPath());
     }
 
     @Override
-    public void initData() {
-        super.initData();
+    protected void onInit(Bundle savedInstanceState) {
+        super.onInit(savedInstanceState);
         fullScreen();
         keepScreenOn();
         mContainer = (RelativeLayout) findViewById(R.id.container);

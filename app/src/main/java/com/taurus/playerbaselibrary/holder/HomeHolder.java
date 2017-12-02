@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.RadioGroup;
 
-import com.kk.taurus.baseframe.base.ContentHolder;
+import com.kk.taurus.uiframe.v.ContentHolder;
 import com.taurus.playerbaselibrary.R;
 import com.taurus.playerbaselibrary.bean.VideosInfo;
 
@@ -14,7 +14,7 @@ import com.taurus.playerbaselibrary.bean.VideosInfo;
  * Created by Taurus on 2017/3/28.
  */
 
-public class HomeHolder extends ContentHolder<VideosInfo>{
+public class HomeHolder extends ContentHolder<VideosInfo> {
 
     private RadioGroup mRadioGroup;
     private OnMainPageListener onMainPageListener;
@@ -35,8 +35,8 @@ public class HomeHolder extends ContentHolder<VideosInfo>{
     }
 
     @Override
-    public void onHolderCreated(Bundle savedInstanceState) {
-        super.onHolderCreated(savedInstanceState);
+    public void onHolderCreated() {
+        super.onHolderCreated();
         mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -52,6 +52,12 @@ public class HomeHolder extends ContentHolder<VideosInfo>{
                             onMainPageListener.onSwitchLocalVideos();
                         }
                         break;
+
+                    case R.id.rb_local_video_play_go:
+                        if(onMainPageListener!=null){
+                            onMainPageListener.onSwitchLocalVideosPlayGo();
+                        }
+                        break;
                 }
             }
         });
@@ -60,6 +66,7 @@ public class HomeHolder extends ContentHolder<VideosInfo>{
     public interface OnMainPageListener{
         void onSwitchOnlineVideos();
         void onSwitchLocalVideos();
+        void onSwitchLocalVideosPlayGo();
     }
 
 }

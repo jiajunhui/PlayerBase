@@ -74,7 +74,7 @@ public class DefaultPlayerControllerCover extends BasePlayerControllerCover {
                 public void onClick(View v) {
                     if(player==null)
                         return;
-                    if(getStatus()== IDecoder.STATUS_STARTED){
+                    if(isPlaying()){
                         pause();
                         setPlayState(false);
                     }else{

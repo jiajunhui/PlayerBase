@@ -6,7 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.jiajunhui.xapp.medialoader.bean.VideoItem;
-import com.kk.taurus.baseframe.base.ContentHolder;
+import com.kk.taurus.uiframe.v.ContentHolder;
 import com.taurus.playerbaselibrary.R;
 import com.taurus.playerbaselibrary.adapter.VideoListAdapter;
 import com.taurus.playerbaselibrary.bean.VideosInfo;
@@ -40,8 +40,8 @@ public class LocalVideoHolder extends ContentHolder<VideosInfo> implements Video
     }
 
     @Override
-    public void onHolderCreated(Bundle savedInstanceState) {
-        super.onHolderCreated(savedInstanceState);
+    public void onHolderCreated() {
+        super.onHolderCreated();
         mRecycler.setLayoutManager(new LinearLayoutManager(mContext,LinearLayoutManager.VERTICAL,false));
         mAdapter = new VideoListAdapter(mContext,videoItems);
         mAdapter.setOnItemClickListener(this);

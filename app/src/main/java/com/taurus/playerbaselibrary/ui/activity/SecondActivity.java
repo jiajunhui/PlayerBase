@@ -19,12 +19,12 @@ package com.taurus.playerbaselibrary.ui.activity;
 import android.os.Bundle;
 import android.view.View;
 
-import com.kk.taurus.baseframe.ui.activity.ToolsActivity;
 import com.kk.taurus.playerbase.DefaultPlayer;
 import com.kk.taurus.playerbase.cover.DefaultReceiverCollections;
 import com.kk.taurus.playerbase.view.RenderSurfaceView;
-import com.kk.taurus.playerbase.view.RenderTextureView;
+import com.kk.taurus.uiframe.a.ToolsActivity;
 import com.taurus.playerbaselibrary.R;
+import com.taurus.playerbaselibrary.cover.AppControllerCover;
 
 /**
  * Created by Taurus on 2017/11/23.
@@ -35,29 +35,28 @@ public class SecondActivity extends ToolsActivity {
     private DefaultPlayer mPlayer;
 
     @Override
-    public void initData() {
-        super.initData();
-
+    protected void onInit(Bundle savedInstanceState) {
+        super.onInit(savedInstanceState);
         keepScreenOn();
         mPlayer = (DefaultPlayer) findViewById(R.id.player);
-//        mPlayer.setGestureEnable(false);
 
         DefaultReceiverCollections receiverCollections = new DefaultReceiverCollections(this);
-        receiverCollections.setDefaultPlayerControllerCover().setDefaultPlayerGestureCover().setDefaultPlayerLoadingCover().build();
+        receiverCollections
+                .addCover("appcover",new AppControllerCover(this))
+                .setDefaultPlayerGestureCover()
+                .setDefaultPlayerLoadingCover().build();
         mPlayer.bindReceiverCollections(receiverCollections);
 
         mPlayer.setRenderViewForDecoder(new RenderSurfaceView(getApplicationContext()));
-
-//        mPlayer.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                mPlayer.setDisplayRotation(90);
-//            }
-//        }, 2000);
     }
 
     @Override
-    public View getContentView(Bundle savedInstanceState) {
+    protected void onLoadState() {
+
+    }
+
+    @Override
+    public View getContentView() {
         return View.inflate(this,R.layout.activity_second,null);
     }
 

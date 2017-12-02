@@ -23,11 +23,12 @@ import android.os.Bundle;
 import com.jiajunhui.xapp.medialoader.bean.VideoItem;
 import com.jiajunhui.xapp.medialoader.callback.OnVideoLoaderCallBack;
 import com.jiajunhui.xapp.medialoader.loader.MediaLoader;
-import com.kk.taurus.baseframe.bean.PageState;
-import com.kk.taurus.baseframe.ui.fragment.StateFragment;
+import com.kk.taurus.uiframe.d.BaseState;
+import com.kk.taurus.uiframe.f.StateFragment;
 import com.taurus.playerbaselibrary.bean.VideosInfo;
 import com.taurus.playerbaselibrary.holder.LocalVideoListHolder;
-import com.taurus.playerbaselibrary.ui.activity.PlayerActivity;
+import com.taurus.playerbaselibrary.ui.activity.FullScreenActivity;
+import com.taurus.playerbaselibrary.ui.activity.SecondActivity;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -41,15 +42,21 @@ import kr.co.namee.permissiongen.PermissionSuccess;
  * Created by Taurus on 2017/10/10.
  */
 
-public class LocalVideoListFragment extends StateFragment<VideosInfo,LocalVideoListHolder> implements LocalVideoListHolder.OnLocalVideoListener{
+public class LocalVideoListFragment extends StateFragment<VideosInfo,LocalVideoListHolder> implements LocalVideoListHolder.OnLocalVideoListHolderListener {
     @Override
-    public LocalVideoListHolder getContentViewHolder(Bundle savedInstanceState) {
+    public LocalVideoListHolder onBindContentHolder() {
         return new LocalVideoListHolder(mContext);
     }
 
     @Override
-    public void loadState() {
-        setPageState(PageState.loading());
+    protected void onInit(Bundle savedInstanceState) {
+        super.onInit(savedInstanceState);
+        getUserContentHolder().setOnLocalVideoListHolderListener(this);
+    }
+
+    @Override
+    public void onLoadState() {
+        setPageState(BaseState.LOADING);
         PermissionGen.with(this)
                 .addRequestCode(100)
                 .permissions(
@@ -72,24 +79,27 @@ public class LocalVideoListFragment extends StateFragment<VideosInfo,LocalVideoL
             public void onResultList(List<VideoItem> items) {
                 Collections.sort(items,new MCompartor());
                 VideosInfo videosInfo = new VideosInfo(items);
-                mContentHolder.setOnLocalVideoListener(LocalVideoListFragment.this);
                 setData(videosInfo);
-                setPageState(PageState.success());
+                setPageState(BaseState.SUCCESS);
             }
         });
     }
 
     @PermissionFail(requestCode = 100)
     public void permissionFailure(){
-        showSnackBar("permission deny",null,null);
-        setPageState(PageState.success());
+        setPageState(BaseState.ERROR);
     }
 
     @Override
-    public void onItemClick(VideoItem item, int position) {
-//        Intent intent = new Intent(getApplicationContext(),PlayerActivity.class);
-//        intent.putExtra("data",item);
-//        startActivity(intent);
+    public void onIntentToDetail(VideoItem item, int position) {
+        Intent intent = new Intent(getActivity(), SecondActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onFullScreen() {
+        Intent intent = new Intent(getActivity(), FullScreenActivity.class);
+        startActivity(intent);
     }
 
     public class MCompartor implements Comparator<VideoItem> {

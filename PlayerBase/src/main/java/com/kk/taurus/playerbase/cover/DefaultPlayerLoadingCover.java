@@ -26,6 +26,7 @@ import com.kk.taurus.playerbase.callback.OnCoverEventListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.cover.base.BaseCoverObserver;
 import com.kk.taurus.playerbase.cover.base.BasePlayerLoadingCover;
+import com.kk.taurus.playerbase.inter.IDataProvider;
 
 /**
  * Created by Taurus on 2017/3/25.
@@ -52,6 +53,10 @@ public class DefaultPlayerLoadingCover extends BasePlayerLoadingCover {
     public void onNotifyPlayEvent(int eventCode, Bundle bundle) {
         super.onNotifyPlayEvent(eventCode, bundle);
         switch (eventCode){
+            case OnPlayerEventListener.EVENT_CODE_PLAYER_ON_SET_DATA_SOURCE:
+            case IDataProvider.EVENT_CODE_START_HANDLE_SOURCE_DATA:
+                setLoadingState(true);
+                break;
             case OnPlayerEventListener.EVENT_CODE_ON_INTENT_TO_START:
                 Log.d(TAG,"on intent to start......");
                 setLoadingState(true);

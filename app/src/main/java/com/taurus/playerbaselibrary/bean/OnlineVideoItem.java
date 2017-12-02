@@ -14,26 +14,32 @@
  *    limitations under the License.
  */
 
-package com.taurus.playerbaselibrary.ui.activity;
+package com.taurus.playerbaselibrary.bean;
 
-import android.os.Bundle;
-
-import com.kk.taurus.baseframe.base.ContentHolder;
-import com.kk.taurus.baseframe.base.HolderData;
-import com.kk.taurus.baseframe.ui.activity.StateActivity;
+import java.io.Serializable;
 
 /**
- * Created by Taurus on 2017/9/30.
+ * Created by Taurus on 2017/12/2.
  */
 
-public class TestActivity extends StateActivity<HolderData,ContentHolder<HolderData>> {
-    @Override
-    public ContentHolder getContentViewHolder(Bundle savedInstanceState) {
-        return new ContentHolder(this) {
-            @Override
-            public void onCreate() {
+public class OnlineVideoItem implements Serializable{
 
-            }
-        };
+    private String url;
+    private int resId;
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public int getResId() {
+        return resId;
+    }
+
+    public void setResId(int resId) {
+        this.resId = resId;
     }
 }
