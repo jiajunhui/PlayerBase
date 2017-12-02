@@ -128,6 +128,11 @@ public class ListVideoAdapter extends RecyclerView.Adapter<ListVideoAdapter.Vide
         playerList.clear();
     }
 
+    public void resetNotify(){
+        mCurrPlayPos = -1;
+        notifyDataSetChanged();
+    }
+
     @Override
     public void onBindViewHolder(final VideoItemHolder holder, final int position) {
         final VideoItem item = getItem(position);

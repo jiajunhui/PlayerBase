@@ -113,6 +113,7 @@ public class HomeActivity extends TitleBarActivity<VideosInfo,HomeHolder> implem
     private void hiddenLocalVideoPlayGoFragment(FragmentTransaction ft){
         if(localVideoListFragment!=null){
             ft.hide(localVideoListFragment);
+            localVideoListFragment.onHidden();
         }
     }
 }

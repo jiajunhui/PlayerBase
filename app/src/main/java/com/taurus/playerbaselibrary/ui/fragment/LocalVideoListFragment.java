@@ -90,6 +90,10 @@ public class LocalVideoListFragment extends StateFragment<VideosInfo,LocalVideoL
         setPageState(BaseState.ERROR);
     }
 
+    public void onHidden(){
+        getUserContentHolder().onHidden();
+    }
+
     @Override
     public void onIntentToDetail(VideoItem item, int position) {
         Intent intent = new Intent(getActivity(), SecondActivity.class);

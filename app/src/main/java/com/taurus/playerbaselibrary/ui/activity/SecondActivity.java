@@ -24,7 +24,6 @@ import com.kk.taurus.playerbase.cover.DefaultReceiverCollections;
 import com.kk.taurus.playerbase.view.RenderSurfaceView;
 import com.kk.taurus.uiframe.a.ToolsActivity;
 import com.taurus.playerbaselibrary.R;
-import com.taurus.playerbaselibrary.cover.AppControllerCover;
 
 /**
  * Created by Taurus on 2017/11/23.
@@ -42,7 +41,7 @@ public class SecondActivity extends ToolsActivity {
 
         DefaultReceiverCollections receiverCollections = new DefaultReceiverCollections(this);
         receiverCollections
-                .addCover("appcover",new AppControllerCover(this))
+                .setDefaultPlayerControllerCover()
                 .setDefaultPlayerGestureCover()
                 .setDefaultPlayerLoadingCover().build();
         mPlayer.bindReceiverCollections(receiverCollections);

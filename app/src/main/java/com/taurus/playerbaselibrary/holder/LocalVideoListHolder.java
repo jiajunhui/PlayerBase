@@ -88,6 +88,13 @@ public class LocalVideoListHolder extends ContentHolder<VideosInfo> implements L
         }
     }
 
+    public void onHidden(){
+        if(mAdapter!=null){
+            mAdapter.destroy(true);
+            mAdapter.resetNotify();
+        }
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();

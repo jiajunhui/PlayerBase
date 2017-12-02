@@ -54,7 +54,7 @@ public class FullScreenActivity extends ToolsActivity {
 
         DefaultReceiverCollections receiverCollections = new DefaultReceiverCollections(this);
         receiverCollections
-                .addCover("appcover",new AppControllerCover(this))
+                .setDefaultPlayerControllerCover()
                 .setDefaultPlayerGestureCover()
                 .setDefaultPlayerLoadingCover().build();
         mPlayer.bindReceiverCollections(receiverCollections);
