@@ -58,6 +58,12 @@ public class HomeHolder extends ContentHolder<VideosInfo> {
                             onMainPageListener.onSwitchLocalVideosPlayGo();
                         }
                         break;
+
+                    case R.id.rb_input_url:
+                        if(onMainPageListener!=null){
+                            onMainPageListener.onSwitchInputUrl();
+                        }
+                        break;
                 }
             }
         });
@@ -67,6 +73,7 @@ public class HomeHolder extends ContentHolder<VideosInfo> {
         void onSwitchOnlineVideos();
         void onSwitchLocalVideos();
         void onSwitchLocalVideosPlayGo();
+        void onSwitchInputUrl();
     }
 
 }

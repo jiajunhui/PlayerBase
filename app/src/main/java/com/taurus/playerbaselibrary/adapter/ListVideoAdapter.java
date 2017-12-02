@@ -17,6 +17,7 @@
 package com.taurus.playerbaselibrary.adapter;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -27,7 +28,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jiajunhui.xapp.medialoader.bean.VideoItem;
+import com.kk.taurus.imagedisplay.ImageDisplay;
+import com.kk.taurus.imagedisplay.entity.ThumbnailType;
 import com.kk.taurus.playerbase.DefaultPlayer;
+import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.cover.DefaultReceiverCollections;
 import com.kk.taurus.playerbase.setting.VideoData;
 import com.kk.taurus.playerbase.view.RenderTextureView;
@@ -94,7 +98,7 @@ public class ListVideoAdapter extends RecyclerView.Adapter<ListVideoAdapter.Vide
                                 RelativeLayout container = ((VideoItemHolder)viewHolderForItemId).container;
                                 container.removeAllViews();
                             }
-                            player.destroy(false);
+                            player.destroy(true);
                         }
                     }
                 }
@@ -137,6 +141,7 @@ public class ListVideoAdapter extends RecyclerView.Adapter<ListVideoAdapter.Vide
     public void onBindViewHolder(final VideoItemHolder holder, final int position) {
         final VideoItem item = getItem(position);
         holder.name.setText(item.getDisplayName());
+        ImageDisplay.disPlayThumbnail(mContext,holder.cover,item.getPath(),R.mipmap.ic_cover_default, ThumbnailType.VIDEO_MICRO_KIND);
         if(mCurrPlayPos != position){
             holder.container.removeAllViews();
         }
@@ -148,6 +153,9 @@ public class ListVideoAdapter extends RecyclerView.Adapter<ListVideoAdapter.Vide
             public void onClick(View v) {
                 holder.detail.setVisibility(View.VISIBLE);
                 holder.fullScreen.setVisibility(View.VISIBLE);
+                if(player!=null){
+                    player.setOnPlayerEventListener(null);
+                }
                 player = new DefaultPlayer(mContext);
                 addPlayer(player);
                 buildReceivers();
@@ -166,6 +174,18 @@ public class ListVideoAdapter extends RecyclerView.Adapter<ListVideoAdapter.Vide
                         container.removeAllViews();
                     }
                 }
+
+                player.setOnPlayerEventListener(new OnPlayerEventListener() {
+                    @Override
+                    public void onPlayerEvent(int eventCode, Bundle bundle) {
+                        switch (eventCode){
+                            case OnPlayerEventListener.EVENT_CODE_PLAY_COMPLETE:
+                                resetNotify();
+                                break;
+                        }
+                    }
+                });
+
                 mCurrPlayPos = position;
                 holder.start.setVisibility(View.GONE);
                 holder.detail.setOnClickListener(new View.OnClickListener() {
@@ -221,6 +241,7 @@ public class ListVideoAdapter extends RecyclerView.Adapter<ListVideoAdapter.Vide
         TextView detail;
         TextView fullScreen;
         RelativeLayout container;
+        ImageView cover;
         ImageView start;
 
         public VideoItemHolder(View itemView) {
@@ -230,6 +251,7 @@ public class ListVideoAdapter extends RecyclerView.Adapter<ListVideoAdapter.Vide
             fullScreen = (TextView) itemView.findViewById(R.id.fullScreen);
             container = (RelativeLayout) itemView.findViewById(R.id.container);
             start = (ImageView) itemView.findViewById(R.id.start);
+            cover = (ImageView) itemView.findViewById(R.id.iv_cover);
         }
     }
 

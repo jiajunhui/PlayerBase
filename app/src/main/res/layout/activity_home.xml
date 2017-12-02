@@ -59,7 +59,23 @@
             android:checked="false"
             android:gravity="center"
             android:button="@null"
-            android:text="本地无缝续播"/>
+            android:text="无缝续播"/>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#ffffff"/>
+        <RadioButton
+            android:id="@+id/rb_input_url"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_tabs"
+            android:textSize="16sp"
+            android:textColor="#333333"
+            android:checked="false"
+            android:gravity="center"
+            android:button="@null"
+            android:text="输入地址"/>
     </RadioGroup>
 
 </LinearLayout>

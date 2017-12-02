@@ -13,6 +13,7 @@ import com.kk.taurus.uiframe.v.BaseUserHolder;
 import com.kk.taurus.uiframe.v.d.DefaultTitleBarHolder;
 import com.taurus.playerbaselibrary.bean.VideosInfo;
 import com.taurus.playerbaselibrary.holder.HomeHolder;
+import com.taurus.playerbaselibrary.ui.fragment.InputUrlFragment;
 import com.taurus.playerbaselibrary.ui.fragment.LocalVideoFragment;
 import com.taurus.playerbaselibrary.ui.fragment.LocalVideoListFragment;
 import com.taurus.playerbaselibrary.ui.fragment.OnlineVideosFragment;
@@ -27,6 +28,7 @@ public class HomeActivity extends TitleBarActivity<VideosInfo,HomeHolder> implem
     private OnlineVideosFragment onlineVideosFragment;
     private LocalVideoFragment localVideoFragment;
     private LocalVideoListFragment localVideoListFragment;
+    private InputUrlFragment inputUrlFragment;
 
     @Override
     public HomeHolder onBindContentHolder() {
@@ -60,6 +62,7 @@ public class HomeActivity extends TitleBarActivity<VideosInfo,HomeHolder> implem
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         hiddenLocalVideoPlayGoFragment(ft);
         hiddenLocalVideoFragment(ft);
+        hiddenInputUrlFragment(ft);
         if(onlineVideosFragment==null){
             onlineVideosFragment = new OnlineVideosFragment();
             ft.add(getUserContentHolder().getContainer().getId(),onlineVideosFragment);
@@ -74,6 +77,7 @@ public class HomeActivity extends TitleBarActivity<VideosInfo,HomeHolder> implem
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         hiddenOnLineFragment(ft);
         hiddenLocalVideoPlayGoFragment(ft);
+        hiddenInputUrlFragment(ft);
         if(localVideoFragment==null){
             localVideoFragment = new LocalVideoFragment();
             ft.add(getUserContentHolder().getContainer().getId(),localVideoFragment);
@@ -89,11 +93,27 @@ public class HomeActivity extends TitleBarActivity<VideosInfo,HomeHolder> implem
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         hiddenOnLineFragment(ft);
         hiddenLocalVideoFragment(ft);
+        hiddenInputUrlFragment(ft);
         if(localVideoListFragment==null){
             localVideoListFragment = new LocalVideoListFragment();
             ft.add(getUserContentHolder().getContainer().getId(),localVideoListFragment);
         }else{
             ft.show(localVideoListFragment);
+        }
+        ft.commitAllowingStateLoss();
+    }
+
+    @Override
+    public void onSwitchInputUrl() {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        hiddenOnLineFragment(ft);
+        hiddenLocalVideoFragment(ft);
+        hiddenLocalVideoPlayGoFragment(ft);
+        if(inputUrlFragment==null){
+            inputUrlFragment = new InputUrlFragment();
+            ft.add(getUserContentHolder().getContainer().getId(),inputUrlFragment);
+        }else{
+            ft.show(inputUrlFragment);
         }
         ft.commitAllowingStateLoss();
     }
@@ -114,6 +134,12 @@ public class HomeActivity extends TitleBarActivity<VideosInfo,HomeHolder> implem
         if(localVideoListFragment!=null){
             ft.hide(localVideoListFragment);
             localVideoListFragment.onHidden();
+        }
+    }
+
+    private void hiddenInputUrlFragment(FragmentTransaction ft){
+        if(inputUrlFragment!=null){
+            ft.hide(inputUrlFragment);
         }
     }
 }

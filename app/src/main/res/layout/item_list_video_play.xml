@@ -9,6 +9,11 @@
         android:layout_width="match_parent"
         android:layout_height="201dp"
         android:background="#000000">
+        <ImageView
+            android:id="@+id/iv_cover"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"/>
         <RelativeLayout
             android:id="@+id/container"
             android:layout_width="match_parent"

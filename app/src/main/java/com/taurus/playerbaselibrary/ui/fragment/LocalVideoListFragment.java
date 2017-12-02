@@ -19,6 +19,7 @@ package com.taurus.playerbaselibrary.ui.fragment;
 import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.jiajunhui.xapp.medialoader.bean.VideoItem;
 import com.jiajunhui.xapp.medialoader.callback.OnVideoLoaderCallBack;
@@ -87,6 +88,7 @@ public class LocalVideoListFragment extends StateFragment<VideosInfo,LocalVideoL
 
     @PermissionFail(requestCode = 100)
     public void permissionFailure(){
+        Toast.makeText(mContext, "permission deny", Toast.LENGTH_SHORT).show();
         setPageState(BaseState.ERROR);
     }
 

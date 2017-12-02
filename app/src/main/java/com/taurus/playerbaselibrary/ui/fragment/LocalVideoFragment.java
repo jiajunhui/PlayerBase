@@ -2,8 +2,6 @@ package com.taurus.playerbaselibrary.ui.fragment;
 
 import android.Manifest;
 import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
 
 import com.jiajunhui.xapp.medialoader.bean.VideoItem;
 import com.jiajunhui.xapp.medialoader.callback.OnVideoLoaderCallBack;
