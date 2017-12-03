@@ -32,13 +32,13 @@ import java.util.List;
  * Created by Taurus on 2017/11/18.
  */
 
-public class MixVideoView extends DelegateVideoView implements IDataProvider.OnProviderListener{
+public class MixRenderWidget extends DelegateRenderWidget implements IDataProvider.OnProviderListener{
 
     private IDataProvider mDataProvider;
     private VideoData mProviderUseData;
     private List<Rate> mProviderGetRateList;
 
-    public MixVideoView(Context context) {
+    public MixRenderWidget(Context context) {
         super(context);
     }
 

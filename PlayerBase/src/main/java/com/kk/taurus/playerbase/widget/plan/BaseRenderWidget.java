@@ -17,17 +17,18 @@
 package com.kk.taurus.playerbase.widget.plan;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 
 import com.kk.taurus.playerbase.callback.OnErrorListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.inter.IRenderWidget;
+import com.kk.taurus.playerbase.inter.ITimerGetter;
 import com.kk.taurus.playerbase.setting.AspectRatio;
 import com.kk.taurus.playerbase.setting.DecodeMode;
+import com.kk.taurus.playerbase.setting.PlayerType;
+import com.kk.taurus.playerbase.setting.TimerCounterProxy;
+import com.kk.taurus.playerbase.setting.TimerData;
 import com.kk.taurus.playerbase.setting.VideoData;
 import com.kk.taurus.playerbase.setting.ViewType;
 
@@ -35,55 +36,35 @@ import com.kk.taurus.playerbase.setting.ViewType;
  * Created by Taurus on 2017/11/18.
  */
 
-public abstract class BaseRenderWidget extends FrameLayout implements IRenderWidget {
+public abstract class BaseRenderWidget implements IRenderWidget, IEventBinder, ITimerGetter, TimerCounterProxy.OnTimerHandlerListener {
 
     protected Context mContext;
-    protected int mStatus = STATUS_IDLE;
-    protected int mTargetStatus = STATUS_IDLE;
+    protected BaseVideoView mRenderWidget;
     protected VideoData mDataSource;
-    protected int startSeekPos;
+    private int mRenderType;
+    private OnErrorListener mOnErrorListener;
+    private OnPlayerEventListener mOnPlayerEventListener;
     private DecodeMode mDecodeMode;
     private ViewType mViewType;
     private AspectRatio mAspectRatio = AspectRatio.AspectRatio_ORIGIN;
-    protected boolean useDefaultRender = true;
 
-    private OnPlayerEventListener mOnPlayerEventListener;
-    private OnErrorListener mOnErrorListener;
+    private TimerCounterProxy timerCounterProxy;
+    private Bundle mBundle;
+
+    public Bundle getBundle(){
+        if(mBundle==null){
+            mBundle = new Bundle();
+        }
+        mBundle.clear();
+        return mBundle;
+    }
 
     public BaseRenderWidget(Context context){
-        super(context);
         this.mContext = context;
-        init(context);
-    }
-
-    public void setOnPlayerEventListener(OnPlayerEventListener onPlayerEventListener) {
-        this.mOnPlayerEventListener = onPlayerEventListener;
-    }
-
-    public void setOnErrorListener(OnErrorListener onErrorListener) {
-        this.mOnErrorListener = onErrorListener;
-    }
-
-    public void onPlayerEvent(int eventCode, Bundle bundle) {
-        if(this.mOnPlayerEventListener!=null){
-            this.mOnPlayerEventListener.onPlayerEvent(eventCode, bundle);
-        }
-    }
-
-    public void onErrorEvent(int eventCode, Bundle bundle) {
-        if(this.mOnErrorListener!=null){
-            this.mOnErrorListener.onError(eventCode, bundle);
-        }
-    }
-
-    protected void init(Context context) {
-        setBackgroundColor(Color.BLACK);
-        setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        initPlayerView(context);
-    }
-
-    private void initPlayerView(Context context) {
-        addView(getPlayerView(context),new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        mRenderType = PlayerType.getInstance().getDefaultPlayerType();
+        mRenderWidget = initRenderWidget(context);
+        timerCounterProxy = new TimerCounterProxy(this);
+        timerCounterProxy.setOnTimerHandlerListener(this);
     }
 
     @Override
@@ -91,23 +72,65 @@ public abstract class BaseRenderWidget extends FrameLayout implements IRenderWid
         this.mDataSource = data;
     }
 
-    public void setUseDefaultRender(boolean useDefaultRender){
-        this.useDefaultRender = useDefaultRender;
+    protected abstract BaseVideoView initRenderWidget(Context context);
+
+    public void setOnErrorListener(OnErrorListener mOnErrorListener) {
+        this.mOnErrorListener = mOnErrorListener;
     }
 
-    public abstract View getPlayerView(Context context);
-
-    public void setDecodeMode(DecodeMode mDecodeMode){
-        this.mDecodeMode = mDecodeMode;
+    public void setOnPlayerEventListener(OnPlayerEventListener mOnPlayerEventListener) {
+        this.mOnPlayerEventListener = mOnPlayerEventListener;
     }
 
     @Override
-    public View getRenderView() {
-        return null;
+    public void onBindPlayerEvent(int eventCode, Bundle bundle) {
+        timerCounterProxy.proxyPlayerEvent(eventCode, bundle);
+        if(this.mOnPlayerEventListener!=null){
+            this.mOnPlayerEventListener.onPlayerEvent(eventCode, bundle);
+        }
     }
 
-    public void setViewType(ViewType viewType) {
-        this.mViewType = viewType;
+    @Override
+    public void onBindErrorEvent(int eventCode, Bundle bundle) {
+        if(this.mOnErrorListener!=null){
+            this.mOnErrorListener.onError(eventCode, bundle);
+        }
+    }
+
+    @Override
+    public void onTimerCounter(TimerData timerData) {
+        Bundle bundle = getBundle();
+        bundle.putInt(ITimerGetter.KEY_TIMER_CURRENT_POSITION,timerData.getCurrentPosition());
+        bundle.putInt(ITimerGetter.KEY_TIMER_DURATION,timerData.getDuration());
+        bundle.putInt(ITimerGetter.KEY_TIMER_BUFFER_POSITION,timerData.getBufferPosition());
+        onBindPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_PLAYER_TIMER_UPDATE,bundle);
+    }
+
+    @Override
+    public int getTimerCurrentPosition() {
+        return getCurrentPosition();
+    }
+
+    @Override
+    public int getTimerDuration() {
+        return getDuration();
+    }
+
+    @Override
+    public int getTimerBufferPercentage() {
+        return getBufferPercentage();
+    }
+
+    public void setDecodeMode(DecodeMode mDecodeMode) {
+        this.mDecodeMode = mDecodeMode;
+    }
+
+    public void setViewType(ViewType mViewType) {
+        this.mViewType = mViewType;
+    }
+
+    public void setAspectRatio(AspectRatio mAspectRatio) {
+        this.mAspectRatio = mAspectRatio;
     }
 
     public DecodeMode getDecodeMode() {
@@ -118,29 +141,24 @@ public abstract class BaseRenderWidget extends FrameLayout implements IRenderWid
         return mViewType;
     }
 
-    @Override
-    public void setAspectRatio(AspectRatio aspectRatio) {
-        mAspectRatio = aspectRatio;
-    }
-
-    public AspectRatio getAspectRatio(){
+    public AspectRatio getAspectRatio() {
         return mAspectRatio;
     }
 
+    public int getRenderType() {
+        return mRenderType;
+    }
+
+    public void setRenderType(int renderType) {
+        boolean needUpdateRenderType = mRenderType!=renderType;
+        this.mRenderType = renderType;
+        if(needUpdateRenderType){
+            initRenderWidget(mContext);
+        }
+    }
+
     @Override
-    public void rePlay(int msc) {
-        stop();
-        setDataSource(mDataSource);
-        start(msc);
+    public View getRenderView() {
+        return mRenderWidget;
     }
-
-    public int getStatus() {
-        return mStatus;
-    }
-
-    @Override
-    public int getAudioSessionId() {
-        return 0;
-    }
-
 }

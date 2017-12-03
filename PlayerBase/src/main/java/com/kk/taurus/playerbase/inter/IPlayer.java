@@ -34,5 +34,9 @@ public interface IPlayer extends IDecoder{
     void updatePlayerType(int type);
     void setViewType(ViewType viewType);
     void setAspectRatio(AspectRatio aspectRatio);
+
+    ViewType getViewType();
+    AspectRatio getAspectRatio();
+
     View getRenderView();
 }

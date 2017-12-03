@@ -18,10 +18,9 @@ package com.kk.taurus.playerbase.player;
 
 import android.content.Context;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -32,28 +31,28 @@ import com.kk.taurus.playerbase.setting.Rate;
 import com.kk.taurus.playerbase.setting.VideoData;
 import com.kk.taurus.playerbase.widget.plan.BaseDecoder;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * Created by Taurus on 2017/9/28.
+ * Created by Taurus on 2017/12/3.
  */
 
-public class DefaultDecoder extends BaseDecoder{
+public class DefaultDecoderPlayer extends BaseDecoder {
 
-    private final String TAG = "DefaultDecoder";
-
-    private AndroidMediaPlayer mMediaPlayer;
-    private int mCurrentBufferPercentage;
-    private boolean useMediaDataSource;
-
+    private final String TAG = "DefaultMediaPlayer";
+    private MediaPlayer mMediaPlayer;
     private VideoData mDataSource;
+    private int mCurrentBufferPercentage;
 
-    public DefaultDecoder(Context context) {
+    public DefaultDecoderPlayer(Context context) {
         super(context);
-        mMediaPlayer = createMediaPlayer();
+        init(context);
+    }
+
+    private void init(Context context) {
+        mMediaPlayer = new MediaPlayer();
     }
 
     @Override
@@ -70,14 +69,10 @@ public class DefaultDecoder extends BaseDecoder{
         }
     }
 
-    public void setUsingMediaDataSource(boolean useMediaDataSource){
-        this.useMediaDataSource = useMediaDataSource;
-    }
-
     private void openVideo(VideoData data) {
         try {
             if(mMediaPlayer==null){
-                mMediaPlayer = createMediaPlayer();
+                mMediaPlayer = new MediaPlayer();
             }else{
                 mMediaPlayer.reset();
                 mStatus = STATUS_IDLE;
@@ -95,17 +90,7 @@ public class DefaultDecoder extends BaseDecoder{
             mMediaPlayer.setOnBufferingUpdateListener(mBufferingUpdateListener);
             mCurrentBufferPercentage = 0;
             mStatus = STATUS_INITIALIZED;
-            String scheme = mUri.getScheme();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
-                    useMediaDataSource &&
-                    (TextUtils.isEmpty(scheme) || scheme.equalsIgnoreCase("file"))) {
-                IMediaDataSource dataSource = new FileMediaDataSource(new File(mUri.toString()));
-                mMediaPlayer.setDataSource(dataSource);
-            }  else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                mMediaPlayer.setDataSource(mContext, mUri, mHeaders);
-            } else {
-                mMediaPlayer.setDataSource(mUri.toString());
-            }
+            mMediaPlayer.setDataSource(mUri.toString());
 
             mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mMediaPlayer.setScreenOnWhilePlaying(true);
@@ -136,11 +121,15 @@ public class DefaultDecoder extends BaseDecoder{
                 (mStatus==STATUS_PREPARED
                         || mStatus==STATUS_PAUSED
                         || mStatus==STATUS_PLAYBACK_COMPLETE)){
-            mMediaPlayer.start();
-            mStatus = STATUS_STARTED;
-            Bundle bundle = new Bundle();
-            bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_POSITION,startSeekPos);
-            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_INTENT_TO_START,bundle);
+            try {
+                mMediaPlayer.start();
+                mStatus = STATUS_STARTED;
+                Bundle bundle = new Bundle();
+                bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_POSITION,startSeekPos);
+                onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_INTENT_TO_START,bundle);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
         mTargetStatus = STATUS_STARTED;
         Log.d(TAG,"start...");
@@ -159,11 +148,15 @@ public class DefaultDecoder extends BaseDecoder{
     @Override
     public void pause() {
         if(available() && mStatus==STATUS_STARTED){
-            mMediaPlayer.pause();
-            mStatus = STATUS_PAUSED;
-            Bundle bundle = new Bundle();
-            bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_POSITION,getCurrentPosition());
-            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAY_PAUSE,bundle);
+            try {
+                mMediaPlayer.pause();
+                mStatus = STATUS_PAUSED;
+                Bundle bundle = new Bundle();
+                bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_POSITION,getCurrentPosition());
+                onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAY_PAUSE,bundle);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
         mTargetStatus = STATUS_PAUSED;
         Log.d(TAG,"pause...");
@@ -172,11 +165,15 @@ public class DefaultDecoder extends BaseDecoder{
     @Override
     public void resume() {
         if(available() && mStatus == STATUS_PAUSED){
-            mMediaPlayer.start();
-            mStatus = STATUS_STARTED;
-            Bundle bundle = new Bundle();
-            bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_POSITION,getCurrentPosition());
-            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAY_RESUME,bundle);
+            try {
+                mMediaPlayer.start();
+                mStatus = STATUS_STARTED;
+                Bundle bundle = new Bundle();
+                bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_POSITION,getCurrentPosition());
+                onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAY_RESUME,bundle);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
         mTargetStatus = STATUS_STARTED;
         Log.d(TAG,"resume...");
@@ -189,10 +186,14 @@ public class DefaultDecoder extends BaseDecoder{
                         || mStatus==STATUS_STARTED
                         || mStatus==STATUS_PAUSED
                         || mStatus==STATUS_PLAYBACK_COMPLETE)){
-            mMediaPlayer.seekTo(msc);
-            Bundle bundle = new Bundle();
-            bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_POSITION,msc);
-            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_SEEK_TO,bundle);
+            try {
+                mMediaPlayer.seekTo(msc);
+                Bundle bundle = new Bundle();
+                bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_POSITION,msc);
+                onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_SEEK_TO,bundle);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 
@@ -203,9 +204,13 @@ public class DefaultDecoder extends BaseDecoder{
                         || mStatus==STATUS_STARTED
                         || mStatus==STATUS_PAUSED
                         || mStatus==STATUS_PLAYBACK_COMPLETE)){
-            mMediaPlayer.stop();
-            mStatus = STATUS_STOPPED;
-            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_ON_STOP,null);
+            try {
+                mMediaPlayer.stop();
+                mStatus = STATUS_STOPPED;
+                onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_ON_STOP,null);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
         mTargetStatus = STATUS_STOPPED;
     }
@@ -236,7 +241,7 @@ public class DefaultDecoder extends BaseDecoder{
                 || mStatus==STATUS_STARTED
                 || mStatus==STATUS_PAUSED
                 || mStatus==STATUS_PLAYBACK_COMPLETE)){
-            return (int) mMediaPlayer.getCurrentPosition();
+            return mMediaPlayer.getCurrentPosition();
         }
         return 0;
     }
@@ -247,7 +252,7 @@ public class DefaultDecoder extends BaseDecoder{
                 && mStatus!=STATUS_ERROR
                 && mStatus!=STATUS_INITIALIZED
                 && mStatus!=STATUS_IDLE){
-            return (int) mMediaPlayer.getDuration();
+            return mMediaPlayer.getDuration();
         }
         return 0;
     }
@@ -312,8 +317,12 @@ public class DefaultDecoder extends BaseDecoder{
         }
     }
 
-    private AndroidMediaPlayer createMediaPlayer() {
-        return new AndroidMediaPlayer();
+    @Override
+    public int getAudioSessionId() {
+        if(available()){
+            return mMediaPlayer.getAudioSessionId();
+        }
+        return 0;
     }
 
     private void resetListener(){
@@ -327,11 +336,8 @@ public class DefaultDecoder extends BaseDecoder{
         mMediaPlayer.setOnBufferingUpdateListener(null);
     }
 
-    private int mVideoWidth;
-    private int mVideoHeight;
-
-    IMediaPlayer.OnPreparedListener mPreparedListener = new IMediaPlayer.OnPreparedListener() {
-        public void onPrepared(IMediaPlayer mp) {
+    MediaPlayer.OnPreparedListener mPreparedListener = new MediaPlayer.OnPreparedListener() {
+        public void onPrepared(MediaPlayer mp) {
             Log.d(TAG,"onPrepared...");
             mStatus = STATUS_PREPARED;
 
@@ -357,21 +363,23 @@ public class DefaultDecoder extends BaseDecoder{
         }
     };
 
-    IMediaPlayer.OnVideoSizeChangedListener mSizeChangedListener =
-            new IMediaPlayer.OnVideoSizeChangedListener() {
-                public void onVideoSizeChanged(IMediaPlayer mp, int width, int height, int sarNum, int sarDen) {
+    private int mVideoWidth;
+    private int mVideoHeight;
+    MediaPlayer.OnVideoSizeChangedListener mSizeChangedListener =
+            new MediaPlayer.OnVideoSizeChangedListener() {
+                public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
                     mVideoWidth = mp.getVideoWidth();
                     mVideoHeight = mp.getVideoHeight();
                     Bundle bundle = new Bundle();
-                    bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_VIDEO_WIDTH,mVideoWidth);
-                    bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_VIDEO_HEIGHT,mVideoHeight);
+                    bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_VIDEO_WIDTH, mVideoWidth);
+                    bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_VIDEO_HEIGHT, mVideoHeight);
                     onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_VIDEO_SIZE_CHANGE,bundle);
                 }
             };
 
-    private IMediaPlayer.OnCompletionListener mCompletionListener =
-            new IMediaPlayer.OnCompletionListener() {
-                public void onCompletion(IMediaPlayer mp) {
+    private MediaPlayer.OnCompletionListener mCompletionListener =
+            new MediaPlayer.OnCompletionListener() {
+                public void onCompletion(MediaPlayer mp) {
                     mStatus = STATUS_PLAYBACK_COMPLETE;
                     mTargetStatus = STATUS_PLAYBACK_COMPLETE;
                     onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAY_COMPLETE,null);
@@ -379,70 +387,58 @@ public class DefaultDecoder extends BaseDecoder{
             };
 
     private int mSeekWhenPrepared;
-    private IMediaPlayer.OnInfoListener mInfoListener =
-            new IMediaPlayer.OnInfoListener() {
-                public boolean onInfo(IMediaPlayer mp, int arg1, int arg2) {
+    private MediaPlayer.OnInfoListener mInfoListener =
+            new MediaPlayer.OnInfoListener() {
+                public boolean onInfo(MediaPlayer mp, int arg1, int arg2) {
                     switch (arg1) {
-                        case IMediaPlayer.MEDIA_INFO_VIDEO_TRACK_LAGGING:
+                        case MediaPlayer.MEDIA_INFO_VIDEO_TRACK_LAGGING:
                             Log.d(TAG, "MEDIA_INFO_VIDEO_TRACK_LAGGING:");
                             break;
-                        case IMediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START:
+                        case MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START:
 //                            Log.d(TAG, "MEDIA_INFO_VIDEO_RENDERING_START:" + " renderView == SurfaceView : " + (mCurrentRender==RENDER_SURFACE_VIEW));
                             Log.d(TAG, "MEDIA_INFO_VIDEO_RENDERING_START");
                             mSeekWhenPrepared = 0;
                             onPlayerEvent(OnPlayerEventListener.EVENT_CODE_RENDER_START,null);
                             break;
-                        case IMediaPlayer.MEDIA_INFO_BUFFERING_START:
+                        case MediaPlayer.MEDIA_INFO_BUFFERING_START:
                             Log.d(TAG, "MEDIA_INFO_BUFFERING_START:");
                             onPlayerEvent(OnPlayerEventListener.EVENT_CODE_BUFFERING_START,null);
                             break;
-                        case IMediaPlayer.MEDIA_INFO_BUFFERING_END:
+                        case MediaPlayer.MEDIA_INFO_BUFFERING_END:
                             Log.d(TAG, "MEDIA_INFO_BUFFERING_END:");
                             onPlayerEvent(OnPlayerEventListener.EVENT_CODE_BUFFERING_END,null);
                             break;
-                        case IMediaPlayer.MEDIA_INFO_NETWORK_BANDWIDTH:
-                            Log.d(TAG, "MEDIA_INFO_NETWORK_BANDWIDTH: " + arg2);
-                            break;
-                        case IMediaPlayer.MEDIA_INFO_BAD_INTERLEAVING:
+                        case MediaPlayer.MEDIA_INFO_BAD_INTERLEAVING:
                             Log.d(TAG, "MEDIA_INFO_BAD_INTERLEAVING:");
                             break;
-                        case IMediaPlayer.MEDIA_INFO_NOT_SEEKABLE:
+                        case MediaPlayer.MEDIA_INFO_NOT_SEEKABLE:
                             Log.d(TAG, "MEDIA_INFO_NOT_SEEKABLE:");
                             break;
-                        case IMediaPlayer.MEDIA_INFO_METADATA_UPDATE:
+                        case MediaPlayer.MEDIA_INFO_METADATA_UPDATE:
                             Log.d(TAG, "MEDIA_INFO_METADATA_UPDATE:");
                             break;
-                        case IMediaPlayer.MEDIA_INFO_UNSUPPORTED_SUBTITLE:
+                        case MediaPlayer.MEDIA_INFO_UNSUPPORTED_SUBTITLE:
                             Log.d(TAG, "MEDIA_INFO_UNSUPPORTED_SUBTITLE:");
                             break;
-                        case IMediaPlayer.MEDIA_INFO_SUBTITLE_TIMED_OUT:
+                        case MediaPlayer.MEDIA_INFO_SUBTITLE_TIMED_OUT:
                             Log.d(TAG, "MEDIA_INFO_SUBTITLE_TIMED_OUT:");
-                            break;
-                        case IMediaPlayer.MEDIA_INFO_VIDEO_ROTATION_CHANGED:
-                            Log.d(TAG, "MEDIA_INFO_VIDEO_ROTATION_CHANGED: " + arg2);
-                            Bundle bundle = new Bundle();
-                            bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_INT_DATA,arg2);
-                            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_VIDEO_ROTATION_CHANGED,bundle);
-                            break;
-                        case IMediaPlayer.MEDIA_INFO_AUDIO_RENDERING_START:
-                            Log.d(TAG, "MEDIA_INFO_AUDIO_RENDERING_START:");
                             break;
                     }
                     return true;
                 }
             };
 
-    private IMediaPlayer.OnSeekCompleteListener mOnSeekCompleteListener = new IMediaPlayer.OnSeekCompleteListener() {
+    private MediaPlayer.OnSeekCompleteListener mOnSeekCompleteListener = new MediaPlayer.OnSeekCompleteListener() {
         @Override
-        public void onSeekComplete(IMediaPlayer mp) {
+        public void onSeekComplete(MediaPlayer mp) {
             Log.d(TAG,"EVENT_CODE_SEEK_COMPLETE");
             onPlayerEvent(OnPlayerEventListener.EVENT_CODE_SEEK_COMPLETE,null);
         }
     };
 
-    private IMediaPlayer.OnErrorListener mErrorListener =
-            new IMediaPlayer.OnErrorListener() {
-                public boolean onError(IMediaPlayer mp, int framework_err, int impl_err) {
+    private MediaPlayer.OnErrorListener mErrorListener =
+            new MediaPlayer.OnErrorListener() {
+                public boolean onError(MediaPlayer mp, int framework_err, int impl_err) {
                     Log.d(TAG, "Error: " + framework_err + "," + impl_err);
                     mStatus = STATUS_ERROR;
                     mTargetStatus = STATUS_ERROR;
@@ -461,11 +457,12 @@ public class DefaultDecoder extends BaseDecoder{
                 }
             };
 
-    private IMediaPlayer.OnBufferingUpdateListener mBufferingUpdateListener =
-            new IMediaPlayer.OnBufferingUpdateListener() {
-                public void onBufferingUpdate(IMediaPlayer mp, int percent) {
+    private MediaPlayer.OnBufferingUpdateListener mBufferingUpdateListener =
+            new MediaPlayer.OnBufferingUpdateListener() {
+                public void onBufferingUpdate(MediaPlayer mp, int percent) {
                     mCurrentBufferPercentage = percent;
                 }
             };
+
 
 }

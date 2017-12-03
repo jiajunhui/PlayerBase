@@ -150,19 +150,25 @@ public abstract class BaseContainer extends FrameLayout {
         View widget = getPlayerWidget(context);
         if(widget==null)
             return;
-        addViewToPlayerContainer(widget,true);
+        LayoutParams lp = new LayoutParams(
+                LayoutParams.MATCH_PARENT,
+                LayoutParams.WRAP_CONTENT,
+                Gravity.CENTER);
+        addViewToPlayerContainer(widget,true, lp);
     }
 
-    protected void addViewToPlayerContainer(View view, boolean removeAll){
+    protected void addViewToPlayerContainer(View view, boolean removeAll, LayoutParams lp){
         if(mPlayerContainer==null)
             return;
         if(removeAll){
             clearPlayerContainer();
         }
-        LayoutParams lp = new LayoutParams(
-                LayoutParams.WRAP_CONTENT,
-                LayoutParams.WRAP_CONTENT,
-                Gravity.CENTER);
+        if(lp==null){
+            lp = new LayoutParams(
+                    LayoutParams.WRAP_CONTENT,
+                    LayoutParams.WRAP_CONTENT,
+                    Gravity.CENTER);
+        }
         mPlayerContainer.addView(view,lp);
     }
 

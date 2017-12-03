@@ -60,6 +60,7 @@ public interface IDecoder {
     int getVideoWidth();
     int getVideoHeight();
     void setDecodeMode(DecodeMode decodeMode);
+    DecodeMode getDecodeMode();
     void setDisplay(SurfaceHolder surfaceHolder);
     void setSurface(Surface surface);
     /** get current playing video definition*/

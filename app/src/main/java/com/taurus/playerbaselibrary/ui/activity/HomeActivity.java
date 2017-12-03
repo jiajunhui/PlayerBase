@@ -47,10 +47,14 @@ public class HomeActivity extends TitleBarActivity<VideosInfo,HomeHolder> implem
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             getWindow().setStatusBarColor(Color.parseColor("#3F51B5"));
         }
+        setCenterTitle("在线视频");
+    }
+
+    private void setCenterTitle(String title) {
         BaseUserHolder userHolder = getUserHolder();
         if(userHolder!=null){
             BaseTitleBarHolder titleBarHolder = userHolder.titleBarHolder;
-            titleBarHolder.setTitle("Videos");
+            titleBarHolder.setTitle(title);
             if(titleBarHolder instanceof DefaultTitleBarHolder){
                 ((DefaultTitleBarHolder) titleBarHolder).setBackIconVisibility(View.GONE);
             }
@@ -59,6 +63,7 @@ public class HomeActivity extends TitleBarActivity<VideosInfo,HomeHolder> implem
 
     @Override
     public void onSwitchOnlineVideos() {
+        setCenterTitle("在线视频");
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         hiddenLocalVideoPlayGoFragment(ft);
         hiddenLocalVideoFragment(ft);
@@ -74,6 +79,7 @@ public class HomeActivity extends TitleBarActivity<VideosInfo,HomeHolder> implem
 
     @Override
     public void onSwitchLocalVideos() {
+        setCenterTitle("本地视频");
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         hiddenOnLineFragment(ft);
         hiddenLocalVideoPlayGoFragment(ft);
@@ -90,6 +96,7 @@ public class HomeActivity extends TitleBarActivity<VideosInfo,HomeHolder> implem
 
     @Override
     public void onSwitchLocalVideosPlayGo() {
+        setCenterTitle("无缝切播");
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         hiddenOnLineFragment(ft);
         hiddenLocalVideoFragment(ft);
@@ -105,6 +112,7 @@ public class HomeActivity extends TitleBarActivity<VideosInfo,HomeHolder> implem
 
     @Override
     public void onSwitchInputUrl() {
+        setCenterTitle("输入地址");
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         hiddenOnLineFragment(ft);
         hiddenLocalVideoFragment(ft);

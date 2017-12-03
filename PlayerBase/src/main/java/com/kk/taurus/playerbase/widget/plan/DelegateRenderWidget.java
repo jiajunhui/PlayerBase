@@ -32,15 +32,15 @@ import java.util.List;
  * Created by Taurus on 2017/11/18.
  */
 
-public abstract class DelegateVideoView extends BaseVideoView {
+public abstract class DelegateRenderWidget extends BaseRenderWidget {
 
-    public DelegateVideoView(Context context) {
+    public DelegateRenderWidget(Context context) {
         super(context);
     }
 
     @Override
-    protected BaseRenderWidget initRenderWidget(Context context) {
-        BaseRenderWidget renderWidget = (BaseRenderWidget) ConfigLoader.getPlayerInstance(context,getRenderType());
+    protected BaseVideoView initRenderWidget(Context context) {
+        BaseVideoView renderWidget = (BaseVideoView) ConfigLoader.getPlayerInstance(context,getRenderType());
         if(renderWidget!=null){
             renderWidget.setOnPlayerEventListener(new OnPlayerEventListener() {
                 @Override

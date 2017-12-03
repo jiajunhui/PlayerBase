@@ -43,7 +43,7 @@
             android:checked="false"
             android:gravity="center"
             android:button="@null"
-            android:text="本地"/>
+            android:text="本地视频"/>
         <View
             android:layout_width="1dp"
             android:layout_height="match_parent"

@@ -52,6 +52,7 @@ public class LocalVideoListFragment extends StateFragment<VideosInfo,LocalVideoL
     @Override
     protected void onInit(Bundle savedInstanceState) {
         super.onInit(savedInstanceState);
+        keepScreenOn();
         getUserContentHolder().setOnLocalVideoListHolderListener(this);
     }
 

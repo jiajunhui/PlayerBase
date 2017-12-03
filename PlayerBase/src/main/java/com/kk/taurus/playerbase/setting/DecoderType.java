@@ -36,7 +36,7 @@ public class DecoderType {
 
     private DecoderType(){
         decoderTypes = new HashMap<>();
-        addDecoderType(TYPE_DECODER_DEFAULT,new DecoderTypeEntity("原生解码","com.kk.taurus.playerbase.player.DefaultDecoder"));
+        addDecoderType(TYPE_DECODER_DEFAULT,new DecoderTypeEntity("原生解码","com.kk.taurus.playerbase.player.DefaultDecoderPlayer"));
     }
 
     public static DecoderType getInstance(){

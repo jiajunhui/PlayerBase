@@ -22,7 +22,7 @@ import android.util.Log;
 
 import com.kk.taurus.playerbase.inter.IPlayer;
 import com.kk.taurus.playerbase.setting.DecoderType;
-import com.kk.taurus.playerbase.setting.InternalPlayerManager;
+import com.kk.taurus.playerbase.widget.plan.InternalPlayerManager;
 import com.kk.taurus.playerbase.setting.PlayerType;
 
 import java.lang.reflect.Constructor;

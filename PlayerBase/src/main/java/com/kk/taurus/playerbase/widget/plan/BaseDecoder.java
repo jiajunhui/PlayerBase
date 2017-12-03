@@ -73,9 +73,4 @@ public abstract class BaseDecoder implements IDecoder {
         return mStatus;
     }
 
-    @Override
-    public int getAudioSessionId() {
-        return 0;
-    }
-
 }

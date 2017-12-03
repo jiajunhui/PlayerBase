@@ -58,7 +58,7 @@ public class VideoDetailActivity extends ToolsActivity implements OnPlayerEventL
         mCoverCollections = new DefaultReceiverCollections(this);
         mCoverCollections.buildDefault().addCover(PlayCompleteCover.KEY,completeCover = new PlayCompleteCover(this,null));
 
-        mPlayer.bindCoverCollections(mCoverCollections);
+        mPlayer.bindReceiverCollections(mCoverCollections);
 
         BasePlayerControllerCover controllerCover = mCoverCollections.getReceiver(BasePlayerControllerCover.KEY);
         controllerCover.setVideoTitle(item.getUrl());

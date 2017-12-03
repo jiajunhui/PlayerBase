@@ -1,65 +1,63 @@
-/*
- * Copyright 2017 jiajunhui<junhui_jia@163.com>
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
- */
-
-package com.kk.taurus.playerbase.player;
+package com.kk.taurus.ijkplayer;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.kk.taurus.ijkplayer.media.IRenderView;
+import com.kk.taurus.ijkplayer.media.IjkVideoView;
 import com.kk.taurus.playerbase.callback.OnErrorListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.setting.AspectRatio;
 import com.kk.taurus.playerbase.setting.Rate;
 import com.kk.taurus.playerbase.setting.VideoData;
-import com.kk.taurus.playerbase.setting.ViewType;
-import com.kk.taurus.playerbase.widget.plan.BaseRenderWidget;
+import com.kk.taurus.playerbase.widget.plan.BaseVideoView;
 
 import java.util.List;
+
+import tv.danmaku.ijk.media.player.IMediaPlayer;
+import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
 /**
  * Created by Taurus on 2016/11/14.
  */
 
-public class DefaultRenderWidget extends BaseRenderWidget {
+public class IJKVideoViewPlayer extends BaseVideoView {
 
-    private final String TAG = "MediaSinglePlayer";
-    protected MediaVideoView mVideoView;
+    private final String TAG = "IjkSinglePlayer";
+    protected IjkVideoView mVideoView;
+    private boolean hasLoadLibrary;
     private VideoData dataSource;
 
-    public DefaultRenderWidget(Context context) {
+    public IJKVideoViewPlayer(Context context) {
         super(context);
     }
 
     @Override
     public View getPlayerView(Context context) {
-        mVideoView = new MediaVideoView(context);
+        loadLibrary();
+        mVideoView = new IjkVideoView(context);
         mVideoView.setFocusable(false);
         mVideoView.setBackgroundColor(Color.BLACK);
         initPlayerListener();
         return mVideoView;
     }
 
+    private void loadLibrary() {
+        try {
+            IjkMediaPlayer.loadLibrariesOnce(null);
+            IjkMediaPlayer.native_profileBegin("libijkplayer.so");
+            hasLoadLibrary = true;
+        } catch (Throwable e) {
+            Log.e(TAG, "loadLibraries error", e);
+        }
+    }
+
     private void initPlayerListener() {
         if(mVideoView==null)
             return;
         mVideoView.setOnPreparedListener(mOnPreparedListener);
-        mVideoView.setOnVideoSizeChangedListener(mOnVideoSizeChangedListener);
         mVideoView.setOnInfoListener(mOnInfoListener);
         mVideoView.setOnCompletionListener(mOnCompletionListener);
         mVideoView.setOnErrorListener(mOnErrorListener);
@@ -85,26 +83,17 @@ public class DefaultRenderWidget extends BaseRenderWidget {
         public void onPrepared(IMediaPlayer mp) {
             mStatus = STATUS_PREPARED;
             preparedMediaPlayer(mp);
-            Log.d(TAG,"EVENT_CODE_PREPARED");
 
             if(startSeekPos > 0){
                 seekTo(startSeekPos);
+                startSeekPos = -1;
             }
-
-            if(mTargetStatus==STATUS_STARTED){
+            Log.d(TAG,"EVENT_CODE_PREPARED");
+            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PREPARED,null);
+//                //IjkVideoView  ...int STATE_PLAYING = 3;
+            if(available() && mTargetStatus==STATUS_STARTED){
                 start();
             }
-            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PREPARED,null);
-        }
-    };
-
-    private IMediaPlayer.OnVideoSizeChangedListener mOnVideoSizeChangedListener = new IMediaPlayer.OnVideoSizeChangedListener() {
-        @Override
-        public void onVideoSizeChanged(IMediaPlayer mp, int width, int height, int sar_num, int sar_den) {
-            Bundle bundle = new Bundle();
-            bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_VIDEO_WIDTH,width);
-            bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_VIDEO_HEIGHT,height);
-            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_VIDEO_SIZE_CHANGE,bundle);
         }
     };
 
@@ -123,11 +112,6 @@ public class DefaultRenderWidget extends BaseRenderWidget {
                 case IMediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START:
                     Log.d(TAG,"EVENT_CODE_RENDER_START");
                     onPlayerEvent(OnPlayerEventListener.EVENT_CODE_RENDER_START,null);
-                    break;
-                case IMediaPlayer.MEDIA_INFO_VIDEO_ROTATION_CHANGED:
-                    Bundle bundle = new Bundle();
-                    bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_INT_DATA,extra);
-                    onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_VIDEO_ROTATION_CHANGED,bundle);
                     break;
             }
             return false;
@@ -167,7 +151,7 @@ public class DefaultRenderWidget extends BaseRenderWidget {
     }
 
     private boolean available(){
-        return mVideoView!=null;
+        return mVideoView!=null && hasLoadLibrary;
     }
 
     @Override
@@ -191,12 +175,6 @@ public class DefaultRenderWidget extends BaseRenderWidget {
             mStatus = STATUS_INITIALIZED;
             this.dataSource = data;
             startSeekPos = -1;
-            //-----send event-----
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(OnPlayerEventListener.BUNDLE_KEY_VIDEO_DATA,data);
-            //on set data source
-            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_ON_SET_DATA_SOURCE,bundle);
-            //-----send event-----
             mVideoView.setVideoPath(data.getData());
             initPlayerListener();
         }
@@ -220,9 +198,6 @@ public class DefaultRenderWidget extends BaseRenderWidget {
                         || mStatus==STATUS_PLAYBACK_COMPLETE)){
             mVideoView.start();
             mStatus = STATUS_STARTED;
-            Bundle bundle = new Bundle();
-            bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_POSITION,startSeekPos);
-            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_INTENT_TO_START,bundle);
         }
         mTargetStatus = STATUS_STARTED;
     }
@@ -242,23 +217,18 @@ public class DefaultRenderWidget extends BaseRenderWidget {
         if(available() && mStatus==STATUS_STARTED){
             mVideoView.pause();
             mStatus = STATUS_PAUSED;
-            Bundle bundle = new Bundle();
-            bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_POSITION,getCurrentPosition());
-            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAY_PAUSE,bundle);
         }
         mTargetStatus = STATUS_PAUSED;
     }
 
     @Override
     public void resume() {
-        if(available() && mStatus == STATUS_PAUSED){
-            mVideoView.start();
-            mStatus = STATUS_STARTED;
-            Bundle bundle = new Bundle();
-            bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_POSITION,getCurrentPosition());
-            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAY_RESUME,bundle);
-        }
-        mTargetStatus = STATUS_STARTED;
+//        if(available() && mStatus == STATUS_PAUSED){
+//            mVideoView.start();
+//            mStatus = STATUS_STARTED;
+//        }
+//        mTargetStatus = STATUS_STARTED;
+        start();
     }
 
     @Override
@@ -269,9 +239,6 @@ public class DefaultRenderWidget extends BaseRenderWidget {
                         || mStatus==STATUS_PAUSED
                         || mStatus==STATUS_PLAYBACK_COMPLETE)){
             mVideoView.seekTo(msc);
-            Bundle bundle = new Bundle();
-            bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_POSITION,msc);
-            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_SEEK_TO,bundle);
         }
     }
 
@@ -284,7 +251,6 @@ public class DefaultRenderWidget extends BaseRenderWidget {
                         || mStatus==STATUS_PLAYBACK_COMPLETE)){
             mVideoView.stop();
             mStatus = STATUS_STOPPED;
-            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_ON_STOP,null);
         }
         mTargetStatus = STATUS_STOPPED;
     }
@@ -292,7 +258,7 @@ public class DefaultRenderWidget extends BaseRenderWidget {
     @Override
     public void reset() {
         if(available()){
-            mVideoView.reset();
+//            mVideoView.reset();
             resetListener();
             mStatus = STATUS_IDLE;
         }
@@ -332,32 +298,6 @@ public class DefaultRenderWidget extends BaseRenderWidget {
     }
 
     @Override
-    public int getAudioSessionId() {
-        if(mVideoView!=null)
-            return mVideoView.getAudioSessionId();
-        return super.getAudioSessionId();
-    }
-
-    @Override
-    public void setViewType(ViewType viewType) {
-        super.setViewType(viewType);
-        if(available()){
-            mVideoView.setRenderType(viewType==ViewType.SURFACEVIEW);
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(OnPlayerEventListener.BUNDLE_KEY_SERIALIZABLE_DATA,viewType);
-            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_RENDER_VIEW_TYPE_UPDATE,bundle);
-        }
-    }
-
-    @Override
-    public View getRenderView() {
-        if(available()){
-            return mVideoView.getRenderView();
-        }
-        return super.getRenderView();
-    }
-
-    @Override
     public void setAspectRatio(AspectRatio aspectRatio) {
         if(available()){
             if(aspectRatio == AspectRatio.AspectRatio_16_9){
@@ -369,9 +309,6 @@ public class DefaultRenderWidget extends BaseRenderWidget {
             }else if(aspectRatio == AspectRatio.AspectRatio_ORIGIN){
                 mVideoView.setAspectRatio(IRenderView.AR_ASPECT_WRAP_CONTENT);
             }
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(OnPlayerEventListener.BUNDLE_KEY_SERIALIZABLE_DATA,aspectRatio);
-            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_RENDER_ASPECT_RATIO_UPDATE,bundle);
         }
     }
 
@@ -384,7 +321,6 @@ public class DefaultRenderWidget extends BaseRenderWidget {
                 mVideoView.stopPlayback();
                 mVideoView = null;
             }
-            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_ON_DESTROY,null);
         }catch (Exception e){
             e.printStackTrace();
         }

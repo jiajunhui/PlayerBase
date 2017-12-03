@@ -1,9 +1,9 @@
 package com.taurus.playerbaselibrary;
 
-import com.kk.taurus.http_helper.XHTTP;
 import com.kk.taurus.playerbase.config.ConfigLoader;
 import com.kk.taurus.playerbase.inter.IPlayer;
 import com.kk.taurus.playerbase.setting.DecoderType;
+import com.kk.taurus.playerbase.setting.DecoderTypeEntity;
 import com.kk.taurus.playerbase.setting.PlayerType;
 import com.kk.taurus.playerbase.setting.PlayerTypeEntity;
 import com.kk.taurus.uiframe.FrameApplication;
@@ -29,13 +29,28 @@ public class MApp extends FrameApplication {
                         .setFileLogAllow(true)
                         .setMessageTable(true));
 
-        XHTTP.init(this,null);
-//        ConfigLoader.setDefaultWidgetMode(IPlayer.WIDGET_MODE_VIDEO_VIEW);
-//        DecoderType.getInstance().setDefaultDecoderType(0);
-        ConfigLoader.setDefaultWidgetMode(this, IPlayer.WIDGET_MODE_DECODER);
-//        PlayerType.getInstance().addPlayerType(1,new PlayerTypeEntity("IJK播放器","com.kk.taurus.ijkplayer.IJKRenderWidgetPlayer"));
+        /**
+         *
+         * 如果要实现无缝续播的功能，不能使用VideoView类型的方案，组件模式必须设置为WIDGET_MODE_DECODER
+         *
+         * **/
+        //使用系统MediaPlayer方案
+        DecoderType.getInstance().setDefaultDecoderType(0);
+        ConfigLoader.setDefaultWidgetMode(this,IPlayer.WIDGET_MODE_DECODER);
+
+//        //使用系统的VideoView方案
 //        PlayerType.getInstance().setDefaultPlayerType(0);
-//        PlayerType.getInstance().setDefaultPlayerType(SharedPrefer.getInstance().getInt(getApplicationContext(),"player_type",0));
+//        ConfigLoader.setDefaultWidgetMode(this, IPlayer.WIDGET_MODE_VIDEO_VIEW);
+//
+//        //使用IJKPlayer的IjkVideoView方案
+//        PlayerType.getInstance().addPlayerType(1,new PlayerTypeEntity("IJK播放器","com.kk.taurus.ijkplayer.IJKVideoViewPlayer"));
+//        PlayerType.getInstance().setDefaultPlayerType(1);
+//        ConfigLoader.setDefaultWidgetMode(this,IPlayer.WIDGET_MODE_VIDEO_VIEW);
+//
+//        //使用IJKPlayer的IjkMediaPlayer方案
+//        DecoderType.getInstance().addDecoderType(1,new DecoderTypeEntity("ijkplayer","com.kk.taurus.ijkplayer.IJkDecoderPlayer"));
+//        DecoderType.getInstance().setDefaultDecoderType(1);
+//        ConfigLoader.setDefaultWidgetMode(this, IPlayer.WIDGET_MODE_DECODER);
     }
 
 }

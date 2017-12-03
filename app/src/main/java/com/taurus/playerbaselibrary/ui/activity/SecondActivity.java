@@ -36,6 +36,7 @@ public class SecondActivity extends ToolsActivity {
     @Override
     protected void onInit(Bundle savedInstanceState) {
         super.onInit(savedInstanceState);
+        fullScreen();
         keepScreenOn();
         mPlayer = (DefaultPlayer) findViewById(R.id.player);
 

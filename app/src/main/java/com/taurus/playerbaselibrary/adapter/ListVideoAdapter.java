@@ -58,6 +58,8 @@ public class ListVideoAdapter extends RecyclerView.Adapter<ListVideoAdapter.Vide
 
     private List<DefaultPlayer> playerList = new ArrayList<>();
 
+    private boolean isScrolling;
+
 
     public void setOnItemListener(OnItemListener onItemListener) {
         this.onItemListener = onItemListener;
@@ -101,6 +103,9 @@ public class ListVideoAdapter extends RecyclerView.Adapter<ListVideoAdapter.Vide
                             player.destroy(true);
                         }
                     }
+                    isScrolling = false;
+                }else{
+                    isScrolling = true;
                 }
             }
         });
@@ -141,16 +146,20 @@ public class ListVideoAdapter extends RecyclerView.Adapter<ListVideoAdapter.Vide
     public void onBindViewHolder(final VideoItemHolder holder, final int position) {
         final VideoItem item = getItem(position);
         holder.name.setText(item.getDisplayName());
-        ImageDisplay.disPlayThumbnail(mContext,holder.cover,item.getPath(),R.mipmap.ic_cover_default, ThumbnailType.VIDEO_MICRO_KIND);
+        ImageDisplay.disPlayThumbnail(mContext,holder.cover,item.getPath()
+                ,R.mipmap.ic_video_default, ThumbnailType.VIDEO_MICRO_KIND);
         if(mCurrPlayPos != position){
             holder.container.removeAllViews();
+            holder.start.setVisibility(View.VISIBLE);
+            holder.detail.setVisibility(View.GONE);
+            holder.fullScreen.setVisibility(View.GONE);
         }
-        holder.start.setVisibility(View.VISIBLE);
-        holder.detail.setVisibility(View.GONE);
-        holder.fullScreen.setVisibility(View.GONE);
+
         holder.start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(isScrolling)
+                    return;
                 holder.detail.setVisibility(View.VISIBLE);
                 holder.fullScreen.setVisibility(View.VISIBLE);
                 if(player!=null){
@@ -211,17 +220,7 @@ public class ListVideoAdapter extends RecyclerView.Adapter<ListVideoAdapter.Vide
                         });
                     }
                 });
-                player.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
-                    @Override
-                    public void onViewAttachedToWindow(View v) {
-                        Log.d("IRender","player onViewAttachedToWindow...");
-                    }
-
-                    @Override
-                    public void onViewDetachedFromWindow(View v) {
-                        Log.d("IRender","player onViewDetachedFromWindow");
-                    }
-                });
+                notifyDataSetChanged();
             }
         });
     }

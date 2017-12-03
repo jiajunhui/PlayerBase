@@ -103,7 +103,7 @@ public class DefaultPlayerGestureOperationCover extends BaseGestureOperationCove
 
     @Override
     public void onGestureDoubleTab(MotionEvent event) {
-        getPlayer().setAspectRatio(AspectRatio.AspectRatio_ORIGIN);
+
     }
 
     @Override

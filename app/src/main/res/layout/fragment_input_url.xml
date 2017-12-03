@@ -46,7 +46,7 @@
             android:paddingLeft="12dp"
             android:textSize="14sp"
             android:textColor="#000000"
-            android:text="https://github.com/jiajunhui/PlayerBase/video/edwin_rolling_in_the_deep.flv"
+            android:text="http://"
             android:hint="http://url..."/>
 
         <Button

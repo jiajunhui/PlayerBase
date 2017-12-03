@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package com.kk.taurus.playerbase.setting;
+package com.kk.taurus.playerbase.widget.plan;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -27,8 +27,11 @@ import com.kk.taurus.playerbase.callback.OnErrorListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.inter.IDataProvider;
 import com.kk.taurus.playerbase.inter.IPlayer;
-import com.kk.taurus.playerbase.widget.plan.MixMediaPlayer;
-import com.kk.taurus.playerbase.widget.plan.MixVideoView;
+import com.kk.taurus.playerbase.setting.AspectRatio;
+import com.kk.taurus.playerbase.setting.DecodeMode;
+import com.kk.taurus.playerbase.setting.Rate;
+import com.kk.taurus.playerbase.setting.VideoData;
+import com.kk.taurus.playerbase.setting.ViewType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,8 +61,9 @@ public class InternalPlayerManager implements IPlayer {
 
     private List<OnInternalPlayerListener> mOnInternalPlayerListeners;
     private MixMediaPlayer mMediaPlayer;
-    private MixVideoView mVideoView;
+    private MixRenderWidget mVideoView;
     private int mWidgetMode;
+    private VideoData mDataSource;
 
     public void setOnInternalPlayerListener(OnInternalPlayerListener onInternalPlayerListener) {
         if(mOnInternalPlayerListeners==null){
@@ -85,6 +89,10 @@ public class InternalPlayerManager implements IPlayer {
             initInternalPlayer(appContext);
     }
 
+    public int getWidgetMode(){
+        return mWidgetMode;
+    }
+
     private boolean isNeedInitInternalPlayer(){
         return (mMediaPlayer==null && mWidgetMode==WIDGET_MODE_DECODER)
                 || (mVideoView==null && mWidgetMode==WIDGET_MODE_VIDEO_VIEW);
@@ -106,9 +114,9 @@ public class InternalPlayerManager implements IPlayer {
         return new MixMediaPlayer(context);
     }
 
-    private MixVideoView createVideoView(Context context){
+    private MixRenderWidget createVideoView(Context context){
         Log.d(TAG,"createVideoView ...");
-        return new MixVideoView(context);
+        return new MixRenderWidget(context);
     }
 
     private void attachMediaPlayerListener(){
@@ -231,8 +239,13 @@ public class InternalPlayerManager implements IPlayer {
         }
     }
 
+    public boolean isDataSourceAvailable(){
+        return mDataSource!=null;
+    }
+
     @Override
     public void setDataSource(VideoData data) {
+        this.mDataSource = data;
         if(isDecoderMode()){
             mMediaPlayer.setDataSource(data);
         }else if(isVideoViewMode()){
@@ -438,6 +451,32 @@ public class InternalPlayerManager implements IPlayer {
         if(isVideoViewMode()){
             mVideoView.setViewType(viewType);
         }
+    }
+
+    @Override
+    public ViewType getViewType() {
+        if(isVideoViewMode()){
+            return mVideoView.getViewType();
+        }
+        return null;
+    }
+
+    @Override
+    public AspectRatio getAspectRatio() {
+        if(isVideoViewMode()){
+            return mVideoView.getAspectRatio();
+        }
+        return null;
+    }
+
+    @Override
+    public DecodeMode getDecodeMode() {
+        if(isDecoderMode()){
+            return mMediaPlayer.getDecodeMode();
+        }else if(isVideoViewMode()){
+            return mVideoView.getDecodeMode();
+        }
+        return null;
     }
 
     @Override

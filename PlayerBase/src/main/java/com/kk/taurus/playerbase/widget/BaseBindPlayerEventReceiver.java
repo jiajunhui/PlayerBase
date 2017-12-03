@@ -33,11 +33,7 @@ import com.kk.taurus.playerbase.cover.base.BaseReceiverCollections;
 import com.kk.taurus.playerbase.inter.IBindPlayer;
 import com.kk.taurus.playerbase.inter.IDpadFocusCover;
 import com.kk.taurus.playerbase.inter.IPlayer;
-import com.kk.taurus.playerbase.setting.AspectRatio;
-import com.kk.taurus.playerbase.setting.DecodeMode;
 import com.kk.taurus.playerbase.setting.EventDistributionHandler;
-import com.kk.taurus.playerbase.setting.Rate;
-import com.kk.taurus.playerbase.setting.ViewType;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -49,12 +45,6 @@ import java.util.List;
  */
 
 public abstract class BaseBindPlayerEventReceiver extends BaseContainer implements IPlayer, IBindPlayer, OnCoverEventListener {
-
-    protected Rate rate;
-    protected int mStatus = STATUS_IDLE;
-    private DecodeMode mDecodeMode = DecodeMode.SOFT;
-    private ViewType mViewType = ViewType.TEXTUREVIEW;
-    private AspectRatio aspectRatio = AspectRatio.AspectRatio_FIT_PARENT;
 
     private List<WeakReference<OnPlayerEventListener>> mPlayerEventListenerList = new ArrayList<>();
     private List<WeakReference<OnErrorListener>> mErrorEventListenerList = new ArrayList<>();
@@ -71,13 +61,7 @@ public abstract class BaseBindPlayerEventReceiver extends BaseContainer implemen
         super(context, attrs);
     }
 
-    @Override
-    public void changeVideoDefinition(Rate rate) {
-        this.rate = rate;
-    }
-
     protected void onPlayerEvent(int eventCode, Bundle bundle){
-        onHandleStatus(eventCode,bundle);
         callBackPlayerEventListener(eventCode, bundle);
         distributionPlayerEvent(eventCode, bundle);
     }
@@ -103,25 +87,7 @@ public abstract class BaseBindPlayerEventReceiver extends BaseContainer implemen
         }
     }
 
-    private void onHandleStatus(int eventCode, Bundle bundle) {
-        switch (eventCode){
-            case OnPlayerEventListener.EVENT_CODE_RENDER_START:
-                mStatus = STATUS_STARTED;
-                break;
-            case OnPlayerEventListener.EVENT_CODE_PLAY_PAUSE:
-                mStatus = STATUS_PAUSED;
-                break;
-            case OnPlayerEventListener.EVENT_CODE_PLAY_RESUME:
-                mStatus = STATUS_STARTED;
-                break;
-            case OnPlayerEventListener.EVENT_CODE_PLAYER_ON_STOP:
-                mStatus = STATUS_STOPPED;
-                break;
-        }
-    }
-
     protected void onErrorEvent(int eventCode, Bundle bundle){
-        onHandleErrorStatus(eventCode, bundle);
         callBackErrorEventListener(eventCode, bundle);
         distributionErrorEvent(eventCode, bundle);
     }
@@ -153,14 +119,6 @@ public abstract class BaseBindPlayerEventReceiver extends BaseContainer implemen
         }
     }
 
-    private void onHandleErrorStatus(int eventCode, Bundle bundle) {
-        switch (eventCode){
-            case OnErrorListener.ERROR_CODE_COMMON:
-                mStatus = STATUS_ERROR;
-                break;
-        }
-    }
-
     public void setOnPlayerEventListener(OnPlayerEventListener onPlayerEventListener) {
         this.mPlayerEventListenerList.add(new WeakReference<>(onPlayerEventListener));
     }
@@ -181,37 +139,6 @@ public abstract class BaseBindPlayerEventReceiver extends BaseContainer implemen
         mPlayerEventListenerList.clear();
         mErrorEventListenerList.clear();
         mCoverEventListenerList.clear();
-    }
-
-    @Override
-    public void setDecodeMode(DecodeMode decodeMode) {
-        this.mDecodeMode = decodeMode;
-    }
-
-    public DecodeMode getDecodeMode() {
-        return mDecodeMode;
-    }
-
-    public ViewType getViewType() {
-        return mViewType;
-    }
-
-    public void setViewType(ViewType viewType) {
-        this.mViewType = viewType;
-    }
-
-    @Override
-    public void setAspectRatio(AspectRatio aspectRatio) {
-        this.aspectRatio = aspectRatio;
-    }
-
-    public AspectRatio getAspectRatio() {
-        return aspectRatio;
-    }
-
-    @Override
-    public int getStatus() {
-        return mStatus;
     }
 
     public boolean isExpectedBufferAvailable(){

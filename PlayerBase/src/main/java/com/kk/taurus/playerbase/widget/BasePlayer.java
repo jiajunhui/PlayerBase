@@ -33,7 +33,7 @@ import com.kk.taurus.playerbase.setting.AspectRatio;
 import com.kk.taurus.playerbase.setting.BaseExtendEventBox;
 import com.kk.taurus.playerbase.setting.DecodeMode;
 import com.kk.taurus.playerbase.setting.DecoderType;
-import com.kk.taurus.playerbase.setting.InternalPlayerManager;
+import com.kk.taurus.playerbase.widget.plan.InternalPlayerManager;
 import com.kk.taurus.playerbase.setting.PlayerType;
 import com.kk.taurus.playerbase.setting.Rate;
 import com.kk.taurus.playerbase.setting.RenderCallbackProxy;
@@ -50,8 +50,8 @@ import java.util.List;
 
 public abstract class BasePlayer extends BaseBindPlayerEventReceiver implements InternalPlayerManager.OnInternalPlayerListener {
 
-    protected VideoData dataSource;
-    private int mWidgetMode;
+    private ViewType mViewType;
+    private AspectRatio mAspectRatio;
 
     private BaseExtendEventBox extendEventBox;
 
@@ -122,8 +122,7 @@ public abstract class BasePlayer extends BaseBindPlayerEventReceiver implements 
     }
 
     protected void setWidgetMode(int widgetMode){
-        this.mWidgetMode = widgetMode;
-        InternalPlayerManager.get().updateWidgetMode(mAppContext,mWidgetMode);
+        InternalPlayerManager.get().updateWidgetMode(mAppContext,widgetMode);
     }
 
     /**
@@ -140,7 +139,7 @@ public abstract class BasePlayer extends BaseBindPlayerEventReceiver implements 
         mRenderCallbackProxy = new RenderCallbackProxy(this,render);
         mRenderCallbackProxy.proxy();
         if(render instanceof View){
-            addViewToPlayerContainer((View) render,true);
+            addViewToPlayerContainer((View) render,true, null);
             needProxyRenderEvent = true;
             isRenderAvailable = true;
         }
@@ -182,7 +181,7 @@ public abstract class BasePlayer extends BaseBindPlayerEventReceiver implements 
             case OnPlayerEventListener.EVENT_CODE_PREPARED:
                 //当组件模式设置为decoder模式时，且没有设置渲染视图时，此处自动为decoder设置一个渲染视图。
                 if(getWidgetMode()==WIDGET_MODE_DECODER
-                        && isDataSourceAvailable()
+                        && InternalPlayerManager.get().isDataSourceAvailable()
                         && !isRenderAvailable){
                     IRender render;
                     if(getViewType()==ViewType.TEXTUREVIEW){
@@ -197,16 +196,11 @@ public abstract class BasePlayer extends BaseBindPlayerEventReceiver implements 
     }
 
     public int getWidgetMode() {
-        return mWidgetMode;
-    }
-
-    protected boolean isDataSourceAvailable(){
-        return dataSource!=null;
+        return InternalPlayerManager.get().getWidgetMode();
     }
 
     @Override
     public void setDataSource(VideoData data) {
-        this.dataSource = data;
         onDataSourceAvailable();
         InternalPlayerManager.get().setDataSource(data);
     }
@@ -303,20 +297,31 @@ public abstract class BasePlayer extends BaseBindPlayerEventReceiver implements 
 
     @Override
     public void changeVideoDefinition(Rate rate) {
-        super.changeVideoDefinition(rate);
         InternalPlayerManager.get().changeVideoDefinition(rate);
     }
 
     @Override
     public void setDecodeMode(DecodeMode decodeMode) {
-        super.setDecodeMode(decodeMode);
         InternalPlayerManager.get().setDecodeMode(decodeMode);
     }
 
     @Override
+    public DecodeMode getDecodeMode() {
+        return InternalPlayerManager.get().getDecodeMode();
+    }
+
+    @Override
     public void setViewType(ViewType viewType) {
-        super.setViewType(viewType);
+        this.mViewType = viewType;
         InternalPlayerManager.get().setViewType(viewType);
+    }
+
+    @Override
+    public ViewType getViewType() {
+        if(getWidgetMode()==WIDGET_MODE_DECODER){
+            return mViewType;
+        }
+        return InternalPlayerManager.get().getViewType();
     }
 
     @Override
@@ -333,11 +338,24 @@ public abstract class BasePlayer extends BaseBindPlayerEventReceiver implements 
 
     @Override
     public void setAspectRatio(AspectRatio aspectRatio) {
-        super.setAspectRatio(aspectRatio);
+        this.mAspectRatio = aspectRatio;
         if(mRenderCallbackProxy!=null){
             mRenderCallbackProxy.onAspectUpdate(aspectRatio);
         }
         InternalPlayerManager.get().setAspectRatio(aspectRatio);
+    }
+
+    @Override
+    public AspectRatio getAspectRatio() {
+        if(getWidgetMode()==WIDGET_MODE_DECODER){
+            return mAspectRatio;
+        }
+        return InternalPlayerManager.get().getAspectRatio();
+    }
+
+    @Override
+    public int getStatus() {
+        return InternalPlayerManager.get().getStatus();
     }
 
     @Override
@@ -376,7 +394,6 @@ public abstract class BasePlayer extends BaseBindPlayerEventReceiver implements 
         //先发出一个容器销毁的event事件
         sendEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_CONTAINER_ON_DESTROY,null);
         if(getWidgetMode()==WIDGET_MODE_DECODER){
-            dataSource = null;
             //组件模式为解码器时，同时要清掉RenderView
             clearPlayerContainer();
         }

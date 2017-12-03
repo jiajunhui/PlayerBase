@@ -36,7 +36,7 @@ public class PlayerType {
 
     private PlayerType(){
         playerTypes = new HashMap<>();
-        addPlayerType(TYPE_PLAYER_DEFAULT,new PlayerTypeEntity("原生解码VideoView","com.kk.taurus.playerbase.player.DefaultRenderWidget"));
+        addPlayerType(TYPE_PLAYER_DEFAULT,new PlayerTypeEntity("原生解码VideoView","com.kk.taurus.playerbase.player.DefaultVideoView"));
     }
 
     public static PlayerType getInstance(){
