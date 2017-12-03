@@ -17,6 +17,7 @@
 package com.kk.taurus.playerbase.config;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.danikula.videocache.HttpProxyCacheServer;
 
@@ -44,6 +45,14 @@ public class VideoCacheProxy {
     private HttpProxyCacheServer proxy;
     private boolean videoCacheOpen;
 
+    private boolean isNetSource(String sourceUrl){
+        if(TextUtils.isEmpty(sourceUrl)){
+            return false;
+        }
+        sourceUrl = sourceUrl.trim();
+        return sourceUrl.startsWith("http://")||sourceUrl.startsWith("https://");
+    }
+
     public boolean isVideoCacheOpen() {
         return videoCacheOpen;
     }
@@ -53,7 +62,7 @@ public class VideoCacheProxy {
     }
 
     public String proxyVideoUrl(Context context, String sourceUrl){
-        if(!videoCacheOpen)
+        if(!videoCacheOpen || !isNetSource(sourceUrl))
             return sourceUrl;
         HttpProxyCacheServer proxy = getProxy(context);
         return proxy.getProxyUrl(sourceUrl);
