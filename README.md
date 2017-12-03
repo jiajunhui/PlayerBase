@@ -1,6 +1,10 @@
 # 介绍
 PlayerBase是一种将播放业务组件化处理的解决方案框架。无论是播放器内的控制视图还是业务视图，均可以做到组件化处理。将播放器的开发变得清晰简单，更利于产品的迭代。
 
+无缝续播效果<br>
+![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/play_go_on.gif)
+
+
 # Demo下载
 [Demo下载](https://fir.im/ya4e)
 
@@ -146,8 +150,6 @@ public void setRenderViewForDecoder(IRender render)
 ```
 详见项目代码ListVideoAdapter和SecondActivity。
 
-无缝续播效果<br>
-![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/play_go_on.gif)
 
 # 交流
 联系方式：junhui_jia@163.com

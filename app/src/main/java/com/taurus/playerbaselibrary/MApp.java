@@ -34,7 +34,8 @@ public class MApp extends FrameApplication {
          * 如果要实现无缝续播的功能，不能使用VideoView类型的方案，组件模式必须设置为WIDGET_MODE_DECODER
          *
          * **/
-        //使用系统MediaPlayer方案
+        //使用系统MediaPlayer,IjkMediaPlayer融合方案
+        DecoderType.getInstance().addDecoderType(1,new DecoderTypeEntity("ijkplayer","com.kk.taurus.ijkplayer.IJkDecoderPlayer"));
         DecoderType.getInstance().setDefaultDecoderType(0);
         ConfigLoader.setDefaultWidgetMode(this,IPlayer.WIDGET_MODE_DECODER);
 

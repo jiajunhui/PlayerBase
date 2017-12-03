@@ -1,5 +1,6 @@
 package com.taurus.playerbaselibrary.ui.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import com.kk.taurus.uiframe.a.TitleBarActivity;
 import com.kk.taurus.uiframe.v.BaseTitleBarHolder;
 import com.kk.taurus.uiframe.v.BaseUserHolder;
 import com.kk.taurus.uiframe.v.d.DefaultTitleBarHolder;
+import com.kk.taurus.uiframe.w.TitleBarMenu;
 import com.taurus.playerbaselibrary.bean.VideosInfo;
 import com.taurus.playerbaselibrary.holder.HomeHolder;
 import com.taurus.playerbaselibrary.ui.fragment.InputUrlFragment;
@@ -48,6 +50,19 @@ public class HomeActivity extends TitleBarActivity<VideosInfo,HomeHolder> implem
             getWindow().setStatusBarColor(Color.parseColor("#3F51B5"));
         }
         setCenterTitle("在线视频");
+        BaseUserHolder userHolder = getUserHolder();
+        BaseTitleBarHolder titleBarHolder = userHolder.titleBarHolder;
+        DefaultTitleBarHolder defaultTitleBarHolder = (DefaultTitleBarHolder)titleBarHolder;
+        TitleBarMenu menu = defaultTitleBarHolder.getMenu();
+        menu.setTriggerType(TitleBarMenu.TRIGGER_TYPE_TEXT);
+        menu.setMenuText("设置");
+        menu.setOnMenuListener(new TitleBarMenu.OnMenuListener() {
+            @Override
+            public void onTriggerClick(int triggerType, View view) {
+                Intent intent = new Intent(getApplicationContext(),SettingActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void setCenterTitle(String title) {

@@ -3,17 +3,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
+    android:background="#FFFFFF"
     tools:context="com.taurus.playerbaselibrary.ui.activity.PlayerActivity">
 
-    <RelativeLayout
-        android:id="@+id/container"
+    <com.kk.taurus.playerbase.DefaultPlayer
+        android:id="@+id/player"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></RelativeLayout>
+        android:layout_height="200dp"/>
 
-    <!--<com.kk.taurus.playerbase.DefaultPlayer-->
-        <!--android:id="@+id/player"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"/>-->
+    <TextView
+        android:id="@+id/tv_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:layout_marginTop="230dp"
+        android:textSize="16sp"
+        android:textColor="#555555"
+        android:text=""/>
+
+    <Button
+        android:id="@+id/btn_toggle_decoder"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_centerHorizontal="true"
+        android:background="@color/colorPrimary"
+        android:layout_below="@id/tv_info"
+        android:layout_marginTop="30dp"
+        android:textSize="18sp"
+        android:textColor="#ffffff"
+        android:text="切换播放核心"/>
 
 </RelativeLayout>

@@ -68,7 +68,7 @@ public class PlayerActivity extends ToolsActivity implements OnPlayerEventListen
 
     @Override
     public View getContentView() {
-        return View.inflate(this,R.layout.activity_main,null);
+        return View.inflate(this,R.layout.activity_player,null);
     }
 
     @Override

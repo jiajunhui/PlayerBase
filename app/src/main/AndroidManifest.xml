@@ -31,6 +31,9 @@
             android:name=".ui.activity.HomeActivity"
             android:screenOrientation="portrait"/>
         <activity
+            android:name=".ui.activity.SettingActivity"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".ui.activity.PlayerActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="sensor">
@@ -39,7 +42,7 @@
         <activity
             android:name=".ui.activity.VideoDetailActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="sensor">
+            android:screenOrientation="portrait">
 
         </activity>
         <activity android:name=".ui.activity.SecondActivity"/>
