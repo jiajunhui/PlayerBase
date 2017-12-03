@@ -18,6 +18,7 @@ __-统一的事件下发机制__<br>
 __-扩展事件的添加__<br>
 __-默认支持历史点定点播放__<br>
 __-支持列表播放中的无缝续播__<br>
+__-支持边播边缓存功能-__<br>
 __-等功能……__<br>
 
 ![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_20171203-124242.png)
@@ -26,7 +27,7 @@ __-等功能……__<br>
 # 使用
 ```gradle
 dependencies {
-  compile 'com.kk.taurus.playerbase:PlayerBase:2.1.2'
+  compile 'com.kk.taurus.playerbase:PlayerBase:2.1.3'
 }
 ```
 使用DefaultPlayer对象，可写入xml布局中，也可用代码创建。

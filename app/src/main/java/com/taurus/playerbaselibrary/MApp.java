@@ -1,6 +1,10 @@
 package com.taurus.playerbaselibrary;
 
+import android.os.Environment;
+
+import com.danikula.videocache.HttpProxyCacheServer;
 import com.kk.taurus.playerbase.config.ConfigLoader;
+import com.kk.taurus.playerbase.config.VideoCacheProxy;
 import com.kk.taurus.playerbase.inter.IPlayer;
 import com.kk.taurus.playerbase.setting.DecoderType;
 import com.kk.taurus.playerbase.setting.DecoderTypeEntity;
@@ -28,6 +32,10 @@ public class MApp extends FrameApplication {
                         .setFileExtensionName(".txt")
                         .setFileLogAllow(true)
                         .setMessageTable(true));
+
+        VideoCacheProxy.get().initHttpProxyCacheServer(
+                new HttpProxyCacheServer.Builder(this)
+                        .cacheDirectory(Environment.getExternalStorageDirectory()));
 
         /**
          *

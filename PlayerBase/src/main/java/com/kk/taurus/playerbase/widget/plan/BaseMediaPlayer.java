@@ -21,6 +21,7 @@ import android.os.Bundle;
 
 import com.kk.taurus.playerbase.callback.OnErrorListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
+import com.kk.taurus.playerbase.config.VideoCacheProxy;
 import com.kk.taurus.playerbase.inter.ITimerGetter;
 import com.kk.taurus.playerbase.setting.DecodeMode;
 import com.kk.taurus.playerbase.setting.DecoderType;
@@ -65,6 +66,10 @@ public abstract class BaseMediaPlayer implements IDecoder ,IEventBinder, ITimerG
 
     @Override
     public void setDataSource(VideoData data) {
+        if(VideoCacheProxy.get().isVideoCacheOpen()){
+            String sourceUrl = data.getData();
+            data.setData(VideoCacheProxy.get().proxyVideoUrl(mContext,sourceUrl));
+        }
         this.mDataSource = data;
     }
 

@@ -17,9 +17,13 @@
 package com.taurus.playerbaselibrary.holder;
 
 import android.content.Context;
+import android.support.v7.widget.SwitchCompat;
+import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
+import com.kk.taurus.playerbase.config.VideoCacheProxy;
 import com.kk.taurus.playerbase.setting.DecoderType;
 import com.kk.taurus.playerbase.setting.DecoderTypeEntity;
 import com.kk.taurus.uiframe.i.HolderData;
@@ -40,8 +44,11 @@ import java.util.Set;
 public class SettingHolder extends ContentHolder<HolderData> {
 
     private RadioGroup mRadioGroup;
+    private TextView mVideoCacheTips;
+    private SwitchCompat mVideoCacheSwitch;
     private List<Integer> radioIds = new ArrayList<>();
     private final String KEY_PLAYER_TYPE = "play_type";
+    private final String KEY_PLAYER_VIDEO_CACHE = "video_cache";
 
     public SettingHolder(Context context) {
         super(context);
@@ -60,6 +67,25 @@ public class SettingHolder extends ContentHolder<HolderData> {
     public void onHolderCreated() {
         super.onHolderCreated();
         mRadioGroup = getViewById(R.id.radio_group);
+        mVideoCacheTips = getViewById(R.id.tv_video_cache_tips);
+        mVideoCacheSwitch = getViewById(R.id.switch_video_cache);
+
+
+        mVideoCacheSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    mVideoCacheTips.setText("边播边缓存已打开");
+                }else{
+                    mVideoCacheTips.setText("边播边缓存已关闭");
+                }
+                VideoCacheProxy.get().setVideoCacheState(isChecked);
+                SharedPrefer.getInstance().saveBoolean(mContext,KEY_PLAYER_VIDEO_CACHE,isChecked);
+            }
+        });
+
+        boolean videoCacheOpen = SharedPrefer.getInstance().getBoolean(mContext, KEY_PLAYER_VIDEO_CACHE, false);
+        mVideoCacheSwitch.setChecked(videoCacheOpen);
 
         initRadioButtons();
 

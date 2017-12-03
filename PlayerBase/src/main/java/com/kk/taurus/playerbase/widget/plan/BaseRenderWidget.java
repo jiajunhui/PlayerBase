@@ -22,6 +22,7 @@ import android.view.View;
 
 import com.kk.taurus.playerbase.callback.OnErrorListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
+import com.kk.taurus.playerbase.config.VideoCacheProxy;
 import com.kk.taurus.playerbase.inter.IRenderWidget;
 import com.kk.taurus.playerbase.inter.ITimerGetter;
 import com.kk.taurus.playerbase.setting.AspectRatio;
@@ -69,6 +70,10 @@ public abstract class BaseRenderWidget implements IRenderWidget, IEventBinder, I
 
     @Override
     public void setDataSource(VideoData data) {
+        if(VideoCacheProxy.get().isVideoCacheOpen()){
+            String sourceUrl = data.getData();
+            data.setData(VideoCacheProxy.get().proxyVideoUrl(mContext,sourceUrl));
+        }
         this.mDataSource = data;
     }
 
