@@ -35,7 +35,7 @@ public class ConfigLoader {
 
     private static final String TAG = "ConfigLoader";
 
-    private static int mWidgetMode = IPlayer.WIDGET_MODE_VIDEO_VIEW;
+    private static int mWidgetMode = IPlayer.WIDGET_MODE_DECODER;
 
     public static void setDefaultWidgetMode(Application application, int widgetMode){
         mWidgetMode = widgetMode;

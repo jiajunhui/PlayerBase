@@ -1,123 +1,154 @@
-# PlayerBase
-a base player widget library,The library layered the player business. Between the decoder and the layer, the layer and layer communicate with each other through the event. You can use the default written layer, and if you are not satisfied with this, you can customize your layer. Each layer supports plug and play. At the same time, you can always replace the decoder without any sense, so as to minimize the impact.
-# Dependency
+# 介绍
+PlayerBase是一种将播放业务组件化处理的解决方案框架。无论是播放器内的控制视图还是业务视图，均可以做到组件化处理。将播放器的开发变得清晰简单，更利于产品的迭代。
+
+# Demo下载
+[Demo下载]()
+
+# 功能
+__-解码方案的配置化管理__<br>
+__-自定义接入各种解码方案__<br>
+__-多种解码方案的切换__<br>
+__-视图的组件化处理__<br>
+__-可根据需求自定义视图组件层__<br>
+__-统一的事件下发机制__<br>
+__-扩展事件的添加__<br>
+__-支持列表播放中的无缝续播__<br>
+__-等功能……__<br>
+
+![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_20171203-124242.png)
+![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_20171203-124309.png)
+
+# 使用
 ```gradle
 dependencies {
-  compile 'com.kk.taurus.playerbase:PlayerBase:2.0.8'
+  compile 'com.kk.taurus.playerbase:PlayerBase:2.1.0'
 }
 ```
-# Use
+使用DefaultPlayer对象，可写入xml布局中，也可用代码创建。
+
 ```java
-mPlayer = new DefaultPlayer(this);
-mContainer.addView(mPlayer,new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-
-mCoverCollections = new DefaultReceiverCollections(this);
-mCoverCollections.buildDefault();
-
-mPlayer.bindCoverCollections(mCoverCollections);
-
-VideoData videoData = new VideoData("http://...some url");
+mPlayer = (DefaultPlayer) findViewById(R.id.player);
+DefaultReceiverCollections receiverCollections = new DefaultReceiverCollections(this);
+        receiverCollections.buildDefault();
+mPlayer.bindReceiverCollections(receiverCollections);
+VideoData videoData = new VideoData("http://url...");
 mPlayer.setDataSource(videoData);
 mPlayer.start();
-
-//some handle
-mPlayer.pause();
-mPlayer.resume();
-mPlayer.destroy();
-
 ```
-#### for setting data include ad videos
+
+# 说明
+系统的播放模式有两种。<br>
+一种是Decoder+RenderView方案，对应API设置中的__IPlayer.WIDGET_MODE_DECODER__<br>
+另一种是VideoView方案。对应API设置中的__IPlayer.WIDGET_MODE_VIDEO_VIEW__。<br>
+框架默认自带系统的MediaPlayer方案和VideoView方案。如果不做任何配置即为默认的MediaPlayer方案。当需要使用无缝切播功能时，必须设置为__IPlayer.WIDGET_MODE_DECODER__模式。
+
+# 接入其他播放器
+一下示例为接入IJKPlayer<br>
+__Decoder方案，接入IjkMediaPlayer__<br>
+
 ```java
-PlayData playData = new PlayData(videoData);
-List<BaseAdVideo> adVideos = new ArrayList<>();
-adVideos.add(new BaseAdVideo("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"));
-playData.setAdVideos(adVideos);
+public class IJkDecoderPlayer extends BaseDecoder {
 
-mPlayer.playData(playData,new OnAdCallBack(){
-    @Override
-    public void onAdPlay(BaseAdPlayer adPlayer, BaseAdVideo adVideo) {
-        super.onAdPlay(adPlayer, adVideo);
+    private IjkMediaPlayer mMediaPlayer;
+
+    public IJkDecoderPlayer(Context context) {
+        super(context);
+        init(context);
+    }
+
+    private void init(Context context) {
+        mMediaPlayer = new IjkMediaPlayer();
+        // init player
+        IjkMediaPlayer.loadLibrariesOnce(null);
+        IjkMediaPlayer.native_profileBegin("libijkplayer.so");
     }
 
     @Override
-    public void onAdPlayComplete(BaseAdVideo adVideo, boolean isAllComplete) {
-        Toast.makeText(PlayerActivity.this, adVideo.getData(), Toast.LENGTH_SHORT).show();
-        super.onAdPlayComplete(adVideo, isAllComplete);
+    public void setDataSource(VideoData data) {
+        //......
     }
 
     @Override
-    public void onVideoStart(BaseAdPlayer adPlayer,VideoData data) {
-        super.onVideoStart(adPlayer,data);
-    }
-});
-```
-## register listeners
-```java
-mPlayer.setOnPlayerEventListener(new OnPlayerEventListener() {
-    @Override
-    public void onPlayerEvent(int eventCode, Bundle bundle) {
-
-    }
-});
-mPlayer.setOnCoverEventListener(new OnCoverEventListener() {
-    @Override
-    public void onCoverEvent(int eventCode, Bundle bundle) {
-
-    }
-});
-```
-### custom cover
-```java
-public class PlayCompleteCover extends BaseCover{
-
-    public static final String KEY = "complete_cover";
-    private OnCompleteListener onCompleteListener;
-    private TextView mTvReplay;
-
-    public PlayCompleteCover(Context context, BaseCoverObserver coverObserver) {
-        super(context, coverObserver);
+    public void start() {
+        //......
     }
 
     @Override
-    protected void findView() {
-
+    public void pause() {
+        //......
     }
 
     @Override
-    public View initCoverLayout(Context context) {
-        return View.inflate(context, R.layout.layout_play_complete_cover,null);
+    public void resume() {
+        //......
     }
 
     @Override
-    public void onNotifyPlayEvent(int eventCode, Bundle bundle) {
-        super.onNotifyPlayEvent(eventCode, bundle);
-        switch (eventCode){
-            case OnPlayerEventListener.EVENT_CODE_PLAY_COMPLETE:
-
-                break;
-        }
+    public void seekTo(int msc) {
+        //......
     }
 
+    //......
 }
 ```
-# Structure
-![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/screenshot01.png)
-### cover
-![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/screenshot02.png)
-### EventReceiver
-![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/screenshot03.png)
-### Event delivery
-![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/screenshot04.png)
-## License
+具体参见项目代码。<br>
+使用前做如下配置：<br>
+
+```java
+DecoderType.getInstance().addDecoderType(1,new DecoderTypeEntity("ijkplayer","com.kk.taurus.ijkplayer.IJkDecoderPlayer"));
+DecoderType.getInstance().setDefaultDecoderType(1);
+ConfigLoader.setDefaultWidgetMode(this, IPlayer.WIDGET_MODE_DECODER);
 ```
-Copyright 2017 jiajunhui<junhui_jia@163.com>
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-    http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+
+__VideoView方案，接入IjkVideoView__<br>
+详见项目代码IJKVideoViewPlayer
+
+# 组件视图
+框架自带一套默认组件，包含Loading组件、Error组件、Controller组件、手势处理组件等。<br>
+这些组件均继承自父类BaseCover（覆盖层基类）
+
+自定义覆盖层组件
+
+```java
+public class CustomCover extends BaseCover{
+	
+	public CustomCover(Context context) {
+        super(context);
+    }
+
+    public CustomCover(Context context, BaseCoverObserver coverObserver) {
+        super(context, coverObserver);
+    }
+    
+    //......
+	
+}
 ```
+
+自定义组件的使用。
+
+```java
+mPlayer = (DefaultPlayer) findViewById(R.id.player);
+DefaultReceiverCollections receiverCollections = new DefaultReceiverCollections(this);
+receiverCollections
+	.addCover("custom_cover",new CustomCover(context)).build();
+mPlayer.bindReceiverCollections(receiverCollections);
+```
+
+# 无缝续播的使用
+类似于今日头条等应用的效果，在列表中播放时无缝续播进入详情页或者无缝进入全屏页面。<br><br>
+原理：使用Decoder+RenderView方案，解码器动态关联不同的渲染视图（RenderView），比如使用MediaPlayer动态关联SurfaceView，就如同一个电脑主机不断连接不同的显示器。
+<br>
+主要方法：
+
+```java
+public void setRenderViewForDecoder(IRender render)
+```
+详见项目代码ListVideoAdapter和SecondActivity。
+
+无缝续播效果<br>
+![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/play_go_on.gif)
+
+# 交流
+联系方式：junhui_jia@163.com
+QQ群：600201778
