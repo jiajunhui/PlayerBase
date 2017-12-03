@@ -58,6 +58,8 @@ public class VideoDetailHolder extends ContentHolder<HolderData> implements OnPl
 
     private VideoData mVideoData;
 
+    private int mPos;
+
     public VideoDetailHolder(Context context) {
         super(context);
     }
@@ -68,7 +70,7 @@ public class VideoDetailHolder extends ContentHolder<HolderData> implements OnPl
 
     @Override
     public void onCreate() {
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_video_detail);
     }
 
     @Override
@@ -105,14 +107,14 @@ public class VideoDetailHolder extends ContentHolder<HolderData> implements OnPl
         this.mVideoData = videoData;
         updateInfo();
         mPlayer.setDataSource(videoData);
-        mPlayer.start();
+        mPlayer.start(mPos);
     }
 
     private void updateInfo() {
         StringBuilder sb = new StringBuilder();
         if(mVideoData!=null){
-            sb.append("视频: ").append(mVideoData.getData()).append("\n");
-            sb.append("时长: ").append(TimeUtil.getTime(mPlayer.getDuration())).append("\n");
+            sb.append("视频: ").append(mVideoData.getData()).append("\n\n");
+            sb.append("时长: ").append(TimeUtil.getTime(mPlayer.getDuration())).append("\n\n");
             String playerStr;
             if(mPlayer.getWidgetMode()== IPlayer.WIDGET_MODE_DECODER){
                 int defaultPlayerType = DecoderType.getInstance().getDefaultPlayerType();
@@ -131,6 +133,7 @@ public class VideoDetailHolder extends ContentHolder<HolderData> implements OnPl
     @Override
     public void onClick(View v) {
         super.onClick(v);
+        mPos = mPlayer.getCurrentPosition();
         switch (v.getId()){
             case R.id.btn_toggle_decoder:
                 if(mPlayer.getWidgetMode()== IPlayer.WIDGET_MODE_DECODER){

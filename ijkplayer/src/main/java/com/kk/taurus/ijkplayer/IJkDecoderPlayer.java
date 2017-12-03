@@ -337,9 +337,10 @@ public class IJkDecoderPlayer extends BaseDecoder {
             mVideoWidth = mp.getVideoWidth();
             mVideoHeight = mp.getVideoHeight();
 
-            int seekToPosition = mSeekWhenPrepared;  // mSeekWhenPrepared may be changed after seekTo() call
+            int seekToPosition = startSeekPos;  // mSeekWhenPrepared may be changed after seekTo() call
             if (seekToPosition != 0) {
                 seekTo(seekToPosition);
+                startSeekPos = 0;
             }
 
             // We don't know the video size yet, but should start anyway.
@@ -374,7 +375,6 @@ public class IJkDecoderPlayer extends BaseDecoder {
                 }
             };
 
-    private int mSeekWhenPrepared;
     private IMediaPlayer.OnInfoListener mInfoListener =
             new IMediaPlayer.OnInfoListener() {
                 public boolean onInfo(IMediaPlayer mp, int arg1, int arg2) {
@@ -385,7 +385,7 @@ public class IJkDecoderPlayer extends BaseDecoder {
                         case IMediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START:
 //                            Log.d(TAG, "MEDIA_INFO_VIDEO_RENDERING_START:" + " renderView == SurfaceView : " + (mCurrentRender==RENDER_SURFACE_VIEW));
                             Log.d(TAG, "MEDIA_INFO_VIDEO_RENDERING_START");
-                            mSeekWhenPrepared = 0;
+                            startSeekPos = 0;
                             onPlayerEvent(OnPlayerEventListener.EVENT_CODE_RENDER_START,null);
                             break;
                         case IMediaPlayer.MEDIA_INFO_BUFFERING_START:
