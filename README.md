@@ -2,7 +2,7 @@
 PlayerBase是一种将播放业务组件化处理的解决方案框架。无论是播放器内的控制视图还是业务视图，均可以做到组件化处理。将播放器的开发变得清晰简单，更利于产品的迭代。
 
 # Demo下载
-[Demo下载]()
+[Demo下载](https://fir.im/ya4e)
 
 # 功能
 __-解码方案的配置化管理__<br>
@@ -21,7 +21,7 @@ __-等功能……__<br>
 # 使用
 ```gradle
 dependencies {
-  compile 'com.kk.taurus.playerbase:PlayerBase:2.1.0'
+  compile 'com.kk.taurus.playerbase:PlayerBase:2.1.1'
 }
 ```
 使用DefaultPlayer对象，可写入xml布局中，也可用代码创建。
