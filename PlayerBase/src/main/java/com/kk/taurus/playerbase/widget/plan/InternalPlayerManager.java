@@ -239,6 +239,16 @@ public class InternalPlayerManager implements IPlayer {
         }
     }
 
+    @Override
+    public int getPlayerType() {
+        if(isDecoderMode()){
+            return mMediaPlayer.getDecoderType();
+        }else if(isVideoViewMode()){
+            return mVideoView.getRenderType();
+        }
+        return 0;
+    }
+
     public boolean isDataSourceAvailable(){
         return mDataSource!=null;
     }

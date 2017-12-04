@@ -50,7 +50,7 @@ import java.util.List;
 
 public abstract class BasePlayer extends BaseBindPlayerEventReceiver implements InternalPlayerManager.OnInternalPlayerListener {
 
-    private ViewType mViewType;
+    private ViewType mViewType = ViewType.TEXTUREVIEW;
     private AspectRatio mAspectRatio;
 
     private BaseExtendEventBox extendEventBox;
@@ -208,6 +208,11 @@ public abstract class BasePlayer extends BaseBindPlayerEventReceiver implements 
     @Override
     public void updatePlayerType(int type) {
         InternalPlayerManager.get().updatePlayerType(type);
+    }
+
+    @Override
+    public int getPlayerType() {
+        return InternalPlayerManager.get().getPlayerType();
     }
 
     @Override

@@ -18,11 +18,13 @@ package com.kk.taurus.playerbase.setting;
 
 import android.os.Bundle;
 import android.view.Surface;
+import android.view.SurfaceHolder;
 import android.view.View;
 
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.inter.IPlayer;
 import com.kk.taurus.playerbase.inter.IRender;
+import com.kk.taurus.playerbase.widget.BasePlayer;
 
 /**
  * Created by Taurus on 2017/11/19.
@@ -68,6 +70,20 @@ public class RenderCallbackProxy implements IRender.IRenderCallback {
                 }
                 break;
             case OnPlayerEventListener.EVENT_CODE_PLAYER_ON_SET_DATA_SOURCE:
+                break;
+            case OnPlayerEventListener.EVENT_CODE_PLAYER_ON_DESTROY:
+                mOnPreparedListener=null;
+                /**
+                 * 当播放器销毁时，渲染视图置空。使渲染视图状态为不可用。
+                 * 这样，后面再设置新的资源时，当prepared回调后会重新设置渲染视图。
+                 * {@link BasePlayer#setDisplay(SurfaceHolder)}
+                 */
+                mPlayer.setDisplay(null);
+                /**
+                 * 当播放器销毁时，渲染视图置空。使渲染视图状态为不可用。
+                 * {@link BasePlayer#setSurface(Surface)}
+                 */
+                mPlayer.setSurface(null);
                 break;
         }
     }

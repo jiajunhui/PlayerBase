@@ -296,6 +296,7 @@ public class DefaultDecoderPlayer extends BaseDecoder {
     @Override
     public void destroy() {
         if(available()){
+            resetListener();
             mMediaPlayer.release();
             onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_ON_DESTROY,null);
         }
@@ -303,17 +304,25 @@ public class DefaultDecoderPlayer extends BaseDecoder {
 
     @Override
     public void setDisplay(SurfaceHolder surfaceHolder) {
-        if(surfaceHolder!=null && mMediaPlayer!=null){
-            mMediaPlayer.setDisplay(surfaceHolder);
-            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_SURFACE_HOLDER_UPDATE,null);
+        if(mMediaPlayer!=null){
+            try {
+                mMediaPlayer.setDisplay(surfaceHolder);
+                onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_SURFACE_HOLDER_UPDATE,null);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 
     @Override
     public void setSurface(Surface surface) {
-        if(surface!=null && mMediaPlayer!=null){
-            mMediaPlayer.setSurface(surface);
-            onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_SURFACE_UPDATE,null);
+        if(mMediaPlayer!=null){
+            try {
+                mMediaPlayer.setSurface(surface);
+                onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_SURFACE_UPDATE,null);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 

@@ -284,6 +284,7 @@ public class IJkDecoderPlayer extends BaseDecoder {
     @Override
     public void destroy() {
         if(available()){
+            resetListener();
             mMediaPlayer.release();
             onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_ON_DESTROY,null);
         }
@@ -291,7 +292,7 @@ public class IJkDecoderPlayer extends BaseDecoder {
 
     @Override
     public void setDisplay(SurfaceHolder surfaceHolder) {
-        if(surfaceHolder!=null && mMediaPlayer!=null){
+        if(mMediaPlayer!=null){
             mMediaPlayer.setDisplay(surfaceHolder);
             onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_SURFACE_HOLDER_UPDATE,null);
         }
@@ -299,7 +300,7 @@ public class IJkDecoderPlayer extends BaseDecoder {
 
     @Override
     public void setSurface(Surface surface) {
-        if(surface!=null && mMediaPlayer!=null){
+        if(mMediaPlayer!=null){
             mMediaPlayer.setSurface(surface);
             onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_SURFACE_UPDATE,null);
         }

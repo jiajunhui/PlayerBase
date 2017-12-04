@@ -317,6 +317,7 @@ public class IJKVideoViewPlayer extends BaseVideoView {
         try{
             mStatus = STATUS_END;
             mTargetStatus = STATUS_IDLE;
+            resetListener();
             if(mVideoView!=null){
                 mVideoView.stopPlayback();
                 mVideoView = null;

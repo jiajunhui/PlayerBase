@@ -41,22 +41,25 @@ public abstract class DelegateDecoderPlayer extends BaseMediaPlayer{
 
     @Override
     protected BaseDecoder initDecoder(Context context) {
-        BaseDecoder decoder = (BaseDecoder) ConfigLoader.getDecoderInstance(context, getDecoderType());
-        if(decoder!=null){
-            decoder.setOnPlayerEventListener(new OnPlayerEventListener() {
+        if(mDecoder!=null){
+            destroy();
+        }
+        mDecoder = (BaseDecoder) ConfigLoader.getDecoderInstance(context, getDecoderType());
+        if(mDecoder!=null){
+            mDecoder.setOnPlayerEventListener(new OnPlayerEventListener() {
                 @Override
                 public void onPlayerEvent(int eventCode, Bundle bundle) {
                     onBindPlayerEvent(eventCode, bundle);
                 }
             });
-            decoder.setOnErrorListener(new OnErrorListener() {
+            mDecoder.setOnErrorListener(new OnErrorListener() {
                 @Override
                 public void onError(int errorCode, Bundle bundle) {
                     onBindErrorEvent(errorCode,bundle);
                 }
             });
         }
-        return decoder;
+        return mDecoder;
     }
 
     private boolean isLegalState(){
@@ -235,8 +238,6 @@ public abstract class DelegateDecoderPlayer extends BaseMediaPlayer{
     public void destroy() {
         if(isLegalState()){
             mDecoder.destroy();
-            setOnPlayerEventListener(null);
-            setOnErrorListener(null);
         }
     }
 

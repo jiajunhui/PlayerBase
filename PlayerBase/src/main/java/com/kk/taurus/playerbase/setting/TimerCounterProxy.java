@@ -109,6 +109,9 @@ public class TimerCounterProxy {
             case OnPlayerEventListener.EVENT_CODE_PLAYER_ON_STOP:
                 removePlayMsg();
                 break;
+            case OnPlayerEventListener.EVENT_CODE_PLAY_COMPLETE:
+                removePlayMsg();
+                break;
             case OnPlayerEventListener.EVENT_CODE_PLAYER_ON_DESTROY:
                 removePlayMsg();
                 break;

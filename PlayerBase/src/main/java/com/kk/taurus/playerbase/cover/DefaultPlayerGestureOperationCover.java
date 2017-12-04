@@ -26,7 +26,6 @@ import android.view.WindowManager;
 import com.kk.taurus.playerbase.R;
 import com.kk.taurus.playerbase.cover.base.BaseCoverObserver;
 import com.kk.taurus.playerbase.cover.base.BaseGestureOperationCover;
-import com.kk.taurus.playerbase.setting.AspectRatio;
 import com.kk.taurus.playerbase.utils.TimeUtil;
 
 import static android.media.AudioManager.AUDIOFOCUS_LOSS_TRANSIENT;
@@ -109,7 +108,7 @@ public class DefaultPlayerGestureOperationCover extends BaseGestureOperationCove
     @Override
     public void onGestureHorizontalSlide(float percent,MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
         super.onGestureHorizontalSlide(percent,e1, e2, distanceX, distanceY);
-        if(!adListFinish)
+        if(!adListFinish || getDuration()<=0)
             return;
         if(player==null)
             return;

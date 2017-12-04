@@ -32,6 +32,7 @@ public interface IPlayer extends IDecoder{
 
     void setDataProvider(IDataProvider dataProvider);
     void updatePlayerType(int type);
+    int getPlayerType();
     void setViewType(ViewType viewType);
     void setAspectRatio(AspectRatio aspectRatio);
 

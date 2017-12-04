@@ -116,13 +116,12 @@ public class VideoDetailHolder extends ContentHolder<HolderData> implements OnPl
             sb.append("视频: ").append(mVideoData.getData()).append("\n\n");
             sb.append("时长: ").append(TimeUtil.getTime(mPlayer.getDuration())).append("\n\n");
             String playerStr;
+            int currPlayerType = mPlayer.getPlayerType();
             if(mPlayer.getWidgetMode()== IPlayer.WIDGET_MODE_DECODER){
-                int defaultPlayerType = DecoderType.getInstance().getDefaultPlayerType();
-                String decoderPath = DecoderType.getInstance().getDecoderPath(defaultPlayerType);
+                String decoderPath = DecoderType.getInstance().getDecoderPath(currPlayerType);
                 playerStr = decoderPath;
             }else{
-                int defaultPlayerType = PlayerType.getInstance().getDefaultPlayerType();
-                String playerPath = PlayerType.getInstance().getPlayerPath(defaultPlayerType);
+                String playerPath = PlayerType.getInstance().getPlayerPath(currPlayerType);
                 playerStr = playerPath;
             }
             sb.append("解码器: ").append(playerStr).append("\n");
@@ -134,23 +133,20 @@ public class VideoDetailHolder extends ContentHolder<HolderData> implements OnPl
     public void onClick(View v) {
         super.onClick(v);
         mPos = mPlayer.getCurrentPosition();
+        int currPlayerType = mPlayer.getPlayerType();
         switch (v.getId()){
             case R.id.btn_toggle_decoder:
                 if(mPlayer.getWidgetMode()== IPlayer.WIDGET_MODE_DECODER){
-                    int defaultPlayerType = DecoderType.getInstance().getDefaultPlayerType();
                     Map<Integer, DecoderTypeEntity> decoderTypes = DecoderType.getInstance().getDecoderTypes();
                     for(Map.Entry<Integer, DecoderTypeEntity> entry:decoderTypes.entrySet()){
-                        if(entry.getKey()!=defaultPlayerType){
-                            DecoderType.getInstance().setDefaultDecoderType(entry.getKey());
+                        if(entry.getKey()!=currPlayerType){
                             mPlayer.updatePlayerType(entry.getKey());
                         }
                     }
                 }else{
-                    int defaultPlayerType = PlayerType.getInstance().getDefaultPlayerType();
                     Map<Integer, PlayerTypeEntity> decoderTypes = PlayerType.getInstance().getPlayerTypes();
                     for(Map.Entry<Integer, PlayerTypeEntity> entry:decoderTypes.entrySet()){
-                        if(entry.getKey()!=defaultPlayerType){
-                            PlayerType.getInstance().setDefaultPlayerType(entry.getKey());
+                        if(entry.getKey()!=currPlayerType){
                             mPlayer.updatePlayerType(entry.getKey());
                         }
                     }

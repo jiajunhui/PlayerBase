@@ -40,22 +40,25 @@ public abstract class DelegateRenderWidget extends BaseRenderWidget {
 
     @Override
     protected BaseVideoView initRenderWidget(Context context) {
-        BaseVideoView renderWidget = (BaseVideoView) ConfigLoader.getPlayerInstance(context,getRenderType());
-        if(renderWidget!=null){
-            renderWidget.setOnPlayerEventListener(new OnPlayerEventListener() {
+        if(mRenderWidget!=null){
+            destroy();
+        }
+        mRenderWidget = (BaseVideoView) ConfigLoader.getPlayerInstance(context,getRenderType());
+        if(mRenderWidget!=null){
+            mRenderWidget.setOnPlayerEventListener(new OnPlayerEventListener() {
                 @Override
                 public void onPlayerEvent(int eventCode, Bundle bundle) {
                     onBindPlayerEvent(eventCode, bundle);
                 }
             });
-            renderWidget.setOnErrorListener(new OnErrorListener() {
+            mRenderWidget.setOnErrorListener(new OnErrorListener() {
                 @Override
                 public void onError(int errorCode, Bundle bundle) {
                     onBindErrorEvent(errorCode, bundle);
                 }
             });
         }
-        return renderWidget;
+        return mRenderWidget;
     }
 
     private boolean isLegalState(){
@@ -211,8 +214,6 @@ public abstract class DelegateRenderWidget extends BaseRenderWidget {
     public void destroy() {
         if(isLegalState()){
             mRenderWidget.destroy();
-            setOnPlayerEventListener(null);
-            setOnErrorListener(null);
         }
     }
     

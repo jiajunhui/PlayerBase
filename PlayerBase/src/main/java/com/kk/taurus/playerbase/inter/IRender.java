@@ -28,7 +28,6 @@ public interface IRender {
 
     String TAG = "IRender";
 
-
     void setRenderCallback(IRenderCallback renderCallback);
 
     void setVideoRotation(int degree);
