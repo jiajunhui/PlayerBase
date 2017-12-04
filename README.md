@@ -34,8 +34,24 @@ dependencies {
 ```
 使用DefaultPlayer对象，可写入xml布局中，也可用代码创建。
 
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.kk.taurus.playerbase.DefaultPlayer
+        android:id="@+id/player"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</RelativeLayout>
+```
+
+
 ```java
-mPlayer = (DefaultPlayer) findViewById(R.id.player);
+DefaultPlayer mPlayer = (DefaultPlayer) findViewById(R.id.player);
 DefaultReceiverCollections receiverCollections = new DefaultReceiverCollections(this);
         receiverCollections.buildDefault();
 mPlayer.bindReceiverCollections(receiverCollections);
