@@ -31,13 +31,9 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     testCompile 'junit:junit:4.12'
-    compile 'tv.danmaku.ijk.media:ijkplayer-java:0.7.8.1'
     compile 'com.android.support:appcompat-v7:25.3.0'
 
     compile 'tv.danmaku.ijk.media:ijkplayer-java:0.8.4'
-    compile 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.4'
-
-    compile 'tv.danmaku.ijk.media:ijkplayer-x86:0.8.4'
 
     compile 'tv.danmaku.ijk.media:ijkplayer-exo:0.8.4'
 
