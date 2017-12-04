@@ -47,8 +47,8 @@ public class SettingHolder extends ContentHolder<HolderData> {
     private TextView mVideoCacheTips;
     private SwitchCompat mVideoCacheSwitch;
     private List<Integer> radioIds = new ArrayList<>();
-    private final String KEY_PLAYER_TYPE = "play_type";
-    private final String KEY_PLAYER_VIDEO_CACHE = "video_cache";
+    public static final String KEY_PLAYER_TYPE = "play_type";
+    public static final String KEY_PLAYER_VIDEO_CACHE = "video_cache";
 
     public SettingHolder(Context context) {
         super(context);

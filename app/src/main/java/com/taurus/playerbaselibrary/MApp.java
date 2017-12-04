@@ -11,6 +11,8 @@ import com.kk.taurus.playerbase.setting.DecoderTypeEntity;
 import com.kk.taurus.playerbase.setting.PlayerType;
 import com.kk.taurus.playerbase.setting.PlayerTypeEntity;
 import com.kk.taurus.uiframe.FrameApplication;
+import com.taurus.playerbaselibrary.holder.SettingHolder;
+import com.taurus.playerbaselibrary.utils.SharedPrefer;
 import com.xapp.jjh.logtools.config.XLogConfig;
 import com.xapp.jjh.logtools.logger.LogLevel;
 import com.xapp.jjh.logtools.tools.XLog;
@@ -44,7 +46,8 @@ public class MApp extends FrameApplication {
          * **/
         //使用系统MediaPlayer,IjkMediaPlayer融合方案
         DecoderType.getInstance().addDecoderType(1,new DecoderTypeEntity("ijkplayer","com.kk.taurus.ijkplayer.IJkDecoderPlayer"));
-        DecoderType.getInstance().setDefaultDecoderType(0);
+        int type = SharedPrefer.getInstance().getInt(this, SettingHolder.KEY_PLAYER_TYPE, 0);
+        DecoderType.getInstance().setDefaultDecoderType(type);
         ConfigLoader.setDefaultWidgetMode(this,IPlayer.WIDGET_MODE_DECODER);
 
 //        //使用系统的VideoView方案
