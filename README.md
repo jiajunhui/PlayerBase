@@ -1,5 +1,7 @@
 # 介绍
-PlayerBase是一种将播放业务组件化处理的解决方案框架。无论是播放器内的控制视图还是业务视图，均可以做到组件化处理。将播放器的开发变得清晰简单，更利于产品的迭代。
+PlayerBase是一种将播放业务组件化处理的解决方案框架。无论是播放器内的控制视图还是业务视图，均可以做到组件化处理。将播放器的开发变得清晰简单，更利于产品的迭代。框架内包含系统MediaPlayer的解码实现，demo里面有一套度IJKPlayer解码方案的实现和接入，请参见源码可以接入其他播放器解码方案。框架默认自带一套控制组件，包含播放控制组件、Loading组件、Error组件、手势处理组件等，如不满足需求，可添加自定义组件。
+<br><br>
+遇到问题，请联系作者。QQ：309812983  Email：junhui_jia@163.com
 
 无缝续播效果<br>
 ![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/play_go_on.gif)
