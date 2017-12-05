@@ -26,6 +26,7 @@ import android.view.SurfaceHolder;
 
 import com.kk.taurus.playerbase.callback.OnErrorListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
+import com.kk.taurus.playerbase.setting.DecodeMode;
 import com.kk.taurus.playerbase.setting.Rate;
 import com.kk.taurus.playerbase.setting.VideoData;
 import com.kk.taurus.playerbase.widget.plan.BaseDecoder;
@@ -287,6 +288,18 @@ public class IJkDecoderPlayer extends BaseDecoder {
             resetListener();
             mMediaPlayer.release();
             onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_ON_DESTROY,null);
+        }
+    }
+
+    @Override
+    public void setDecodeMode(DecodeMode mDecodeMode) {
+        super.setDecodeMode(mDecodeMode);
+        if(available() && mDecodeMode!=null){
+            int value = mDecodeMode==DecodeMode.HARD?1:0;
+            mMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec", value);
+            if(value==1){
+                Log.e(TAG,"-->ijkplayer open mediacodec");
+            }
         }
     }
 

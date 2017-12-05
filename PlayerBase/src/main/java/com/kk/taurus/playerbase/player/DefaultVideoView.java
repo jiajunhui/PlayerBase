@@ -27,6 +27,8 @@ import android.widget.VideoView;
 
 import com.kk.taurus.playerbase.callback.OnErrorListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
+import com.kk.taurus.playerbase.setting.AspectRatio;
+import com.kk.taurus.playerbase.setting.DecodeMode;
 import com.kk.taurus.playerbase.setting.Rate;
 import com.kk.taurus.playerbase.setting.VideoData;
 import com.kk.taurus.playerbase.widget.plan.BaseVideoView;
@@ -165,6 +167,18 @@ public class DefaultVideoView extends BaseVideoView {
             bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_POSITION,msc);
             onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_SEEK_TO,bundle);
         }
+    }
+
+    @Override
+    public void setDecodeMode(DecodeMode mDecodeMode) {
+        super.setDecodeMode(mDecodeMode);
+
+    }
+
+    @Override
+    public void setAspectRatio(AspectRatio aspectRatio) {
+        super.setAspectRatio(aspectRatio);
+
     }
 
     @Override

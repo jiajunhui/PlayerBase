@@ -45,10 +45,13 @@ public class SettingHolder extends ContentHolder<HolderData> {
 
     private RadioGroup mRadioGroup;
     private TextView mVideoCacheTips;
+    private TextView mIjkDecodeTips;
     private SwitchCompat mVideoCacheSwitch;
+    private SwitchCompat mIjkDecodeSwitch;
     private List<Integer> radioIds = new ArrayList<>();
     public static final String KEY_PLAYER_TYPE = "play_type";
     public static final String KEY_PLAYER_VIDEO_CACHE = "video_cache";
+    public static final String KEY_PLAYER_IJK_DECODE_MEDIACODEC = "ijk_decode_mediacodec";
 
     public SettingHolder(Context context) {
         super(context);
@@ -68,9 +71,19 @@ public class SettingHolder extends ContentHolder<HolderData> {
         super.onHolderCreated();
         mRadioGroup = getViewById(R.id.radio_group);
         mVideoCacheTips = getViewById(R.id.tv_video_cache_tips);
+        mIjkDecodeTips = getViewById(R.id.tv_ijk_decode_mode);
         mVideoCacheSwitch = getViewById(R.id.switch_video_cache);
+        mIjkDecodeSwitch = getViewById(R.id.switch_ijk_decode_setting);
 
+        initRadioButtons();
 
+        mRadioGroup.setOnCheckedChangeListener(onCheckedChangeListener);
+
+        handleVideoCacheSwitch();
+        handleIjkDecodeSwitch();
+    }
+
+    private void handleVideoCacheSwitch() {
         mVideoCacheSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -86,10 +99,23 @@ public class SettingHolder extends ContentHolder<HolderData> {
 
         boolean videoCacheOpen = SharedPrefer.getInstance().getBoolean(mContext, KEY_PLAYER_VIDEO_CACHE, false);
         mVideoCacheSwitch.setChecked(videoCacheOpen);
+    }
 
-        initRadioButtons();
+    private void handleIjkDecodeSwitch() {
+        mIjkDecodeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    mIjkDecodeTips.setText("ijkplayer硬解打开");
+                }else{
+                    mIjkDecodeTips.setText("ijkplayer硬解关闭");
+                }
+                SharedPrefer.getInstance().saveBoolean(mContext,KEY_PLAYER_IJK_DECODE_MEDIACODEC,isChecked);
+            }
+        });
 
-        mRadioGroup.setOnCheckedChangeListener(onCheckedChangeListener);
+        boolean ijkMediaCodecOpen = SharedPrefer.getInstance().getBoolean(mContext, KEY_PLAYER_IJK_DECODE_MEDIACODEC, false);
+        mIjkDecodeSwitch.setChecked(ijkMediaCodecOpen);
     }
 
     private void initRadioButtons() {

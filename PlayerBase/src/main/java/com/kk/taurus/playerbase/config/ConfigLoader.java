@@ -22,7 +22,6 @@ import android.util.Log;
 
 import com.kk.taurus.playerbase.inter.IPlayer;
 import com.kk.taurus.playerbase.setting.DecoderType;
-import com.kk.taurus.playerbase.widget.plan.InternalPlayerManager;
 import com.kk.taurus.playerbase.setting.PlayerType;
 
 import java.lang.reflect.Constructor;
@@ -39,10 +38,6 @@ public class ConfigLoader {
 
     public static void setDefaultWidgetMode(Application application, int widgetMode){
         mWidgetMode = widgetMode;
-        //当组件类型为decoder时，可直接初始化decoder解码器
-        if(mWidgetMode==IPlayer.WIDGET_MODE_DECODER){
-            InternalPlayerManager.get().updateWidgetMode(application.getApplicationContext(),mWidgetMode);
-        }
     }
 
     public static int getWidgetMode(){

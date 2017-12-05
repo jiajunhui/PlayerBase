@@ -7,11 +7,14 @@ import android.view.View;
 
 import com.kk.taurus.ijkplayer.media.IRenderView;
 import com.kk.taurus.ijkplayer.media.IjkVideoView;
+import com.kk.taurus.ijkplayer.media.Settings;
 import com.kk.taurus.playerbase.callback.OnErrorListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.setting.AspectRatio;
+import com.kk.taurus.playerbase.setting.DecodeMode;
 import com.kk.taurus.playerbase.setting.Rate;
 import com.kk.taurus.playerbase.setting.VideoData;
+import com.kk.taurus.playerbase.setting.ViewType;
 import com.kk.taurus.playerbase.widget.plan.BaseVideoView;
 
 import java.util.List;
@@ -308,6 +311,35 @@ public class IJKVideoViewPlayer extends BaseVideoView {
                 mVideoView.setAspectRatio(IRenderView.AR_ASPECT_FILL_PARENT);
             }else if(aspectRatio == AspectRatio.AspectRatio_ORIGIN){
                 mVideoView.setAspectRatio(IRenderView.AR_ASPECT_WRAP_CONTENT);
+            }
+        }
+    }
+
+    @Override
+    public void setDecodeMode(DecodeMode mDecodeMode) {
+        super.setDecodeMode(mDecodeMode);
+        if(available() && mDecodeMode!=null){
+            if(mDecodeMode==DecodeMode.SOFT){
+                mVideoView.setPlayerType(Settings.PV_PLAYER__IjkMediaPlayer);
+            }else if(mDecodeMode==DecodeMode.EXO_PLAYER){
+                mVideoView.setPlayerType(Settings.PV_PLAYER__IjkExoMediaPlayer);
+            }else if(mDecodeMode==DecodeMode.MEDIA_PLAYER){
+                mVideoView.setPlayerType(Settings.PV_PLAYER__AndroidMediaPlayer);
+            }else if(mDecodeMode==DecodeMode.HARD){
+                mVideoView.setPlayerType(Settings.PV_PLAYER__IjkMediaPlayer);
+                mVideoView.setUsingMediaCodec(true);
+            }
+        }
+    }
+
+    @Override
+    public void setViewType(ViewType viewType) {
+        super.setViewType(viewType);
+        if(available() && viewType!=null){
+            if(viewType==ViewType.SURFACEVIEW){
+                mVideoView.setEnableSurfaceView();
+            }else if(viewType==ViewType.TEXTUREVIEW){
+                mVideoView.setEnableTextureView();
             }
         }
     }

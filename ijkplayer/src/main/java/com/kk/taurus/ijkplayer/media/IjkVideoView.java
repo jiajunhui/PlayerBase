@@ -133,9 +133,6 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
 
     //****************************************************Taurus add code on 2016.08.02*****************************************************
     public void setPlayerType(int playerType) {
-        if(playerType!=Settings.PV_PLAYER__AndroidMediaPlayer && playerType!=Settings.PV_PLAYER__IjkExoMediaPlayer && playerType!=Settings.PV_PLAYER__IjkMediaPlayer){
-            playerType = Settings.PV_PLAYER__IjkMediaPlayer;
-        }
         mSettings.setPlayerType(playerType);
     }
 

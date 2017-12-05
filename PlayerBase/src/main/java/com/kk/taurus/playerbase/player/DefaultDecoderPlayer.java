@@ -27,6 +27,7 @@ import android.view.SurfaceHolder;
 
 import com.kk.taurus.playerbase.callback.OnErrorListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
+import com.kk.taurus.playerbase.setting.DecodeMode;
 import com.kk.taurus.playerbase.setting.Rate;
 import com.kk.taurus.playerbase.setting.VideoData;
 import com.kk.taurus.playerbase.widget.plan.BaseDecoder;
@@ -300,6 +301,12 @@ public class DefaultDecoderPlayer extends BaseDecoder {
             mMediaPlayer.release();
             onPlayerEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_ON_DESTROY,null);
         }
+    }
+
+    @Override
+    public void setDecodeMode(DecodeMode mDecodeMode) {
+        super.setDecodeMode(mDecodeMode);
+
     }
 
     @Override

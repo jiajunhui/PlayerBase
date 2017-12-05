@@ -20,7 +20,7 @@ package com.kk.taurus.ijkplayer.media;
 public class Settings {
 
     private boolean enableBackgroundPlay;
-    private int playerType;
+    private int playerType = PV_PLAYER__IjkMediaPlayer;
     private boolean usingMediaCodec;
     private boolean usingMediaCodecAutoRotate;
     private boolean mediaCodecHandleResolutionChange;

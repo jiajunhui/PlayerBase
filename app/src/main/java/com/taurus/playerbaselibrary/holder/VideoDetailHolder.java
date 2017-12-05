@@ -26,6 +26,7 @@ import com.kk.taurus.playerbase.DefaultPlayer;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.cover.DefaultReceiverCollections;
 import com.kk.taurus.playerbase.inter.IPlayer;
+import com.kk.taurus.playerbase.setting.DecodeMode;
 import com.kk.taurus.playerbase.setting.DecoderType;
 import com.kk.taurus.playerbase.setting.DecoderTypeEntity;
 import com.kk.taurus.playerbase.setting.PlayerType;
@@ -39,8 +40,11 @@ import com.taurus.playerbaselibrary.R;
 import com.taurus.playerbaselibrary.callback.OnCompleteCallBack;
 import com.taurus.playerbaselibrary.cover.AppControllerCover;
 import com.taurus.playerbaselibrary.cover.PlayCompleteCover;
+import com.taurus.playerbaselibrary.utils.SharedPrefer;
 
 import java.util.Map;
+
+import static com.taurus.playerbaselibrary.holder.SettingHolder.KEY_PLAYER_IJK_DECODE_MEDIACODEC;
 
 /**
  * Created by Taurus on 2017/12/3.
@@ -106,8 +110,21 @@ public class VideoDetailHolder extends ContentHolder<HolderData> implements OnPl
     public void startPlay(VideoData videoData){
         this.mVideoData = videoData;
         updateInfo();
+        assertDecodeMode();
         mPlayer.setDataSource(videoData);
         mPlayer.start(mPos);
+    }
+
+    private void assertDecodeMode(){
+        if(mPlayer.getWidgetMode()== IPlayer.WIDGET_MODE_DECODER){
+            int playerType = DecoderType.getInstance().getDefaultPlayerType();
+            if(playerType==1){
+                boolean ijkMediaCodecOpen = SharedPrefer.getInstance().getBoolean(mContext, KEY_PLAYER_IJK_DECODE_MEDIACODEC, false);
+                if(ijkMediaCodecOpen){
+                    mPlayer.setDecodeMode(DecodeMode.HARD);
+                }
+            }
+        }
     }
 
     private void updateInfo() {

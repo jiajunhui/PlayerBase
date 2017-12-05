@@ -129,6 +129,7 @@ public abstract class BaseMediaPlayer implements IDecoder ,IEventBinder, ITimerG
 
     public void setDecodeMode(DecodeMode mDecodeMode) {
         this.mDecodeMode = mDecodeMode;
+        mDecoder.setDecodeMode(mDecodeMode);
     }
 
     @Override
