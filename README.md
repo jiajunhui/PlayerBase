@@ -30,7 +30,7 @@ __-等功能……__<br>
 # 使用
 ```gradle
 dependencies {
-  compile 'com.kk.taurus.playerbase:PlayerBase:2.1.5'
+  compile 'com.kk.taurus.playerbase:PlayerBase:2.1.6'
 }
 ```
 使用DefaultPlayer对象，可写入xml布局中，也可用代码创建。
