@@ -11,6 +11,7 @@ import com.kk.taurus.playerbase.setting.DecoderTypeEntity;
 import com.kk.taurus.playerbase.setting.PlayerType;
 import com.kk.taurus.playerbase.setting.PlayerTypeEntity;
 import com.kk.taurus.uiframe.FrameApplication;
+import com.taurus.playerbaselibrary.callback.TestCacheFileNameGenerator;
 import com.taurus.playerbaselibrary.holder.SettingHolder;
 import com.taurus.playerbaselibrary.utils.SharedPrefer;
 import com.xapp.jjh.logtools.config.XLogConfig;
@@ -35,9 +36,15 @@ public class MApp extends FrameApplication {
                         .setFileLogAllow(true)
                         .setMessageTable(true));
 
+
+
         VideoCacheProxy.get().initHttpProxyCacheServer(
-                new HttpProxyCacheServer.Builder(this)
-                        .cacheDirectory(Environment.getExternalStorageDirectory()));
+                new VideoCacheProxy.Builder(this)
+                        .setCacheDirectory(Environment.getExternalStorageDirectory())
+                        .setFileNameGenerator(new TestCacheFileNameGenerator()));
+        if(SharedPrefer.getInstance().getBoolean(this,SettingHolder.KEY_PLAYER_VIDEO_CACHE,false)){
+            VideoCacheProxy.get().setVideoCacheState(true);
+        }
 
         /**
          *

@@ -122,7 +122,6 @@ public abstract class DelegateRenderWidget extends BaseRenderWidget {
         }
     }
 
-    @Override
     public void rePlay(int msc) {
         if(isLegalState()){
             stop();

@@ -32,7 +32,6 @@ import com.kk.taurus.playerbase.setting.DecoderTypeEntity;
 import com.kk.taurus.playerbase.setting.PlayerType;
 import com.kk.taurus.playerbase.setting.PlayerTypeEntity;
 import com.kk.taurus.playerbase.setting.VideoData;
-import com.kk.taurus.playerbase.utils.TimeUtil;
 import com.kk.taurus.uiframe.i.HolderData;
 import com.kk.taurus.uiframe.listener.OnHolderListener;
 import com.kk.taurus.uiframe.v.ContentHolder;
@@ -130,8 +129,6 @@ public class VideoDetailHolder extends ContentHolder<HolderData> implements OnPl
     private void updateInfo() {
         StringBuilder sb = new StringBuilder();
         if(mVideoData!=null){
-            sb.append("视频: ").append(mVideoData.getData()).append("\n\n");
-            sb.append("时长: ").append(TimeUtil.getTime(mPlayer.getDuration())).append("\n\n");
             String playerStr;
             int currPlayerType = mPlayer.getPlayerType();
             if(mPlayer.getWidgetMode()== IPlayer.WIDGET_MODE_DECODER){

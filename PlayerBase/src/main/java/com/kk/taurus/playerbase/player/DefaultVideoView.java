@@ -102,15 +102,6 @@ public class DefaultVideoView extends BaseVideoView {
     }
 
     @Override
-    public void rePlay(int msc) {
-        if(available()){
-            stop();
-            setDataSource(mDataSource);
-            start(msc);
-        }
-    }
-
-    @Override
     public void start() {
         if(available()){
             mVideoView.start();

@@ -16,11 +16,8 @@
 
 package com.kk.taurus.playerbase.inter;
 
-import android.support.annotation.MainThread;
-
 import com.kk.taurus.playerbase.setting.Rate;
 import com.kk.taurus.playerbase.setting.VideoData;
-import com.kk.taurus.playerbase.widget.plan.IEventBinder;
 
 import java.util.List;
 
@@ -43,14 +40,14 @@ public interface IDataProvider {
 
     void setOnProviderListener(OnProviderListener onProviderListener);
 
+    /**
+     * 数据提供者的实现类回调下面方法时，请在主线程中调用
+     */
     interface OnProviderListener{
-        @MainThread
         void onProvideDataSource(VideoData data);
 
-        @MainThread
         void onProvideDefinitionList(List<Rate> rates);
 
-        @MainThread
         void onProvideError(int type, String message);
     }
 

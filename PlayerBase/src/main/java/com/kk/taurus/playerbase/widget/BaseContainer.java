@@ -18,8 +18,6 @@ package com.kk.taurus.playerbase.widget;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -71,11 +69,11 @@ public abstract class BaseContainer extends FrameLayout {
     private ContainerTouchHelper mTouchHelper;
     private boolean mGestureEnable = true;
 
-    public BaseContainer(@NonNull Context context) {
+    public BaseContainer(Context context) {
         this(context,null);
     }
 
-    public BaseContainer(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public BaseContainer(Context context, AttributeSet attrs) {
         super(context, attrs);
         initContainer(context);
     }

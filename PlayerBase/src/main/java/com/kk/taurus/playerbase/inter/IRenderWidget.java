@@ -50,8 +50,6 @@ public interface IRenderWidget {
     void seekTo(int msc);
     void stop();
     void reset();
-    /** replay current data source*/
-    void rePlay(int msc);
     boolean isPlaying();
     int getCurrentPosition();
     int getDuration();

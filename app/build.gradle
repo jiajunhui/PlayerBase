@@ -14,7 +14,8 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -34,5 +35,6 @@ dependencies {
     compile 'com.jiajunhui.xapp.medialoader:medialoader:1.0.0'
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.lovedise:permissiongen:0.0.6'
+    compile 'com.danikula:videocache:2.7.0'
     compile project(':ijkplayer')
 }

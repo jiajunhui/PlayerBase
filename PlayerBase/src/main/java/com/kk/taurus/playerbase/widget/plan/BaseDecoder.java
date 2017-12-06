@@ -21,7 +21,9 @@ import android.os.Bundle;
 
 import com.kk.taurus.playerbase.callback.OnErrorListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
+import com.kk.taurus.playerbase.inter.IDecoder;
 import com.kk.taurus.playerbase.setting.DecodeMode;
+import com.kk.taurus.playerbase.setting.VideoData;
 
 /**
  * Created by mtime on 2017/11/17.
@@ -36,9 +38,15 @@ public abstract class BaseDecoder implements IDecoder {
     private OnPlayerEventListener mOnPlayerEventListener;
     protected int startSeekPos;
     private DecodeMode mDecodeMode;
+    protected VideoData mDataSource;
 
     public BaseDecoder(Context context){
         this.mContext = context;
+    }
+
+    @Override
+    public void setDataSource(VideoData data) {
+        this.mDataSource = data;
     }
 
     public void setDecodeMode(DecodeMode mDecodeMode){

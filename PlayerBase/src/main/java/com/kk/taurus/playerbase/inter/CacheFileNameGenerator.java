@@ -14,18 +14,12 @@
  *    limitations under the License.
  */
 
-package com.kk.taurus.playerbase.widget.plan;
-
-import android.os.Bundle;
+package com.kk.taurus.playerbase.inter;
 
 /**
- * Created by mtime on 2017/11/17.
+ * Created by Taurus on 2017/12/5.
  */
 
-public interface IEventBinder {
-
-    void onBindPlayerEvent(int eventCode, Bundle bundle);
-
-    void onBindErrorEvent(int eventCode, Bundle bundle);
-
+public interface CacheFileNameGenerator {
+    String generate(String url);
 }

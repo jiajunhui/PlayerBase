@@ -22,6 +22,8 @@ import android.os.Bundle;
 import com.kk.taurus.playerbase.callback.OnErrorListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.config.VideoCacheProxy;
+import com.kk.taurus.playerbase.inter.IDecoder;
+import com.kk.taurus.playerbase.inter.IEventBinder;
 import com.kk.taurus.playerbase.inter.ITimerGetter;
 import com.kk.taurus.playerbase.setting.DecodeMode;
 import com.kk.taurus.playerbase.setting.DecoderType;
@@ -33,7 +35,7 @@ import com.kk.taurus.playerbase.setting.VideoData;
  * Created by mtime on 2017/11/17.
  */
 
-public abstract class BaseMediaPlayer implements IDecoder ,IEventBinder, ITimerGetter, TimerCounterProxy.OnTimerHandlerListener {
+public abstract class BaseMediaPlayer implements IDecoder,IEventBinder, ITimerGetter, TimerCounterProxy.OnTimerHandlerListener {
 
     protected Context mContext;
     protected BaseDecoder mDecoder;
@@ -66,11 +68,11 @@ public abstract class BaseMediaPlayer implements IDecoder ,IEventBinder, ITimerG
 
     @Override
     public void setDataSource(VideoData data) {
+        this.mDataSource = data.clone();
         if(VideoCacheProxy.get().isVideoCacheOpen()){
             String sourceUrl = data.getData();
             data.setData(VideoCacheProxy.get().proxyVideoUrl(mContext,sourceUrl));
         }
-        this.mDataSource = data;
     }
 
     public void setOnPlayerEventListener(OnPlayerEventListener onPlayerEventListener){

@@ -19,8 +19,6 @@ package com.kk.taurus.playerbase.widget;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 
 import com.kk.taurus.playerbase.callback.BaseEventReceiver;
@@ -53,11 +51,11 @@ public abstract class BaseBindPlayerEventReceiver extends BaseContainer implemen
     private BaseReceiverCollections mReceiverCollections;
     private EventDistributionHandler mEventDistributionHandler;
 
-    public BaseBindPlayerEventReceiver(@NonNull Context context) {
+    public BaseBindPlayerEventReceiver(Context context) {
         super(context);
     }
 
-    public BaseBindPlayerEventReceiver(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public BaseBindPlayerEventReceiver(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 

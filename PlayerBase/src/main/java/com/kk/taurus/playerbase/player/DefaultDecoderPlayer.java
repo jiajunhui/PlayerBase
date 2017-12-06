@@ -44,7 +44,7 @@ public class DefaultDecoderPlayer extends BaseDecoder {
 
     private final String TAG = "DefaultMediaPlayer";
     private MediaPlayer mMediaPlayer;
-    private VideoData mDataSource;
+
     private int mCurrentBufferPercentage;
 
     public DefaultDecoderPlayer(Context context) {
@@ -58,8 +58,8 @@ public class DefaultDecoderPlayer extends BaseDecoder {
 
     @Override
     public void setDataSource(VideoData data) {
+        super.setDataSource(data);
         if(data!=null){
-            this.mDataSource = data;
             //-----send event-----
             Bundle bundle = new Bundle();
             bundle.putSerializable(OnPlayerEventListener.BUNDLE_KEY_VIDEO_DATA,data);
@@ -105,15 +105,6 @@ public class DefaultDecoderPlayer extends BaseDecoder {
 
     private boolean available(){
         return mMediaPlayer!=null;
-    }
-
-    @Override
-    public void rePlay(int msc) {
-        if(available()){
-            stop();
-            setDataSource(mDataSource);
-            start(msc);
-        }
     }
 
     @Override

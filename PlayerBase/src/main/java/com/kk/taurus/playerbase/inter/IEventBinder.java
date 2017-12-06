@@ -16,28 +16,16 @@
 
 package com.kk.taurus.playerbase.inter;
 
-import android.view.View;
-
-import com.kk.taurus.playerbase.setting.AspectRatio;
-import com.kk.taurus.playerbase.setting.ViewType;
+import android.os.Bundle;
 
 /**
- * Created by Taurus on 2016/8/29.
+ * Created by mtime on 2017/11/17.
  */
-public interface IPlayer extends IDecoder{
 
-    int WIDGET_MODE_VIDEO_VIEW = 2;
-    int WIDGET_MODE_DECODER = 4;
+public interface IEventBinder {
 
-    void rePlay(int msc);
-    void setDataProvider(IDataProvider dataProvider);
-    void updatePlayerType(int type);
-    int getPlayerType();
-    void setViewType(ViewType viewType);
-    void setAspectRatio(AspectRatio aspectRatio);
+    void onBindPlayerEvent(int eventCode, Bundle bundle);
 
-    ViewType getViewType();
-    AspectRatio getAspectRatio();
+    void onBindErrorEvent(int eventCode, Bundle bundle);
 
-    View getRenderView();
 }

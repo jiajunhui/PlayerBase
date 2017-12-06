@@ -26,7 +26,7 @@ import com.kk.taurus.playerbase.cover.DefaultPlayerGestureOperationCover;
 import com.kk.taurus.playerbase.inter.ICoverContainer;
 import com.kk.taurus.playerbase.setting.BaseExtendEventBox;
 import com.kk.taurus.playerbase.widget.BasePlayer;
-import com.kk.taurus.playerbase.widget.plan.IEventBinder;
+import com.kk.taurus.playerbase.inter.IEventBinder;
 
 /**
  *

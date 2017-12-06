@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package com.kk.taurus.playerbase.widget.plan;
+package com.kk.taurus.playerbase.inter;
 
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -49,8 +49,6 @@ public interface IDecoder {
     void seekTo(int msc);
     void stop();
     void reset();
-    /** replay current data source*/
-    void rePlay(int msc);
     boolean isPlaying();
     int getCurrentPosition();
     int getDuration();

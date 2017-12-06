@@ -22,7 +22,7 @@ import java.io.Serializable;
  * Created by Taurus on 2017/3/25.
  */
 
-public class VideoData implements Serializable {
+public class VideoData implements Serializable , Cloneable{
 
     private String data;
     private String name;
@@ -34,16 +34,15 @@ public class VideoData implements Serializable {
     }
 
     public VideoData(String data) {
-        this.data = data;
+        this(data, null);
     }
 
     public VideoData(String data, Rate rate) {
-        this.data = data;
-        this.rate = rate;
+        this(data, 0, rate);
     }
 
     public VideoData(String data, int playerType, Rate rate) {
-        this.data = data;
+        setData(data);
         this.playerType = playerType;
         this.rate = rate;
     }
@@ -86,5 +85,16 @@ public class VideoData implements Serializable {
 
     public void setStartPos(int startPos) {
         this.startPos = startPos;
+    }
+
+    @Override
+    public VideoData clone() {
+        VideoData data = null;
+        try {
+            data = (VideoData) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return data;
     }
 }

@@ -127,13 +127,6 @@ public abstract class BaseVideoView extends FrameLayout implements IRenderWidget
         return mAspectRatio;
     }
 
-    @Override
-    public void rePlay(int msc) {
-        stop();
-        setDataSource(mDataSource);
-        start(msc);
-    }
-
     public int getStatus() {
         return mStatus;
     }

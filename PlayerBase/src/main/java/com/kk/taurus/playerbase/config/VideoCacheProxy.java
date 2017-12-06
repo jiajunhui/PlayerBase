@@ -20,7 +20,9 @@ import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import com.danikula.videocache.HttpProxyCacheServer;
+import com.kk.taurus.playerbase.inter.CacheFileNameGenerator;
+
+import java.io.File;
 
 /**
  * Created by Taurus on 2017/12/3.
@@ -43,7 +45,6 @@ public class VideoCacheProxy {
         return instance;
     }
 
-    private HttpProxyCacheServer proxy;
     private boolean videoCacheOpen;
 
     private boolean isNetSource(String sourceUrl){
@@ -71,26 +72,66 @@ public class VideoCacheProxy {
     public String proxyVideoUrl(Context context, String sourceUrl){
         if(!videoCacheOpen || !isNetSource(sourceUrl))
             return sourceUrl;
-        HttpProxyCacheServer proxy = getProxy(context);
-        return proxy.getProxyUrl(sourceUrl);
+        return VideoCacheLibraryLoader.getProxyUrl(context, sourceUrl);
     }
 
-
-    private HttpProxyCacheServer getProxy(Context context) {
-        if(proxy==null){
-            proxy = newProxy(context);
-        }
-        return proxy;
-    }
-
-    public void initHttpProxyCacheServer(HttpProxyCacheServer.Builder builder){
+    public void initHttpProxyCacheServer(VideoCacheProxy.Builder builder){
         if(builder!=null){
-            proxy = builder.build();
+            VideoCacheLibraryLoader.initHttpProxyCacheServer(builder);
         }
     }
 
-    private HttpProxyCacheServer newProxy(Context context) {
-        return new HttpProxyCacheServer(context);
+    public static final class Builder{
+
+        private Context context;
+        private File cacheDirectory;
+        private long maxCacheSize;
+        private int maxCacheCount;
+        private CacheFileNameGenerator fileNameGenerator;
+
+        public Builder(Context context) {
+            this.context = context;
+        }
+
+        public Context getContext() {
+            return context;
+        }
+
+        public File getCacheDirectory() {
+            return cacheDirectory;
+        }
+
+        public Builder setCacheDirectory(File cacheDirectory) {
+            this.cacheDirectory = cacheDirectory;
+            return this;
+        }
+
+        public long getMaxCacheSize() {
+            return maxCacheSize;
+        }
+
+        public Builder setMaxCacheSize(long maxCacheSize) {
+            this.maxCacheSize = maxCacheSize;
+            return this;
+        }
+
+        public int getMaxCacheCount() {
+            return maxCacheCount;
+        }
+
+        public Builder setMaxCacheCount(int maxCacheCount) {
+            this.maxCacheCount = maxCacheCount;
+            return this;
+        }
+
+        public CacheFileNameGenerator getFileNameGenerator() {
+            return fileNameGenerator;
+        }
+
+        public Builder setFileNameGenerator(CacheFileNameGenerator fileNameGenerator) {
+            this.fileNameGenerator = fileNameGenerator;
+            return this;
+        }
     }
 
 }

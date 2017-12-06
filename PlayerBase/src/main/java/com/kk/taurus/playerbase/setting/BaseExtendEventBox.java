@@ -27,7 +27,7 @@ import android.util.Log;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.callback.PlayerObserver;
 import com.kk.taurus.playerbase.utils.CommonUtils;
-import com.kk.taurus.playerbase.widget.plan.IEventBinder;
+import com.kk.taurus.playerbase.inter.IEventBinder;
 
 /**
  * Created by Taurus on 2017/11/18.

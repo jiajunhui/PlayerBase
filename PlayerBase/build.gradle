@@ -3,7 +3,7 @@ apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
 // 这个version是区分library版本的，因此当我们需要更新library时记得修改这个version
-version = "2.1.6"
+version = "2.1.7"
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -34,8 +34,7 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.danikula:videocache:2.7.0'
+
     testCompile 'junit:junit:4.12'
 }
 

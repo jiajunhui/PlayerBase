@@ -18,8 +18,6 @@ package com.kk.taurus.playerbase.widget;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -60,11 +58,11 @@ public abstract class BasePlayer extends BaseBindPlayerEventReceiver implements 
 
     private boolean isRenderAvailable;
 
-    public BasePlayer(@NonNull Context context) {
+    public BasePlayer(Context context) {
         super(context);
     }
 
-    public BasePlayer(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public BasePlayer(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 

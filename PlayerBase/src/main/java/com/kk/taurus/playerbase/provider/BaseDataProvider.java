@@ -21,7 +21,7 @@ import android.os.Bundle;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.inter.IDataProvider;
 import com.kk.taurus.playerbase.setting.VideoData;
-import com.kk.taurus.playerbase.widget.plan.IEventBinder;
+import com.kk.taurus.playerbase.inter.IEventBinder;
 
 /**
  * Created by mtime on 2017/10/19.

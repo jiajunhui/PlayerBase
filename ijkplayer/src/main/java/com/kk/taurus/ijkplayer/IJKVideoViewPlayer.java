@@ -185,15 +185,6 @@ public class IJKVideoViewPlayer extends BaseVideoView {
     }
 
     @Override
-    public void rePlay(int msc) {
-        if(available()){
-            stop();
-            setDataSource(dataSource);
-            start(msc);
-        }
-    }
-
-    @Override
     public void start() {
         if(available() &&
                 (mStatus==STATUS_PREPARED

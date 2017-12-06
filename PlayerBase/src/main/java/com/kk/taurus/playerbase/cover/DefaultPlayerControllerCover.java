@@ -36,7 +36,7 @@ import com.kk.taurus.playerbase.cover.base.BasePlayerControllerCover;
 import com.kk.taurus.playerbase.inter.MSG;
 import com.kk.taurus.playerbase.setting.BaseAdVideo;
 import com.kk.taurus.playerbase.setting.VideoData;
-import com.kk.taurus.playerbase.widget.plan.IDecoder;
+import com.kk.taurus.playerbase.inter.IDecoder;
 
 import java.util.List;
 

@@ -138,7 +138,6 @@ public abstract class DelegateDecoderPlayer extends BaseMediaPlayer{
         }
     }
 
-    @Override
     public void rePlay(int msc) {
         if(isLegalState()){
             stop();

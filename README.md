@@ -28,13 +28,58 @@ __-等功能……__<br>
 ![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_20171203-124309.png)
 
 # 使用
+
+需要的权限，如果targetSDK版本在Android M以上的，请注意运行时权限的处理。<br>
+
+```xml
+<uses-permission android:name="android.permission.INTERNET"/>
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+```
+
+添加如下依赖<br>
+
 ```gradle
 dependencies {
-  compile 'com.kk.taurus.playerbase:PlayerBase:2.1.6'
+  compile 'com.kk.taurus.playerbase:PlayerBase:2.1.7'
 }
 ```
-使用DefaultPlayer对象，可写入xml布局中，也可用代码创建。
 
+如果要使用边播边缓存功能，你还需要添加以下依赖：<br>
+
+```gradle
+dependencies {
+  compile 'com.danikula:videocache:2.7.0'
+}
+```
+
+并在application初始化时下添加您的配置代码：
+
+```java
+VideoCacheProxy.get().initHttpProxyCacheServer(
+                new VideoCacheProxy.Builder(this)
+                        .setCacheDirectory(Environment.getExternalStorageDirectory())
+                        .setFileNameGenerator(new TestCacheFileNameGenerator()));
+VideoCacheProxy.get().setVideoCacheState(true);
+```
+
+代码混淆时，请在proguard中添加如下保护<br>
+
+```proguard
+-keep public class * extends android.view.View{*;}
+
+-keep public class * implements com.kk.taurus.playerbase.inter.IDecoder{*;}
+
+-keep public class * implements com.kk.taurus.playerbase.inter.IRenderWidget{*;}
+
+# 如果添加了缓存依赖，请将如下保护也加入到proguard中
+-keep class com.danikula.videocache.HttpProxyCacheServer{*;}
+
+-keep class com.danikula.videocache.file.FileNameGenerator{*;}
+
+-keep class com.danikula.videocache.HttpProxyCacheServer$Builder{*;}
+```
+
+使用DefaultPlayer对象，可写入xml布局中，也可用代码创建。
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -49,7 +94,6 @@ dependencies {
 
 </RelativeLayout>
 ```
-
 
 ```java
 DefaultPlayer mPlayer = (DefaultPlayer) findViewById(R.id.player);

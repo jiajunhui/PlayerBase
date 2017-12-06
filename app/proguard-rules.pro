@@ -1,25 +1,31 @@
-# Add project specific ProGuard rules here.
-# By default, the flags in this file are appended to flags specified
-# in D:\AndroidSDK/tools/proguard/proguard-android.txt
-# You can edit the include path and order by changing the proguardFiles
-# directive in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# 代码的压缩级别
+-optimizationpasses 5
+#混淆时类名
+-dontusemixedcaseclassnames
+#指定不去忽略非公共的库类。
+-dontskipnonpubliclibraryclasses
+#指定不去忽略包可见的库类的成员
+-dontskipnonpubliclibraryclassmembers
+#不预校验
+-dontpreverify
+# 混淆时记录日志
+-verbose
+#不压缩输入的类文件
+-dontshrink
+ # 混淆时所采用的算法
+-optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
 
-# Add any project specific keep options here:
+-keep class tv.danmaku.ijk.media.**{*;}
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+-keep public class * extends android.view.View{*;}
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+-keep public class * implements com.kk.taurus.playerbase.inter.IDecoder{*;}
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+-keep public class * implements com.kk.taurus.playerbase.inter.IRenderWidget{*;}
+
+# 如果添加了缓存依赖，请将如下保护加入到proguard中
+-keep class com.danikula.videocache.HttpProxyCacheServer{*;}
+
+-keep class com.danikula.videocache.file.FileNameGenerator{*;}
+
+-keep class com.danikula.videocache.HttpProxyCacheServer$Builder{*;}
