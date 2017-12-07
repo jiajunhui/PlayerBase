@@ -33,8 +33,9 @@ __-等功能……__<br>
 ![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/frame_structure03.png)
 ![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/frame_structure04.png)
 ![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/frame_structure05.png)
-<br>
-详细的设计思路见附件PPT[PPT](https://github.com/jiajunhui/PlayerBase/player_base_structure.pptx)
+<br><br><br>
+详细的设计思路见附件PPT<br><br>
+[PPT](https://github.com/jiajunhui/PlayerBase/raw/master/player_base_structure.pptx)
 
 
 # 使用
