@@ -27,6 +27,16 @@ __-等功能……__<br>
 ![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_20171203-124242.png)
 ![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_20171203-124309.png)
 
+# 框架的设计
+![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/frame_structure01.png)
+![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/frame_structure02.png)
+![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/frame_structure03.png)
+![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/frame_structure04.png)
+![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/frame_structure05.png)
+<br>
+详细的设计思路见附件PPT[PPT](https://github.com/jiajunhui/PlayerBase/player_base_structure.pptx)
+
+
 # 使用
 
 需要的权限，如果targetSDK版本在Android M以上的，请注意运行时权限的处理。<br>
