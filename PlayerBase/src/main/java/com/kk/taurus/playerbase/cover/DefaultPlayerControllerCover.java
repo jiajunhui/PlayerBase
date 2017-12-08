@@ -218,6 +218,9 @@ public class DefaultPlayerControllerCover extends BasePlayerControllerCover {
                     mSeekBar.setOnSeekBarChangeListener(onSeekBarChangeListener);
                 }
                 break;
+            case OnPlayerEventListener.EVENT_CODE_ON_RECEIVER_COLLECTIONS_NEW_BIND:
+                setPlayState(isPlaying());
+                break;
             case OnPlayerEventListener.EVENT_CODE_RENDER_START:
                 setPlayState(true);
                 break;

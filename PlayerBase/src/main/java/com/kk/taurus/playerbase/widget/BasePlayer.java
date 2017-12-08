@@ -206,6 +206,7 @@ public abstract class BasePlayer extends BaseBindPlayerEventReceiver implements 
     @Override
     public void updatePlayerType(int type) {
         InternalPlayerManager.get().updatePlayerType(type);
+        notifyPlayerWidget(mAppContext);
     }
 
     @Override
