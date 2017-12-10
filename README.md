@@ -4,9 +4,9 @@ PlayerBase是一种将播放业务组件化处理的解决方案框架。无论�
 遇到问题，请联系作者。QQ：309812983  Email：junhui_jia@163.com
 
 效果<br>
-![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/play_go_on.gif)
 ![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_20171210-145216.png)
 ![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_20171210-145228.png)
+![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/play_go_on.gif)
 
 
 # Demo下载
@@ -24,6 +24,7 @@ __-扩展事件的添加__<br>
 __-默认支持历史点定点播放__<br>
 __-支持列表播放中的无缝续播__<br>
 __-支持边播边缓存功能-__<br>
+__-支持视频切角处理，边缘阴影效果-__<br>
 __-等功能……__<br>
 
 ![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_20171203-124242.png)
