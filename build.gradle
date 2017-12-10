@@ -20,6 +20,12 @@ allprojects {
 //        maven { url "http://192.168.50.240:8081/nexus/content/repositories/releases/" }
         jcenter()
     }
+
+    tasks.withType(Javadoc) {
+        options.addStringOption('Xdoclint:none', '-quiet')
+        options.addStringOption('encoding', 'UTF-8')
+    }
+
 }
 
 task clean(type: Delete) {

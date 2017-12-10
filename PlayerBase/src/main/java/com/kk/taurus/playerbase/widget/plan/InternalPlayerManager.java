@@ -27,11 +27,13 @@ import com.kk.taurus.playerbase.callback.OnErrorListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.inter.IDataProvider;
 import com.kk.taurus.playerbase.inter.IPlayer;
+import com.kk.taurus.playerbase.inter.IPlayerManager;
 import com.kk.taurus.playerbase.setting.AspectRatio;
 import com.kk.taurus.playerbase.setting.DecodeMode;
 import com.kk.taurus.playerbase.setting.Rate;
 import com.kk.taurus.playerbase.setting.VideoData;
 import com.kk.taurus.playerbase.setting.ViewType;
+import com.kk.taurus.playerbase.widget.BasePlayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +43,7 @@ import java.util.List;
  * 该类为解码器(或VideoView)的单利管理类，由框架内部调用。请不要尝试直接调用该类中的方法。
  */
 
-public class InternalPlayerManager implements IPlayer {
+public class InternalPlayerManager implements IPlayer, IPlayerManager {
 
     private final String TAG = "InternalPlayerManager";
     private static InternalPlayerManager instance;
@@ -64,6 +66,7 @@ public class InternalPlayerManager implements IPlayer {
     private MixRenderWidget mVideoView;
     private int mWidgetMode;
     private VideoData mDataSource;
+    private Context mApplicationContext;
 
     public void setOnInternalPlayerListener(OnInternalPlayerListener onInternalPlayerListener) {
         if(mOnInternalPlayerListeners==null){
@@ -82,11 +85,11 @@ public class InternalPlayerManager implements IPlayer {
 
     public void updateWidgetMode(Context context, int widgetMode){
         //use application context.
-        Context appContext = context.getApplicationContext();
+        mApplicationContext = context.getApplicationContext();
         boolean isModeChange = mWidgetMode!=widgetMode;
         mWidgetMode = widgetMode;
         if(isModeChange || isNeedInitInternalPlayer())
-            initInternalPlayer(appContext);
+            initInternalPlayer(mApplicationContext);
     }
 
     public int getWidgetMode(){
@@ -124,6 +127,8 @@ public class InternalPlayerManager implements IPlayer {
             mMediaPlayer.setOnPlayerEventListener(new OnPlayerEventListener() {
                 @Override
                 public void onPlayerEvent(int eventCode, Bundle bundle) {
+                    if(mOnInternalPlayerListeners==null)
+                        return;
                     for(OnInternalPlayerListener onInternalPlayerListener : mOnInternalPlayerListeners){
                         if(onInternalPlayerListener!=null){
                             onInternalPlayerListener.onInternalPlayerEvent(eventCode, bundle);
@@ -134,6 +139,8 @@ public class InternalPlayerManager implements IPlayer {
             mMediaPlayer.setOnErrorListener(new OnErrorListener() {
                 @Override
                 public void onError(int errorCode, Bundle bundle) {
+                    if(mOnInternalPlayerListeners==null)
+                        return;
                     for(OnInternalPlayerListener onInternalPlayerListener : mOnInternalPlayerListeners){
                         if(onInternalPlayerListener!=null){
                             onInternalPlayerListener.onInternalErrorEvent(errorCode, bundle);
@@ -156,6 +163,8 @@ public class InternalPlayerManager implements IPlayer {
             mVideoView.setOnPlayerEventListener(new OnPlayerEventListener() {
                 @Override
                 public void onPlayerEvent(int eventCode, Bundle bundle) {
+                    if(mOnInternalPlayerListeners==null)
+                        return;
                     for(OnInternalPlayerListener onInternalPlayerListener : mOnInternalPlayerListeners){
                         if(onInternalPlayerListener!=null){
                             onInternalPlayerListener.onInternalPlayerEvent(eventCode, bundle);
@@ -166,6 +175,8 @@ public class InternalPlayerManager implements IPlayer {
             mVideoView.setOnErrorListener(new OnErrorListener() {
                 @Override
                 public void onError(int errorCode, Bundle bundle) {
+                    if(mOnInternalPlayerListeners==null)
+                        return;
                     for(OnInternalPlayerListener onInternalPlayerListener : mOnInternalPlayerListeners){
                         if(onInternalPlayerListener!=null){
                             onInternalPlayerListener.onInternalErrorEvent(errorCode, bundle);
@@ -200,11 +211,20 @@ public class InternalPlayerManager implements IPlayer {
     }
 
     private boolean isDecoderMode(){
+        checkWidget();
         return mWidgetMode==WIDGET_MODE_DECODER && mMediaPlayer!=null;
     }
 
     private boolean isVideoViewMode(){
+        checkWidget();
         return mWidgetMode==WIDGET_MODE_VIDEO_VIEW && mVideoView!=null;
+    }
+
+    private void checkWidget(){
+        if((mMediaPlayer==null && mWidgetMode==WIDGET_MODE_DECODER)
+                || (mVideoView==null && mWidgetMode==WIDGET_MODE_VIDEO_VIEW)){
+            initInternalPlayer(mApplicationContext);
+        }
     }
 
     @Override
@@ -457,6 +477,13 @@ public class InternalPlayerManager implements IPlayer {
     }
 
     @Override
+    public void setVolume(float leftVolume, float rightVolume) {
+        if(isDecoderMode()){
+            mMediaPlayer.setVolume(leftVolume, rightVolume);
+        }
+    }
+
+    @Override
     public void setViewType(ViewType viewType) {
         if(isVideoViewMode()){
             mVideoView.setViewType(viewType);
@@ -507,5 +534,280 @@ public class InternalPlayerManager implements IPlayer {
         void onInternalPlayerEvent(int eventCode, Bundle bundle);
         void onInternalErrorEvent(int errorCode, Bundle bundle);
     }
+
+    //-------------------IPlayerManager-------------------
+
+    private List<IPlayer> mHostArrays = new ArrayList<>(2);
+
+    private boolean isContainPlayer(IPlayer host){
+        if(mHostArrays==null || mHostArrays.size()<=0)
+            return false;
+        return mHostArrays.contains(host);
+    }
+
+    /**
+     * 当容器执行
+     * {@link BasePlayer#setDataSource(VideoData)}
+     * {@link BasePlayer#initBaseInfo(Context)}方法时该方法会被调用
+     * @param host
+     */
+    @Override
+    public void attachPlayer(IPlayer host) {
+        if(!isContainPlayer(host)){
+            this.mHostArrays.add(host);
+        }
+        Log.d(TAG,"attachPlayer ...");
+    }
+
+    /**
+     * 当容器{@link BasePlayer#destroyContainer()} 被销毁时该方法会被调用
+     * @param host
+     */
+    @Override
+    public void detachPlayer(IPlayer host) {
+        this.mHostArrays.remove(host);
+        Log.d(TAG,"detachPlayer ...");
+    }
+
+    @Override
+    public void rePlay(IPlayer host, int msc) {
+        if(isContainPlayer(host)){
+            rePlay(msc);
+        }
+    }
+
+    @Override
+    public void updatePlayerType(IPlayer host, int type) {
+        if(isContainPlayer(host)){
+            updatePlayerType(type);
+        }
+    }
+
+    @Override
+    public int getPlayerType(IPlayer host) {
+        if(isContainPlayer(host)){
+            return getPlayerType();
+        }
+        return 0;
+    }
+
+    @Override
+    public void setViewType(IPlayer host, ViewType viewType) {
+        if(isContainPlayer(host)){
+            setViewType(viewType);
+        }
+    }
+
+    @Override
+    public void setAspectRatio(IPlayer host, AspectRatio aspectRatio) {
+        if(isContainPlayer(host)){
+            setAspectRatio(aspectRatio);
+        }
+    }
+
+    @Override
+    public ViewType getViewType(IPlayer host) {
+        if(isContainPlayer(host)){
+            return getViewType();
+        }
+        return null;
+    }
+
+    @Override
+    public AspectRatio getAspectRatio(IPlayer host) {
+        if(isContainPlayer(host)){
+            return getAspectRatio();
+        }
+        return null;
+    }
+
+    @Override
+    public View getRenderView(IPlayer host) {
+        if(isContainPlayer(host)){
+            return getRenderView();
+        }
+        return null;
+    }
+
+    @Override
+    public void setDataSource(IPlayer host, VideoData data) {
+        if(isContainPlayer(host)){
+            setDataSource(data);
+        }
+    }
+
+    @Override
+    public void start(IPlayer host) {
+        if(isContainPlayer(host)){
+            start();
+        }
+    }
+
+    @Override
+    public void start(IPlayer host, int msc) {
+        if(isContainPlayer(host)){
+            start(msc);
+        }
+    }
+
+    @Override
+    public void pause(IPlayer host) {
+        if(isContainPlayer(host)){
+            pause();
+        }
+    }
+
+    @Override
+    public void resume(IPlayer host) {
+        if(isContainPlayer(host)){
+            resume();
+        }
+    }
+
+    @Override
+    public void seekTo(IPlayer host, int msc) {
+        if(isContainPlayer(host)){
+            seekTo(msc);
+        }
+    }
+
+    @Override
+    public void stop(IPlayer host) {
+        if(isContainPlayer(host)){
+            stop();
+        }
+    }
+
+    @Override
+    public void reset(IPlayer host) {
+        if(isContainPlayer(host)){
+            reset();
+        }
+    }
+
+    @Override
+    public boolean isPlaying(IPlayer host) {
+        if(isContainPlayer(host)){
+            return isPlaying();
+        }
+        return false;
+    }
+
+    @Override
+    public int getCurrentPosition(IPlayer host) {
+        if(isContainPlayer(host)){
+            return getCurrentPosition();
+        }
+        return 0;
+    }
+
+    @Override
+    public int getDuration(IPlayer host) {
+        if(isContainPlayer(host)){
+            return getDuration();
+        }
+        return 0;
+    }
+
+    @Override
+    public int getBufferPercentage(IPlayer host) {
+        if(isContainPlayer(host)){
+            return getBufferPercentage();
+        }
+        return 0;
+    }
+
+    @Override
+    public int getAudioSessionId(IPlayer host) {
+        if(isContainPlayer(host)){
+            return getAudioSessionId();
+        }
+        return 0;
+    }
+
+    @Override
+    public int getStatus(IPlayer host) {
+        if(isContainPlayer(host)){
+            return getStatus();
+        }
+        return 0;
+    }
+
+    @Override
+    public int getVideoWidth(IPlayer host) {
+        if(isContainPlayer(host)){
+            return getVideoWidth();
+        }
+        return 0;
+    }
+
+    @Override
+    public int getVideoHeight(IPlayer host) {
+        if(isContainPlayer(host)){
+            return getVideoHeight();
+        }
+        return 0;
+    }
+
+    @Override
+    public void setVolume(IPlayer host, float leftVolume, float rightVolume) {
+        if(isContainPlayer(host)){
+            setVolume(leftVolume, rightVolume);
+        }
+    }
+
+    @Override
+    public void setDecodeMode(IPlayer host, DecodeMode decodeMode) {
+        if(isContainPlayer(host)){
+            setDecodeMode(decodeMode);
+        }
+    }
+
+    @Override
+    public DecodeMode getDecodeMode(IPlayer host) {
+        if(isContainPlayer(host)){
+            return getDecodeMode();
+        }
+        return null;
+    }
+
+    @Override
+    public void setDisplay(IPlayer host, SurfaceHolder surfaceHolder) {
+        if(isContainPlayer(host)){
+            setDisplay(surfaceHolder);
+        }
+    }
+
+    @Override
+    public void setSurface(IPlayer host, Surface surface) {
+        if(isContainPlayer(host)){
+            setSurface(surface);
+        }
+    }
+
+    @Override
+    public Rate getCurrentDefinition(IPlayer host) {
+        if(isContainPlayer(host)){
+            return getCurrentDefinition();
+        }
+        return null;
+    }
+
+    @Override
+    public List<Rate> getVideoDefinitions(IPlayer host) {
+        if(isContainPlayer(host)){
+            return getVideoDefinitions();
+        }
+        return null;
+    }
+
+    @Override
+    public void changeVideoDefinition(IPlayer host, Rate rate) {
+        if(isContainPlayer(host)){
+            changeVideoDefinition(rate);
+        }
+    }
+
+    //-------------------IPlayerManager-------------------
 
 }

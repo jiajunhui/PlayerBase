@@ -28,8 +28,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jiajunhui.xapp.medialoader.bean.VideoItem;
-import com.kk.taurus.imagedisplay.ImageDisplay;
-import com.kk.taurus.imagedisplay.entity.ThumbnailType;
+import com.kk.taurus.mediadataretriever.MediaRetriever;
 import com.kk.taurus.playerbase.DefaultPlayer;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.cover.DefaultReceiverCollections;
@@ -137,6 +136,10 @@ public class ListVideoAdapter extends RecyclerView.Adapter<ListVideoAdapter.Vide
         playerList.clear();
     }
 
+    public void onResume(){
+
+    }
+
     public void resetNotify(){
         mCurrPlayPos = -1;
         notifyDataSetChanged();
@@ -146,8 +149,13 @@ public class ListVideoAdapter extends RecyclerView.Adapter<ListVideoAdapter.Vide
     public void onBindViewHolder(final VideoItemHolder holder, final int position) {
         final VideoItem item = getItem(position);
         holder.name.setText(item.getDisplayName());
-        ImageDisplay.disPlayThumbnail(mContext,holder.cover,item.getPath()
-                ,R.mipmap.ic_video_default, ThumbnailType.VIDEO_MICRO_KIND);
+
+        MediaRetriever
+                .withVideo(item.getPath())
+                .thumbnailType(MediaRetriever.MINI_KIND)
+                .placeHolder(R.mipmap.ic_video_default)
+                .into(holder.cover);
+
         if(mCurrPlayPos != position){
             holder.container.removeAllViews();
             holder.start.setVisibility(View.VISIBLE);

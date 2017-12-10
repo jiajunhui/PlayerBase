@@ -57,6 +57,7 @@ public interface IDecoder {
     int getStatus();
     int getVideoWidth();
     int getVideoHeight();
+    void setVolume(float leftVolume, float rightVolume);
     void setDecodeMode(DecodeMode decodeMode);
     DecodeMode getDecodeMode();
     void setDisplay(SurfaceHolder surfaceHolder);

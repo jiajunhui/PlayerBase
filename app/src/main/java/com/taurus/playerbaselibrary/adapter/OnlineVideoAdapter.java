@@ -7,8 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.kk.taurus.imagedisplay.ImageDisplay;
-import com.kk.taurus.imagedisplay.entity.ThumbnailType;
+import com.kk.taurus.mediadataretriever.MediaRetriever;
 import com.taurus.playerbaselibrary.R;
 import com.taurus.playerbaselibrary.bean.OnlineVideoItem;
 
@@ -44,7 +43,12 @@ public class OnlineVideoAdapter extends RecyclerView.Adapter<OnlineVideoAdapter.
         OnlineVideoItem onlineVideoItem = videoEntities.get(position);
         String url = onlineVideoItem.getUrl();
         holder.title.setText(url);
-        ImageDisplay.disPlayThumbnail(mContext,holder.cover,url,R.mipmap.ic_video_default, ThumbnailType.VIDEO_MINI_KIND);
+
+        MediaRetriever
+                .withVideo(url)
+                .thumbnailType(MediaRetriever.MINI_KIND)
+                .placeHolder(R.mipmap.ic_video_default)
+                .into(holder.cover);
 
         if(onItemClickListener!=null){
             holder.itemView.setOnClickListener(new View.OnClickListener() {

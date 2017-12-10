@@ -311,6 +311,13 @@ public class IJkDecoderPlayer extends BaseDecoder {
     }
 
     @Override
+    public void setVolume(float leftVolume, float rightVolume) {
+        if(available()){
+            mMediaPlayer.setVolume(leftVolume, rightVolume);
+        }
+    }
+
+    @Override
     public int getAudioSessionId() {
         if(available()){
             return mMediaPlayer.getAudioSessionId();

@@ -82,6 +82,13 @@ public abstract class DelegateDecoderPlayer extends BaseMediaPlayer{
     }
 
     @Override
+    public void setVolume(float leftVolume, float rightVolume) {
+        if(isLegalState()){
+            mDecoder.setVolume(leftVolume, rightVolume);
+        }
+    }
+
+    @Override
     public void setSurface(Surface surface) {
         if(isLegalState()){
             mDecoder.setSurface(surface);

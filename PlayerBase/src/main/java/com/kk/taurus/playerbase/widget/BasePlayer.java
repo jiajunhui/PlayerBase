@@ -31,6 +31,7 @@ import com.kk.taurus.playerbase.setting.AspectRatio;
 import com.kk.taurus.playerbase.setting.BaseExtendEventBox;
 import com.kk.taurus.playerbase.setting.DecodeMode;
 import com.kk.taurus.playerbase.setting.DecoderType;
+import com.kk.taurus.playerbase.setting.PlayerAudioManager;
 import com.kk.taurus.playerbase.widget.plan.InternalPlayerManager;
 import com.kk.taurus.playerbase.setting.PlayerType;
 import com.kk.taurus.playerbase.setting.Rate;
@@ -70,6 +71,8 @@ public abstract class BasePlayer extends BaseBindPlayerEventReceiver implements 
     protected void initBaseInfo(Context context) {
         super.initBaseInfo(context);
         extendEventBox = getExtendEventBox();
+        PlayerAudioManager.get().init(context);
+        InternalPlayerManager.get().attachPlayer(this);
     }
 
     /**
@@ -131,15 +134,19 @@ public abstract class BasePlayer extends BaseBindPlayerEventReceiver implements 
     public void setRenderViewForDecoder(IRender render){
         if(getWidgetMode()==WIDGET_MODE_VIDEO_VIEW)
             return;
-        if(mRenderCallbackProxy!=null){
-            mRenderCallbackProxy.destroy();
-        }
+        releaseRenderCallbackProxy();
         mRenderCallbackProxy = new RenderCallbackProxy(this,render);
         mRenderCallbackProxy.proxy();
         if(render instanceof View){
             addViewToPlayerContainer((View) render,true, null);
             needProxyRenderEvent = true;
             isRenderAvailable = true;
+        }
+    }
+
+    private void releaseRenderCallbackProxy() {
+        if(mRenderCallbackProxy!=null){
+            mRenderCallbackProxy.destroy();
         }
     }
 
@@ -200,124 +207,125 @@ public abstract class BasePlayer extends BaseBindPlayerEventReceiver implements 
     @Override
     public void setDataSource(VideoData data) {
         onDataSourceAvailable();
-        InternalPlayerManager.get().setDataSource(data);
+        InternalPlayerManager.get().attachPlayer(this);
+        InternalPlayerManager.get().setDataSource(this,data);
     }
 
     @Override
     public void updatePlayerType(int type) {
-        InternalPlayerManager.get().updatePlayerType(type);
+        InternalPlayerManager.get().updatePlayerType(this, type);
         notifyPlayerWidget(mAppContext);
     }
 
     @Override
     public int getPlayerType() {
-        return InternalPlayerManager.get().getPlayerType();
+        return InternalPlayerManager.get().getPlayerType(this);
     }
 
     @Override
     public void start() {
-        InternalPlayerManager.get().start();
+        InternalPlayerManager.get().start(this);
     }
 
     @Override
     public void start(int msc) {
-        InternalPlayerManager.get().start(msc);
+        InternalPlayerManager.get().start(this, msc);
     }
 
     @Override
     public void pause() {
-        InternalPlayerManager.get().pause();
+        InternalPlayerManager.get().pause(this);
     }
 
     @Override
     public void resume() {
-        InternalPlayerManager.get().resume();
+        InternalPlayerManager.get().resume(this);
     }
 
     @Override
     public void seekTo(int msc) {
-        InternalPlayerManager.get().seekTo(msc);
+        InternalPlayerManager.get().seekTo(this, msc);
     }
 
     @Override
     public void stop() {
-        InternalPlayerManager.get().stop();
+        InternalPlayerManager.get().stop(this);
     }
 
     @Override
     public void reset() {
-        InternalPlayerManager.get().reset();
+        InternalPlayerManager.get().reset(this);
     }
 
     @Override
     public void rePlay(int msc) {
-        InternalPlayerManager.get().rePlay(msc);
+        InternalPlayerManager.get().rePlay(this, msc);
     }
 
     @Override
     public boolean isPlaying() {
-        return InternalPlayerManager.get().isPlaying();
+        return InternalPlayerManager.get().isPlaying(this);
     }
 
     @Override
     public int getCurrentPosition() {
-        return InternalPlayerManager.get().getCurrentPosition();
+        return InternalPlayerManager.get().getCurrentPosition(this);
     }
 
     @Override
     public int getDuration() {
-        return InternalPlayerManager.get().getDuration();
+        return InternalPlayerManager.get().getDuration(this);
     }
 
     @Override
     public int getBufferPercentage() {
-        return InternalPlayerManager.get().getBufferPercentage();
+        return InternalPlayerManager.get().getBufferPercentage(this);
     }
 
     @Override
     public int getAudioSessionId() {
-        return InternalPlayerManager.get().getAudioSessionId();
+        return InternalPlayerManager.get().getAudioSessionId(this);
     }
 
     @Override
     public int getVideoWidth() {
-        return InternalPlayerManager.get().getVideoWidth();
+        return InternalPlayerManager.get().getVideoWidth(this);
     }
 
     @Override
     public int getVideoHeight() {
-        return InternalPlayerManager.get().getVideoHeight();
+        return InternalPlayerManager.get().getVideoHeight(this);
     }
 
     @Override
     public Rate getCurrentDefinition() {
-        return InternalPlayerManager.get().getCurrentDefinition();
+        return InternalPlayerManager.get().getCurrentDefinition(this);
     }
 
     @Override
     public List<Rate> getVideoDefinitions() {
-        return InternalPlayerManager.get().getVideoDefinitions();
+        return InternalPlayerManager.get().getVideoDefinitions(this);
     }
 
     @Override
     public void changeVideoDefinition(Rate rate) {
-        InternalPlayerManager.get().changeVideoDefinition(rate);
+        InternalPlayerManager.get().changeVideoDefinition(this, rate);
     }
 
     @Override
     public void setDecodeMode(DecodeMode decodeMode) {
-        InternalPlayerManager.get().setDecodeMode(decodeMode);
+        InternalPlayerManager.get().setDecodeMode(this, decodeMode);
     }
 
     @Override
     public DecodeMode getDecodeMode() {
-        return InternalPlayerManager.get().getDecodeMode();
+        return InternalPlayerManager.get().getDecodeMode(this);
     }
 
     @Override
     public void setViewType(ViewType viewType) {
         this.mViewType = viewType;
-        InternalPlayerManager.get().setViewType(viewType);
+        InternalPlayerManager.get().setViewType(this, viewType);
     }
 
     @Override
@@ -325,19 +333,24 @@ public abstract class BasePlayer extends BaseBindPlayerEventReceiver implements 
         if(getWidgetMode()==WIDGET_MODE_DECODER){
             return mViewType;
         }
-        return InternalPlayerManager.get().getViewType();
+        return InternalPlayerManager.get().getViewType(this);
     }
 
     @Override
     public void setDisplay(SurfaceHolder surfaceHolder){
         isRenderAvailable = surfaceHolder!=null;
-        InternalPlayerManager.get().setDisplay(surfaceHolder);
+        InternalPlayerManager.get().setDisplay(this, surfaceHolder);
     }
 
     @Override
     public void setSurface(Surface surface) {
         isRenderAvailable = surface!=null;
-        InternalPlayerManager.get().setSurface(surface);
+        InternalPlayerManager.get().setSurface(this, surface);
+    }
+
+    @Override
+    public void setVolume(float leftVolume, float rightVolume){
+        InternalPlayerManager.get().setVolume(this, leftVolume, rightVolume);
     }
 
     @Override
@@ -346,7 +359,7 @@ public abstract class BasePlayer extends BaseBindPlayerEventReceiver implements 
         if(mRenderCallbackProxy!=null){
             mRenderCallbackProxy.onAspectUpdate(aspectRatio);
         }
-        InternalPlayerManager.get().setAspectRatio(aspectRatio);
+        InternalPlayerManager.get().setAspectRatio(this, aspectRatio);
     }
 
     @Override
@@ -354,12 +367,12 @@ public abstract class BasePlayer extends BaseBindPlayerEventReceiver implements 
         if(getWidgetMode()==WIDGET_MODE_DECODER){
             return mAspectRatio;
         }
-        return InternalPlayerManager.get().getAspectRatio();
+        return InternalPlayerManager.get().getAspectRatio(this);
     }
 
     @Override
     public int getStatus() {
-        return InternalPlayerManager.get().getStatus();
+        return InternalPlayerManager.get().getStatus(this);
     }
 
     @Override
@@ -367,7 +380,13 @@ public abstract class BasePlayer extends BaseBindPlayerEventReceiver implements 
         if(getWidgetMode()==WIDGET_MODE_DECODER){
             return getPlayerRenderView();
         }
-        return InternalPlayerManager.get().getRenderView();
+        return InternalPlayerManager.get().getRenderView(this);
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        destroy(false);
     }
 
     @Override
@@ -395,6 +414,10 @@ public abstract class BasePlayer extends BaseBindPlayerEventReceiver implements 
     }
 
     private void destroyContainer() {
+        releaseRenderCallbackProxy();
+        isRenderAvailable = false;
+        //移除宿主IPlayer的关联
+        InternalPlayerManager.get().detachPlayer(this);
         //先发出一个容器销毁的event事件
         sendEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_CONTAINER_ON_DESTROY,null);
         if(getWidgetMode()==WIDGET_MODE_DECODER){

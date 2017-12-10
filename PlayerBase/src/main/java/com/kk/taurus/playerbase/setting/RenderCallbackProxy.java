@@ -47,6 +47,7 @@ public class RenderCallbackProxy implements IRender.IRenderCallback {
 
     public void destroy(){
         if(this.mRender!=null){
+            mOnPreparedListener = null;
             this.mRender.setRenderCallback(null);
         }
     }
@@ -96,16 +97,22 @@ public class RenderCallbackProxy implements IRender.IRenderCallback {
         }
     }
 
+    private void setSurface(Surface surface){
+        if(mPlayer!=null){
+            mPlayer.setSurface(surface);
+        }
+    }
+
     @Override
     public void onSurfaceCreated(IRender render, final Surface surface, int width, int height) {
         setOnPreparedListener(new OnPreparedListener() {
             @Override
             public void onPrepared() {
-                mPlayer.setSurface(surface);
+                setSurface(surface);
                 updateVideoSize();
             }
         });
-        mPlayer.setSurface(surface);
+        setSurface(surface);
         updateVideoSize();
     }
 

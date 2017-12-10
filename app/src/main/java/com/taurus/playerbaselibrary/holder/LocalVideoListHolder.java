@@ -96,6 +96,14 @@ public class LocalVideoListHolder extends ContentHolder<VideosInfo> implements L
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if(mAdapter!=null){
+            mAdapter.onResume();
+        }
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         if(mAdapter!=null){

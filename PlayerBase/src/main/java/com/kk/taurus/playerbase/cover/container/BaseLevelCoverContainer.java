@@ -47,18 +47,4 @@ public abstract class BaseLevelCoverContainer extends BaseCoverContainer {
         }
     }
 
-    protected void removeLevelContainerView(ViewGroup container){
-        if(getContainerRoot()!=null){
-            getContainerRoot().removeView(container);
-            mLevelContainer.remove(container);
-        }
-    }
-
-    protected void removeAllLevelContainers(){
-        if(getContainerRoot()!=null){
-            getContainerRoot().removeAllViews();
-            mLevelContainer.clear();
-        }
-    }
-
 }

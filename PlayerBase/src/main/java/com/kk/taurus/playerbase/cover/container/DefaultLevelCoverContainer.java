@@ -95,7 +95,6 @@ public class DefaultLevelCoverContainer extends BaseLevelCoverContainer {
         mLevelLowCoverContainer.removeAllViews();
         mLevelMediumCoverContainer.removeAllViews();
         mLevelHighCoverContainer.removeAllViews();
-        removeAllLevelContainers();
     }
 
     private ViewGroup.LayoutParams getNewMatchLayoutParams(){

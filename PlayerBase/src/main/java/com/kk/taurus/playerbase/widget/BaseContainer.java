@@ -18,6 +18,7 @@ package com.kk.taurus.playerbase.widget;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -28,9 +29,11 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.kk.taurus.playerbase.callback.BaseGestureCallbackHandler;
+import com.kk.taurus.playerbase.inter.IStyleSetter;
 import com.kk.taurus.playerbase.setting.ContainerTouchHelper;
 import com.kk.taurus.playerbase.cover.base.BaseCover;
 import com.kk.taurus.playerbase.inter.ICoverContainer;
+import com.kk.taurus.playerbase.setting.StyleSetter;
 
 
 /**
@@ -40,34 +43,42 @@ import com.kk.taurus.playerbase.inter.ICoverContainer;
  *
  */
 
-public abstract class BaseContainer extends FrameLayout {
+public abstract class BaseContainer extends FrameLayout implements IStyleSetter {
 
     private final String TAG = "_BaseContainer";
+
     /**
      * the app context.
      */
     protected Context mAppContext;
+
     /**
      * player widget container. such as VideoView.
      */
     private FrameLayout mPlayerContainer;
+
     /**
      * cover container
      */
     private ICoverContainer mCoverContainer;
+
     /**
      * the container width and height.
      */
     protected int mWidth,mHeight;
+
     /**
      * the device info , screen width and screen height.
      */
     protected int mScreenW, mScreenH;
+
     /**
      * for handle user gesture.
      */
     private ContainerTouchHelper mTouchHelper;
     private boolean mGestureEnable = true;
+
+    private StyleSetter mStyleSetter;
 
     public BaseContainer(Context context) {
         this(context,null);
@@ -88,13 +99,14 @@ public abstract class BaseContainer extends FrameLayout {
 
     private void initContainer(Context context) {
         this.mAppContext = context;
+        this.mStyleSetter = new StyleSetter(this);
         setBackgroundColor(Color.BLACK);
         initBaseInfo(context);
         //init render container
         initPlayerContainer(context);
         //init cover container
         initCoverContainer(context);
-        //init gesture handle layout
+        //init gesture handle
         initGesture(context);
         onContainerHasInit(context);
     }
@@ -236,14 +248,33 @@ public abstract class BaseContainer extends FrameLayout {
         }
     }
 
-    protected void removeAllContainers(){
-        removeView(mPlayerContainer);
-        if(mCoverContainer!=null){
-            removeView(mCoverContainer.getContainerRoot());
-        }
-    }
-
     protected void onPlayerGestureEnableChange(boolean enable){
         Log.d(TAG,"onPlayerGestureEnableChange...");
     }
+
+    @Override
+    public void setRoundRectShape(float radius) {
+        mStyleSetter.setRoundRectShape(radius);
+    }
+
+    @Override
+    public void setRoundRectShape(Rect rect, float radius) {
+        mStyleSetter.setRoundRectShape(rect, radius);
+    }
+
+    @Override
+    public void setOvalRectShape() {
+        mStyleSetter.setOvalRectShape();
+    }
+
+    @Override
+    public void setOvalRectShape(Rect rect) {
+        mStyleSetter.setOvalRectShape(rect);
+    }
+
+    @Override
+    public void setElevationShadow(float elevation) {
+        mStyleSetter.setElevationShadow(elevation);
+    }
+
 }
