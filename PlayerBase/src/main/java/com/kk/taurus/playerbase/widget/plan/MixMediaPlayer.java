@@ -42,6 +42,10 @@ public class MixMediaPlayer extends DelegateDecoderPlayer implements IDataProvid
         super(context);
     }
 
+    public MixMediaPlayer(Context context, int decoderType) {
+        super(context, decoderType);
+    }
+
     public void setDataProvider(IDataProvider dataProvider){
         this.mDataProvider = dataProvider;
         if(mDataProvider!=null){

@@ -24,10 +24,10 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import com.kk.taurus.playerbase.R;
+import com.kk.taurus.playerbase.utils.PLog;
 
 /**
  * Created by Taurus on 16/11/27.
@@ -118,7 +118,7 @@ public class BatteryView extends View {
         mWidth = w;
         mHeight = h;
         mBodyWidth = w;
-        Log.d(TAG,"width = " + mWidth + " height = " + mHeight);
+        PLog.d(TAG,"width = " + mWidth + " height = " + mHeight);
     }
 
     @Override

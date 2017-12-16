@@ -19,7 +19,7 @@ package com.kk.taurus.playerbase.cover.base;
 import android.content.Context;
 
 import com.kk.taurus.playerbase.adapter.BaseVideoDataAdapter;
-import com.kk.taurus.playerbase.callback.BaseEventReceiver;
+import com.kk.taurus.playerbase.eventHandler.BaseEventReceiver;
 import com.kk.taurus.playerbase.inter.IReceiverCollections;
 import com.kk.taurus.playerbase.setting.CoverData;
 

@@ -339,6 +339,11 @@ public class DefaultDecoderPlayer extends BaseDecoder {
         return 0;
     }
 
+    @Override
+    public int getStatus() {
+        return mStatus;
+    }
+
     private void resetListener(){
         if(mMediaPlayer==null)
             return;

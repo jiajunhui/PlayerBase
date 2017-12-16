@@ -24,20 +24,19 @@ import com.kk.taurus.playerbase.R;
 import com.kk.taurus.playerbase.callback.OnCoverEventListener;
 import com.kk.taurus.playerbase.callback.OnErrorListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
-import com.kk.taurus.playerbase.cover.base.BaseCoverObserver;
 import com.kk.taurus.playerbase.cover.base.BasePlayerErrorCover;
+import com.kk.taurus.playerbase.utils.PLog;
 
 /**
  * Created by Taurus on 2017/3/27.
  */
 
 public class DefaultPlayerErrorCover extends BasePlayerErrorCover {
+
+    private final String TAG = "PlayerErrorCover";
+
     public DefaultPlayerErrorCover(Context context) {
         super(context);
-    }
-
-    public DefaultPlayerErrorCover(Context context, BaseCoverObserver coverObserver) {
-        super(context, coverObserver);
     }
 
     @Override
@@ -96,4 +95,18 @@ public class DefaultPlayerErrorCover extends BasePlayerErrorCover {
         notifyCoverEvent(state? OnCoverEventListener.EVENT_CODE_ON_PLAYER_ERROR_SHOW
                 :OnCoverEventListener.EVENT_CODE_ON_PLAYER_ERROR_HIDDEN,null);
     }
+
+    @Override
+    public void onNotifyNetWorkError() {
+        super.onNotifyNetWorkError();
+        PLog.d(TAG,"onNotifyNetWorkError");
+    }
+
+    @Override
+    public void onNotifyNetWorkConnected(int networkType) {
+        super.onNotifyNetWorkConnected(networkType);
+        PLog.d(TAG,"onNotifyNetWorkConnected");
+
+    }
+
 }

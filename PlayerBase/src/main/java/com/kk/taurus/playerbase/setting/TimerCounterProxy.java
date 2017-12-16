@@ -93,9 +93,6 @@ public class TimerCounterProxy {
             case OnPlayerEventListener.EVENT_CODE_PLAYER_ON_SET_DATA_SOURCE:
                 removePlayMsg();
                 break;
-            case OnPlayerEventListener.EVENT_CODE_PREPARED:
-                startPlay();
-                break;
             case OnPlayerEventListener.EVENT_CODE_RENDER_START:
                 startPlay();
                 break;

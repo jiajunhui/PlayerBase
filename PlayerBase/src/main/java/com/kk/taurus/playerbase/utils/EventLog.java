@@ -17,7 +17,6 @@
 package com.kk.taurus.playerbase.utils;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 
@@ -34,148 +33,141 @@ public class EventLog {
     public static void onNotifyPlayerEvent(int eventCode, Bundle bundle){
         switch (eventCode){
             case OnPlayerEventListener.EVENT_CODE_ON_PLAYER_PREPARING:
-                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_PLAYER_PREPARING");
+                PLog.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_PLAYER_PREPARING");
                 break;
             /** when player ready to start*/
             case OnPlayerEventListener.EVENT_CODE_ON_INTENT_TO_START:
-                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_INTENT_TO_START");
+                PLog.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_INTENT_TO_START");
                 break;
             /** when player prepared*/
             case OnPlayerEventListener.EVENT_CODE_PREPARED:
-                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_PREPARED");
+                PLog.d(TAG_PLAYER_EVENT,"EVENT_CODE_PREPARED");
                 break;
             /** when video info ready , such as video rate info and so on.*/
             case OnPlayerEventListener.EVENT_CODE_VIDEO_INFO_READY:
-                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_VIDEO_INFO_READY");
+                PLog.d(TAG_PLAYER_EVENT,"EVENT_CODE_VIDEO_INFO_READY");
                 break;
             /** when player start render screen*/
             case OnPlayerEventListener.EVENT_CODE_RENDER_START:
-                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_RENDER_START");
+                PLog.d(TAG_PLAYER_EVENT,"EVENT_CODE_RENDER_START");
                 break;
             /** when the network is not good, start buffering*/
             case OnPlayerEventListener.EVENT_CODE_BUFFERING_START:
-                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_BUFFERING_START");
+                PLog.d(TAG_PLAYER_EVENT,"EVENT_CODE_BUFFERING_START");
                 break;
             /** buffering end*/
             case OnPlayerEventListener.EVENT_CODE_BUFFERING_END:
-                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_BUFFERING_END");
+                PLog.d(TAG_PLAYER_EVENT,"EVENT_CODE_BUFFERING_END");
                 break;
             /** when seek over call this event code*/
             case OnPlayerEventListener.EVENT_CODE_SEEK_COMPLETE:
-                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_SEEK_COMPLETE");
+                PLog.d(TAG_PLAYER_EVENT,"EVENT_CODE_SEEK_COMPLETE");
                 break;
             /** when setDataSource video complete*/
             case OnPlayerEventListener.EVENT_CODE_PLAY_COMPLETE:
-                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_PLAY_COMPLETE");
+                PLog.d(TAG_PLAYER_EVENT,"EVENT_CODE_PLAY_COMPLETE");
                 break;
             /** when player paused*/
             case OnPlayerEventListener.EVENT_CODE_PLAY_PAUSE:
-                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_PLAY_PAUSE");
+                PLog.d(TAG_PLAYER_EVENT,"EVENT_CODE_PLAY_PAUSE");
                 break;
             /** when player resumed*/
             case OnPlayerEventListener.EVENT_CODE_PLAY_RESUME:
-                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_PLAY_RESUME");
+                PLog.d(TAG_PLAYER_EVENT,"EVENT_CODE_PLAY_RESUME");
                 break;
             /** when change video definition*/
             case OnPlayerEventListener.EVENT_CODE_PLAYER_CHANGE_DEFINITION:
-                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_PLAYER_CHANGE_DEFINITION");
+                PLog.d(TAG_PLAYER_EVENT,"EVENT_CODE_PLAYER_CHANGE_DEFINITION");
                 break;
             /** when seek to */
             case OnPlayerEventListener.EVENT_CODE_PLAYER_SEEK_TO:
-                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_PLAYER_SEEK_TO");
+                PLog.d(TAG_PLAYER_EVENT,"EVENT_CODE_PLAYER_SEEK_TO");
                 break;
             /** when player set data*/
             case OnPlayerEventListener.EVENT_CODE_PLAYER_ON_SET_DATA_SOURCE:
-                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_PLAYER_ON_SET_DATA_SOURCE");
+                PLog.d(TAG_PLAYER_EVENT,"EVENT_CODE_PLAYER_ON_SET_DATA_SOURCE");
                 break;
             /** when set video data*/
             case OnPlayerEventListener.EVENT_CODE_PLAYER_ON_SET_VIDEO_DATA:
-                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_PLAYER_ON_SET_VIDEO_DATA");
+                PLog.d(TAG_PLAYER_EVENT,"EVENT_CODE_PLAYER_ON_SET_VIDEO_DATA");
                 break;
             /** when set ad video data*/
             case OnPlayerEventListener.EVENT_CODE_PLAYER_ON_SET_AD_DATA:
-                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_PLAYER_ON_SET_AD_DATA");
+                PLog.d(TAG_PLAYER_EVENT,"EVENT_CODE_PLAYER_ON_SET_AD_DATA");
                 break;
             /** when set play data include video data and ad data*/
             case OnPlayerEventListener.EVENT_CODE_PLAYER_ON_SET_PLAY_DATA:
-                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_PLAYER_ON_SET_PLAY_DATA");
+                PLog.d(TAG_PLAYER_EVENT,"EVENT_CODE_PLAYER_ON_SET_PLAY_DATA");
                 break;
             /** when player stop*/
             case OnPlayerEventListener.EVENT_CODE_PLAYER_ON_STOP:
-                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_PLAYER_ON_STOP");
+                PLog.d(TAG_PLAYER_EVENT,"EVENT_CODE_PLAYER_ON_STOP");
                 break;
             /** when player destroy*/
             case OnPlayerEventListener.EVENT_CODE_PLAYER_ON_DESTROY:
-                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_PLAYER_ON_DESTROY");
+                PLog.d(TAG_PLAYER_EVENT,"EVENT_CODE_PLAYER_ON_DESTROY");
                 break;
             /** when ready to switch player type*/
             case OnPlayerEventListener.EVENT_CODE_ON_INTENT_TO_SWITCH_PLAYER_TYPE:
-                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_INTENT_TO_SWITCH_PLAYER_TYPE");
+                PLog.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_INTENT_TO_SWITCH_PLAYER_TYPE");
                 break;
             case OnPlayerEventListener.EVENT_CODE_PLAYER_FULL_SCREEN:
-                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_PLAYER_FULL_SCREEN");
+                PLog.d(TAG_PLAYER_EVENT,"EVENT_CODE_PLAYER_FULL_SCREEN");
                 break;
             case OnPlayerEventListener.EVENT_CODE_PLAYER_QUIT_FULL_SCREEN:
-                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_PLAYER_QUIT_FULL_SCREEN");
+                PLog.d(TAG_PLAYER_EVENT,"EVENT_CODE_PLAYER_QUIT_FULL_SCREEN");
                 break;
             case OnPlayerEventListener.EVENT_CODE_PLAYER_DPAD_REQUEST_FOCUS:
-                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_PLAYER_DPAD_REQUEST_FOCUS");
+                PLog.d(TAG_PLAYER_EVENT,"EVENT_CODE_PLAYER_DPAD_REQUEST_FOCUS");
                 break;
             case OnPlayerEventListener.EVENT_CODE_ON_DEFINITION_LIST_READY:
-                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_DEFINITION_LIST_READY");
+                PLog.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_DEFINITION_LIST_READY");
                 break;
             case OnPlayerEventListener.EVENT_CODE_ON_INTENT_SET_SCREEN_ORIENTATION_PORTRAIT:
-                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_INTENT_SET_SCREEN_ORIENTATION_PORTRAIT");
+                PLog.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_INTENT_SET_SCREEN_ORIENTATION_PORTRAIT");
                 break;
             case OnPlayerEventListener.EVENT_CODE_ON_INTENT_SET_SCREEN_ORIENTATION_LANDSCAPE:
-                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_INTENT_SET_SCREEN_ORIENTATION_LANDSCAPE");
+                PLog.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_INTENT_SET_SCREEN_ORIENTATION_LANDSCAPE");
                 break;
             case OnPlayerEventListener.EVENT_CODE_ON_RECEIVER_COLLECTIONS_NEW_BIND:
-                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_RECEIVER_COLLECTIONS_NEW_BIND");
+                PLog.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_RECEIVER_COLLECTIONS_NEW_BIND");
                 break;
             case OnPlayerEventListener.EVENT_CODE_ON_SURFACE_HOLDER_UPDATE:
-                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_SURFACE_HOLDER_UPDATE");
+                PLog.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_SURFACE_HOLDER_UPDATE");
                 break;
             case OnPlayerEventListener.EVENT_CODE_ON_SURFACE_UPDATE:
-                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_SURFACE_UPDATE");
+                PLog.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_SURFACE_UPDATE");
                 break;
             case OnPlayerEventListener.EVENT_CODE_ON_VIDEO_SIZE_CHANGE:
                 int width = bundle.getInt(OnPlayerEventListener.BUNDLE_KEY_VIDEO_WIDTH);
                 int height = bundle.getInt(OnPlayerEventListener.BUNDLE_KEY_VIDEO_HEIGHT);
-                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_VIDEO_SIZE_CHANGE : videoW = " + width + " videoH = " + height);
+                PLog.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_VIDEO_SIZE_CHANGE : videoW = " + width + " videoH = " + height);
                 break;
             case OnPlayerEventListener.EVENT_CODE_ON_VIDEO_ROTATION_CHANGED:
-                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_VIDEO_ROTATION_CHANGED");
+                PLog.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_VIDEO_ROTATION_CHANGED");
                 break;
             case OnPlayerEventListener.EVENT_CODE_ON_NETWORK_ERROR:
-                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_NETWORK_ERROR");
-                break;
-            case OnPlayerEventListener.EVENT_CODE_ON_NETWORK_CHANGE:
-                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_NETWORK_CHANGE");
+                PLog.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_NETWORK_ERROR");
                 break;
             case OnPlayerEventListener.EVENT_CODE_ON_NETWORK_CONNECTED:
-                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_NETWORK_CONNECTED");
+                PLog.d(TAG_PLAYER_EVENT,"EVENT_CODE_ON_NETWORK_CONNECTED");
                 break;
             case OnPlayerEventListener.EVENT_CODE_PLAYER_CONTAINER_ON_DESTROY:
-                Log.d(TAG_PLAYER_EVENT,"EVENT_CODE_PLAYER_CONTAINER_ON_DESTROY");
+                PLog.d(TAG_PLAYER_EVENT,"EVENT_CODE_PLAYER_CONTAINER_ON_DESTROY");
                 break;
         }
     }
 
     public static void onNotifyPlayTimerCounter(int curr, int duration, int bufferPercentage){
-        Log.d(TAG_TIMER_COUNTER,"curr = " + curr + " duration = " + duration + " bufferPercentagePos = " + bufferPercentage);
+        PLog.d(TAG_TIMER_COUNTER,"curr = " + curr + " duration = " + duration + " bufferPercentagePos = " + bufferPercentage);
     }
 
     public static void onNotifyNetWorkError(){
-        Log.e(TAG_NETWORK_EVENT,"onNotifyNetWorkError");
-    }
-
-    public static void onNotifyNetWorkChanged(){
-        Log.e(TAG_NETWORK_EVENT,"onNotifyNetWorkChanged");
+        PLog.e(TAG_NETWORK_EVENT,"onNotifyNetWorkError");
     }
 
     public static void onNotifyNetWorkConnected(){
-        Log.e(TAG_NETWORK_EVENT,"onNotifyNetWorkConnected");
+        PLog.e(TAG_NETWORK_EVENT,"onNotifyNetWorkConnected");
     }
     
 }

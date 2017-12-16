@@ -2,7 +2,6 @@ package com.taurus.playerbaselibrary;
 
 import android.os.Environment;
 
-import com.danikula.videocache.HttpProxyCacheServer;
 import com.kk.taurus.playerbase.config.ConfigLoader;
 import com.kk.taurus.playerbase.config.VideoCacheProxy;
 import com.kk.taurus.playerbase.inter.IPlayer;
@@ -10,6 +9,7 @@ import com.kk.taurus.playerbase.setting.DecoderType;
 import com.kk.taurus.playerbase.setting.DecoderTypeEntity;
 import com.kk.taurus.playerbase.setting.PlayerType;
 import com.kk.taurus.playerbase.setting.PlayerTypeEntity;
+import com.kk.taurus.playerbase.utils.PLog;
 import com.kk.taurus.uiframe.FrameApplication;
 import com.taurus.playerbaselibrary.callback.TestCacheFileNameGenerator;
 import com.taurus.playerbaselibrary.holder.SettingHolder;
@@ -37,12 +37,16 @@ public class MApp extends FrameApplication {
                         .setMessageTable(true));
 
 
+        //是否输出播放框架内部事件日志
+        PLog.LOG_OPEN = BuildConfig.DEBUG;
 
+        //边播边缓存配置
         VideoCacheProxy.get().initHttpProxyCacheServer(
                 new VideoCacheProxy.Builder(this)
                         .setCacheDirectory(Environment.getExternalStorageDirectory())
                         .setFileNameGenerator(new TestCacheFileNameGenerator()));
         if(SharedPrefer.getInstance().getBoolean(this,SettingHolder.KEY_PLAYER_VIDEO_CACHE,false)){
+            //开启边播边缓存功能
             VideoCacheProxy.get().setVideoCacheState(true);
         }
 

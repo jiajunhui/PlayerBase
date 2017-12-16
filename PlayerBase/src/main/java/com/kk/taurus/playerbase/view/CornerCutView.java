@@ -23,8 +23,9 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
+
+import com.kk.taurus.playerbase.utils.PLog;
 
 /**
  * Created by Taurus on 2016/10/17.
@@ -83,7 +84,7 @@ public class CornerCutView extends View {
         super.onSizeChanged(w, h, oldw, oldh);
         mWidth = w;
         mHeight = h;
-        Log.d(TAG,"mWidth = " + mWidth + " mHeight = " + mHeight);
+        PLog.d(TAG,"mWidth = " + mWidth + " mHeight = " + mHeight);
     }
 
     @Override

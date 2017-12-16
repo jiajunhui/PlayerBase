@@ -23,7 +23,6 @@ import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Message;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.SeekBar;
@@ -31,14 +30,10 @@ import android.widget.SeekBar;
 import com.kk.taurus.playerbase.R;
 import com.kk.taurus.playerbase.callback.OnCoverEventListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
-import com.kk.taurus.playerbase.cover.base.BaseCoverObserver;
 import com.kk.taurus.playerbase.cover.base.BasePlayerControllerCover;
 import com.kk.taurus.playerbase.inter.MSG;
-import com.kk.taurus.playerbase.setting.BaseAdVideo;
-import com.kk.taurus.playerbase.setting.VideoData;
 import com.kk.taurus.playerbase.inter.IDecoder;
-
-import java.util.List;
+import com.kk.taurus.playerbase.utils.PLog;
 
 /**
  * Created by Taurus on 2017/3/24.
@@ -51,12 +46,11 @@ public class DefaultPlayerControllerCover extends BasePlayerControllerCover {
     private boolean isLandScape;
     private BatteryReceiver batteryReceiver;
 
+    public static final int EVENT_CODE_USER_PAUSE = 2001;
+    public static final int EVENT_CODE_USER_RESUME = 2002;
+
     public DefaultPlayerControllerCover(Context context) {
         super(context);
-    }
-
-    public DefaultPlayerControllerCover(Context context, BaseCoverObserver coverObserver) {
-        super(context, coverObserver);
     }
 
     @Override
@@ -74,13 +68,17 @@ public class DefaultPlayerControllerCover extends BasePlayerControllerCover {
                 public void onClick(View v) {
                     if(player==null)
                         return;
+                    boolean pause;
                     if(isPlaying()){
+                        pause = true;
                         pause();
                         setPlayState(false);
                     }else{
+                        pause = false;
                         resume();
                         setPlayState(true);
                     }
+                    notifyCoverEvent(pause?EVENT_CODE_USER_PAUSE:EVENT_CODE_USER_RESUME,null);
                 }
             });
         }
@@ -154,13 +152,13 @@ public class DefaultPlayerControllerCover extends BasePlayerControllerCover {
             bundle.putInt(OnCoverEventListener.KEY_INT_DATA,progress);
             notifyCoverEvent(OnCoverEventListener.EVENT_CODE_ON_SEEK_BAR_PROGRESS_CHANGE,bundle);
             if(fromUser){
-                Log.d(TAG,"onProgressChanged...");
+                PLog.d(TAG,"onProgressChanged...");
                 setPlayTime(progress,seekBar.getMax());
             }
         }
         @Override
         public void onStartTrackingTouch(SeekBar seekBar) {
-            Log.d(TAG,"onStartTrackingTouch...");
+            PLog.d(TAG,"onStartTrackingTouch...");
             Bundle bundle = getBundle();
             bundle.putInt(OnCoverEventListener.KEY_INT_DATA,seekBar.getProgress());
             notifyCoverEvent(OnCoverEventListener.EVENT_CODE_ON_SEEK_BAR_START_TRACKING_TOUCH,bundle);
@@ -176,7 +174,7 @@ public class DefaultPlayerControllerCover extends BasePlayerControllerCover {
                 return;
             if(seekBar.getMax()<=0 || getDuration() <= 0)
                 return;
-            Log.d(TAG,"onStopTrackingTouch...");
+            PLog.d(TAG,"onStopTrackingTouch...");
             int progress = seekBar.getProgress();
             sendSeekToMsg(progress);
             sendDelayHiddenControllerMsg();
@@ -213,35 +211,27 @@ public class DefaultPlayerControllerCover extends BasePlayerControllerCover {
     public void onNotifyPlayEvent(int eventCode, Bundle bundle) {
         super.onNotifyPlayEvent(eventCode, bundle);
         switch (eventCode){
-            case OnPlayerEventListener.EVENT_CODE_PREPARED:
+            case OnPlayerEventListener.EVENT_CODE_ON_RECEIVER_COLLECTIONS_NEW_BIND:
+                setPlayState(isPlaying());
                 if(mSeekBar!=null){
                     mSeekBar.setOnSeekBarChangeListener(onSeekBarChangeListener);
                 }
                 break;
-            case OnPlayerEventListener.EVENT_CODE_ON_RECEIVER_COLLECTIONS_NEW_BIND:
-                setPlayState(isPlaying());
-                break;
             case OnPlayerEventListener.EVENT_CODE_RENDER_START:
+                setPlayState(true);
+                break;
+
+            case OnPlayerEventListener.EVENT_CODE_PLAY_PAUSE:
+                setPlayState(false);
+                break;
+
+            case OnPlayerEventListener.EVENT_CODE_PLAY_RESUME:
                 setPlayState(true);
                 break;
 
             case OnPlayerEventListener.EVENT_CODE_SEEK_COMPLETE:
                 setTimerCounterUpdateProgressEnable(true);
                 break;
-        }
-    }
-
-    @Override
-    public void onNotifyAdPrepared(List<BaseAdVideo> adVideos) {
-        super.onNotifyAdPrepared(adVideos);
-        setCoverEnable(false);
-    }
-
-    @Override
-    public void onNotifyAdFinish(VideoData data, boolean isAllFinish) {
-        super.onNotifyAdFinish(data, isAllFinish);
-        if(isAllFinish){
-            setCoverEnable(true);
         }
     }
 

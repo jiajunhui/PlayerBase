@@ -22,8 +22,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.kk.taurus.playerbase.DefaultPlayer;
+import com.kk.taurus.playerbase.callback.OnCoverEventListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
+import com.kk.taurus.playerbase.cover.DefaultPlayerControllerCover;
 import com.kk.taurus.playerbase.cover.DefaultReceiverCollections;
 import com.kk.taurus.playerbase.inter.IPlayer;
 import com.kk.taurus.playerbase.setting.DecodeMode;
@@ -32,6 +33,7 @@ import com.kk.taurus.playerbase.setting.DecoderTypeEntity;
 import com.kk.taurus.playerbase.setting.PlayerType;
 import com.kk.taurus.playerbase.setting.PlayerTypeEntity;
 import com.kk.taurus.playerbase.setting.VideoData;
+import com.kk.taurus.playerbase.widget.StandardPlayer;
 import com.kk.taurus.uiframe.i.HolderData;
 import com.kk.taurus.uiframe.listener.OnHolderListener;
 import com.kk.taurus.uiframe.v.ContentHolder;
@@ -49,9 +51,9 @@ import static com.taurus.playerbaselibrary.holder.SettingHolder.KEY_PLAYER_IJK_D
  * Created by Taurus on 2017/12/3.
  */
 
-public class VideoDetailHolder extends ContentHolder<HolderData> implements OnPlayerEventListener {
+public class VideoDetailHolder extends ContentHolder<HolderData> implements OnPlayerEventListener, OnCoverEventListener {
 
-    private DefaultPlayer mPlayer;
+    private StandardPlayer mPlayer;
 
     private DefaultReceiverCollections mCoverCollections;
     private PlayCompleteCover completeCover;
@@ -62,6 +64,8 @@ public class VideoDetailHolder extends ContentHolder<HolderData> implements OnPl
     private VideoData mVideoData;
 
     private int mPos;
+
+    private boolean isUserPause;
 
     public VideoDetailHolder(Context context) {
         super(context);
@@ -89,7 +93,7 @@ public class VideoDetailHolder extends ContentHolder<HolderData> implements OnPl
                 .setDefaultPlayerGestureCover()
                 .setDefaultPlayerErrorCover()
                 .addCover("appcover",new AppControllerCover(mContext))
-                .addCover(PlayCompleteCover.KEY,completeCover = new PlayCompleteCover(mContext,null)).build();;
+                .addCover(PlayCompleteCover.KEY,completeCover = new PlayCompleteCover(mContext)).build();
 
         mPlayer.bindReceiverCollections(mCoverCollections);
 
@@ -104,6 +108,7 @@ public class VideoDetailHolder extends ContentHolder<HolderData> implements OnPl
         }
 
         mPlayer.setOnPlayerEventListener(this);
+        mPlayer.setOnCoverEventListener(this);
     }
 
     public void startPlay(VideoData videoData){
@@ -174,7 +179,20 @@ public class VideoDetailHolder extends ContentHolder<HolderData> implements OnPl
     public void onPlayerEvent(int eventCode, Bundle bundle) {
         switch (eventCode){
             case OnPlayerEventListener.EVENT_CODE_RENDER_START:
+                isUserPause = false;
                 updateInfo();
+                break;
+            case OnPlayerEventListener.EVENT_CODE_PLAY_RESUME:
+                isUserPause = false;
+                break;
+        }
+    }
+
+    @Override
+    public void onCoverEvent(int eventCode, Bundle bundle) {
+        switch (eventCode){
+            case DefaultPlayerControllerCover.EVENT_CODE_USER_PAUSE:
+                isUserPause = true;
                 break;
         }
     }
@@ -190,7 +208,7 @@ public class VideoDetailHolder extends ContentHolder<HolderData> implements OnPl
     @Override
     public void onResume() {
         super.onResume();
-        if(mPlayer!=null){
+        if(mPlayer!=null && !isUserPause){
             mPlayer.resume();
         }
     }
@@ -199,7 +217,7 @@ public class VideoDetailHolder extends ContentHolder<HolderData> implements OnPl
     public void onDestroy() {
         super.onDestroy();
         if(mPlayer!=null){
-            mPlayer.destroy(true);
+            mPlayer.destroy();
         }
     }
 }

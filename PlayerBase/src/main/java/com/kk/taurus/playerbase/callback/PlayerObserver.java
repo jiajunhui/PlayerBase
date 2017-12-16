@@ -19,11 +19,6 @@ package com.kk.taurus.playerbase.callback;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
-import com.kk.taurus.playerbase.setting.BaseAdVideo;
-import com.kk.taurus.playerbase.setting.VideoData;
-
-import java.util.List;
-
 /**
  * Created by Taurus on 2017/3/24.
  */
@@ -68,33 +63,8 @@ public interface PlayerObserver {
     void onNotifyNetWorkConnected(int networkType);
 
     /**
-     * on network connected change
-     * @param networkType
-     */
-    void onNotifyNetWorkChanged(int networkType);
-
-    /**
      * on network occur error.
      */
     void onNotifyNetWorkError();
-
-    /**
-     * on ad prepare start,notify receivers.
-     * @param adVideos
-     */
-    void onNotifyAdPrepared(List<BaseAdVideo> adVideos);
-
-    /**
-     * on ad video start,notify receivers.
-     * @param adVideo current ad video.
-     */
-    void onNotifyAdStart(BaseAdVideo adVideo);
-
-    /**
-     * on ad videos finish,notify receivers.
-     * @param data ad video.
-     * @param isAllFinish when ad video list finish,return true.
-     */
-    void onNotifyAdFinish(VideoData data, boolean isAllFinish);
 
 }

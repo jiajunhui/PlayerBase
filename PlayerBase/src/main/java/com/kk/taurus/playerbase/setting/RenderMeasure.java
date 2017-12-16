@@ -16,8 +16,9 @@
 
 package com.kk.taurus.playerbase.setting;
 
-import android.util.Log;
 import android.view.View;
+
+import com.kk.taurus.playerbase.utils.PLog;
 
 /**
  * Created by Taurus on 2017/11/20.
@@ -119,10 +120,10 @@ public class RenderMeasure {
 
                 // for compatibility, we adjust size based on aspect ratio
                 if (mVideoWidth * height < width * mVideoHeight) {
-                    //Log.i("@@@", "image too wide, correcting");
+                    //PLog.i("@@@", "image too wide, correcting");
                     width = height * mVideoWidth / mVideoHeight;
                 } else if (mVideoWidth * height > width * mVideoHeight) {
-                    //Log.i("@@@", "image too tall, correcting");
+                    //PLog.i("@@@", "image too tall, correcting");
                     height = width * mVideoHeight / mVideoWidth;
                 }
             }else if (widthSpecMode == View.MeasureSpec.EXACTLY) {
@@ -162,7 +163,7 @@ public class RenderMeasure {
     }
 
     public void setVideoSize(int videoWidth, int videoHeight){
-        Log.d(TAG,"videoWidth = " + videoWidth + " videoHeight = " + videoHeight);
+        PLog.d(TAG,"videoWidth = " + videoWidth + " videoHeight = " + videoHeight);
         this.mVideoWidth = videoWidth;
         this.mVideoHeight = videoHeight;
     }

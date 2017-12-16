@@ -18,11 +18,11 @@ package com.kk.taurus.playerbase.config;
 
 import android.app.Application;
 import android.content.Context;
-import android.util.Log;
 
 import com.kk.taurus.playerbase.inter.IPlayer;
 import com.kk.taurus.playerbase.setting.DecoderType;
 import com.kk.taurus.playerbase.setting.PlayerType;
+import com.kk.taurus.playerbase.utils.PLog;
 
 import java.lang.reflect.Constructor;
 
@@ -44,6 +44,15 @@ public class ConfigLoader {
         return mWidgetMode;
     }
 
+    public static int getDefaultType(int widgetMode){
+        if(mWidgetMode==IPlayer.WIDGET_MODE_DECODER){
+            return DecoderType.getInstance().getDefaultPlayerType();
+        }else if(mWidgetMode==IPlayer.WIDGET_MODE_VIDEO_VIEW){
+            return PlayerType.getInstance().getDefaultPlayerType();
+        }
+        return 0;
+    }
+
     public static Object getPlayerInstance(Context context, int playerType){
         Object instance = null;
         try{
@@ -54,7 +63,7 @@ public class ConfigLoader {
                     instance = constructor.newInstance(context);
                 }
             }
-            Log.d(TAG,"init VideoView instance ...");
+            PLog.d(TAG,"init VideoView instance ...");
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -71,7 +80,7 @@ public class ConfigLoader {
                     instance = constructor.newInstance(context);
                 }
             }
-            Log.d(TAG,"init Decoder instance ...");
+            PLog.d(TAG,"init Decoder instance ...");
         }catch (Exception e){
             e.printStackTrace();
         }

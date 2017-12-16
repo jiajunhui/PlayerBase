@@ -137,7 +137,9 @@ public class ListVideoAdapter extends RecyclerView.Adapter<ListVideoAdapter.Vide
     }
 
     public void onResume(){
-
+        if(player!=null){
+            player.resume();
+        }
     }
 
     public void resetNotify(){

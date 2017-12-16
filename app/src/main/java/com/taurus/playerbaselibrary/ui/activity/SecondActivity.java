@@ -61,6 +61,22 @@ public class SecondActivity extends ToolsActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        if(mPlayer!=null){
+            mPlayer.pause();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(mPlayer!=null){
+            mPlayer.resume();
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         if(mPlayer!=null){

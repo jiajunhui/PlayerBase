@@ -56,11 +56,32 @@ public class IJkDecoderPlayer extends BaseDecoder {
         init(context);
     }
 
-    private void init(Context context) {
-        mMediaPlayer = new IjkMediaPlayer();
-        // init player
+    static {
         IjkMediaPlayer.loadLibrariesOnce(null);
         IjkMediaPlayer.native_profileBegin("libijkplayer.so");
+    }
+
+    private void init(Context context) {
+        // init player
+        mMediaPlayer = createPlayer();
+    }
+
+    private IjkMediaPlayer createPlayer(){
+        IjkMediaPlayer ijkMediaPlayer = new IjkMediaPlayer();
+//        ijkMediaPlayer.native_setLogLevel(IjkMediaPlayer.IJK_LOG_DEBUG);
+
+        ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-auto-rotate", 1);
+        ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "opensles", 1);
+        ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "framedrop", 1);
+        ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "start-on-prepared", 0);
+
+        ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "timeout", 10000000);
+        ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "reconnect", 1);
+
+        ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "http-detect-range-support", 0);
+
+        ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_CODEC, "skip_loop_filter", 48);
+        return ijkMediaPlayer;
     }
 
     @Override
@@ -156,6 +177,8 @@ public class IJkDecoderPlayer extends BaseDecoder {
 
     @Override
     public void resume() {
+        if(mDataSource==null)
+            return;
         if(available() && mStatus == STATUS_PAUSED){
             mMediaPlayer.start();
             mStatus = STATUS_STARTED;
@@ -323,6 +346,11 @@ public class IJkDecoderPlayer extends BaseDecoder {
             return mMediaPlayer.getAudioSessionId();
         }
         return 0;
+    }
+
+    @Override
+    public int getStatus() {
+        return mStatus;
     }
 
     private void resetListener(){

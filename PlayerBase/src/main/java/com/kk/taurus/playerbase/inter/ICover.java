@@ -19,7 +19,6 @@ package com.kk.taurus.playerbase.inter;
 import android.content.Context;
 import android.view.View;
 
-import com.kk.taurus.playerbase.callback.CoverObserver;
 import com.kk.taurus.playerbase.setting.CoverData;
 
 /**
@@ -38,5 +37,4 @@ public interface ICover {
     void onRefreshCoverData(CoverData data);
     View getView();
     int getCoverLevel();
-    CoverObserver getCoverObserver();
 }

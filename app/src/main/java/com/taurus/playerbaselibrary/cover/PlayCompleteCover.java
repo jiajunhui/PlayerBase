@@ -7,7 +7,6 @@ import android.widget.TextView;
 
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.cover.base.BaseCover;
-import com.kk.taurus.playerbase.cover.base.BaseCoverObserver;
 import com.taurus.playerbaselibrary.R;
 import com.taurus.playerbaselibrary.callback.OnCompleteListener;
 import com.taurus.playerbaselibrary.inter.IPlayCompleteCover;
@@ -22,8 +21,8 @@ public class PlayCompleteCover extends BaseCover implements IPlayCompleteCover{
     private OnCompleteListener onCompleteListener;
     private TextView mTvReplay;
 
-    public PlayCompleteCover(Context context, BaseCoverObserver coverObserver) {
-        super(context, coverObserver);
+    public PlayCompleteCover(Context context) {
+        super(context);
     }
 
     @Override

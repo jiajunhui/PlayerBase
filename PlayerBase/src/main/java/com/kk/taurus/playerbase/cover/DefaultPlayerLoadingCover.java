@@ -18,15 +18,14 @@ package com.kk.taurus.playerbase.cover;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import com.kk.taurus.playerbase.R;
 import com.kk.taurus.playerbase.callback.OnCoverEventListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
-import com.kk.taurus.playerbase.cover.base.BaseCoverObserver;
 import com.kk.taurus.playerbase.cover.base.BasePlayerLoadingCover;
 import com.kk.taurus.playerbase.inter.IDataProvider;
+import com.kk.taurus.playerbase.utils.PLog;
 
 /**
  * Created by Taurus on 2017/3/25.
@@ -38,10 +37,6 @@ public class DefaultPlayerLoadingCover extends BasePlayerLoadingCover {
 
     public DefaultPlayerLoadingCover(Context context) {
         super(context);
-    }
-
-    public DefaultPlayerLoadingCover(Context context, BaseCoverObserver coverObserver) {
-        super(context, coverObserver);
     }
 
     @Override
@@ -58,25 +53,25 @@ public class DefaultPlayerLoadingCover extends BasePlayerLoadingCover {
                 setLoadingState(true);
                 break;
             case OnPlayerEventListener.EVENT_CODE_ON_INTENT_TO_START:
-                Log.d(TAG,"on intent to start......");
+                PLog.d(TAG,"on intent to start......");
                 setLoadingState(true);
                 break;
             case OnPlayerEventListener.EVENT_CODE_RENDER_START:
-                Log.d(TAG,"on render start......");
+                PLog.d(TAG,"on render start......");
                 setLoadingState(false);
                 break;
             case OnPlayerEventListener.EVENT_CODE_BUFFERING_START:
-                Log.d(TAG,"buffering start......");
+                PLog.d(TAG,"buffering start......");
                 setLoadingState(true);
                 break;
 
             case OnPlayerEventListener.EVENT_CODE_BUFFERING_END:
-                Log.d(TAG,"buffering end......");
+                PLog.d(TAG,"buffering end......");
                 setLoadingState(false);
                 break;
 
             case OnPlayerEventListener.EVENT_CODE_PLAYER_ON_STOP:
-                Log.d(TAG,"on stopped......");
+                PLog.d(TAG,"on stopped......");
                 setLoadingState(false);
                 break;
 
@@ -91,10 +86,10 @@ public class DefaultPlayerLoadingCover extends BasePlayerLoadingCover {
         super.onCoverEvent(eventCode, bundle);
         switch (eventCode){
             case OnCoverEventListener.EVENT_CODE_ON_PLAYER_CONTROLLER_SHOW:
-                Log.d(TAG,"controller show......");
+                PLog.d(TAG,"controller show......");
                 break;
             case OnCoverEventListener.EVENT_CODE_ON_PLAYER_CONTROLLER_HIDDEN:
-                Log.d(TAG,"controller hidden......");
+                PLog.d(TAG,"controller hidden......");
                 break;
         }
     }

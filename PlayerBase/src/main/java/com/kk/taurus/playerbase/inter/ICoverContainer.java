@@ -22,6 +22,7 @@ import com.kk.taurus.playerbase.cover.base.BaseCover;
 
 /**
  * Created by Taurus on 2017/4/29.
+ * 覆盖层容器接口，主要用于处理覆盖层的放置规则和覆盖层的添加和移除。
  */
 
 public interface ICoverContainer {

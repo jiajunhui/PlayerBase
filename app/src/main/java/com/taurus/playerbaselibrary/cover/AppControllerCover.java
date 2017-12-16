@@ -21,7 +21,6 @@ import android.os.Bundle;
 
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.cover.DefaultPlayerControllerCover;
-import com.kk.taurus.playerbase.cover.base.BaseCoverObserver;
 
 /**
  * Created by Taurus on 2017/12/2.
@@ -31,10 +30,6 @@ public class AppControllerCover extends DefaultPlayerControllerCover {
 
     public AppControllerCover(Context context) {
         super(context);
-    }
-
-    public AppControllerCover(Context context, BaseCoverObserver coverObserver) {
-        super(context, coverObserver);
     }
 
     @Override

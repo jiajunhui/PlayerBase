@@ -47,10 +47,6 @@ public abstract class BaseGestureOperationCover extends BaseCover implements IGe
         super(context);
     }
 
-    public BaseGestureOperationCover(Context context, BaseCoverObserver coverObserver) {
-        super(context, coverObserver);
-    }
-
     @Override
     protected void setDefaultGone() {
         setCoverVisibility(View.VISIBLE);

@@ -12,7 +12,6 @@ import android.widget.RelativeLayout;
 
 import com.jiajunhui.xapp.medialoader.bean.VideoItem;
 import com.kk.taurus.filebase.engine.FileEngine;
-import com.kk.taurus.playerbase.DefaultPlayer;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.cover.DefaultReceiverCollections;
 import com.kk.taurus.playerbase.cover.base.BasePlayerControllerCover;
@@ -21,7 +20,7 @@ import com.kk.taurus.playerbase.inter.IPlayer;
 import com.kk.taurus.playerbase.setting.DecodeMode;
 import com.kk.taurus.playerbase.setting.DecoderType;
 import com.kk.taurus.playerbase.setting.VideoData;
-import com.kk.taurus.playerbase.widget.BasePlayer;
+import com.kk.taurus.playerbase.widget.StandardPlayer;
 import com.kk.taurus.uiframe.a.ToolsActivity;
 import com.taurus.playerbaselibrary.R;
 import com.taurus.playerbaselibrary.callback.OnCompleteCallBack;
@@ -34,7 +33,7 @@ import static com.taurus.playerbaselibrary.holder.SettingHolder.KEY_PLAYER_IJK_D
 public class PlayerActivity extends ToolsActivity implements OnPlayerEventListener {
 
     private RelativeLayout mContainer;
-    private BasePlayer mPlayer;
+    private StandardPlayer mPlayer;
     private DefaultReceiverCollections mCoverCollections;
     private VideoItem item;
     private VideoData videoData;
@@ -90,11 +89,11 @@ public class PlayerActivity extends ToolsActivity implements OnPlayerEventListen
         keepScreenOn();
         mContainer = (RelativeLayout) findViewById(R.id.container);
 
-        mPlayer = new DefaultPlayer(this);
+        mPlayer = new StandardPlayer(this);
         mContainer.addView(mPlayer,new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
         mCoverCollections = new DefaultReceiverCollections(this);
-        mCoverCollections.buildDefault().addCover(PlayCompleteCover.KEY,completeCover = new PlayCompleteCover(this,null))
+        mCoverCollections.buildDefault().addCover(PlayCompleteCover.KEY,completeCover = new PlayCompleteCover(this))
                 .addCover(BasePlayerErrorCover.KEY_INT_DATA,new PlayerErrorCover(this));
 
         mPlayer.bindCoverCollections(mCoverCollections);
@@ -168,7 +167,7 @@ public class PlayerActivity extends ToolsActivity implements OnPlayerEventListen
     protected void onDestroy() {
         super.onDestroy();
         if(mPlayer!=null){
-            mPlayer.destroy(true);
+            mPlayer.destroy();
         }
         mHandler.removeMessages(0);
     }

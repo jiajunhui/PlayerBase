@@ -20,7 +20,6 @@ import android.content.Context;
 import android.view.View;
 
 import com.kk.taurus.playerbase.cover.base.BaseCover;
-import com.kk.taurus.playerbase.cover.base.BaseCoverObserver;
 import com.kk.taurus.playerbase.inter.ICover;
 import com.kk.taurus.playerbase.view.CornerCutView;
 
@@ -35,10 +34,6 @@ public class CornerCutCover extends BaseCover {
 
     public CornerCutCover(Context context){
         super(context);
-    }
-
-    public CornerCutCover(Context context, BaseCoverObserver coverObserver) {
-        super(context, coverObserver);
     }
 
     @Override

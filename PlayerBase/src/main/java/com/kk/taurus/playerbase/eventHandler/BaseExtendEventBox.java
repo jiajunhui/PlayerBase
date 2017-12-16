@@ -14,7 +14,7 @@
  *    limitations under the License.
  */
 
-package com.kk.taurus.playerbase.setting;
+package com.kk.taurus.playerbase.eventHandler;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -22,6 +22,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
@@ -82,13 +85,14 @@ public class BaseExtendEventBox {
 
     public static class NetChangeReceiver extends BroadcastReceiver {
 
-        private boolean mNetError;
+        private Context context;
         private IEventBinder eventBinder;
         private Bundle mBundle;
+        private Handler mHandler = new Handler(Looper.getMainLooper());
 
         public NetChangeReceiver(Context context, IEventBinder eventBinder){
+            this.context = context;
             this.eventBinder = eventBinder;
-            mNetError = !CommonUtils.isNetworkConnected(context.getApplicationContext());
         }
 
         private void onPlayerEvent(int eventCode, Bundle bundle){
@@ -98,6 +102,7 @@ public class BaseExtendEventBox {
         }
 
         public void destroy(){
+            mHandler.removeCallbacks(mCallback);
             eventBinder = null;
         }
 
@@ -112,26 +117,43 @@ public class BaseExtendEventBox {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
+            if(TextUtils.isEmpty(action))
+                return;
             if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
                 Log.d("NetChangeReceiver","CONNECTIVITY_ACTION");
-                if(CommonUtils.isNetworkConnected(context)){
-                    int networkType = CommonUtils.isWifi(context)? PlayerObserver.NETWORK_TYPE_WIFI:PlayerObserver.NETWORK_TYPE_MOBILE;
-                    if(mNetError){
-                        mNetError = false;
-                        Bundle bundle = getBundle();
-                        bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_INT_DATA,networkType);
-                        onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_NETWORK_CONNECTED,bundle);
-                    }else{
-                        Bundle bundle = getBundle();
-                        bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_INT_DATA,networkType);
-                        onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_NETWORK_CHANGE,bundle);
-                    }
+                mHandler.removeCallbacks(mCallback);
+                mHandler.postDelayed(mCallback,100);
+            }
+        }
+
+        private Runnable mCallback = new Runnable() {
+            @Override
+            public void run() {
+                if(CommonUtils.isNetworkConnected2(context)){
+                    int networkType = CommonUtils.isWifi(context)?
+                            PlayerObserver.NETWORK_TYPE_WIFI:PlayerObserver.NETWORK_TYPE_MOBILE;
+
+                    Bundle bundle = getBundle();
+                    bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_INT_DATA,networkType);
+                    onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_NETWORK_CONNECTED,bundle);
+
+                    //delete old 2017/12/16
+//                    if(mNetError){
+//                        mNetError = false;
+//                        Bundle bundle = getBundle();
+//                        bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_INT_DATA,networkType);
+//                        onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_NETWORK_CONNECTED,bundle);
+//                    }else{
+//                        Bundle bundle = getBundle();
+//                        bundle.putInt(OnPlayerEventListener.BUNDLE_KEY_INT_DATA,networkType);
+//                        onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_NETWORK_CHANGE,bundle);
+//                    }
                 }else{
-                    mNetError = true;
                     onPlayerEvent(OnPlayerEventListener.EVENT_CODE_ON_NETWORK_ERROR,null);
                 }
             }
-        }
+        };
+
     }
 
 }

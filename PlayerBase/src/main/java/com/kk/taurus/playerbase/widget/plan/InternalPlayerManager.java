@@ -18,7 +18,6 @@ package com.kk.taurus.playerbase.widget.plan;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.View;
@@ -33,7 +32,8 @@ import com.kk.taurus.playerbase.setting.DecodeMode;
 import com.kk.taurus.playerbase.setting.Rate;
 import com.kk.taurus.playerbase.setting.VideoData;
 import com.kk.taurus.playerbase.setting.ViewType;
-import com.kk.taurus.playerbase.widget.BasePlayer;
+import com.kk.taurus.playerbase.utils.PLog;
+import com.kk.taurus.playerbase.widget.BaseSingleDecoderPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,12 +113,12 @@ public class InternalPlayerManager implements IPlayer, IPlayerManager {
     }
 
     private MixMediaPlayer createMediaPlayer(Context context){
-        Log.d(TAG,"createMediaPlayer ...");
+        PLog.d(TAG,"createMediaPlayer ...");
         return new MixMediaPlayer(context);
     }
 
     private MixRenderWidget createVideoView(Context context){
-        Log.d(TAG,"createVideoView ...");
+        PLog.d(TAG,"createVideoView ...");
         return new MixRenderWidget(context);
     }
 
@@ -537,6 +537,12 @@ public class InternalPlayerManager implements IPlayer, IPlayerManager {
 
     //-------------------IPlayerManager-------------------
 
+    /***
+     * 该类为对解码核心的单利管理类。由于对于{@link BaseSingleDecoderPlayer}
+     * 来说解码核心是单一的实例，也就是说这个解码核心只能同时存在一个操纵者，销毁的容器会被抛弃。
+     * 新创建的容器被认为是解码核心的宿主对象，也就是拥有对该单利解码器的控制权。
+     */
+
     private List<IPlayer> mHostArrays = new ArrayList<>(2);
 
     private boolean isContainPlayer(IPlayer host){
@@ -547,8 +553,8 @@ public class InternalPlayerManager implements IPlayer, IPlayerManager {
 
     /**
      * 当容器执行
-     * {@link BasePlayer#setDataSource(VideoData)}
-     * {@link BasePlayer#initBaseInfo(Context)}方法时该方法会被调用
+     * {@link BaseSingleDecoderPlayer#setDataSource(VideoData)}
+     * {@link BaseSingleDecoderPlayer#initBaseInfo(Context)}方法时该方法会被调用
      * @param host
      */
     @Override
@@ -556,17 +562,17 @@ public class InternalPlayerManager implements IPlayer, IPlayerManager {
         if(!isContainPlayer(host)){
             this.mHostArrays.add(host);
         }
-        Log.d(TAG,"attachPlayer ...");
+        PLog.d(TAG,"attachPlayer ...");
     }
 
     /**
-     * 当容器{@link BasePlayer#destroyContainer()} 被销毁时该方法会被调用
+     * 当容器{@link BaseSingleDecoderPlayer#destroyContainer()} 被销毁时该方法会被调用
      * @param host
      */
     @Override
     public void detachPlayer(IPlayer host) {
         this.mHostArrays.remove(host);
-        Log.d(TAG,"detachPlayer ...");
+        PLog.d(TAG,"detachPlayer ...");
     }
 
     @Override

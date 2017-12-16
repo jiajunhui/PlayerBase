@@ -23,7 +23,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
-import com.kk.taurus.playerbase.cover.base.BaseCoverObserver;
 import com.kk.taurus.playerbase.cover.base.BaseFocusCover;
 import com.kk.taurus.playerbase.inter.IDpadFocusCover;
 
@@ -36,10 +35,6 @@ public class DefaultDpadFocusCover extends BaseFocusCover implements IDpadFocusC
 
     public DefaultDpadFocusCover(Context context) {
         super(context);
-    }
-
-    public DefaultDpadFocusCover(Context context, BaseCoverObserver coverObserver) {
-        super(context, coverObserver);
     }
 
     @Override

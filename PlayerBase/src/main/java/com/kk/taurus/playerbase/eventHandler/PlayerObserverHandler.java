@@ -14,22 +14,19 @@
  *    limitations under the License.
  */
 
-package com.kk.taurus.playerbase.callback;
+package com.kk.taurus.playerbase.eventHandler;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
 
+import com.kk.taurus.playerbase.callback.PlayerObserver;
 import com.kk.taurus.playerbase.cover.base.BaseReceiverCollections;
-import com.kk.taurus.playerbase.setting.BaseAdVideo;
-import com.kk.taurus.playerbase.setting.VideoData;
-
-import java.util.List;
 
 /**
  * Created by Taurus on 2017/10/15.
  */
 
-public class PlayerObserverHandler implements PlayerObserver{
+public class PlayerObserverHandler implements PlayerObserver {
     
     private BaseReceiverCollections mReceiverCollections;
     
@@ -88,51 +85,11 @@ public class PlayerObserverHandler implements PlayerObserver{
     }
 
     @Override
-    public void onNotifyNetWorkChanged(int networkType) {
-        if(mReceiverCollections!=null && mReceiverCollections.getReceivers()!=null)
-            for(BaseEventReceiver receiver:mReceiverCollections.getReceivers()){
-                if(receiver!=null){
-                    receiver.onNotifyNetWorkChanged(networkType);
-                }
-            }
-    }
-
-    @Override
     public void onNotifyNetWorkError() {
         if(mReceiverCollections!=null && mReceiverCollections.getReceivers()!=null)
             for(BaseEventReceiver receiver:mReceiverCollections.getReceivers()){
                 if(receiver!=null){
                     receiver.onNotifyNetWorkError();
-                }
-            }
-    }
-
-    @Override
-    public void onNotifyAdPrepared(List<BaseAdVideo> adVideos) {
-        if(mReceiverCollections!=null && mReceiverCollections.getReceivers()!=null)
-            for(BaseEventReceiver receiver:mReceiverCollections.getReceivers()){
-                if(receiver!=null){
-                    receiver.onNotifyAdPrepared(adVideos);
-                }
-            }
-    }
-
-    @Override
-    public void onNotifyAdStart(BaseAdVideo adVideo) {
-        if(mReceiverCollections!=null && mReceiverCollections.getReceivers()!=null)
-            for(BaseEventReceiver receiver:mReceiverCollections.getReceivers()){
-                if(receiver!=null){
-                    receiver.onNotifyAdStart(adVideo);
-                }
-            }
-    }
-
-    @Override
-    public void onNotifyAdFinish(VideoData data, boolean isAllFinish) {
-        if(mReceiverCollections!=null && mReceiverCollections.getReceivers()!=null)
-            for(BaseEventReceiver receiver:mReceiverCollections.getReceivers()){
-                if(receiver!=null){
-                    receiver.onNotifyAdFinish(data, isAllFinish);
                 }
             }
     }

@@ -57,14 +57,18 @@ public abstract class BaseMediaPlayer implements IDecoder,IEventBinder, ITimerGe
     }
 
     public BaseMediaPlayer(Context context){
+        this(context, DecoderType.getInstance().getDefaultPlayerType());
+    }
+
+    public BaseMediaPlayer(Context context, int decoderType){
         this.mContext = context;
-        mDecoderType = DecoderType.getInstance().getDefaultPlayerType();
-        mDecoder = initDecoder(context);
+        mDecoderType = decoderType;
+        initDecoder(context, decoderType);
         timerCounterProxy = new TimerCounterProxy(this);
         timerCounterProxy.setOnTimerHandlerListener(this);
     }
 
-    protected abstract BaseDecoder initDecoder(Context context);
+    protected abstract void initDecoder(Context context, int decoderType);
 
     @Override
     public void setDataSource(VideoData data) {
@@ -117,7 +121,7 @@ public abstract class BaseMediaPlayer implements IDecoder,IEventBinder, ITimerGe
         boolean needUpdateDecoder = mDecoderType!=decoderType;
         this.mDecoderType = decoderType;
         if(needUpdateDecoder){
-            initDecoder(mContext);
+            initDecoder(mContext, decoderType);
         }
     }
 

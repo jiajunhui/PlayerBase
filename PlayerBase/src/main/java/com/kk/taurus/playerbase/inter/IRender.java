@@ -17,6 +17,7 @@
 package com.kk.taurus.playerbase.inter;
 
 import android.view.Surface;
+import android.view.View;
 
 import com.kk.taurus.playerbase.setting.AspectRatio;
 
@@ -35,6 +36,8 @@ public interface IRender {
     void onUpdateAspectRatio(AspectRatio aspectRatio);
 
     void onUpdateVideoSize(int videoWidth, int videoHeight);
+
+    View getRenderView();
 
 
     interface IRenderCallback{

@@ -62,9 +62,13 @@ public abstract class BaseRenderWidget implements IRenderWidget, IEventBinder, I
     }
 
     public BaseRenderWidget(Context context){
+        this(context, PlayerType.getInstance().getDefaultPlayerType());
+    }
+
+    public BaseRenderWidget(Context context, int playerType){
         this.mContext = context;
-        mRenderType = PlayerType.getInstance().getDefaultPlayerType();
-        mRenderWidget = initRenderWidget(context);
+        mRenderType = playerType;
+        mRenderWidget = initRenderWidget(context, playerType);
         timerCounterProxy = new TimerCounterProxy(this);
         timerCounterProxy.setOnTimerHandlerListener(this);
     }
@@ -78,7 +82,7 @@ public abstract class BaseRenderWidget implements IRenderWidget, IEventBinder, I
         }
     }
 
-    protected abstract BaseVideoView initRenderWidget(Context context);
+    protected abstract BaseVideoView initRenderWidget(Context context, int playerType);
 
     public void setOnErrorListener(OnErrorListener mOnErrorListener) {
         this.mOnErrorListener = mOnErrorListener;
@@ -159,7 +163,7 @@ public abstract class BaseRenderWidget implements IRenderWidget, IEventBinder, I
         boolean needUpdateRenderType = mRenderType!=renderType;
         this.mRenderType = renderType;
         if(needUpdateRenderType){
-            initRenderWidget(mContext);
+            initRenderWidget(mContext, renderType);
         }
     }
 

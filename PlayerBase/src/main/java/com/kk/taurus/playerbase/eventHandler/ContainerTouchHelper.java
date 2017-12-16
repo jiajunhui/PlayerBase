@@ -14,13 +14,12 @@
  *    limitations under the License.
  */
 
-package com.kk.taurus.playerbase.setting;
+package com.kk.taurus.playerbase.eventHandler;
 
 import android.content.Context;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
-import com.kk.taurus.playerbase.callback.BaseGestureCallbackHandler;
 import com.kk.taurus.playerbase.inter.IGestureHelper;
 
 /**

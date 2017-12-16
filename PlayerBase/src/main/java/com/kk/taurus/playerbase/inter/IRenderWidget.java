@@ -19,18 +19,13 @@ package com.kk.taurus.playerbase.inter;
 import android.view.View;
 
 import com.kk.taurus.playerbase.setting.AspectRatio;
-import com.kk.taurus.playerbase.setting.DecodeMode;
-import com.kk.taurus.playerbase.setting.Rate;
-import com.kk.taurus.playerbase.setting.VideoData;
 import com.kk.taurus.playerbase.setting.ViewType;
-
-import java.util.List;
 
 /**
  * Created by Taurus on 2017/11/18.
  */
 
-public interface IRenderWidget {
+public interface IRenderWidget extends IPlayCommon{
 
     int STATUS_END = -2;
     int STATUS_ERROR = -1;
@@ -42,31 +37,9 @@ public interface IRenderWidget {
     int STATUS_STOPPED = 5;
     int STATUS_PLAYBACK_COMPLETE = 6;
 
-    void setDataSource(VideoData data);
-    void start();
-    void start(int msc);
-    void pause();
-    void resume();
-    void seekTo(int msc);
-    void stop();
-    void reset();
-    boolean isPlaying();
-    int getCurrentPosition();
-    int getDuration();
-    int getBufferPercentage();
-    int getAudioSessionId();
-    int getStatus();
-    /** get current playing video definition*/
-    Rate getCurrentDefinition();
-    /** get current playing data source all definitions*/
-    List<Rate> getVideoDefinitions();
-    /** change playing video definition*/
-    void changeVideoDefinition(Rate rate);
     /** Switch video fill type , such as 16:9 ,4:3 ,FILL_PARENT , ORIGINAL*/
     void setAspectRatio(AspectRatio aspectRatio);
     void setViewType(ViewType viewType);
-    void setDecodeMode(DecodeMode decodeMode);
     View getRenderView();
-    void destroy();
 
 }

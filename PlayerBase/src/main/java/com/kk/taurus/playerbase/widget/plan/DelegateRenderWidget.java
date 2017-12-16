@@ -38,12 +38,14 @@ public abstract class DelegateRenderWidget extends BaseRenderWidget {
         super(context);
     }
 
+    public DelegateRenderWidget(Context context, int playerType) {
+        super(context, playerType);
+    }
+
     @Override
-    protected BaseVideoView initRenderWidget(Context context) {
-        if(mRenderWidget!=null){
-            destroy();
-        }
-        mRenderWidget = (BaseVideoView) ConfigLoader.getPlayerInstance(context,getRenderType());
+    protected BaseVideoView initRenderWidget(Context context, int playerType) {
+        destroy();
+        mRenderWidget = (BaseVideoView) ConfigLoader.getPlayerInstance(context,playerType);
         if(mRenderWidget!=null){
             mRenderWidget.setOnPlayerEventListener(new OnPlayerEventListener() {
                 @Override

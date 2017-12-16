@@ -18,8 +18,7 @@ package com.kk.taurus.playerbase.cover;
 
 import android.content.Context;
 
-import com.kk.taurus.playerbase.callback.BaseEventReceiver;
-import com.kk.taurus.playerbase.cover.base.BaseAdCover;
+import com.kk.taurus.playerbase.eventHandler.BaseEventReceiver;
 import com.kk.taurus.playerbase.cover.base.BaseCover;
 import com.kk.taurus.playerbase.cover.base.BaseReceiverCollections;
 import com.kk.taurus.playerbase.cover.base.BaseFocusCover;
@@ -65,12 +64,6 @@ public class DefaultReceiverCollections extends BaseReceiverCollections {
         return addCover(BasePlayerErrorCover.KEY,errorCover);
     }
 
-    public DefaultReceiverCollections addPlayerAdCover(BaseAdCover adCover){
-        if(adCover==null)
-            return this;
-        return addCover(BaseAdCover.KEY,adCover);
-    }
-
     public DefaultReceiverCollections addCornerCutCover(CornerCutCover cornerCutCover){
         if(cornerCutCover==null)
             return this;
@@ -113,17 +106,11 @@ public class DefaultReceiverCollections extends BaseReceiverCollections {
         return this;
     }
 
-    public DefaultReceiverCollections setDefaultPlayerAdCover(){
-        addPlayerAdCover(new DefaultPlayerAdCover(mContext));
-        return this;
-    }
-
     public DefaultReceiverCollections buildDefault(){
         return setDefaultPlayerControllerCover()
                 .setDefaultPlayerLoadingCover()
                 .setDefaultPlayerGestureCover()
-                .setDefaultPlayerErrorCover()
-                .setDefaultPlayerAdCover();
+                .setDefaultPlayerErrorCover();
     }
 
 }

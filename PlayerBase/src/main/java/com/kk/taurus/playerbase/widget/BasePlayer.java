@@ -17,6 +17,7 @@
 package com.kk.taurus.playerbase.widget;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.Surface;
@@ -25,91 +26,71 @@ import android.view.View;
 
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.config.ConfigLoader;
-import com.kk.taurus.playerbase.inter.IDataProvider;
 import com.kk.taurus.playerbase.inter.IRender;
 import com.kk.taurus.playerbase.setting.AspectRatio;
-import com.kk.taurus.playerbase.setting.BaseExtendEventBox;
-import com.kk.taurus.playerbase.setting.DecodeMode;
-import com.kk.taurus.playerbase.setting.DecoderType;
-import com.kk.taurus.playerbase.setting.PlayerAudioManager;
-import com.kk.taurus.playerbase.widget.plan.InternalPlayerManager;
-import com.kk.taurus.playerbase.setting.PlayerType;
-import com.kk.taurus.playerbase.setting.Rate;
+import com.kk.taurus.playerbase.eventHandler.BaseExtendEventBox;
 import com.kk.taurus.playerbase.setting.RenderCallbackProxy;
 import com.kk.taurus.playerbase.setting.VideoData;
 import com.kk.taurus.playerbase.setting.ViewType;
 import com.kk.taurus.playerbase.view.RenderSurfaceView;
 import com.kk.taurus.playerbase.view.RenderTextureView;
 
-import java.util.List;
-
 /**
  * Created by Taurus on 2017/3/28.
+ * 播放器抽象基类
  */
 
-public abstract class BasePlayer extends BaseBindPlayerEventReceiver implements InternalPlayerManager.OnInternalPlayerListener {
+public abstract class BasePlayer extends BaseBindPlayerEventReceiver  {
 
-    private ViewType mViewType = ViewType.TEXTUREVIEW;
-    private AspectRatio mAspectRatio;
+    protected ViewType mViewType = ViewType.TEXTUREVIEW;
+    protected AspectRatio mAspectRatio = AspectRatio.AspectRatio_ORIGIN;
 
-    private BaseExtendEventBox extendEventBox;
+    protected BaseExtendEventBox extendEventBox;
+
+    private int mWidgetMode;
+    private int mSignPlayerType;
 
     private boolean needProxyRenderEvent;
     private RenderCallbackProxy mRenderCallbackProxy;
 
     private boolean isRenderAvailable;
 
+    private VideoData mDataSource;
+
+    private int mRecordPos;
+
     public BasePlayer(Context context) {
         super(context);
+        settingDefault();
+        notifyPlayerWidget(context);
+    }
+
+    public BasePlayer(Context context, int widgetMode, int playerType){
+        super(context);
+        this.mWidgetMode = widgetMode;
+        this.mSignPlayerType = playerType;
+        notifyPlayerWidget(context);
     }
 
     public BasePlayer(Context context, AttributeSet attrs) {
         super(context, attrs);
+        settingDefault();
+        notifyPlayerWidget(context);
+    }
+
+    private void settingDefault(){
+        this.mWidgetMode = ConfigLoader.getWidgetMode();
+        this.mSignPlayerType = ConfigLoader.getDefaultType(mWidgetMode);
     }
 
     @Override
     protected void initBaseInfo(Context context) {
         super.initBaseInfo(context);
         extendEventBox = getExtendEventBox();
-        PlayerAudioManager.get().init(context);
-        InternalPlayerManager.get().attachPlayer(this);
-    }
-
-    /**
-     * 该方法会返回一个View（仅当组件类型WIDGET_MODE为VideoView类型时）。
-     *
-     * 通过{@link InternalPlayerManager}统一控制。
-     *
-     * 通过{@link PlayerType}进行设置VideoView类型。
-     * WIDGET_MODE为VideoView类型时，通过InternalPlayerManager会初始化你设置好的VideoView类型的对象，并返回给上层。
-     *
-     * 通过{@link DecoderType}进行设置Decoder类型。
-     * WIDGET_MODE为DECODER类型时，InternalPlayerManager只是初始化了你设置好的解码器类型。并没有View返回。
-     * @param context
-     * @return
-     */
-    protected View getPlayerWidget(Context context) {
-        InternalPlayerManager.get().updateWidgetMode(context,getWidgetMode());
-        return InternalPlayerManager.get().getRenderView();
-    }
-
-    private void onDataSourceAvailable() {
-        InternalPlayerManager.get().setOnInternalPlayerListener(this);
-    }
-
-    @Override
-    protected void onReceiverCollectionsHasBind() {
-        super.onReceiverCollectionsHasBind();
-        InternalPlayerManager.get().setOnInternalPlayerListener(this);
+        mWidgetMode = ConfigLoader.getWidgetMode();
     }
 
     protected abstract BaseExtendEventBox getExtendEventBox();
-
-    @Override
-    protected void onPlayerContainerHasInit(Context context) {
-        super.onPlayerContainerHasInit(context);
-        setWidgetMode(ConfigLoader.getWidgetMode());
-    }
 
     @Override
     protected void onCoversHasInit(Context context) {
@@ -117,13 +98,48 @@ public abstract class BasePlayer extends BaseBindPlayerEventReceiver implements 
         onBindPlayer(this,this);
     }
 
-    @Override
-    public void setDataProvider(IDataProvider dataProvider){
-        InternalPlayerManager.get().setDataProvider(dataProvider);
+    public void setWidgetMode(int widgetMode){
+        boolean change = this.mWidgetMode!=widgetMode;
+        this.mWidgetMode = widgetMode;
+        if(change){
+            onWidgetModeChange(widgetMode);
+        }
     }
 
-    protected void setWidgetMode(int widgetMode){
-        InternalPlayerManager.get().updateWidgetMode(mAppContext,widgetMode);
+    protected abstract void onWidgetModeChange(int widgetMode);
+
+    public int getWidgetMode() {
+        return mWidgetMode;
+    }
+
+    @Override
+    public void updatePlayerType(int type) {
+        boolean change = getPlayerType()!=type;
+        this.mSignPlayerType = type;
+        if(change){
+            onPlayerTypeChange(type);
+        }
+    }
+
+    protected abstract void onPlayerTypeChange(int type);
+
+    protected int getSignPlayerType() {
+        return mSignPlayerType;
+    }
+
+    @Override
+    public void setDataSource(VideoData data) {
+        this.mDataSource = data;
+    }
+
+    protected boolean isDataSourceAvailable(){
+        return mDataSource!=null;
+    }
+
+    private void releaseRenderCallbackProxy() {
+        if(mRenderCallbackProxy!=null){
+            mRenderCallbackProxy.destroy();
+        }
     }
 
     /**
@@ -134,20 +150,14 @@ public abstract class BasePlayer extends BaseBindPlayerEventReceiver implements 
     public void setRenderViewForDecoder(IRender render){
         if(getWidgetMode()==WIDGET_MODE_VIDEO_VIEW)
             return;
-        releaseRenderCallbackProxy();
-        mRenderCallbackProxy = new RenderCallbackProxy(this,render);
-        mRenderCallbackProxy.proxy();
-        if(render instanceof View){
-            addViewToPlayerContainer((View) render,true, null);
-            needProxyRenderEvent = true;
-            isRenderAvailable = true;
-        }
-    }
-
-    private void releaseRenderCallbackProxy() {
         if(mRenderCallbackProxy!=null){
             mRenderCallbackProxy.destroy();
         }
+        mRenderCallbackProxy = new RenderCallbackProxy(this,render);
+        mRenderCallbackProxy.proxy();
+        addViewToPlayerContainer(render.getRenderView(),true, null);
+        needProxyRenderEvent = true;
+        isRenderAvailable = true;
     }
 
     public void setDisplayRotation(float rotation){
@@ -155,25 +165,6 @@ public abstract class BasePlayer extends BaseBindPlayerEventReceiver implements 
         if(renderView!=null){
             renderView.setRotation(rotation);
         }
-    }
-
-    @Override
-    public void onInternalPlayerEvent(int eventCode, Bundle bundle) {
-        onPlayerEvent(eventCode, bundle);
-    }
-
-    @Override
-    public void onInternalErrorEvent(int errorCode, Bundle bundle) {
-        onErrorEvent(errorCode, bundle);
-    }
-
-    /**
-     * send some event by player,all receivers can receive this event.
-     * @param eventCode
-     * @param bundle
-     */
-    public void sendEvent(int eventCode, Bundle bundle){
-        onPlayerEvent(eventCode, bundle);
     }
 
     @Override
@@ -186,7 +177,7 @@ public abstract class BasePlayer extends BaseBindPlayerEventReceiver implements 
             case OnPlayerEventListener.EVENT_CODE_PREPARED:
                 //当组件模式设置为decoder模式时，且没有设置渲染视图时，此处自动为decoder设置一个渲染视图。
                 if(getWidgetMode()==WIDGET_MODE_DECODER
-                        && InternalPlayerManager.get().isDataSourceAvailable()
+                        && isDataSourceAvailable()
                         && !isRenderAvailable){
                     IRender render;
                     if(getViewType()==ViewType.TEXTUREVIEW){
@@ -197,160 +188,45 @@ public abstract class BasePlayer extends BaseBindPlayerEventReceiver implements 
                     setRenderViewForDecoder(render);
                 }
                 break;
+            case OnPlayerEventListener.EVENT_CODE_ON_PLAYER_TIMER_UPDATE:
+                if(getDuration()>0 && getDuration() > getCurrentPosition()){
+                    mRecordPos = getCurrentPosition();
+                }
+                break;
         }
     }
 
-    public int getWidgetMode() {
-        return InternalPlayerManager.get().getWidgetMode();
+    public int getRecordPos(){
+        return mRecordPos;
     }
 
-    @Override
-    public void setDataSource(VideoData data) {
-        onDataSourceAvailable();
-        InternalPlayerManager.get().attachPlayer(this);
-        InternalPlayerManager.get().setDataSource(this,data);
-    }
-
-    @Override
-    public void updatePlayerType(int type) {
-        InternalPlayerManager.get().updatePlayerType(this, type);
-        notifyPlayerWidget(mAppContext);
-    }
-
-    @Override
-    public int getPlayerType() {
-        return InternalPlayerManager.get().getPlayerType(this);
-    }
-
-    @Override
-    public void start() {
-        InternalPlayerManager.get().start(this);
-    }
-
-    @Override
-    public void start(int msc) {
-        InternalPlayerManager.get().start(this, msc);
-    }
-
-    @Override
-    public void pause() {
-        InternalPlayerManager.get().pause(this);
-    }
-
-    @Override
-    public void resume() {
-        InternalPlayerManager.get().resume(this);
-    }
-
-    @Override
-    public void seekTo(int msc) {
-        InternalPlayerManager.get().seekTo(this, msc);
-    }
-
-    @Override
-    public void stop() {
-        InternalPlayerManager.get().stop(this);
-    }
-
-    @Override
-    public void reset() {
-        InternalPlayerManager.get().reset(this);
-    }
-
-    @Override
-    public void rePlay(int msc) {
-        InternalPlayerManager.get().rePlay(this, msc);
-    }
-
-    @Override
-    public boolean isPlaying() {
-        return InternalPlayerManager.get().isPlaying(this);
-    }
-
-    @Override
-    public int getCurrentPosition() {
-        return InternalPlayerManager.get().getCurrentPosition(this);
-    }
-
-    @Override
-    public int getDuration() {
-        return InternalPlayerManager.get().getDuration(this);
-    }
-
-    @Override
-    public int getBufferPercentage() {
-        return InternalPlayerManager.get().getBufferPercentage(this);
-    }
-
-    @Override
-    public int getAudioSessionId() {
-        return InternalPlayerManager.get().getAudioSessionId(this);
-    }
-
-    @Override
-    public int getVideoWidth() {
-        return InternalPlayerManager.get().getVideoWidth(this);
-    }
-
-    @Override
-    public int getVideoHeight() {
-        return InternalPlayerManager.get().getVideoHeight(this);
-    }
-
-    @Override
-    public Rate getCurrentDefinition() {
-        return InternalPlayerManager.get().getCurrentDefinition(this);
-    }
-
-    @Override
-    public List<Rate> getVideoDefinitions() {
-        return InternalPlayerManager.get().getVideoDefinitions(this);
-    }
-
-    @Override
-    public void changeVideoDefinition(Rate rate) {
-        InternalPlayerManager.get().changeVideoDefinition(this, rate);
-    }
-
-    @Override
-    public void setDecodeMode(DecodeMode decodeMode) {
-        InternalPlayerManager.get().setDecodeMode(this, decodeMode);
-    }
-
-    @Override
-    public DecodeMode getDecodeMode() {
-        return InternalPlayerManager.get().getDecodeMode(this);
+    /**
+     * send some event by player,all receivers can receive this event.
+     * @param eventCode
+     * @param bundle
+     */
+    public void sendEvent(int eventCode, Bundle bundle){
+        onPlayerEvent(eventCode, bundle);
     }
 
     @Override
     public void setViewType(ViewType viewType) {
         this.mViewType = viewType;
-        InternalPlayerManager.get().setViewType(this, viewType);
     }
 
     @Override
     public ViewType getViewType() {
-        if(getWidgetMode()==WIDGET_MODE_DECODER){
-            return mViewType;
-        }
-        return InternalPlayerManager.get().getViewType(this);
+        return mViewType;
     }
 
     @Override
     public void setDisplay(SurfaceHolder surfaceHolder){
         isRenderAvailable = surfaceHolder!=null;
-        InternalPlayerManager.get().setDisplay(this, surfaceHolder);
     }
 
     @Override
     public void setSurface(Surface surface) {
         isRenderAvailable = surface!=null;
-        InternalPlayerManager.get().setSurface(this, surface);
-    }
-
-    @Override
-    public void setVolume(float leftVolume, float rightVolume){
-        InternalPlayerManager.get().setVolume(this, leftVolume, rightVolume);
     }
 
     @Override
@@ -359,81 +235,44 @@ public abstract class BasePlayer extends BaseBindPlayerEventReceiver implements 
         if(mRenderCallbackProxy!=null){
             mRenderCallbackProxy.onAspectUpdate(aspectRatio);
         }
-        InternalPlayerManager.get().setAspectRatio(this, aspectRatio);
     }
 
-    @Override
-    public AspectRatio getAspectRatio() {
-        if(getWidgetMode()==WIDGET_MODE_DECODER){
-            return mAspectRatio;
-        }
-        return InternalPlayerManager.get().getAspectRatio(this);
+    public boolean isExpectedBufferAvailable(){
+        return (getBufferPercentage()*getDuration()/100) > getCurrentPosition();
     }
 
-    @Override
-    public int getStatus() {
-        return InternalPlayerManager.get().getStatus(this);
+    public void setScreenOrientationLandscape(boolean landscape) {
+        /** modify 2017/11/17
+         *
+         *  this operation is not dependent on Activity context as much as possible.
+         *
+         * */
+        int code = landscape?OnPlayerEventListener.EVENT_CODE_ON_INTENT_SET_SCREEN_ORIENTATION_LANDSCAPE:OnPlayerEventListener.EVENT_CODE_ON_INTENT_SET_SCREEN_ORIENTATION_PORTRAIT;
+        onPlayerEvent(code,null);
     }
 
-    @Override
-    public View getRenderView() {
-        if(getWidgetMode()==WIDGET_MODE_DECODER){
-            return getPlayerRenderView();
-        }
-        return InternalPlayerManager.get().getRenderView(this);
-    }
-
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        destroy(false);
+    public boolean isLandscape() {
+        return mAppContext.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
 
     @Override
     public void destroy() {
         destroyExtendBox();
         destroyContainer();
-        destroyInternalPlayer(true);
+        super.destroy();
     }
 
-    public void destroy(boolean destroyInternalPlayer) {
-        destroyExtendBox();
-        destroyContainer();
-        destroyInternalPlayer(destroyInternalPlayer);
-    }
-
-    /**
-     * 是否销毁播放核心
-     * @param destroyInternalPlayer
-     */
-    private void destroyInternalPlayer(boolean destroyInternalPlayer) {
-        //当明确要销毁播放核心，或者组件模式为VideoView类型时，销毁播放核心。
-        if(destroyInternalPlayer || getWidgetMode()==WIDGET_MODE_VIDEO_VIEW){
-            InternalPlayerManager.get().destroy();
-        }
-    }
-
-    private void destroyContainer() {
+    protected void destroyContainer() {
         releaseRenderCallbackProxy();
         isRenderAvailable = false;
-        //移除宿主IPlayer的关联
-        InternalPlayerManager.get().detachPlayer(this);
         //先发出一个容器销毁的event事件
         sendEvent(OnPlayerEventListener.EVENT_CODE_PLAYER_CONTAINER_ON_DESTROY,null);
-        if(getWidgetMode()==WIDGET_MODE_DECODER){
-            //组件模式为解码器时，同时要清掉RenderView
-            clearPlayerContainer();
-        }
-        //然后移除容器的播放核心的事件监听器
-        InternalPlayerManager.get().removeOnInternalPlayerListener(this);
-        //最后清除所有事件监听器，解除已绑定的receiver集合.
-        super.destroy();
     }
 
     /**
      * 销毁扩展事件盒子
      */
-    private void destroyExtendBox(){
+    protected void destroyExtendBox(){
         if(extendEventBox!=null){
             extendEventBox.destroyExtendBox();
         }

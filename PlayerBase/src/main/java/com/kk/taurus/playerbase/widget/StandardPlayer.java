@@ -14,37 +14,34 @@
  *    limitations under the License.
  */
 
-package com.kk.taurus.playerbase;
+package com.kk.taurus.playerbase.widget;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.util.AttributeSet;
 
 import com.kk.taurus.playerbase.eventHandler.BaseGestureCallbackHandler;
-import com.kk.taurus.playerbase.cover.container.DefaultLevelCoverContainer;
 import com.kk.taurus.playerbase.cover.DefaultPlayerGestureOperationCover;
+import com.kk.taurus.playerbase.cover.container.DefaultLevelCoverContainer;
 import com.kk.taurus.playerbase.inter.ICoverContainer;
-import com.kk.taurus.playerbase.eventHandler.BaseExtendEventBox;
 import com.kk.taurus.playerbase.inter.IEventBinder;
-import com.kk.taurus.playerbase.widget.BaseSingleDecoderPlayer;
+import com.kk.taurus.playerbase.eventHandler.BaseExtendEventBox;
 
 /**
- *
- * Created by Taurus on 2017/3/28.
- *
+ * Created by Taurus on 2017/12/13.
  */
 
-public class DefaultPlayer extends BaseSingleDecoderPlayer implements IEventBinder {
+public class StandardPlayer extends BaseMultiInstancePlayer implements IEventBinder {
 
-    public DefaultPlayer(Context context) {
+    public StandardPlayer(Context context) {
         super(context);
     }
 
-    public DefaultPlayer(Context context, int widgetMode, int type) {
+    public StandardPlayer(Context context, int widgetMode, int type) {
         super(context, widgetMode, type);
     }
 
-    public DefaultPlayer(Context context, AttributeSet attrs) {
+    public StandardPlayer(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
@@ -90,5 +87,4 @@ public class DefaultPlayer extends BaseSingleDecoderPlayer implements IEventBind
     public void onBindErrorEvent(int eventCode, Bundle bundle) {
         onErrorEvent(eventCode, bundle);
     }
-
 }

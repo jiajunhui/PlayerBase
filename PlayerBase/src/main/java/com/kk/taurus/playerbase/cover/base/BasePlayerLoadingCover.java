@@ -41,10 +41,6 @@ public abstract class BasePlayerLoadingCover extends BaseCover implements ILoadi
         super(context);
     }
 
-    public BasePlayerLoadingCover(Context context, BaseCoverObserver coverObserver) {
-        super(context, coverObserver);
-    }
-
     @Override
     protected void findView() {
         mLoadingContainer = findViewById(R.id.cover_player_loading_container);

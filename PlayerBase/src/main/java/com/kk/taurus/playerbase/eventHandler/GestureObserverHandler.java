@@ -14,17 +14,18 @@
  *    limitations under the License.
  */
 
-package com.kk.taurus.playerbase.callback;
+package com.kk.taurus.playerbase.eventHandler;
 
 import android.view.MotionEvent;
 
+import com.kk.taurus.playerbase.callback.GestureObserver;
 import com.kk.taurus.playerbase.cover.base.BaseReceiverCollections;
 
 /**
  * Created by Taurus on 2017/10/15.
  */
 
-public class GestureObserverHandler implements GestureObserver{
+public class GestureObserverHandler implements GestureObserver {
 
     private BaseReceiverCollections mReceiverCollections;
 

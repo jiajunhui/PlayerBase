@@ -24,7 +24,6 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.kk.taurus.playerbase.R;
-import com.kk.taurus.playerbase.cover.base.BaseCoverObserver;
 import com.kk.taurus.playerbase.cover.base.BaseGestureOperationCover;
 import com.kk.taurus.playerbase.utils.TimeUtil;
 
@@ -44,10 +43,6 @@ public class DefaultPlayerGestureOperationCover extends BaseGestureOperationCove
 
     public DefaultPlayerGestureOperationCover(Context context) {
         super(context);
-    }
-
-    public DefaultPlayerGestureOperationCover(Context context, BaseCoverObserver coverObserver) {
-        super(context, coverObserver);
     }
 
     @Override

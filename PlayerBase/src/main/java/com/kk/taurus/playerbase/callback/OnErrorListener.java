@@ -26,8 +26,8 @@ public interface OnErrorListener {
     String KEY_EXTRA = "key_error_extra";
     String KEY_MESSAGE = "key_error_message";
 
-    int ERROR_CODE_COMMON = 37001;
-    int ERROR_CODE_NET_ERROR = 37002;
+    int ERROR_CODE_COMMON = -8041000;
+    int ERROR_CODE_NET_ERROR = -8041001;
 
     void onError(int errorCode, Bundle bundle);
 }

@@ -77,8 +77,4 @@ public abstract class BaseDecoder implements IDecoder {
         }
     }
 
-    public int getStatus() {
-        return mStatus;
-    }
-
 }

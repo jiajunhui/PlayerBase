@@ -19,16 +19,21 @@ package com.kk.taurus.playerbase.view;
 import android.content.Context;
 import android.graphics.SurfaceTexture;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Surface;
 import android.view.TextureView;
+import android.view.View;
 
 import com.kk.taurus.playerbase.inter.IRender;
 import com.kk.taurus.playerbase.setting.AspectRatio;
 import com.kk.taurus.playerbase.setting.RenderMeasure;
+import com.kk.taurus.playerbase.utils.PLog;
 
 /**
  * Created by Taurus on 2017/11/19.
+ *
+ * 使用TextureView时，需要开启硬件加速（系统默认是开启的）。
+ * 如果硬件加速是关闭的，会造成{@link SurfaceTextureListener#onSurfaceTextureAvailable(SurfaceTexture, int, int)}不执行。
+ *
  */
 
 public class RenderTextureView extends TextureView implements IRender, TextureView.SurfaceTextureListener {
@@ -71,15 +76,20 @@ public class RenderTextureView extends TextureView implements IRender, TextureVi
 
     @Override
     public void onUpdateVideoSize(int videoWidth, int videoHeight) {
-        Log.d(TAG,"onUpdateVideoSize : videoWidth = " + videoWidth + " videoHeight = " + videoHeight);
+        PLog.d(TAG,"onUpdateVideoSize : videoWidth = " + videoWidth + " videoHeight = " + videoHeight);
         mRenderMeasure.setVideoSize(videoWidth, videoHeight);
         requestLayout();
     }
 
     @Override
+    public View getRenderView() {
+        return this;
+    }
+
+    @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        Log.d(TAG,"onTextureViewAttachedToWindow");
+        PLog.d(TAG,"onTextureViewAttachedToWindow");
         if(mRenderCallback!=null){
             mRenderCallback.onRenderViewAttachedToWindow(this);
         }
@@ -88,7 +98,7 @@ public class RenderTextureView extends TextureView implements IRender, TextureVi
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        Log.d(TAG,"onTextureViewDetachedFromWindow");
+        PLog.d(TAG,"onTextureViewDetachedFromWindow");
         if(mRenderCallback!=null){
             mRenderCallback.onRenderViewDetachedFromWindow(this);
         }
@@ -96,7 +106,7 @@ public class RenderTextureView extends TextureView implements IRender, TextureVi
 
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
-        Log.d(TAG,"<---onSurfaceTextureAvailable---> : width = " + width + " height = " + height);
+        PLog.d(TAG,"<---onSurfaceTextureAvailable---> : width = " + width + " height = " + height);
         if(mRenderCallback!=null){
             mRenderCallback.onSurfaceCreated(this, new Surface(surface), width, height);
         }
@@ -104,7 +114,7 @@ public class RenderTextureView extends TextureView implements IRender, TextureVi
 
     @Override
     public void onSurfaceTextureSizeChanged(SurfaceTexture surface, int width, int height) {
-        Log.d(TAG,"onSurfaceTextureSizeChanged : width = " + width + " height = " + height);
+        PLog.d(TAG,"onSurfaceTextureSizeChanged : width = " + width + " height = " + height);
         if(mRenderCallback!=null){
             mRenderCallback.onSurfaceChanged(this, new Surface(surface), width, height);
         }
@@ -112,7 +122,7 @@ public class RenderTextureView extends TextureView implements IRender, TextureVi
 
     @Override
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-        Log.d(TAG,"***onSurfaceTextureDestroyed***");
+        PLog.d(TAG,"***onSurfaceTextureDestroyed***");
         if(mRenderCallback!=null){
             mRenderCallback.onSurfaceDestroy(this, new Surface(surface));
         }

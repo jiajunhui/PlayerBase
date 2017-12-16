@@ -26,7 +26,16 @@ import com.kk.taurus.playerbase.setting.ViewType;
  */
 public interface IPlayer extends IDecoder{
 
+    /**
+     * 使用接入的VideoView类型的播放组件（View的子类），如系统的VideoView或者三方的XXVideoView
+     */
     int WIDGET_MODE_VIDEO_VIEW = 2;
+
+    /**
+     * 使用接入的MediaPlayer类型的播放组件，如系统的MediaPlayer或者三方的XXMediaPlayer
+     * 一般此种类型的播放组件是只包含解码器不包含渲染视图，也就是说需要需要自己去关联一个渲染视图，{@link IRender}
+     * SurfaceView或者TextureView，框架提供了设置渲染视图的方法，如果用户没有设置，框架会自动设置一个渲染视图。
+     */
     int WIDGET_MODE_DECODER = 4;
 
     void rePlay(int msc);

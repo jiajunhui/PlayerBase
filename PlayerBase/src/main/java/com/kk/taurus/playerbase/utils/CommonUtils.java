@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.view.Surface;
 
@@ -94,9 +95,30 @@ public class CommonUtils {
         ConnectivityManager mConnectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
         if (mNetworkInfo != null) {
-            return mNetworkInfo.isAvailable();
+            return mNetworkInfo.getState()== NetworkInfo.State.CONNECTED && mNetworkInfo.isAvailable();
         }
         return false;
+    }
+
+    public static boolean isNetworkConnected2(Context context){
+        ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo[] infos=manager.getAllNetworkInfo();
+        int netType=-1;
+        boolean hasNet = false;
+        for(int i=0,length=infos.length;i<length;i++){
+            NetworkInfo info=infos[i];
+            if(info!=null&&info.isConnected()){
+                hasNet=true;
+                netType=info.getType();
+                if (netType==ConnectivityManager.TYPE_MOBILE&&info.getSubtype()== TelephonyManager.NETWORK_TYPE_LTE) {
+                    netType=ConnectivityManager.TYPE_WIFI;
+                }
+                break;
+            }else {
+                hasNet=false;
+            }
+        }
+        return hasNet;
     }
 
     public static boolean isWifi(Context context) {

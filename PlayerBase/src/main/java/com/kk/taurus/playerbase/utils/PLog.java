@@ -14,33 +14,34 @@
  *    limitations under the License.
  */
 
-package com.kk.taurus.playerbase.setting;
+package com.kk.taurus.playerbase.utils;
 
+import android.util.Log;
 
 /**
- * Created by Taurus on 2016/9/29.
+ * Created by Taurus on 2017/12/16.
  */
-public class BaseAdVideo extends VideoData {
 
-    private String redirectUrl;
+public class PLog {
 
-    public BaseAdVideo(String data) {
-        super(data);
+    public static boolean LOG_OPEN = false;
+
+    public static void d(String tag, String message){
+        if(!LOG_OPEN)
+            return;
+        Log.d(tag,message);
     }
 
-    public BaseAdVideo(String data, Rate rate) {
-        super(data, rate);
+    public static void w(String tag, String message){
+        if(!LOG_OPEN)
+            return;
+        Log.w(tag,message);
     }
 
-    public BaseAdVideo(String data, int playerType, Rate rate) {
-        super(data, playerType, rate);
+    public static void e(String tag, String message){
+        if(!LOG_OPEN)
+            return;
+        Log.e(tag,message);
     }
 
-    public String getRedirectUrl() {
-        return redirectUrl;
-    }
-
-    public void setRedirectUrl(String redirectUrl) {
-        this.redirectUrl = redirectUrl;
-    }
 }

@@ -17,11 +17,11 @@
 package com.kk.taurus.playerbase.cover.base;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 
 import com.kk.taurus.playerbase.inter.IFocusCover;
+import com.kk.taurus.playerbase.utils.PLog;
 
 /**
  * Created by Taurus on 2017/3/31.
@@ -38,13 +38,9 @@ public abstract class BaseFocusCover extends BaseCover implements IFocusCover,Vi
         super(context);
     }
 
-    public BaseFocusCover(Context context, BaseCoverObserver coverObserver) {
-        super(context, coverObserver);
-    }
-
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
-        Log.d(TAG,"onFocusChange : " + hasFocus);
+        PLog.d(TAG,"onFocusChange : " + hasFocus);
     }
 
     protected void bindFocusListener(View focusView){
@@ -87,32 +83,32 @@ public abstract class BaseFocusCover extends BaseCover implements IFocusCover,Vi
         }
         switch (keyCode){
             case KeyEvent.KEYCODE_DPAD_UP:
-                Log.d(TAG,"onKeyActionDown : dpad up");
+                PLog.d(TAG,"onKeyActionDown : dpad up");
                 return onKeyActionDownDpadUp(v, keyCode, event);
 
             case KeyEvent.KEYCODE_DPAD_DOWN:
-                Log.d(TAG,"onKeyActionDown : dpad down");
+                PLog.d(TAG,"onKeyActionDown : dpad down");
                 return onKeyActionDownDpadDown(v, keyCode, event);
 
             case KeyEvent.KEYCODE_DPAD_LEFT:
-                Log.d(TAG,"onKeyActionDown : dpad left");
+                PLog.d(TAG,"onKeyActionDown : dpad left");
                 return onKeyActionDownDpadLeft(v, keyCode, event);
 
             case KeyEvent.KEYCODE_DPAD_RIGHT:
-                Log.d(TAG,"onKeyActionDown : dpad right");
+                PLog.d(TAG,"onKeyActionDown : dpad right");
                 return onKeyActionDownDpadRight(v, keyCode, event);
 
             case KeyEvent.KEYCODE_DPAD_CENTER:
             case KeyEvent.KEYCODE_ENTER:
-                Log.d(TAG,"onKeyActionDown : dpad enter");
+                PLog.d(TAG,"onKeyActionDown : dpad enter");
                 return onKeyActionDownDpadEnter(v, keyCode, event);
 
             case KeyEvent.KEYCODE_BACK:
-                Log.d(TAG,"onKeyActionDown : dpad back");
+                PLog.d(TAG,"onKeyActionDown : dpad back");
                 return onKeyActionDownDpadBack(v, keyCode, event);
 
             case KeyEvent.KEYCODE_MENU:
-                Log.d(TAG,"onKeyActionDown : dpad menu");
+                PLog.d(TAG,"onKeyActionDown : dpad menu");
                 return onKeyActionDownDpadMenu(v, keyCode, event);
         }
         return false;
@@ -128,32 +124,32 @@ public abstract class BaseFocusCover extends BaseCover implements IFocusCover,Vi
         }
         switch (keyCode){
             case KeyEvent.KEYCODE_DPAD_UP:
-                Log.d(TAG,"onKeyActionUp : dpad up");
+                PLog.d(TAG,"onKeyActionUp : dpad up");
                 return onKeyActionUpDpadUp(v, keyCode, event);
 
             case KeyEvent.KEYCODE_DPAD_DOWN:
-                Log.d(TAG,"onKeyActionUp : dpad down");
+                PLog.d(TAG,"onKeyActionUp : dpad down");
                 return onKeyActionUpDpadDown(v, keyCode, event);
 
             case KeyEvent.KEYCODE_DPAD_LEFT:
-                Log.d(TAG,"onKeyActionUp : dpad left");
+                PLog.d(TAG,"onKeyActionUp : dpad left");
                 return onKeyActionUpDpadLeft(v, keyCode, event);
 
             case KeyEvent.KEYCODE_DPAD_RIGHT:
-                Log.d(TAG,"onKeyActionUp : dpad right");
+                PLog.d(TAG,"onKeyActionUp : dpad right");
                 return onKeyActionUpDpadRight(v, keyCode, event);
 
             case KeyEvent.KEYCODE_DPAD_CENTER:
             case KeyEvent.KEYCODE_ENTER:
-                Log.d(TAG,"onKeyActionUp : dpad enter");
+                PLog.d(TAG,"onKeyActionUp : dpad enter");
                 return onKeyActionUpDpadEnter(v, keyCode, event);
 
             case KeyEvent.KEYCODE_BACK:
-                Log.d(TAG,"onKeyActionUp : dpad back");
+                PLog.d(TAG,"onKeyActionUp : dpad back");
                 return onKeyActionUpDpadBack(v, keyCode, event);
 
             case KeyEvent.KEYCODE_MENU:
-                Log.d(TAG,"onKeyActionUp : dpad menu");
+                PLog.d(TAG,"onKeyActionUp : dpad menu");
                 return onKeyActionUpDpadMenu(v, keyCode, event);
         }
         return false;

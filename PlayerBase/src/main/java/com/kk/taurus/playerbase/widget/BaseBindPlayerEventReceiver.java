@@ -21,7 +21,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.AttributeSet;
 
-import com.kk.taurus.playerbase.callback.BaseEventReceiver;
+import com.kk.taurus.playerbase.eventHandler.BaseEventReceiver;
 import com.kk.taurus.playerbase.callback.OnCoverEventListener;
 import com.kk.taurus.playerbase.callback.OnErrorListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
@@ -31,7 +31,9 @@ import com.kk.taurus.playerbase.cover.base.BaseReceiverCollections;
 import com.kk.taurus.playerbase.inter.IBindPlayer;
 import com.kk.taurus.playerbase.inter.IDpadFocusCover;
 import com.kk.taurus.playerbase.inter.IPlayer;
-import com.kk.taurus.playerbase.setting.EventDistributionHandler;
+import com.kk.taurus.playerbase.eventHandler.EventDistributionHandler;
+import com.kk.taurus.playerbase.eventHandler.PlayerObserverHandler;
+import com.kk.taurus.playerbase.eventHandler.GestureObserverHandler;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -40,6 +42,8 @@ import java.util.List;
 
 /**
  * Created by Taurus on 2017/3/25.
+ * 播放器事件绑定管理分发类.
+ * 请参见{@link EventDistributionHandler},{@link PlayerObserverHandler},{@link GestureObserverHandler}
  */
 
 public abstract class BaseBindPlayerEventReceiver extends BaseContainer implements IPlayer, IBindPlayer, OnCoverEventListener {
@@ -137,24 +141,6 @@ public abstract class BaseBindPlayerEventReceiver extends BaseContainer implemen
         mPlayerEventListenerList.clear();
         mErrorEventListenerList.clear();
         mCoverEventListenerList.clear();
-    }
-
-    public boolean isExpectedBufferAvailable(){
-        return (getBufferPercentage()*getDuration()/100) > getCurrentPosition();
-    }
-
-    public void setScreenOrientationLandscape(boolean landscape) {
-        /** modify 2017/11/17
-         *
-         *  this operation is not dependent on Activity context as much as possible.
-         *
-         * */
-        int code = landscape?OnPlayerEventListener.EVENT_CODE_ON_INTENT_SET_SCREEN_ORIENTATION_LANDSCAPE:OnPlayerEventListener.EVENT_CODE_ON_INTENT_SET_SCREEN_ORIENTATION_PORTRAIT;
-        onPlayerEvent(code,null);
-    }
-
-    public boolean isLandscape() {
-        return mAppContext.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
 
     @Deprecated

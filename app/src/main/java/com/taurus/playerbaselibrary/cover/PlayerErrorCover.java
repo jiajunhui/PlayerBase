@@ -8,13 +8,12 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.kk.taurus.playerbase.callback.BaseEventReceiver;
+import com.kk.taurus.playerbase.eventHandler.BaseEventReceiver;
 import com.kk.taurus.playerbase.callback.OnErrorListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.cover.CornerCutCover;
 import com.kk.taurus.playerbase.cover.DefaultPlayerErrorCover;
 import com.kk.taurus.playerbase.cover.base.BaseCover;
-import com.kk.taurus.playerbase.cover.base.BaseCoverObserver;
 import com.kk.taurus.playerbase.cover.base.BasePlayerErrorCover;
 import com.kk.taurus.playerbase.inter.ICover;
 
@@ -34,10 +33,6 @@ public class PlayerErrorCover extends DefaultPlayerErrorCover {
 
     public PlayerErrorCover(Context context) {
         super(context);
-    }
-
-    public PlayerErrorCover(Context context, BaseCoverObserver coverObserver) {
-        super(context, coverObserver);
     }
 
     @Override

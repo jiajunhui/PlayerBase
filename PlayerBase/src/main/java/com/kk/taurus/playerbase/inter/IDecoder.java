@@ -19,17 +19,11 @@ package com.kk.taurus.playerbase.inter;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 
-import com.kk.taurus.playerbase.setting.DecodeMode;
-import com.kk.taurus.playerbase.setting.Rate;
-import com.kk.taurus.playerbase.setting.VideoData;
-
-import java.util.List;
-
 /**
  * Created by Taurus on 2017/11/17.
  */
 
-public interface IDecoder {
+public interface IDecoder extends IPlayCommon{
 
     int STATUS_END = -2;
     int STATUS_ERROR = -1;
@@ -41,33 +35,10 @@ public interface IDecoder {
     int STATUS_STOPPED = 5;
     int STATUS_PLAYBACK_COMPLETE = 6;
 
-    void setDataSource(VideoData data);
-    void start();
-    void start(int msc);
-    void pause();
-    void resume();
-    void seekTo(int msc);
-    void stop();
-    void reset();
-    boolean isPlaying();
-    int getCurrentPosition();
-    int getDuration();
-    int getBufferPercentage();
-    int getAudioSessionId();
-    int getStatus();
     int getVideoWidth();
     int getVideoHeight();
     void setVolume(float leftVolume, float rightVolume);
-    void setDecodeMode(DecodeMode decodeMode);
-    DecodeMode getDecodeMode();
     void setDisplay(SurfaceHolder surfaceHolder);
     void setSurface(Surface surface);
-    /** get current playing video definition*/
-    Rate getCurrentDefinition();
-    /** get current playing data source all definitions*/
-    List<Rate> getVideoDefinitions();
-    /** change playing video definition*/
-    void changeVideoDefinition(Rate rate);
-    void destroy();
 
 }

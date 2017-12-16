@@ -55,15 +55,6 @@ public abstract class BasePlayerControllerCover extends BaseCover implements IPl
         super(context);
     }
 
-    public BasePlayerControllerCover(Context context, BaseCoverObserver coverObserver) {
-        super(context, coverObserver);
-    }
-
-//    @Override
-//    protected void setDefaultGone() {
-//
-//    }
-
     @Override
     protected void findView() {
         mTopContainer = findViewById(R.id.cover_player_controller_top_container);

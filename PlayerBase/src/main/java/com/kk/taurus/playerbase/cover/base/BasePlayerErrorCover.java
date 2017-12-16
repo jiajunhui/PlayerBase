@@ -39,10 +39,6 @@ public abstract class BasePlayerErrorCover extends BaseCover implements IErrorCo
         super(context);
     }
 
-    public BasePlayerErrorCover(Context context, BaseCoverObserver coverObserver) {
-        super(context, coverObserver);
-    }
-
     @Override
     protected void findView() {
         mErrorView = findViewById(R.id.cover_player_error_state_view_box);

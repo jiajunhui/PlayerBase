@@ -21,26 +21,32 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.kk.taurus.playerbase.callback.BaseGestureCallbackHandler;
+import com.kk.taurus.playerbase.eventHandler.BaseGestureCallbackHandler;
 import com.kk.taurus.playerbase.inter.IStyleSetter;
-import com.kk.taurus.playerbase.setting.ContainerTouchHelper;
+import com.kk.taurus.playerbase.eventHandler.ContainerTouchHelper;
 import com.kk.taurus.playerbase.cover.base.BaseCover;
 import com.kk.taurus.playerbase.inter.ICoverContainer;
 import com.kk.taurus.playerbase.setting.StyleSetter;
+import com.kk.taurus.playerbase.utils.PLog;
+import com.kk.taurus.playerbase.inter.IRender;
+import com.kk.taurus.playerbase.eventHandler.BaseEventReceiver;
+import com.kk.taurus.playerbase.inter.ICover;
 
 
 /**
  * Created by Taurus on 2017/3/24.
  *
- * 播放组件容器。初始化一些设备基本信息。
+ * 组件容器，包含播放组件{@link IRender}，接收者组件{@link BaseEventReceiver}。
+ * 其中接收者组件包含覆盖层组件{@link ICover},初始化了覆盖层组件的容器{@link ICoverContainer}
+ * 初始化一些基本信息。
  *
+ * 手势Event的分发处理。详见{@link ContainerTouchHelper}
  */
 
 public abstract class BaseContainer extends FrameLayout implements IStyleSetter {
@@ -148,12 +154,6 @@ public abstract class BaseContainer extends FrameLayout implements IStyleSetter 
         mPlayerContainer.setBackgroundColor(Color.TRANSPARENT);
         addView(mPlayerContainer,new LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        onPlayerContainerHasInit(context);
-        notifyPlayerWidget(context);
-    }
-
-    protected void onPlayerContainerHasInit(Context context) {
-
     }
 
     private void initPlayerWidget(Context context) {
@@ -186,13 +186,6 @@ public abstract class BaseContainer extends FrameLayout implements IStyleSetter 
         if(mPlayerContainer!=null){
             mPlayerContainer.removeAllViews();
         }
-    }
-
-    protected boolean isPlayerContainerHasChild(){
-        if(mPlayerContainer!=null){
-            return mPlayerContainer.getChildCount() >= 0;
-        }
-        return false;
     }
 
     protected void notifyPlayerWidget(Context context){
@@ -249,7 +242,7 @@ public abstract class BaseContainer extends FrameLayout implements IStyleSetter 
     }
 
     protected void onPlayerGestureEnableChange(boolean enable){
-        Log.d(TAG,"onPlayerGestureEnableChange...");
+        PLog.d(TAG,"onPlayerGestureEnableChange...");
     }
 
     @Override

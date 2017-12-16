@@ -16,7 +16,7 @@
 
 package com.kk.taurus.playerbase.inter;
 
-import com.kk.taurus.playerbase.callback.BaseEventReceiver;
+import com.kk.taurus.playerbase.eventHandler.BaseEventReceiver;
 
 import java.util.List;
 

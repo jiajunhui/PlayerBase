@@ -39,12 +39,16 @@ public abstract class DelegateDecoderPlayer extends BaseMediaPlayer{
         super(context);
     }
 
+    public DelegateDecoderPlayer(Context context, int decoderType) {
+        super(context, decoderType);
+    }
+
     @Override
-    protected BaseDecoder initDecoder(Context context) {
+    protected void initDecoder(Context context, int decoderType) {
         if(mDecoder!=null){
             destroy();
         }
-        mDecoder = (BaseDecoder) ConfigLoader.getDecoderInstance(context, getDecoderType());
+        mDecoder = (BaseDecoder) ConfigLoader.getDecoderInstance(context, decoderType);
         if(mDecoder!=null){
             mDecoder.setOnPlayerEventListener(new OnPlayerEventListener() {
                 @Override
@@ -59,7 +63,6 @@ public abstract class DelegateDecoderPlayer extends BaseMediaPlayer{
                 }
             });
         }
-        return mDecoder;
     }
 
     private boolean isLegalState(){

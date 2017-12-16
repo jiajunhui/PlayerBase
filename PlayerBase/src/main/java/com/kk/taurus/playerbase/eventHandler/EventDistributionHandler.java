@@ -14,27 +14,22 @@
  *    limitations under the License.
  */
 
-package com.kk.taurus.playerbase.setting;
+package com.kk.taurus.playerbase.eventHandler;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.MotionEvent;
 
-import com.kk.taurus.playerbase.callback.BaseEventReceiver;
-import com.kk.taurus.playerbase.callback.GestureObserverHandler;
 import com.kk.taurus.playerbase.callback.OnCoverEventListener;
 import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
 import com.kk.taurus.playerbase.callback.OnPlayerGestureListener;
 import com.kk.taurus.playerbase.callback.PlayerObserver;
-import com.kk.taurus.playerbase.callback.PlayerObserverHandler;
 import com.kk.taurus.playerbase.cover.base.BaseReceiverCollections;
 import com.kk.taurus.playerbase.inter.IBindPlayer;
 import com.kk.taurus.playerbase.inter.IDpadFocusCover;
 import com.kk.taurus.playerbase.inter.ITimerGetter;
 import com.kk.taurus.playerbase.utils.EventLog;
 import com.kk.taurus.playerbase.widget.BasePlayer;
-
-import java.util.List;
 
 /**
  * Created by Taurus on 2017/11/22.
@@ -74,9 +69,6 @@ public class EventDistributionHandler implements PlayerObserver, IBindPlayer, On
                 break;
             case OnPlayerEventListener.EVENT_CODE_ON_NETWORK_ERROR:
                 onNotifyNetWorkError();
-                break;
-            case OnPlayerEventListener.EVENT_CODE_ON_NETWORK_CHANGE:
-                onNotifyNetWorkChanged(bundle.getInt(OnPlayerEventListener.BUNDLE_KEY_INT_DATA));
                 break;
             case OnPlayerEventListener.EVENT_CODE_ON_NETWORK_CONNECTED:
                 onNotifyNetWorkConnected(bundle.getInt(OnPlayerEventListener.BUNDLE_KEY_INT_DATA));
@@ -150,35 +142,10 @@ public class EventDistributionHandler implements PlayerObserver, IBindPlayer, On
     }
 
     @Override
-    public void onNotifyNetWorkChanged(int networkType) {
-        EventLog.onNotifyNetWorkChanged();
-        if(mPlayerObserverHandler!=null)
-            mPlayerObserverHandler.onNotifyNetWorkChanged(networkType);
-    }
-
-    @Override
     public void onNotifyNetWorkError() {
         EventLog.onNotifyNetWorkError();
         if(mPlayerObserverHandler!=null)
             mPlayerObserverHandler.onNotifyNetWorkError();
-    }
-
-    @Override
-    public void onNotifyAdPrepared(List<BaseAdVideo> adVideos) {
-        if(mPlayerObserverHandler!=null)
-            mPlayerObserverHandler.onNotifyAdPrepared(adVideos);
-    }
-
-    @Override
-    public void onNotifyAdStart(BaseAdVideo adVideo) {
-        if(mPlayerObserverHandler!=null)
-            mPlayerObserverHandler.onNotifyAdStart(adVideo);
-    }
-
-    @Override
-    public void onNotifyAdFinish(VideoData data, boolean isAllFinish) {
-        if(mPlayerObserverHandler!=null)
-            mPlayerObserverHandler.onNotifyAdFinish(data, isAllFinish);
     }
 
     //-------------------------------OnPlayerGestureListener-----------------------------

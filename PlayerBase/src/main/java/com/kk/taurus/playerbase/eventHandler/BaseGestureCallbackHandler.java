@@ -14,11 +14,13 @@
  *    limitations under the License.
  */
 
-package com.kk.taurus.playerbase.callback;
+package com.kk.taurus.playerbase.eventHandler;
 
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+
+import com.kk.taurus.playerbase.callback.OnPlayerGestureListener;
+import com.kk.taurus.playerbase.utils.PLog;
 
 /**
  * Created by Taurus on 2017/11/20.
@@ -42,7 +44,7 @@ public class BaseGestureCallbackHandler extends GestureDetector.SimpleOnGestureL
     public void onLayoutSizeChanged(int w, int h, int oldw, int oldh){
         mWidth = w;
         mHeight = h;
-        Log.d(TAG,"width = " + mWidth + " height = " + mHeight);
+        PLog.d(TAG,"width = " + mWidth + " height = " + mHeight);
     }
 
     public void setGestureEnable(boolean enable){
@@ -67,7 +69,7 @@ public class BaseGestureCallbackHandler extends GestureDetector.SimpleOnGestureL
 
     @Override
     public boolean onDown(MotionEvent e) {
-        Log.d(TAG,"onDown...");
+        PLog.d(TAG,"onDown...");
         firstTouch = true;
         if(mOnPlayerGestureListener!=null){
             mOnPlayerGestureListener.onDown(e);

@@ -18,13 +18,14 @@ package com.kk.taurus.playerbase.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 
 import com.kk.taurus.playerbase.inter.IRender;
 import com.kk.taurus.playerbase.setting.AspectRatio;
 import com.kk.taurus.playerbase.setting.RenderMeasure;
+import com.kk.taurus.playerbase.utils.PLog;
 
 /**
  * Created by Taurus on 2017/11/19.
@@ -59,27 +60,32 @@ public class RenderSurfaceView extends SurfaceView implements IRender, SurfaceHo
 
     @Override
     public void setVideoRotation(int degree) {
-        Log.d(TAG,"surface view not support rotation ... ");
+        PLog.d(TAG,"surface view not support rotation ... ");
     }
 
     @Override
     public void onUpdateAspectRatio(AspectRatio aspectRatio) {
-        Log.d(TAG,"onUpdateAspectRatio ... ");
+        PLog.d(TAG,"onUpdateAspectRatio ... ");
         mRenderMeasure.setAspectRatio(aspectRatio);
         requestLayout();
     }
 
     @Override
     public void onUpdateVideoSize(int videoWidth, int videoHeight) {
-        Log.d(TAG,"onUpdateVideoSize : videoWidth = " + videoWidth + " videoHeight = " + videoHeight);
+        PLog.d(TAG,"onUpdateVideoSize : videoWidth = " + videoWidth + " videoHeight = " + videoHeight);
         mRenderMeasure.setVideoSize(videoWidth, videoHeight);
         requestLayout();
     }
 
     @Override
+    public View getRenderView() {
+        return this;
+    }
+
+    @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        Log.d(TAG,"onSurfaceViewDetachedFromWindow");
+        PLog.d(TAG,"onSurfaceViewDetachedFromWindow");
         if(mRenderCallback!=null){
             mRenderCallback.onRenderViewDetachedFromWindow(this);
         }
@@ -88,7 +94,7 @@ public class RenderSurfaceView extends SurfaceView implements IRender, SurfaceHo
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        Log.d(TAG,"onSurfaceViewAttachedToWindow");
+        PLog.d(TAG,"onSurfaceViewAttachedToWindow");
         if(mRenderCallback!=null){
             mRenderCallback.onRenderViewAttachedToWindow(this);
         }
@@ -96,7 +102,7 @@ public class RenderSurfaceView extends SurfaceView implements IRender, SurfaceHo
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        Log.d(TAG,"<---surfaceCreated---->");
+        PLog.d(TAG,"<---surfaceCreated---->");
         if(mRenderCallback!=null){
             mRenderCallback.onSurfaceCreated(this,holder.getSurface(),0,0);
         }
@@ -104,7 +110,7 @@ public class RenderSurfaceView extends SurfaceView implements IRender, SurfaceHo
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        Log.d(TAG,"surfaceChanged : width = " + width + " height = " + height);
+        PLog.d(TAG,"surfaceChanged : width = " + width + " height = " + height);
         getHolder().setFixedSize(width, height);
         requestLayout();
         if(mRenderCallback!=null){
@@ -114,7 +120,7 @@ public class RenderSurfaceView extends SurfaceView implements IRender, SurfaceHo
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        Log.d(TAG,"***surfaceDestroyed***");
+        PLog.d(TAG,"***surfaceDestroyed***");
         if(mRenderCallback!=null){
             mRenderCallback.onSurfaceDestroy(this, null);
         }

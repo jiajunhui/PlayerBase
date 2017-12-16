@@ -42,6 +42,10 @@ public class MixRenderWidget extends DelegateRenderWidget implements IDataProvid
         super(context);
     }
 
+    public MixRenderWidget(Context context, int playerType) {
+        super(context, playerType);
+    }
+
     public void setDataProvider(IDataProvider dataProvider){
         this.mDataProvider = dataProvider;
         if(mDataProvider!=null){
