@@ -8,8 +8,6 @@ version = "3.0.0"
 android {
     compileSdkVersion 26
 
-
-
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 26
