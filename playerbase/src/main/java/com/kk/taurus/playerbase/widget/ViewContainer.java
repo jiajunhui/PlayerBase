@@ -17,7 +17,6 @@
 package com.kk.taurus.playerbase.widget;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -155,8 +154,6 @@ public class ViewContainer extends FrameLayout implements OnReceiverEventListene
                 if(receiver instanceof BaseCover){
                     //add cover view to cover strategy container.
                     mCoverStrategy.addCover((BaseCover) receiver);
-                    //call back method onCoverCreate().
-                    ((BaseCover)receiver).onCoverCreate();
                 }
             }
         });

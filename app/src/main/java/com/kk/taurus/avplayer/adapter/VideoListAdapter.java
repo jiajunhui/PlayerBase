@@ -55,7 +55,11 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
     public void onBindViewHolder(final VideoItemHolder holder, final int position) {
         updateWH(holder);
         final VideoItem item = getItem(position);
-        MediaRetriever.withVideo(item.getPath()).option(MediaRetriever.FULL_SCREEN_KIND).into(holder.albumImage);
+        MediaRetriever
+                .withVideo(item.getPath())
+                .option(MediaRetriever.FULL_SCREEN_KIND)
+                .placeHolder(R.mipmap.ic_launcher)
+                .into(holder.albumImage);
         holder.title.setText(item.getDisplayName());
         holder.layoutContainer.removeAllViews();
         holder.albumLayout.setOnClickListener(new View.OnClickListener() {

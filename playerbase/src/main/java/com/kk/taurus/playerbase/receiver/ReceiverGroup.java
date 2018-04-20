@@ -38,6 +38,8 @@ public final class ReceiverGroup implements IReceiverGroup{
 
     public void addReceiver(String key, IReceiver receiver){
         receiver.bindGroupValue(mGroupValue);
+        //call back method onReceiverCreate().
+        ((BaseReceiver)receiver).onReceiverCreate();
         mReceivers.put(key, receiver);
         mKeySet = mReceivers.keySet();
     }

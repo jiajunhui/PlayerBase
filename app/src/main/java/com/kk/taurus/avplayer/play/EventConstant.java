@@ -14,7 +14,11 @@ public class EventConstant {
     public static final int EVENT_CODE_COMPLETE_REQUEST_REPLAY = 1005;
     public static final int EVENT_CODE_COMPLETE_REQUEST_NEXT = 1006;
 
+    public static final int EVENT_CODE_ERROR_SHOW = 1007;
+    public static final int EVENT_CODE_ERROR_REQUEST_RETRY = 1008;
+
 
     public static final String KEY_COMPLETE_SHOW = "complete_show";
+    public static final String KEY_ERROR_SHOW = "error_show";
 
 }

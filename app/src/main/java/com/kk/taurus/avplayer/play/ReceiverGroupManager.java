@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.kk.taurus.avplayer.cover.CompleteCover;
 import com.kk.taurus.avplayer.cover.ControllerCover;
+import com.kk.taurus.avplayer.cover.ErrorCover;
 import com.kk.taurus.avplayer.cover.LoadingCover;
 import com.kk.taurus.playerbase.receiver.ReceiverGroup;
 
@@ -16,6 +17,7 @@ public class ReceiverGroupManager {
     public static final String KEY_LOADING_COVER = "loading_cover";
     public static final String KEY_CONTROLLER_COVER = "controller_cover";
     public static final String KEY_COMPLETE_COVER = "complete_cover";
+    public static final String KEY_ERROR_COVER = "error_cover";
 
     private static ReceiverGroupManager i;
 
@@ -44,6 +46,7 @@ public class ReceiverGroupManager {
         receiverGroup.addReceiver(KEY_LOADING_COVER, new LoadingCover(context));
         receiverGroup.addReceiver(KEY_CONTROLLER_COVER, new ControllerCover(context));
         receiverGroup.addReceiver(KEY_COMPLETE_COVER, new CompleteCover(context));
+        receiverGroup.addReceiver(KEY_ERROR_COVER, new ErrorCover(context));
         return receiverGroup;
     }
 

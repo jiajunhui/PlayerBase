@@ -18,6 +18,7 @@ import com.kk.taurus.playerbase.event.BundlePool;
 import com.kk.taurus.playerbase.event.EventKey;
 import com.kk.taurus.playerbase.event.OnPlayerEventListener;
 import com.kk.taurus.playerbase.player.OnTimerUpdateListener;
+import com.kk.taurus.playerbase.receiver.ICover;
 import com.kk.taurus.playerbase.receiver.IReceiverGroup;
 import com.kk.taurus.playerbase.touch.OnTouchGestureListener;
 import com.kk.taurus.playerbase.receiver.BaseCover;
@@ -80,8 +81,8 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
     }
 
     @Override
-    public void onCoverCreate() {
-        super.onCoverCreate();
+    public void onReceiverCreate() {
+        super.onReceiverCreate();
         mTopContainer = findViewById(R.id.cover_player_controller_top_container);
         mBottomContainer = findViewById(R.id.cover_player_controller_bottom_container);
 
@@ -317,6 +318,11 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
     }
 
     @Override
+    public int getCoverLevel() {
+        return ICover.COVER_LEVEL_LOW;
+    }
+
+    @Override
     public void onSingleTapUp(MotionEvent event) {
         if(!mGestureEnable)
             return;
@@ -367,7 +373,7 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
         mTimerUpdateProgressEnable = false;
         long position = mCurrentPosition;
         long duration = mDuration;
-        long deltaMax = Math.min(100 * 1000, duration - position);
+        long deltaMax = Math.min(mDuration/2, duration - position);
         long delta = (long) (deltaMax * percent);
         newPosition = delta + position;
         if (newPosition > duration) {

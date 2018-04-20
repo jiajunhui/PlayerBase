@@ -4,6 +4,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -32,6 +33,8 @@ public class VideoViewActivity extends AppCompatActivity implements OnReceiverEv
 
     private int margin;
     private DataSource mDataSource;
+    private String mCurrUrl;
+    private MonitorDataProvider mMonitorDataProvider;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,14 +55,16 @@ public class VideoViewActivity extends AppCompatActivity implements OnReceiverEv
 
         updateVideo(false);
 
-        mDataSource = new DataSource("monitor_id");
+        mDataSource = new DataSource();
+        mDataSource.setId(666);
 
         mVideoView.setOnPlayerEventListener(this);
         mVideoView.setOnReceiverEventListener(this);
         mVideoView.setReceiverGroup(ReceiverGroupManager.get().getReceiverGroup(this));
 
         //设置数据提供者 MonitorDataProvider
-        mVideoView.setDataProvider(new MonitorDataProvider());
+        mMonitorDataProvider = new MonitorDataProvider();
+        mVideoView.setDataProvider(mMonitorDataProvider);
         mVideoView.setDataSource(mDataSource);
         mVideoView.start();
 
@@ -151,22 +156,36 @@ public class VideoViewActivity extends AppCompatActivity implements OnReceiverEv
                 mVideoView.seekTo(bundle.getInt(EventKey.INT_DATA));
                 break;
             case EventConstant.EVENT_CODE_COMPLETE_REQUEST_REPLAY:
-                mVideoView.setDataProvider(new MonitorDataProvider());
-                mVideoView.setDataSource(mDataSource);
-                mVideoView.start();
+                replay();
                 break;
             case EventConstant.EVENT_CODE_COMPLETE_REQUEST_NEXT:
+                mVideoView.setDataProvider(mMonitorDataProvider);
                 mVideoView.setDataSource(mDataSource);
                 mVideoView.start();
                 break;
+            case EventConstant.EVENT_CODE_ERROR_REQUEST_RETRY:
+                replay();
+                break;
         }
+    }
+
+    private void replay(){
+        if(TextUtils.isEmpty(mCurrUrl)){
+            mVideoView.setDataProvider(mMonitorDataProvider);
+            mVideoView.setDataSource(mDataSource);
+        }else{
+            mVideoView.setDataProvider(null);
+            mVideoView.setDataSource(new DataSource(mCurrUrl));
+        }
+        mVideoView.start();
     }
 
     @Override
     public void onPlayerEvent(int eventCode, Bundle bundle) {
         switch (eventCode){
-            case OnPlayerEventListener.PLAYER_EVENT_ON_PLAY_COMPLETE:
-
+            case OnPlayerEventListener.PLAYER_EVENT_ON_DATA_SOURCE_SET:
+                DataSource dataSource = (DataSource) bundle.getSerializable(EventKey.SERIALIZABLE_DATA);
+                mCurrUrl = dataSource.getData();
                 break;
         }
     }

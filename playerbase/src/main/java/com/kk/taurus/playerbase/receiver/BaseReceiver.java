@@ -34,6 +34,10 @@ public abstract class BaseReceiver implements IReceiver {
         this.mAppContext = context.getApplicationContext();
     }
 
+    public void onReceiverCreate(){
+
+    }
+
     @Override
     public final void bindGroupValue(GroupValue groupValue) {
         this.mGroupValue = groupValue;

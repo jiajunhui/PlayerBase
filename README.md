@@ -25,6 +25,14 @@ __-支持列表播放中的无缝续播__<br>
 __-支持视频切角处理，边缘阴影效果-__<br>
 __-等功能……__<br>
 
+# 框架的设计
+![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/frame_structure01.png)
+![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/frame_structure02.png)
+![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/frame_structure03.png)
+![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/frame_structure04.png)
+
+详细设计见PPT附件
+[PPT附件](https://github.com/jiajunhui/PlayerBase/raw/master/player_base_structure.pptx)
 
 # 使用
 
@@ -39,7 +47,7 @@ __-等功能……__<br>
 
 ```gradle
 dependencies {
-  compile 'com.kk.taurus.playerbase:PlayerBase:3.0.0'
+  compile 'com.kk.taurus.playerbase:PlayerBase:3.0.1'
 }
 ```
 

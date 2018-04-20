@@ -92,7 +92,7 @@ public final class AVPlayer implements IPlayer{
     private OnPlayerEventListener mInternalPlayerEventListener = new OnPlayerEventListener() {
         @Override
         public void onPlayerEvent(int eventCode, Bundle bundle) {
-            mTimerCounterProxy.proxyEvent(eventCode, bundle);
+            mTimerCounterProxy.proxyPlayEvent(eventCode, bundle);
             callBackPlayEventListener(eventCode, bundle);
         }
     };
@@ -100,6 +100,7 @@ public final class AVPlayer implements IPlayer{
     private OnErrorEventListener mInternalErrorEventListener = new OnErrorEventListener() {
         @Override
         public void onErrorEvent(int eventCode, Bundle bundle) {
+            mTimerCounterProxy.proxyErrorEvent(eventCode, bundle);
             if(mOnErrorEventListener!=null)
                 mOnErrorEventListener.onErrorEvent(eventCode, bundle);
         }
@@ -133,7 +134,8 @@ public final class AVPlayer implements IPlayer{
         if(mDataProvider!=null)
             mDataProvider.destroy();
         this.mDataProvider = dataProvider;
-        this.mDataProvider.setOnProviderListener(mInternalProviderListener);
+        if(mDataProvider!=null)
+            this.mDataProvider.setOnProviderListener(mInternalProviderListener);
     }
 
     private IDataProvider.OnProviderListener mInternalProviderListener = new IDataProvider.OnProviderListener() {

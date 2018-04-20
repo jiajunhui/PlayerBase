@@ -7,6 +7,7 @@ import android.view.View;
 import com.kk.taurus.avplayer.R;
 import com.kk.taurus.playerbase.event.OnPlayerEventListener;
 import com.kk.taurus.playerbase.receiver.BaseCover;
+import com.kk.taurus.playerbase.receiver.ICover;
 
 /**
  * Created by Taurus on 2018/4/15.
@@ -60,5 +61,10 @@ public class LoadingCover extends BaseCover {
     @Override
     public View onCreateCoverView(Context context) {
         return View.inflate(context, R.layout.layout_loading_cover, null);
+    }
+
+    @Override
+    public int getCoverLevel() {
+        return ICover.COVER_LEVEL_LOW;
     }
 }

@@ -115,6 +115,7 @@ public class IjkPlayer extends BaseInternalPlayer {
             e.printStackTrace();
             updateStatus(STATE_ERROR);
             mTargetState = STATE_ERROR;
+            submitErrorEvent(OnErrorEventListener.ERROR_EVENT_COMMON, null);
         }
     }
 

@@ -2,6 +2,7 @@ package com.kk.taurus.avplayer.ui;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,6 +19,7 @@ import com.jiajunhui.xapp.medialoader.loader.MediaLoader;
 import com.kk.taurus.avplayer.R;
 import com.kk.taurus.avplayer.adapter.VideoListAdapter;
 import com.kk.taurus.avplayer.play.SPlayer;
+import com.kk.taurus.avplayer.utils.OrientationHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,7 +34,8 @@ import kr.co.namee.permissiongen.PermissionSuccess;
  * Created by Taurus on 2018/4/15.
  */
 
-public class LocalVideoListActivity extends AppCompatActivity implements VideoListAdapter.OnListListener{
+public class LocalVideoListActivity extends AppCompatActivity
+        implements VideoListAdapter.OnListListener, OrientationHelper.OnOrientationListener{
 
     private List<VideoItem> mItems = new ArrayList<>();
     private VideoListAdapter mAdapter;
@@ -43,6 +46,8 @@ public class LocalVideoListActivity extends AppCompatActivity implements VideoLi
     private boolean isLandScape;
     private boolean toDetail;
 
+    private OrientationHelper mOrientationHelper;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +56,8 @@ public class LocalVideoListActivity extends AppCompatActivity implements VideoLi
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         setTitle("本地视频");
+
+        mOrientationHelper = new OrientationHelper(this, this);
 
         mRecycler = findViewById(R.id.recycler);
         mContainer = findViewById(R.id.listPlayContainer);
@@ -65,9 +72,32 @@ public class LocalVideoListActivity extends AppCompatActivity implements VideoLi
     }
 
     @Override
+    public void onOrientationChange(boolean reverse, int orientation, int angle) {
+        if(toDetail)
+            return;
+        if(orientation==Configuration.ORIENTATION_LANDSCAPE){
+            if(SPlayer.get().isPlaying()){
+                setRequestedOrientation(reverse?
+                        ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE:
+                        ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            }
+        }else if(orientation==Configuration.ORIENTATION_PORTRAIT){
+            if(SPlayer.get().isPlaying()){
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            }
+        }
+    }
+
+    @Override
+    public void onSensorUserAgreement() {
+
+    }
+
+    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         isLandScape = newConfig.orientation==Configuration.ORIENTATION_LANDSCAPE;
+        mOrientationHelper.onActivityConfigChanged(newConfig);
         if(newConfig.orientation==Configuration.ORIENTATION_LANDSCAPE){
             attachFullScreen();
         }else if(newConfig.orientation==Configuration.ORIENTATION_PORTRAIT){

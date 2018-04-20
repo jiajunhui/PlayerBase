@@ -60,7 +60,7 @@ public class TimerCounterProxy {
         this.onCounterUpdateListener = onCounterUpdateListener;
     }
 
-    public void proxyEvent(int eventCode, Bundle bundle){
+    public void proxyPlayEvent(int eventCode, Bundle bundle){
         switch (eventCode){
             case OnPlayerEventListener.PLAYER_EVENT_ON_DATA_SOURCE_SET:
             case OnPlayerEventListener.PLAYER_EVENT_ON_RENDER_START:
@@ -72,6 +72,10 @@ public class TimerCounterProxy {
                 cancel();
                 break;
         }
+    }
+
+    public void proxyErrorEvent(int eventCode, Bundle bundle){
+        cancel();
     }
 
     public void start(){

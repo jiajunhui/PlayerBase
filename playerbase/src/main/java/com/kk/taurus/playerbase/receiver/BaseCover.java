@@ -33,10 +33,6 @@ public abstract class BaseCover extends BaseReceiver implements ICover, View.OnA
         mCoverView.addOnAttachStateChangeListener(this);
     }
 
-    public void onCoverCreate(){
-
-    }
-
     protected <T extends View> T findViewById(int id){
         return mCoverView.findViewById(id);
     }

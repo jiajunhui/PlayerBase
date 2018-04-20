@@ -29,9 +29,13 @@ public class DataSource implements Serializable {
 
     private String tag;
     private String data;
+    private long id;
     private Uri uri;
     private Map<String, String> headers;
     private int startPos;
+
+    public DataSource() {
+    }
 
     public DataSource(String data) {
         this.data = data;
@@ -56,6 +60,14 @@ public class DataSource implements Serializable {
 
     public void setData(String data) {
         this.data = data;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public Uri getUri() {

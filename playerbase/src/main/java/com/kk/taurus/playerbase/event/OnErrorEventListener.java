@@ -24,7 +24,10 @@ import android.os.Bundle;
 
 public interface OnErrorEventListener {
 
+    //A error that causes a play to terminate
     int ERROR_EVENT_COMMON = -88001;
+
+    int ERROR_EVENT_UNKNOW = -88002;
 
     void onErrorEvent(int eventCode, Bundle bundle);
 

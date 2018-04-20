@@ -40,13 +40,15 @@ public final class GroupValue {
 
     //If you want to listen to changes in some data,
     //you can register a listener to implement it.
-    public void registerOnGroupValueUpdateListener(IReceiverGroup.OnGroupValueUpdateListener onGroupValueUpdateListener){
+    public void registerOnGroupValueUpdateListener(
+            IReceiverGroup.OnGroupValueUpdateListener onGroupValueUpdateListener){
         if(mOnGroupValueUpdateListeners.contains(onGroupValueUpdateListener))
             return;
         mOnGroupValueUpdateListeners.add(onGroupValueUpdateListener);
     }
 
-    public void unregisterOnGroupValueUpdateListener(IReceiverGroup.OnGroupValueUpdateListener onGroupValueUpdateListener){
+    public void unregisterOnGroupValueUpdateListener(
+            IReceiverGroup.OnGroupValueUpdateListener onGroupValueUpdateListener){
         mOnGroupValueUpdateListeners.remove(onGroupValueUpdateListener);
     }
 

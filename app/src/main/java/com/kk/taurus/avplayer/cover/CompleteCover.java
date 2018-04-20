@@ -25,6 +25,7 @@ import com.kk.taurus.avplayer.R;
 import com.kk.taurus.avplayer.play.EventConstant;
 import com.kk.taurus.playerbase.event.OnPlayerEventListener;
 import com.kk.taurus.playerbase.receiver.BaseCover;
+import com.kk.taurus.playerbase.receiver.ICover;
 
 /**
  * Created by Taurus on 2018/4/20.
@@ -40,8 +41,8 @@ public class CompleteCover extends BaseCover {
     }
 
     @Override
-    public void onCoverCreate() {
-        super.onCoverCreate();
+    public void onReceiverCreate() {
+        super.onReceiverCreate();
         mReplay = findViewById(R.id.tv_replay);
         mNext = findViewById(R.id.tv_next);
 
@@ -96,5 +97,10 @@ public class CompleteCover extends BaseCover {
     @Override
     public View onCreateCoverView(Context context) {
         return View.inflate(context, R.layout.layout_complete_cover, null);
+    }
+
+    @Override
+    public int getCoverLevel() {
+        return ICover.COVER_LEVEL_MEDIUM;
     }
 }

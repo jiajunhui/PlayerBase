@@ -29,12 +29,12 @@
             android:name=".ui.LocalVideoListActivity"
             android:theme="@style/FullScreenTheme"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="sensor"/>
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.OnlineVideoListActivity"
             android:theme="@style/FullScreenTheme"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="sensor"/>
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.VideoViewActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"

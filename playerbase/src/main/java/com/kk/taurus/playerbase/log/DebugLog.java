@@ -108,13 +108,16 @@ public class DebugLog {
     public static void onErrorEventLog(int eventCode, Bundle bundle) {
         if (!PLog.LOG_OPEN)
             return;
-        String value = "";
+        String value;
         switch (eventCode){
             case OnErrorEventListener.ERROR_EVENT_COMMON:
                 value = "ERROR_EVENT_COMMON";
                 break;
+            default:
+                value = "unKnow error";
+                break;
         }
-        PLog.d(EVENT_TAG_ERROR_EVENT, value);
+        PLog.e(EVENT_TAG_ERROR_EVENT, value);
     }
 
 }

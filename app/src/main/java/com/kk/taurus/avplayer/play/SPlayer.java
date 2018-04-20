@@ -33,6 +33,10 @@ public class SPlayer {
 
     private IRender.IRenderHolder mRenderHolder;
 
+    private int mVideoRotation;
+    private int mVideoWidth,mVideoHeight;
+    private int mVideoSarNum,mVideoSarDen;
+
     private SPlayer(){
         mAppContext = App.get().getApplicationContext();
         mPlayer = new AVPlayer(mAppContext);
@@ -72,18 +76,25 @@ public class SPlayer {
     public void play(ViewGroup group, DataSource dataSource){
         resetLayoutContainer();
         final IRender render = new RenderTextureView(mAppContext);
+
+        //if render change ,need update some params
+        render.updateVideoSize(mVideoWidth, mVideoHeight);
+        render.setVideoSampleAspectRatio(mVideoSarNum, mVideoSarDen);
+        render.setVideoRotation(mVideoRotation);
+
         mPlayer.setOnPlayerEventListener(new OnPlayerEventListener() {
             @Override
             public void onPlayerEvent(int eventCode, Bundle bundle) {
                 if(eventCode==OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_SIZE_CHANGE){
-                    render.updateVideoSize(
-                            bundle.getInt(EventKey.INT_ARG1),
-                            bundle.getInt(EventKey.INT_ARG2));
-                    render.setVideoSampleAspectRatio(
-                            bundle.getInt(EventKey.INT_ARG3),
-                            bundle.getInt(EventKey.INT_ARG4));
+                    mVideoWidth = bundle.getInt(EventKey.INT_ARG1);
+                    mVideoHeight = bundle.getInt(EventKey.INT_ARG2);
+                    mVideoSarNum = bundle.getInt(EventKey.INT_ARG3);
+                    mVideoSarDen = bundle.getInt(EventKey.INT_ARG4);
+                    render.updateVideoSize(mVideoWidth, mVideoHeight);
+                    render.setVideoSampleAspectRatio(mVideoSarNum, mVideoSarDen);
                 }else if(eventCode==OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_ROTATION_CHANGED){
-                    render.setVideoRotation(bundle.getInt(EventKey.INT_DATA));
+                    mVideoRotation = bundle.getInt(EventKey.INT_DATA);
+                    render.setVideoRotation(mVideoRotation);
                 }else if(eventCode==OnPlayerEventListener.PLAYER_EVENT_ON_PREPARED){
                     bindRenderHolder(mRenderHolder);
                 }
