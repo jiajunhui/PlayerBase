@@ -11,7 +11,7 @@ PlayerBase是一种将播放业务组件化处理的解决方案框架。无论�
 ![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_20180420-170251.png)
 
 # Demo下载
-[Demo下载](https://fir.im/ya4e)
+[Demo下载](http://fir.im/lmhz)
 
 # 功能
 __-解码方案的组件化、配置化管理__<br>
