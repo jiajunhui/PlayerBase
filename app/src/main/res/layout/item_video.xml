@@ -1,39 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:paddingBottom="4dp"
+    android:background="#DDDDDD"
+    >
 
     <RelativeLayout
+        android:id="@+id/layBox"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="15dp"
+        android:layout_height="200dp"
         >
-        <TextView
-            android:id="@+id/tv_name"
+        <RelativeLayout
+            android:id="@+id/album_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textColor="#333333"
-            android:gravity="center_vertical|left"
-            android:text=""
-            />
-        <TextView
-            android:id="@+id/tv_info"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/albumImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/player_icon_start_play"/>
+        </RelativeLayout>
+        <FrameLayout
+            android:id="@+id/layoutContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tv_name"
-            android:layout_marginTop="20dp"
-            android:textSize="12sp"
-            android:textColor="#3344aa"
-            android:gravity="center_vertical|left"
-            android:text=""
+            android:layout_height="match_parent"
             />
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/titleLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/layBox"
+        android:background="#ffffff">
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:padding="8dp"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:text="NAME"/>
+    </RelativeLayout>
+
     <View
+        android:id="@+id/line"
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:background="#22000000"/>
+        android:background="#88888888"
+        android:layout_below="@id/titleLayout"/>
 
-</LinearLayout>
+</RelativeLayout>

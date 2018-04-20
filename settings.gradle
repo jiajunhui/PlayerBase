@@ -1,1 +1,1 @@
-include ':app', ':PlayerBase', ':ijkplayer'
+include ':app', ':playerbase', ':ijkplayer'

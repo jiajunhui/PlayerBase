@@ -18,47 +18,32 @@ package com.kk.taurus.playerbase.provider;
 
 import android.os.Bundle;
 
-import com.kk.taurus.playerbase.callback.OnPlayerEventListener;
-import com.kk.taurus.playerbase.inter.IDataProvider;
-import com.kk.taurus.playerbase.setting.VideoData;
-import com.kk.taurus.playerbase.inter.IEventBinder;
-
 /**
- * Created by mtime on 2017/10/19.
+ * Created by Taurus on 2018/4/15.
  */
 
 public abstract class BaseDataProvider implements IDataProvider {
 
-    protected OnProviderListener mOnProviderListener;
-    private IEventBinder eventBinder;
-
-    @Override
-    public void setEventBinder(IEventBinder eventBinder) {
-        this.eventBinder = eventBinder;
-    }
-
-    @Override
-    public void handleSourceData(VideoData data) {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(OnPlayerEventListener.BUNDLE_KEY_SERIALIZABLE_DATA,data);
-        sendPlayerEvent(EVENT_CODE_START_HANDLE_SOURCE_DATA,bundle);
-    }
+    private OnProviderListener mOnProviderListener;
 
     @Override
     public void setOnProviderListener(OnProviderListener onProviderListener) {
         this.mOnProviderListener = onProviderListener;
     }
 
-    protected void sendPlayerEvent(int eventCode, Bundle bundle){
-        if(eventBinder!=null){
-            eventBinder.onBindPlayerEvent(eventCode, bundle);
-        }
+    protected final void onProviderDataStart(){
+        if(mOnProviderListener!=null)
+            mOnProviderListener.onProviderDataStart();
     }
 
-    protected void sendErrorEvent(int errorCode, Bundle bundle){
-        if(eventBinder!=null){
-            eventBinder.onBindErrorEvent(errorCode, bundle);
-        }
+    protected final void onProviderDataSuccess(int code, Bundle bundle){
+        if(mOnProviderListener!=null)
+            mOnProviderListener.onProviderDataSuccess(code, bundle);
+    }
+
+    protected final void onProviderError(int code, Bundle bundle){
+        if(mOnProviderListener!=null)
+            mOnProviderListener.onProviderError(code, bundle);
     }
 
 }

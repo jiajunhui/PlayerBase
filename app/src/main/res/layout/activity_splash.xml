@@ -4,17 +4,12 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary">
 
-    <RelativeLayout
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="36sp"
-            android:textColor="#ffffff"
-            android:text="PlayerBase"/>
-    </RelativeLayout>
+        android:textSize="28sp"
+        android:textColor="#FFFFFF"
+        android:text="PlayerBase"/>
 
 </RelativeLayout>

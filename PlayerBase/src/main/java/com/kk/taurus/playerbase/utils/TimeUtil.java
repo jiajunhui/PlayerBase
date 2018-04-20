@@ -16,9 +16,6 @@
 
 package com.kk.taurus.playerbase.utils;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 /**
  * ------------------------------------
  * Created by Taurus on 2016/8/3.
@@ -26,33 +23,39 @@ import java.util.Date;
  */
 public class TimeUtil {
 
-    /**
-     * return time format , for example 00:08:19
-     * @param time
-     * @return
-     */
-    public static String getTime(long time){
+    public static final String TIME_FORMAT_01 = "%02d:%02d";
+    public static final String TIME_FORMAT_02 = "%02d:%02d:%02d";
+
+    public static String getTimeFormat1(long timeMs){
+        return getTime(TIME_FORMAT_01, timeMs);
+    }
+
+    public static String getTimeFormat2(long timeMs){
+        return getTime(TIME_FORMAT_02, timeMs);
+    }
+
+    public static String getTimeSmartFormat(long timeMs){
+        int totalSeconds = (int) (timeMs / 1000);
+        if(totalSeconds >= 24 * 60 * 60){
+            return getTimeFormat2(timeMs);
+        }else{
+            return getTimeFormat1(timeMs);
+        }
+    }
+
+    private static String getTime(String format, long time){
         if(time <= 0)
-            return "00:00:00";
+            time = 0;
         int totalSeconds = (int) (time / 1000);
         int seconds = totalSeconds % 60;
         int minutes = (totalSeconds / 60) % 60;
         int hours = totalSeconds / 3600;
-        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
-    }
-
-    public static String getTimeMinSecond(long time){
-        if(time <= 0)
-            return "00:00";
-        int totalSeconds = (int) (time / 1000);
-        int seconds = totalSeconds % 60;
-        int minutes = totalSeconds / 60;
-        return String.format("%02d:%02d", minutes, seconds);
-    }
-
-    public static String getNowTime(){
-        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
-        return format.format(new Date());
+        if(TIME_FORMAT_01.equals(format)){
+            return String.format(format, minutes, seconds);
+        }else if(TIME_FORMAT_02.equals(format)){
+            return String.format(format, hours, minutes, seconds);
+        }
+        return String.format(format, hours, minutes, seconds);
     }
 
 }
