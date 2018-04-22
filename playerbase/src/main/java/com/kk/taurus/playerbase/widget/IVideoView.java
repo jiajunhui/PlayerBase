@@ -33,6 +33,8 @@ public interface IVideoView {
     boolean isPlaying();
     int getCurrentPosition();
     int getDuration();
+    int getAudioSessionId();
+    int getBufferPercentage();
     int getState();
 
     void start();

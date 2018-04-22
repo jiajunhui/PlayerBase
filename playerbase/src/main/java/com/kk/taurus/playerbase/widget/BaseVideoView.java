@@ -19,6 +19,7 @@ package com.kk.taurus.playerbase.widget;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Rect;
+import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -27,6 +28,7 @@ import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.kk.taurus.playerbase.log.PLog;
 import com.kk.taurus.playerbase.player.IPlayer;
 import com.kk.taurus.playerbase.AVPlayer;
 import com.kk.taurus.playerbase.entity.DataSource;
@@ -48,6 +50,8 @@ import com.kk.taurus.playerbase.style.StyleSetter;
  */
 
 public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSetter {
+
+    final String TAG = "BaseVideoView";
 
     //use TextureView for render
     public static final int RENDER_TYPE_TEXTURE_VIEW = 0;
@@ -75,6 +79,9 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
     private int mVideoRotation;
     private int mVideoWidth,mVideoHeight;
     private int mVideoSarNum,mVideoSarDen;
+
+    //the stream buffer percent
+    private int mBufferPercentage;
 
     public BaseVideoView(Context context){
         this(context, null);
@@ -122,6 +129,7 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
         return new ViewContainer(context);
     }
 
+    //create player instance.
     private AVPlayer createPlayer(Context context){
         return new AVPlayer(context);
     }
@@ -137,9 +145,26 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
 
     @Override
     public void setDataSource(DataSource dataSource) {
+        //when data source set, buffer percent reset 0.
+        mBufferPercentage = 0;
+        //init AudioManager
+        requestAudioFocus();
+        //set data to player
         mPlayer.setDataSource(dataSource);
         //Reconfigure the rendering view each time the resource is switched
         setRenderType(nRenderType);
+    }
+
+    private void requestAudioFocus(){
+        PLog.d(TAG,">>requestAudioFocus<<");
+        AudioManager am = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
+        am.requestAudioFocus(null, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+    }
+
+    private void releaseAudioFocus(){
+        PLog.d(TAG,"<<releaseAudioFocus>>");
+        AudioManager am = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
+        am.abandonAudioFocus(null);
     }
 
     /**
@@ -187,6 +212,7 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
         //update some params
         mRender.updateVideoSize(mVideoWidth, mVideoHeight);
         mRender.setVideoSampleAspectRatio(mVideoSarNum, mVideoSarDen);
+        //update video rotation
         mRender.setVideoRotation(mVideoRotation);
         //add to container
         mViewContainer.setRenderView(mRender.getRenderView());
@@ -205,6 +231,19 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
     @Override
     public int getDuration() {
         return mPlayer.getDuration();
+    }
+
+    //getAudioSessionId from player
+    @Override
+    public int getAudioSessionId() {
+        return mPlayer.getAudioSessionId();
+    }
+
+    //stream buffer percent
+    //min 0, and max 100.
+    @Override
+    public int getBufferPercentage() {
+        return mBufferPercentage;
     }
 
     /**
@@ -261,8 +300,10 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
 
     @Override
     public void stopPlayback() {
+        PLog.e(TAG,"stopPlayback release.");
         mRenderHolder = null;
         mPlayer.destroy();
+        releaseAudioFocus();
     }
 
     private OnPlayerEventListener mInternalPlayerEventListener = new OnPlayerEventListener() {
@@ -275,6 +316,10 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
                 mVideoHeight = bundle.getInt(EventKey.INT_ARG2);
                 mVideoSarNum = bundle.getInt(EventKey.INT_ARG3);
                 mVideoSarDen = bundle.getInt(EventKey.INT_ARG4);
+                PLog.d(TAG,"onVideoSizeChange : videoWidth = " + mVideoWidth
+                        + ", videoHeight = " + mVideoHeight
+                        + ", videoSarNum = " + mVideoSarNum
+                        + ", videoSarDen = " + mVideoSarDen);
                 if(mRender!=null){
                     //update video size
                     mRender.updateVideoSize(mVideoWidth, mVideoHeight);
@@ -285,13 +330,20 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
             //when get video rotation, need update render rotation.
             else if(eventCode==OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_ROTATION_CHANGED
                     && bundle!=null){
+                //if rotation change need update render.
                 mVideoRotation = bundle.getInt(EventKey.INT_DATA);
+                PLog.d(TAG,"onVideoRotationChange : videoRotation = " + mVideoRotation);
                 if(mRender!=null)
                     mRender.setVideoRotation(mVideoRotation);
             }
             //when prepared bind surface.
             else if(eventCode==OnPlayerEventListener.PLAYER_EVENT_ON_PREPARED){
                 bindRenderHolder(mRenderHolder);
+            }
+            //when bufferPercentage update
+            else if(eventCode==OnPlayerEventListener.PLAYER_EVENT_ON_BUFFERING_UPDATE){
+                mBufferPercentage = bundle.getInt(EventKey.INT_DATA);
+                PLog.d(TAG,"bufferUpdate : bufferPercentage = " + mBufferPercentage);
             }
             if(mOnPlayerEventListener!=null)
                 mOnPlayerEventListener.onPlayerEvent(eventCode, bundle);
@@ -303,6 +355,8 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
     private OnErrorEventListener mInternalErrorEventListener = new OnErrorEventListener() {
         @Override
         public void onErrorEvent(int eventCode, Bundle bundle) {
+            PLog.e(TAG,"onError : code = " + eventCode
+                    + ", Message = " + (bundle==null?"no message":bundle.toString()));
             if(mOnErrorEventListener!=null)
                 mOnErrorEventListener.onErrorEvent(eventCode, bundle);
             //last dispatch event , because bundle will be recycle after dispatch.
@@ -319,15 +373,18 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
     private IRender.IRenderCallback mRenderCallback = new IRender.IRenderCallback() {
         @Override
         public void onSurfaceCreated(IRender.IRenderHolder renderHolder, int width, int height) {
+            PLog.d(TAG,"onSurfaceCreated : width = " + width + ", height = " + height);
+            //on surface create ,try to attach player.
             mRenderHolder = renderHolder;
             bindRenderHolder(mRenderHolder);
         }
         @Override
         public void onSurfaceChanged(IRender.IRenderHolder renderHolder, int format, int width, int height) {
-
+            //not handle some...
         }
         @Override
         public void onSurfaceDestroy(IRender.IRenderHolder renderHolder) {
+            PLog.d(TAG,"onSurfaceDestroy...");
             //on surface destroy detach player
             mRenderHolder = null;
             mPlayer.setDisplay(null);

@@ -1,6 +1,9 @@
 package com.kk.taurus.avplayer.ui;
 
+import android.Manifest;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.media.audiofx.Visualizer;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -16,12 +19,17 @@ import com.kk.taurus.avplayer.play.EventConstant;
 import com.kk.taurus.avplayer.play.MonitorDataProvider;
 import com.kk.taurus.avplayer.play.ReceiverGroupManager;
 import com.kk.taurus.avplayer.utils.PUtil;
+import com.kk.taurus.avplayer.view.VisualizerView;
 import com.kk.taurus.playerbase.entity.DataSource;
 import com.kk.taurus.playerbase.event.EventKey;
 import com.kk.taurus.playerbase.event.OnPlayerEventListener;
 import com.kk.taurus.playerbase.receiver.OnReceiverEventListener;
 import com.kk.taurus.playerbase.render.AspectRatio;
 import com.kk.taurus.playerbase.widget.BaseVideoView;
+
+import kr.co.namee.permissiongen.PermissionFail;
+import kr.co.namee.permissiongen.PermissionGen;
+import kr.co.namee.permissiongen.PermissionSuccess;
 
 /**
  * Created by Taurus on 2018/4/19.
@@ -30,11 +38,23 @@ import com.kk.taurus.playerbase.widget.BaseVideoView;
 public class VideoViewActivity extends AppCompatActivity implements OnReceiverEventListener, OnPlayerEventListener {
 
     private BaseVideoView mVideoView;
+    private VisualizerView mMusicWave;
+
+    private Visualizer mVisualizer;
 
     private int margin;
     private DataSource mDataSource;
     private String mCurrUrl;
     private MonitorDataProvider mMonitorDataProvider;
+
+    private boolean permissionSuccess;
+
+    private byte[] waveType = new byte[]{
+            VisualizerView.WAVE_TYPE_BROKEN_LINE,
+            VisualizerView.WAVE_TYPE_RECTANGLE,
+            VisualizerView.WAVE_TYPE_CURVE};
+
+    private int typeIndex;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,11 +72,55 @@ public class VideoViewActivity extends AppCompatActivity implements OnReceiverEv
         margin = PUtil.dip2px(this,2);
 
         mVideoView = findViewById(R.id.videoView);
+        mMusicWave = findViewById(R.id.musicWave);
 
-        updateVideo(false);
+        mMusicWave.setWaveType(waveType[typeIndex]);
+        mMusicWave.setColors(new int[]{Color.YELLOW, Color.BLUE});
 
         mDataSource = new DataSource();
         mDataSource.setId(666);
+
+        PermissionGen.with(this)
+                .addRequestCode(101)
+                .permissions(
+                        Manifest.permission.RECORD_AUDIO,
+                        Manifest.permission.MODIFY_AUDIO_SETTINGS
+                )
+                .request();
+
+        mMusicWave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(permissionSuccess){
+                    typeIndex++;
+                    typeIndex %= waveType.length;
+                    mMusicWave.setWaveType(waveType[typeIndex]);
+                }
+            }
+        });
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        PermissionGen.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+    }
+
+    @PermissionSuccess(requestCode = 101)
+    public void permissionSuccess() {
+        permissionSuccess = true;
+        initPlay();
+    }
+
+    @PermissionFail(requestCode = 101)
+    public void permissionFailure(){
+        permissionSuccess = false;
+        initPlay();
+    }
+
+    private void initPlay() {
+        updateVideo(false);
 
         mVideoView.setOnPlayerEventListener(this);
         mVideoView.setOnReceiverEventListener(this);
@@ -187,6 +251,28 @@ public class VideoViewActivity extends AppCompatActivity implements OnReceiverEv
                 DataSource dataSource = (DataSource) bundle.getSerializable(EventKey.SERIALIZABLE_DATA);
                 mCurrUrl = dataSource.getData();
                 break;
+            case OnPlayerEventListener.PLAYER_EVENT_ON_RENDER_START:
+                updateVisualizer();
+                break;
         }
+    }
+
+    private void updateVisualizer() {
+        if(!permissionSuccess)
+            return;
+        mVisualizer = new Visualizer(mVideoView.getAudioSessionId());
+        mVisualizer.setCaptureSize(Visualizer.getCaptureSizeRange()[1]);
+        mVisualizer.setDataCaptureListener(
+                new Visualizer.OnDataCaptureListener() {
+                    public void onWaveFormDataCapture(Visualizer visualizer,
+                                                      byte[] bytes, int samplingRate) {
+                        mMusicWave.updateVisualizer(bytes);
+                    }
+
+                    public void onFftDataCapture(Visualizer visualizer,
+                                                 byte[] bytes, int samplingRate) {
+                    }
+                }, Visualizer.getMaxCaptureRate() / 2, true, false);
+        mVisualizer.setEnabled(true);
     }
 }

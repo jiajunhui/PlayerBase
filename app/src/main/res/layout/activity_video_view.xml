@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#999999">
+    android:background="#352e2e">
 
     <LinearLayout
         android:id="@+id/render_set"
@@ -73,6 +73,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/aspect_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="16dp"
@@ -144,6 +145,12 @@
             android:textSize="14sp"
             android:textColor="#ffffff"/>
     </LinearLayout>
+
+    <com.kk.taurus.avplayer.view.VisualizerView
+        android:id="@+id/musicWave"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/aspect_layout"/>
 
     <com.kk.taurus.playerbase.widget.BaseVideoView
         android:id="@+id/videoView"
