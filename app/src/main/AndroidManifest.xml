@@ -42,7 +42,7 @@
         <activity
             android:name=".ui.DetailPageActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="sensor"/>
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

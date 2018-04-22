@@ -17,6 +17,9 @@ import com.kk.taurus.playerbase.render.IRender;
 import com.kk.taurus.playerbase.render.RenderTextureView;
 import com.kk.taurus.playerbase.widget.ViewContainer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Taurus on 2018/4/15.
  */
@@ -37,8 +40,11 @@ public class SPlayer {
     private int mVideoWidth,mVideoHeight;
     private int mVideoSarNum,mVideoSarDen;
 
+    private List<OnPlayerEventListener> onPlayerEventListeners;
+
     private SPlayer(){
         mAppContext = App.get().getApplicationContext();
+        onPlayerEventListeners = new ArrayList<>();
         mPlayer = new AVPlayer(mAppContext);
         mViewContainer = new ViewContainer(mAppContext);
         mViewContainer.setBackgroundColor(Color.BLACK);
@@ -54,6 +60,26 @@ public class SPlayer {
             }
         }
         return i;
+    }
+
+    public int[] getWH(){
+        return new int[]{mVideoWidth,mVideoHeight};
+    }
+
+    public void addOnPlayerEventListener(OnPlayerEventListener onPlayerEventListener){
+        if(onPlayerEventListeners.contains(onPlayerEventListener))
+            return;
+        onPlayerEventListeners.add(onPlayerEventListener);
+    }
+
+    public void removeOnPlayerEventListener(OnPlayerEventListener onPlayerEventListener){
+        onPlayerEventListeners.remove(onPlayerEventListener);
+    }
+
+    private void dispatchEventListeners(int eventCode, Bundle bundle){
+        for(OnPlayerEventListener listener:onPlayerEventListeners){
+            listener.onPlayerEvent(eventCode, bundle);
+        }
     }
 
     private OnReceiverEventListener mInternalReceiverEventListener = new OnReceiverEventListener() {
@@ -98,6 +124,7 @@ public class SPlayer {
                 }else if(eventCode==OnPlayerEventListener.PLAYER_EVENT_ON_PREPARED){
                     bindRenderHolder(mRenderHolder);
                 }
+                dispatchEventListeners(eventCode, bundle);
                 mViewContainer.dispatchPlayEvent(eventCode, bundle);
             }
         });
