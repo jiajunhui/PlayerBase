@@ -172,6 +172,7 @@ public class SPlayer {
     private void resetLayoutContainer(){
         ViewParent parent = mViewContainer.getParent();
         if(parent!=null && parent instanceof ViewGroup){
+            mRenderHolder = null;
             ((ViewGroup)parent).removeAllViews();
         }
     }
@@ -212,6 +213,7 @@ public class SPlayer {
     }
 
     public void destroy(){
+        mRenderHolder = null;
         if(mPlayer!=null)
             mPlayer.destroy();
         i = null;

@@ -149,7 +149,7 @@ public class RenderTextureView extends TextureView implements IRender {
             if(mRenderCallback!=null){
                 mRenderCallback.onSurfaceDestroy(new InternalRenderHolder(surface));
             }
-            return false;
+            return true;
         }
 
         @Override

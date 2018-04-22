@@ -82,9 +82,13 @@ public final class AVPlayer implements IPlayer{
             new TimerCounterProxy.OnCounterUpdateListener() {
         @Override
         public void onCounter() {
+            int curr = getCurrentPosition();
+            int duration = getDuration();
+            if(duration <= 0 || curr < 0)
+                return;
             Bundle bundle = BundlePool.obtain();
-            bundle.putInt(EventKey.INT_ARG1, getCurrentPosition());
-            bundle.putInt(EventKey.INT_ARG2, getDuration());
+            bundle.putInt(EventKey.INT_ARG1, curr);
+            bundle.putInt(EventKey.INT_ARG2, duration);
             callBackPlayEventListener(OnPlayerEventListener.PLAYER_EVENT_ON_TIMER_UPDATE, bundle);
         }
     };
