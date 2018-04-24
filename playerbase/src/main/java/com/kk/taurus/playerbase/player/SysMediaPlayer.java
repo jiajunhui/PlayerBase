@@ -356,7 +356,7 @@ public class SysMediaPlayer extends BaseInternalPlayer {
                         case MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START:
                             PLog.d(TAG, "MEDIA_INFO_VIDEO_RENDERING_START");
                             startSeekPos = 0;
-                            submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_RENDER_START,null);
+                            submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_RENDER_START,null);
                             break;
                         case MediaPlayer.MEDIA_INFO_BUFFERING_START:
                             PLog.d(TAG, "MEDIA_INFO_BUFFERING_START:");
@@ -368,18 +368,23 @@ public class SysMediaPlayer extends BaseInternalPlayer {
                             break;
                         case MediaPlayer.MEDIA_INFO_BAD_INTERLEAVING:
                             PLog.d(TAG, "MEDIA_INFO_BAD_INTERLEAVING:");
+                            submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_BAD_INTERLEAVING,null);
                             break;
                         case MediaPlayer.MEDIA_INFO_NOT_SEEKABLE:
                             PLog.d(TAG, "MEDIA_INFO_NOT_SEEKABLE:");
+                            submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_NOT_SEEKABLE,null);
                             break;
                         case MediaPlayer.MEDIA_INFO_METADATA_UPDATE:
                             PLog.d(TAG, "MEDIA_INFO_METADATA_UPDATE:");
+                            submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_METADATA_UPDATE,null);
                             break;
                         case MediaPlayer.MEDIA_INFO_UNSUPPORTED_SUBTITLE:
                             PLog.d(TAG, "MEDIA_INFO_UNSUPPORTED_SUBTITLE:");
+                            submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_UNSUPPORTED_SUBTITLE,null);
                             break;
                         case MediaPlayer.MEDIA_INFO_SUBTITLE_TIMED_OUT:
                             PLog.d(TAG, "MEDIA_INFO_SUBTITLE_TIMED_OUT:");
+                            submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_SUBTITLE_TIMED_OUT,null);
                             break;
                     }
                     return true;

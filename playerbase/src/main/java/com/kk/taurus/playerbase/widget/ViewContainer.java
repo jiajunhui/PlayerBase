@@ -28,6 +28,8 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.kk.taurus.playerbase.event.IEventDispatcher;
+import com.kk.taurus.playerbase.log.PLog;
+import com.kk.taurus.playerbase.receiver.BaseReceiver;
 import com.kk.taurus.playerbase.touch.OnTouchGestureListener;
 import com.kk.taurus.playerbase.receiver.BaseCover;
 import com.kk.taurus.playerbase.receiver.DefaultLevelCoverContainer;
@@ -45,6 +47,8 @@ import com.kk.taurus.playerbase.touch.ContainerTouchHelper;
  */
 
 public class ViewContainer extends FrameLayout implements OnReceiverEventListener, OnTouchGestureListener {
+
+    final String TAG = "ViewContainer";
 
     private FrameLayout mRenderContainer;
     private ICoverStrategy mCoverStrategy;
@@ -151,6 +155,7 @@ public class ViewContainer extends FrameLayout implements OnReceiverEventListene
             public void onEach(IReceiver receiver) {
                 //bind the ReceiverEventListener for receivers connect.
                 receiver.bindReceiverEventListener(ViewContainer.this);
+                PLog.d(TAG, "ReceiverEventListener bind : " + ((BaseReceiver)receiver).getTag());
                 if(receiver instanceof BaseCover){
                     //add cover view to cover strategy container.
                     mCoverStrategy.addCover((BaseCover) receiver);

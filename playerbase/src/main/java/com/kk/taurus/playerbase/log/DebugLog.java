@@ -77,8 +77,8 @@ public class DebugLog {
             case OnPlayerEventListener.PLAYER_EVENT_ON_SEEK_COMPLETE:
                 value = "PLAYER_EVENT_ON_SEEK_COMPLETE";
                 break;
-            case OnPlayerEventListener.PLAYER_EVENT_ON_RENDER_START:
-                value = "PLAYER_EVENT_ON_RENDER_START";
+            case OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_RENDER_START:
+                value = "PLAYER_EVENT_ON_VIDEO_RENDER_START";
                 break;
             case OnPlayerEventListener.PLAYER_EVENT_ON_PLAY_COMPLETE:
                 value = "PLAYER_EVENT_ON_PLAY_COMPLETE";
@@ -92,6 +92,43 @@ public class DebugLog {
             case OnPlayerEventListener.PLAYER_EVENT_ON_TIMER_UPDATE:
                 value = "PLAYER_EVENT_ON_TIMER_UPDATE";
                 break;
+            case OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_ROTATION_CHANGED:
+                value = "PLAYER_EVENT_ON_VIDEO_ROTATION_CHANGED";
+                break;
+            case OnPlayerEventListener.PLAYER_EVENT_ON_AUDIO_DECODER_START:
+                value = "PLAYER_EVENT_ON_AUDIO_DECODER_START";
+                break;
+            case OnPlayerEventListener.PLAYER_EVENT_ON_AUDIO_RENDER_START:
+                value = "PLAYER_EVENT_ON_AUDIO_RENDER_START";
+                break;
+            case OnPlayerEventListener.PLAYER_EVENT_ON_AUDIO_SEEK_RENDERING_START:
+                value = "PLAYER_EVENT_ON_AUDIO_SEEK_RENDERING_START";
+                break;
+            case OnPlayerEventListener.PLAYER_EVENT_ON_NETWORK_BANDWIDTH:
+                value = "PLAYER_EVENT_ON_NETWORK_BANDWIDTH";
+                break;
+            case OnPlayerEventListener.PLAYER_EVENT_ON_BAD_INTERLEAVING:
+                value = "PLAYER_EVENT_ON_BAD_INTERLEAVING";
+                break;
+            case OnPlayerEventListener.PLAYER_EVENT_ON_NOT_SEEKABLE:
+                value = "PLAYER_EVENT_ON_NOT_SEEKABLE";
+                break;
+            case OnPlayerEventListener.PLAYER_EVENT_ON_METADATA_UPDATE:
+                value = "PLAYER_EVENT_ON_METADATA_UPDATE";
+                break;
+            case OnPlayerEventListener.PLAYER_EVENT_ON_TIMED_TEXT_ERROR:
+                value = "PLAYER_EVENT_ON_TIMED_TEXT_ERROR";
+                break;
+            case OnPlayerEventListener.PLAYER_EVENT_ON_UNSUPPORTED_SUBTITLE:
+                value = "PLAYER_EVENT_ON_UNSUPPORTED_SUBTITLE";
+                break;
+            case OnPlayerEventListener.PLAYER_EVENT_ON_SUBTITLE_TIMED_OUT:
+                value = "PLAYER_EVENT_ON_SUBTITLE_TIMED_OUT";
+                break;
+
+
+            //--------------------------------provider event-----------------------------
+
             case OnPlayerEventListener.PLAYER_EVENT_ON_PROVIDER_DATA_START:
                 value = "PLAYER_EVENT_ON_PROVIDER_DATA_START";
                 break;
@@ -113,9 +150,33 @@ public class DebugLog {
             case OnErrorEventListener.ERROR_EVENT_COMMON:
                 value = "ERROR_EVENT_COMMON";
                 break;
-            default:
-                value = "unKnow error";
+            case OnErrorEventListener.ERROR_EVENT_UNKNOWN:
+                value = "ERROR_EVENT_UNKNOWN";
                 break;
+            case OnErrorEventListener.ERROR_EVENT_SERVER_DIED:
+                value = "ERROR_EVENT_SERVER_DIED";
+                break;
+            case OnErrorEventListener.ERROR_EVENT_NOT_VALID_FOR_PROGRESSIVE_PLAYBACK:
+                value = "ERROR_EVENT_NOT_VALID_FOR_PROGRESSIVE_PLAYBACK";
+                break;
+            case OnErrorEventListener.ERROR_EVENT_IO:
+                value = "ERROR_EVENT_IO";
+                break;
+            case OnErrorEventListener.ERROR_EVENT_MALFORMED:
+                value = "ERROR_EVENT_MALFORMED";
+                break;
+            case OnErrorEventListener.ERROR_EVENT_UNSUPPORTED:
+                value = "ERROR_EVENT_UNSUPPORTED";
+                break;
+            case OnErrorEventListener.ERROR_EVENT_TIMED_OUT:
+                value = "ERROR_EVENT_TIMED_OUT";
+                break;
+            default:
+                value = "unKnow code error";
+                break;
+        }
+        if(bundle!=null){
+            value += bundle.toString();
         }
         PLog.e(EVENT_TAG_ERROR_EVENT, value);
     }

@@ -29,7 +29,7 @@ public class LoadingCover extends BaseCover {
                 setLoadingState(true);
                 break;
 
-            case OnPlayerEventListener.PLAYER_EVENT_ON_RENDER_START:
+            case OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_RENDER_START:
             case OnPlayerEventListener.PLAYER_EVENT_ON_BUFFERING_END:
             case OnPlayerEventListener.PLAYER_EVENT_ON_STOP:
             case OnPlayerEventListener.PLAYER_EVENT_ON_PROVIDER_DATA_ERROR:

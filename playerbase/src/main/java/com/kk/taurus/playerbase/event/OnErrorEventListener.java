@@ -27,7 +27,19 @@ public interface OnErrorEventListener {
     //A error that causes a play to terminate
     int ERROR_EVENT_COMMON = -88001;
 
-    int ERROR_EVENT_UNKNOW = -88002;
+    int ERROR_EVENT_UNKNOWN = -88002;
+
+    int ERROR_EVENT_SERVER_DIED = -88003;
+
+    int ERROR_EVENT_NOT_VALID_FOR_PROGRESSIVE_PLAYBACK = -88004;
+
+    int ERROR_EVENT_IO = -88005;
+
+    int ERROR_EVENT_MALFORMED = -88006;
+
+    int ERROR_EVENT_UNSUPPORTED = -88007;
+
+    int ERROR_EVENT_TIMED_OUT = -88008;
 
     void onErrorEvent(int eventCode, Bundle bundle);
 

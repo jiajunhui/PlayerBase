@@ -388,7 +388,7 @@ public class IjkPlayer extends BaseInternalPlayer {
 //                            Log.d(TAG, "MEDIA_INFO_VIDEO_RENDERING_START:" + " renderView == SurfaceView : " + (mCurrentRender==RENDER_SURFACE_VIEW));
                             PLog.d(TAG, "MEDIA_INFO_VIDEO_RENDERING_START");
                             startSeekPos = 0;
-                            submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_RENDER_START,null);
+                            submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_RENDER_START,null);
                             break;
                         case IMediaPlayer.MEDIA_INFO_BUFFERING_START:
                             PLog.d(TAG, "MEDIA_INFO_BUFFERING_START:");
@@ -400,21 +400,33 @@ public class IjkPlayer extends BaseInternalPlayer {
                             break;
                         case IMediaPlayer.MEDIA_INFO_NETWORK_BANDWIDTH:
                             PLog.d(TAG, "MEDIA_INFO_NETWORK_BANDWIDTH: " + arg2);
+                            Bundle obtain = BundlePool.obtain();
+                            obtain.putInt(EventKey.INT_DATA,arg2);
+                            submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_NETWORK_BANDWIDTH,obtain);
                             break;
                         case IMediaPlayer.MEDIA_INFO_BAD_INTERLEAVING:
                             PLog.d(TAG, "MEDIA_INFO_BAD_INTERLEAVING:");
+                            submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_BAD_INTERLEAVING,null);
                             break;
                         case IMediaPlayer.MEDIA_INFO_NOT_SEEKABLE:
                             PLog.d(TAG, "MEDIA_INFO_NOT_SEEKABLE:");
+                            submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_NOT_SEEKABLE,null);
                             break;
                         case IMediaPlayer.MEDIA_INFO_METADATA_UPDATE:
                             PLog.d(TAG, "MEDIA_INFO_METADATA_UPDATE:");
+                            submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_METADATA_UPDATE,null);
+                            break;
+                        case IMediaPlayer.MEDIA_INFO_TIMED_TEXT_ERROR:
+                            PLog.d(TAG, "MEDIA_INFO_TIMED_TEXT_ERROR:");
+                            submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_TIMED_TEXT_ERROR,null);
                             break;
                         case IMediaPlayer.MEDIA_INFO_UNSUPPORTED_SUBTITLE:
                             PLog.d(TAG, "MEDIA_INFO_UNSUPPORTED_SUBTITLE:");
+                            submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_UNSUPPORTED_SUBTITLE,null);
                             break;
                         case IMediaPlayer.MEDIA_INFO_SUBTITLE_TIMED_OUT:
                             PLog.d(TAG, "MEDIA_INFO_SUBTITLE_TIMED_OUT:");
+                            submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_SUBTITLE_TIMED_OUT,null);
                             break;
                         case IMediaPlayer.MEDIA_INFO_VIDEO_ROTATION_CHANGED:
                             PLog.d(TAG, "MEDIA_INFO_VIDEO_ROTATION_CHANGED: " + arg2);
@@ -424,6 +436,15 @@ public class IjkPlayer extends BaseInternalPlayer {
                             break;
                         case IMediaPlayer.MEDIA_INFO_AUDIO_RENDERING_START:
                             PLog.d(TAG, "MEDIA_INFO_AUDIO_RENDERING_START:");
+                            submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_AUDIO_RENDER_START,null);
+                            break;
+                        case IMediaPlayer.MEDIA_INFO_AUDIO_DECODED_START:
+                            PLog.d(TAG, "MEDIA_INFO_AUDIO_DECODED_START:");
+                            submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_AUDIO_DECODER_START,null);
+                            break;
+                        case IMediaPlayer.MEDIA_INFO_AUDIO_SEEK_RENDERING_START:
+                            PLog.d(TAG, "MEDIA_INFO_AUDIO_SEEK_RENDERING_START:");
+                            submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_AUDIO_SEEK_RENDERING_START,null);
                             break;
                     }
                     return true;

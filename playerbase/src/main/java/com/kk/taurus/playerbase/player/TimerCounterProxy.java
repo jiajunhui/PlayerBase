@@ -63,7 +63,7 @@ public class TimerCounterProxy {
     public void proxyPlayEvent(int eventCode, Bundle bundle){
         switch (eventCode){
             case OnPlayerEventListener.PLAYER_EVENT_ON_DATA_SOURCE_SET:
-            case OnPlayerEventListener.PLAYER_EVENT_ON_RENDER_START:
+            case OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_RENDER_START:
                 start();
                 break;
             case OnPlayerEventListener.PLAYER_EVENT_ON_STOP:

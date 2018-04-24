@@ -251,7 +251,7 @@ public class VideoViewActivity extends AppCompatActivity implements OnReceiverEv
                 DataSource dataSource = (DataSource) bundle.getSerializable(EventKey.SERIALIZABLE_DATA);
                 mCurrUrl = dataSource.getData();
                 break;
-            case OnPlayerEventListener.PLAYER_EVENT_ON_RENDER_START:
+            case OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_RENDER_START:
                 updateVisualizer();
                 break;
         }

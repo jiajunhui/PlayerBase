@@ -61,4 +61,9 @@ public abstract class BaseReceiver implements IReceiver {
         return mAppContext;
     }
 
+    //default tag is class simple name
+    public Object getTag(){
+        return this.getClass().getSimpleName();
+    }
+
 }
