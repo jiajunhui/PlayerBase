@@ -33,7 +33,7 @@ public class DebugLog {
     public static void onPlayEventLog(int eventCode, Bundle bundle){
         if(!PLog.LOG_OPEN)
             return;
-        String value = "";
+        String value;
         switch (eventCode){
             case OnPlayerEventListener.PLAYER_EVENT_ON_DATA_SOURCE_SET:
                 value = "PLAYER_EVENT_ON_DATA_SOURCE_SET";
@@ -138,6 +138,9 @@ public class DebugLog {
             case OnPlayerEventListener.PLAYER_EVENT_ON_PROVIDER_DATA_ERROR:
                 value = "PLAYER_EVENT_ON_PROVIDER_DATA_ERROR";
                 break;
+            default:
+                value = "UNKNOWN EVENT, maybe from provider, maybe from user custom code.";
+                break;
         }
         PLog.d(EVENT_TAG_PLAY_EVENT, value);
     }
@@ -147,6 +150,9 @@ public class DebugLog {
             return;
         String value;
         switch (eventCode){
+            case OnErrorEventListener.ERROR_EVENT_DATA_PROVIDER_ERROR:
+                value = "ERROR_EVENT_DATA_PROVIDER_ERROR";
+                break;
             case OnErrorEventListener.ERROR_EVENT_COMMON:
                 value = "ERROR_EVENT_COMMON";
                 break;
@@ -172,11 +178,11 @@ public class DebugLog {
                 value = "ERROR_EVENT_TIMED_OUT";
                 break;
             default:
-                value = "unKnow code error";
+                value = "unKnow code error, maybe user custom errorCode";
                 break;
         }
         if(bundle!=null){
-            value += bundle.toString();
+            value += "," + bundle.toString();
         }
         PLog.e(EVENT_TAG_ERROR_EVENT, value);
     }

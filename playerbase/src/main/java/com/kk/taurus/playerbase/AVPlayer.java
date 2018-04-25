@@ -84,6 +84,7 @@ public final class AVPlayer implements IPlayer{
         public void onCounter() {
             int curr = getCurrentPosition();
             int duration = getDuration();
+            //check valid data.
             if(duration <= 0 || curr < 0)
                 return;
             Bundle bundle = BundlePool.obtain();
@@ -105,14 +106,20 @@ public final class AVPlayer implements IPlayer{
         @Override
         public void onErrorEvent(int eventCode, Bundle bundle) {
             mTimerCounterProxy.proxyErrorEvent(eventCode, bundle);
-            if(mOnErrorEventListener!=null)
-                mOnErrorEventListener.onErrorEvent(eventCode, bundle);
+            callBackErrorEventListener(eventCode, bundle);
         }
     };
 
+    //must last callback event listener , because bundle will be recycle after callback.
     private void callBackPlayEventListener(int eventCode, Bundle bundle) {
         if(mOnPlayerEventListener!=null)
             mOnPlayerEventListener.onPlayerEvent(eventCode, bundle);
+    }
+
+    //must last callback event listener , because bundle will be recycle after callback.
+    private void callBackErrorEventListener(int eventCode, Bundle bundle){
+        if(mOnErrorEventListener!=null)
+            mOnErrorEventListener.onErrorEvent(eventCode, bundle);
     }
 
     @Override
@@ -164,17 +171,28 @@ public final class AVPlayer implements IPlayer{
                             internalPlayerStart(data.getStartPos());
                         }
                     }
+                    //success video data call back.
+                    callBackPlayEventListener(OnPlayerEventListener.PLAYER_EVENT_ON_PROVIDER_DATA_SUCCESS, bundle);
+                    break;
+                default:
+                    //success other code ,for example ,maybe IDataProvider.PROVIDER_CODE_EXTRA_DATA
+                    //Usually, these state codes are customizable by the user.
+                    callBackPlayEventListener(code, bundle);
                     break;
             }
-            //must last callback event listener , because bundle will be recycle after callback.
-            callBackPlayEventListener(OnPlayerEventListener.PLAYER_EVENT_ON_PROVIDER_DATA_SUCCESS, bundle);
         }
 
         @Override
         public void onProviderError(int code, Bundle bundle) {
             if(mOnProviderListener!=null)
                 mOnProviderListener.onProviderError(code, bundle);
+            //need recreate a new bundle, because a bundle will be recycle after call back.
+            Bundle errorBundle = new Bundle(bundle);
+            errorBundle.putInt(EventKey.INT_DATA,code);
+            //call back player event
             callBackPlayEventListener(OnPlayerEventListener.PLAYER_EVENT_ON_PROVIDER_DATA_ERROR, bundle);
+            //call back error event
+            callBackErrorEventListener(OnErrorEventListener.ERROR_EVENT_DATA_PROVIDER_ERROR,errorBundle);
         }
     };
 
@@ -182,6 +200,7 @@ public final class AVPlayer implements IPlayer{
     public void setDataSource(DataSource dataSource) {
         this.mDataSource = dataSource;
         initListener();
+        //if not set DataProvider,will be set data to decoder.
         if(!useProvider())
             interPlayerSetDataSource(dataSource);
 

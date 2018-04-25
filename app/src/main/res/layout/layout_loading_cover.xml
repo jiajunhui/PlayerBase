@@ -22,7 +22,8 @@
         <com.kk.taurus.avplayer.view.SmileView
             android:id="@+id/cover_player_loading_view_loading"
             android:layout_width="50dp"
-            android:layout_height="50dp" />
+            android:layout_height="50dp"
+            android:layout_centerHorizontal="true"/>
 
         <TextView
             android:layout_width="wrap_content"

@@ -77,25 +77,19 @@ public class IjkPlayer extends BaseInternalPlayer {
     public void setDataSource(DataSource data) {
         if(data!=null){
             openVideo(data);
-            //-----send event-----
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(EventKey.SERIALIZABLE_DATA,data);
-            //on set data source
-            submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_DATA_SOURCE_SET,bundle);
-            //-----send event-----
         }
     }
 
-    private void openVideo(DataSource data) {
+    private void openVideo(DataSource dataSource) {
         try {
             if(mMediaPlayer==null){
                 mMediaPlayer = new IjkMediaPlayer();
             }else{
+                stop();
                 reset();
                 resetListener();
             }
-            Uri mUri = Uri.parse(data.getData());
-            Map<String, String> mHeaders = new HashMap<>();
+            Uri mUri = Uri.parse(dataSource.getData());
             // REMOVED: mAudioSession
             mMediaPlayer.setOnPreparedListener(mPreparedListener);
             mMediaPlayer.setOnVideoSizeChangedListener(mSizeChangedListener);
@@ -106,11 +100,15 @@ public class IjkPlayer extends BaseInternalPlayer {
             mMediaPlayer.setOnBufferingUpdateListener(mBufferingUpdateListener);
             updateStatus(STATE_INITIALIZED);
 
-            mMediaPlayer.setDataSource(mAppContext, mUri);
+            mMediaPlayer.setDataSource(mUri.toString());
 
             mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mMediaPlayer.setScreenOnWhilePlaying(true);
             mMediaPlayer.prepareAsync();
+
+            Bundle bundle = BundlePool.obtain();
+            bundle.putSerializable(EventKey.SERIALIZABLE_DATA,dataSource);
+            submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_DATA_SOURCE_SET,bundle);
         }catch (Exception e){
             e.printStackTrace();
             updateStatus(STATE_ERROR);
@@ -139,10 +137,10 @@ public class IjkPlayer extends BaseInternalPlayer {
 
     @Override
     public void start(int msc){
+        if(msc > 0){
+            startSeekPos = msc;
+        }
         if(available()){
-            if(msc > 0){
-                startSeekPos = msc;
-            }
             start();
         }
     }

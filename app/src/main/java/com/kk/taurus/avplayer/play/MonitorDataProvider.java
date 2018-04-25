@@ -41,6 +41,12 @@ public class MonitorDataProvider extends BaseDataProvider {
         @Override
         public void run() {
             mRequestNum = mRequestNum%DataUtils.urls.length;
+//            if(mRequestNum%2==1){
+//                Bundle bundle = BundlePool.obtain();
+//                bundle.putString(EventKey.STRING_DATA, "TestError");
+//                onProviderError(888,bundle);
+//                return;
+//            }
             mDataSource.setData(DataUtils.urls[mRequestNum]);
             mRequestNum++;
             Bundle bundle = BundlePool.obtain();

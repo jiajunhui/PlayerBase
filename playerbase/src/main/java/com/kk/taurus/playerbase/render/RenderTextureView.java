@@ -26,8 +26,6 @@ import android.view.View;
 import com.kk.taurus.playerbase.log.PLog;
 import com.kk.taurus.playerbase.player.IPlayer;
 
-import java.lang.ref.WeakReference;
-
 /**
  * Created by Taurus on 2017/11/19.
  *
@@ -110,16 +108,17 @@ public class RenderTextureView extends TextureView implements IRender {
 
     private static final class InternalRenderHolder implements IRenderHolder{
 
-        private WeakReference<SurfaceTexture> mSurfaceTexture;
+        private Surface mSurfaceRefer;
 
         public InternalRenderHolder(SurfaceTexture surfaceTexture){
-            this.mSurfaceTexture = new WeakReference<>(surfaceTexture);
+            mSurfaceRefer = new Surface(surfaceTexture);
         }
 
         @Override
         public void bindPlayer(IPlayer player) {
-            if(player!=null && mSurfaceTexture.get()!=null){
-                player.setSurface(new Surface(mSurfaceTexture.get()));
+            if(player!=null && mSurfaceRefer!=null){
+                PLog.d("RenderTextureView","****bindPlayer****");
+                player.setSurface(mSurfaceRefer);
             }
         }
 

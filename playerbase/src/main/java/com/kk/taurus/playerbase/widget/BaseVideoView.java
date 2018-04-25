@@ -149,10 +149,10 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
         mBufferPercentage = 0;
         //init AudioManager
         requestAudioFocus();
-        //set data to player
-        mPlayer.setDataSource(dataSource);
         //Reconfigure the rendering view each time the resource is switched
         setRenderType(nRenderType);
+        //set data to player
+        mPlayer.setDataSource(dataSource);
     }
 
     private void requestAudioFocus(){
@@ -208,6 +208,8 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
         }
         //clear render holder
         mRenderHolder = null;
+        mPlayer.setDisplay(null);
+        mPlayer.setSurface(null);
         mRender.setRenderCallback(mRenderCallback);
         //update some params
         mRender.updateVideoSize(mVideoWidth, mVideoHeight);

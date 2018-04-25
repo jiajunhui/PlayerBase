@@ -46,7 +46,7 @@ import com.kk.taurus.playerbase.touch.ContainerTouchHelper;
  * Created by Taurus on 2018/3/17.
  */
 
-public class ViewContainer extends FrameLayout implements OnReceiverEventListener, OnTouchGestureListener {
+public class ViewContainer extends FrameLayout implements OnTouchGestureListener {
 
     final String TAG = "ViewContainer";
 
@@ -138,14 +138,6 @@ public class ViewContainer extends FrameLayout implements OnReceiverEventListene
         this.mOnReceiverEventListener = onReceiverEventListener;
     }
 
-    @Override
-    public void onReceiverEvent(int eventCode, Bundle bundle) {
-        if(mOnReceiverEventListener!=null)
-            mOnReceiverEventListener.onReceiverEvent(eventCode, bundle);
-        if(mEventDispatcher !=null)
-            mEventDispatcher.dispatchReceiverEvent(eventCode, bundle);
-    }
-
     public final void setReceiverGroup(ReceiverGroup receiverGroup){
         removeReceivers();
         if(receiverGroup==null)
@@ -154,7 +146,7 @@ public class ViewContainer extends FrameLayout implements OnReceiverEventListene
             @Override
             public void onEach(IReceiver receiver) {
                 //bind the ReceiverEventListener for receivers connect.
-                receiver.bindReceiverEventListener(ViewContainer.this);
+                receiver.bindReceiverEventListener(mInternalReceiverEventListener);
                 PLog.d(TAG, "ReceiverEventListener bind : " + ((BaseReceiver)receiver).getTag());
                 if(receiver instanceof BaseCover){
                     //add cover view to cover strategy container.
@@ -166,6 +158,16 @@ public class ViewContainer extends FrameLayout implements OnReceiverEventListene
         //init event dispatcher.
         mEventDispatcher = new EventDispatcher(receiverGroup);
     }
+
+    private OnReceiverEventListener mInternalReceiverEventListener = new OnReceiverEventListener() {
+        @Override
+        public void onReceiverEvent(int eventCode, Bundle bundle) {
+            if(mOnReceiverEventListener!=null)
+                mOnReceiverEventListener.onReceiverEvent(eventCode, bundle);
+            if(mEventDispatcher !=null)
+                mEventDispatcher.dispatchReceiverEvent(eventCode, bundle);
+        }
+    };
 
     public final void removeRender(){
         if(mRenderContainer!=null)

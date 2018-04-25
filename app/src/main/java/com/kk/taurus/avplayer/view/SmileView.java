@@ -126,13 +126,19 @@ public class SmileView extends View {
 
     private void cancelAnimator01(){
         if(mValueAnimator01!=null){
+            mValueAnimator01.removeAllListeners();
+            mValueAnimator01.removeAllUpdateListeners();
             mValueAnimator01.cancel();
+            mValueAnimator01 = null;
         }
     }
 
     private void cancelAnimator02(){
         if(mValueAnimator02!=null){
+            mValueAnimator02.removeAllListeners();
+            mValueAnimator02.removeAllUpdateListeners();
             mValueAnimator02.cancel();
+            mValueAnimator02 = null;
         }
     }
 

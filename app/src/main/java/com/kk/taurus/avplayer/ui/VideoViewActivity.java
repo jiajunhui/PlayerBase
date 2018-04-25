@@ -205,6 +205,7 @@ public class VideoViewActivity extends AppCompatActivity implements OnReceiverEv
     protected void onDestroy() {
         super.onDestroy();
         mVideoView.stopPlayback();
+        releaseVisualizer();
     }
 
     @Override
@@ -252,9 +253,15 @@ public class VideoViewActivity extends AppCompatActivity implements OnReceiverEv
                 mCurrUrl = dataSource.getData();
                 break;
             case OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_RENDER_START:
+                releaseVisualizer();
                 updateVisualizer();
                 break;
         }
+    }
+
+    private void releaseVisualizer() {
+        if(mVisualizer!=null)
+            mVisualizer.release();
     }
 
     private void updateVisualizer() {
