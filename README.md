@@ -4,7 +4,8 @@ PlayerBase是一种将播放业务组件化处理的解决方案框架。无论�
 # Demo下载
 [Demo下载](http://fir.im/lmhz)
 <br>
-PlayerBase是基于事件分发来完成各组件间协作的问题，定义了接收者Receiver以及覆盖层Cover的概念来进行组件的管理。
+# 设计
+PlayerBase是基于事件分发来完成各组件间协作的问题，定义了接收者Receiver以及覆盖层Cover的概念来进行组件的管理。详细设计见PPT和代码。
 
 ![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/widget_struct.jpeg)
 
