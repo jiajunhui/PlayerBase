@@ -1,6 +1,13 @@
 # 介绍
 PlayerBase是一种将播放业务组件化处理的解决方案框架。无论是播放器内的控制视图还是业务视图，均可以做到组件化处理。将播放器的开发变得清晰简单，更利于产品的迭代。框架内包含系统MediaPlayer的解码实现，demo里面有一套完整的IJKPlayer解码方案的实现和接入，请参见源码可以接入其他播放器解码方案。demo自带了播放控制组件、Loading组件，所有UI功能组件可完全自定义。
-<br><br>
+<br>
+# Demo下载
+[Demo下载](http://fir.im/lmhz)
+<br>
+PlayerBase是基于事件分发来完成各组件间协作的问题，定义了接收者Receiver以及覆盖层Cover的概念来进行组件的管理。
+
+![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/widget_struct.jpeg)
+
 遇到问题，请联系作者。QQ：309812983  Email：junhui_jia@163.com
 
 效果<br>
@@ -9,9 +16,6 @@ PlayerBase是一种将播放业务组件化处理的解决方案框架。无论�
 ![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_20180420-170103.png)
 ![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_20180420-170146.png)
 ![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_20180420-170251.png)
-
-# Demo下载
-[Demo下载](http://fir.im/lmhz)
 
 # 功能
 __-解码方案的组件化、配置化管理__<br>
