@@ -150,6 +150,55 @@ receiverGroup.addReceiver("controller_cover", new ControllerCover(context));
 mPlayer.setReceiverGroup(receiverGroup);
 ```
 
+# 数据提供者DataProvider的接入
+数据提供者的定义是为了更好的进行播控统一的完整性而设计的。比如Server端给你的是id，你需要用id再去请求某个接口取播放的url，这时我们可以把由id到url这个过程统一的做一个处理，就由DataProvider来完成这个对接过程。
+
+```java
+public class MonitorDataProvider extends BaseDataProvider {
+
+    private DataSource mDataSource;
+
+    private int mRequestNum;
+
+    private Handler mHandler = new Handler(Looper.getMainLooper()){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+
+        }
+    };
+
+    @Override
+    public void handleSourceData(DataSource sourceData) {
+        this.mDataSource = sourceData;
+        onProviderDataStart();
+        mHandler.postDelayed(mLoadDataRunnable, 2000);
+    }
+
+    private Runnable mLoadDataRunnable = new Runnable() {
+        @Override
+        public void run() {
+            mRequestNum = mRequestNum%DataUtils.urls.length;
+            mDataSource.setData(DataUtils.urls[mRequestNum]);
+            mRequestNum++;
+            Bundle bundle = BundlePool.obtain();
+            bundle.putSerializable(EventKey.SERIALIZABLE_DATA, mDataSource);
+            onProviderDataSuccess(IDataProvider.PROVIDER_CODE_SUCCESS_MEDIA_DATA, bundle);
+        }
+    };
+
+    @Override
+    public void cancel() {
+        mHandler.removeCallbacks(mLoadDataRunnable);
+    }
+
+    @Override
+    public void destroy() {
+        cancel();
+    }
+}
+```
+
 # 无缝续播的使用
 类似于今日头条等应用的效果，在列表中播放时无缝续播进入详情页或者无缝进入全屏页面。<br><br>
 原理：解码器动态关联不同的渲染视图（RenderView），比如使用MediaPlayer动态关联SurfaceView，就如同一个电脑主机不断连接不同的显示器。
