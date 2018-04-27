@@ -18,14 +18,31 @@ package com.kk.taurus.playerbase.entity;
 
 /**
  * Created by Taurus on 2018/3/17.
+ *
+ * The entity class of the decoder type.
+ *
  */
 
 public class DecoderPlan {
 
+    /**
+     * Required field
+     * It must be guaranteed that the number is unique.
+     */
     private int idNumber;
-    private String tag;
+
+    /**
+     * Required field
+     * it's decoder class reference path.
+     */
     private String classPath;
+
+    private String tag;
     private String desc;
+
+    public DecoderPlan(int idNumber, String classPath) {
+        this(idNumber, classPath, classPath);
+    }
 
     public DecoderPlan(int idNumber, String classPath, String desc) {
         this.idNumber = idNumber;

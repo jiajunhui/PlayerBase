@@ -19,19 +19,63 @@ package com.kk.taurus.playerbase.entity;
 import android.net.Uri;
 
 import java.io.Serializable;
-import java.util.Map;
+import java.util.HashMap;
+
+import com.kk.taurus.playerbase.provider.IDataProvider;
 
 /**
  * Created by Taurus on 2018/3/17.
+ *
+ * if you have video url ,please set it to data field.{@link DataSource#data}
+ *
+ * if you use DataProvider{@link IDataProvider},According to yourself needs,
+ * set them to the corresponding fields. For example, you need to use a long id
+ * to get playback address, you can set the long id to id field{@link DataSource#id}.
+ *
  */
 
 public class DataSource implements Serializable {
 
+    /**
+     * extension field, you can use it if you need.
+     */
     private String tag;
+
+    /**
+     * extension field, you can use it if you need.
+     */
+    private String sid;
+
+    /**
+     * Usually it's a video url.
+     */
     private String data;
+
+    /**
+     * you can set video name to it.
+     */
+    private String title;
+
+    /**
+     * extension field, you can use it if you need.
+     */
     private long id;
+
+    /**
+     * if you want set uri data,you can use this filed.
+     */
     private Uri uri;
-    private Map<String, String> headers;
+
+    /**
+     * if you want set some data to decoder
+     * or some extra data, you can set this field.
+     */
+    private HashMap<String, String> extra;
+
+    /**
+     * If you want to start play at a specified time,
+     * please set this field.
+     */
     private int startPos;
 
     public DataSource() {
@@ -54,6 +98,14 @@ public class DataSource implements Serializable {
         this.tag = tag;
     }
 
+    public String getSid() {
+        return sid;
+    }
+
+    public void setSid(String sid) {
+        this.sid = sid;
+    }
+
     public String getData() {
         return data;
     }
@@ -70,6 +122,14 @@ public class DataSource implements Serializable {
         this.id = id;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public Uri getUri() {
         return uri;
     }
@@ -78,12 +138,12 @@ public class DataSource implements Serializable {
         this.uri = uri;
     }
 
-    public Map<String, String> getHeaders() {
-        return headers;
+    public HashMap<String, String> getExtra() {
+        return extra;
     }
 
-    public void setHeaders(Map<String, String> headers) {
-        this.headers = headers;
+    public void setExtra(HashMap<String, String> extra) {
+        this.extra = extra;
     }
 
     public int getStartPos() {

@@ -53,7 +53,7 @@ public class ViewContainer extends FrameLayout implements OnTouchGestureListener
     private FrameLayout mRenderContainer;
     private ICoverStrategy mCoverStrategy;
 
-    private ReceiverGroup mReceiverGroup;
+    private IReceiverGroup mReceiverGroup;
     private IEventDispatcher mEventDispatcher;
 
     private OnReceiverEventListener mOnReceiverEventListener;

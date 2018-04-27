@@ -39,10 +39,20 @@ public interface IDataProvider {
 
     void setOnProviderListener(OnProviderListener onProviderListener);
 
+    /**
+     * the provider handle data source, Users usually need to be implemented
+     * @param sourceData
+     */
     void handleSourceData(DataSource sourceData);
 
+    /**
+     * cancel the DataProvider handle data source.
+     */
     void cancel();
 
+    /**
+     * destroy the provider.
+     */
     void destroy();
 
 

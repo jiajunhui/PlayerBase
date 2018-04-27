@@ -18,16 +18,56 @@ package com.kk.taurus.playerbase.receiver;
 
 /**
  * Created by Taurus on 2018/4/14.
+ *
+ * Used to manage receivers
+ *
  */
 
 public interface IReceiverGroup {
 
+    /**
+     * add a receiver, you need put a unique key for this receiver.
+     * @param key
+     * @param receiver
+     */
     void addReceiver(String key, IReceiver receiver);
+
+    /**
+     * remove a receiver by key.
+     * @param key
+     */
     void removeReceiver(String key);
+
+    /**
+     * loop all receivers
+     * @param onLoopListener
+     */
     void forEach(OnLoopListener onLoopListener);
+
+    /**
+     * loop all receivers by a receiver filter.
+     * @param filter
+     * @param onLoopListener
+     */
     void forEach(OnReceiverFilter filter, OnLoopListener onLoopListener);
+
+    /**
+     * get receiver by key.
+     * @param key
+     * @param <T>
+     * @return
+     */
     <T extends IReceiver> T getReceiver(String key);
+
+    /**
+     * get the ReceiverGroup group value.
+     * @return
+     */
     GroupValue getGroupValue();
+
+    /**
+     * clean receivers.
+     */
     void clearReceivers();
 
     interface OnLoopListener{
