@@ -19,6 +19,7 @@ package com.kk.taurus.playerbase.receiver;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Taurus on 2018/4/20.
@@ -45,6 +46,15 @@ public final class GroupValue {
         if(mOnGroupValueUpdateListeners.contains(onGroupValueUpdateListener))
             return;
         mOnGroupValueUpdateListeners.add(onGroupValueUpdateListener);
+        //when listener add, if user observe keys in current KeySet, call back it.
+        checkCurrentKeySet();
+    }
+
+    private void checkCurrentKeySet() {
+        Set<String> keys = mValueMap.keySet();
+        for(String key : keys){
+            callBackValueUpdate(key, mValueMap.get(key));
+        }
     }
 
     public void unregisterOnGroupValueUpdateListener(

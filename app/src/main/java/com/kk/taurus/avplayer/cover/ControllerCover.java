@@ -286,6 +286,10 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
     @Override
     public void onPlayerEvent(int eventCode, Bundle bundle) {
         switch (eventCode){
+            case OnPlayerEventListener.PLAYER_EVENT_ON_DATA_SOURCE_SET:
+                mBufferPercentage = 0;
+                updateUI(0, 0);
+                break;
             case OnPlayerEventListener.PLAYER_EVENT_ON_BUFFERING_UPDATE:
                 if(bundle!=null){
                     mBufferPercentage = bundle.getInt(EventKey.INT_DATA);

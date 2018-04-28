@@ -65,6 +65,8 @@ public interface IRender {
 
     View getRenderView();
 
+    void release();
+
     /**
      * IRenderHolder is responsible for associate the decoder with rendering views.
      *

@@ -29,6 +29,8 @@ public final class ReceiverGroup implements IReceiverGroup{
     private Map<String, IReceiver> mReceivers;
     private Set<String> mKeySet;
 
+    private OnReceiverGroupChangeListener mOnReceiverGroupChangeListener;
+
     private GroupValue mGroupValue;
 
     public ReceiverGroup(){
@@ -36,17 +38,28 @@ public final class ReceiverGroup implements IReceiverGroup{
         mGroupValue = new GroupValue();
     }
 
+    @Override
+    public void setOnReceiverGroupChangeListener(
+            OnReceiverGroupChangeListener onReceiverGroupChangeListener) {
+        this.mOnReceiverGroupChangeListener = onReceiverGroupChangeListener;
+    }
+
+    @Override
     public void addReceiver(String key, IReceiver receiver){
         receiver.bindGroupValue(mGroupValue);
         //call back method onReceiverCreate().
         ((BaseReceiver)receiver).onReceiverCreate();
         mReceivers.put(key, receiver);
         mKeySet = mReceivers.keySet();
+        if(mOnReceiverGroupChangeListener!=null)
+            mOnReceiverGroupChangeListener.onReceiverAdd(key, receiver);
     }
 
     @Override
     public void removeReceiver(String key) {
-        mReceivers.remove(key);
+        IReceiver receiver = mReceivers.remove(key);
+        if(mOnReceiverGroupChangeListener!=null)
+            mOnReceiverGroupChangeListener.onReceiverRemove(key, receiver);
     }
 
     @Override
@@ -77,9 +90,14 @@ public final class ReceiverGroup implements IReceiverGroup{
         return mGroupValue;
     }
 
+    @Override
     public void clearReceivers(){
-        if(mReceivers!=null)
-            mReceivers.clear();
+        if(mKeySet==null)
+            return;
+        for (String key : mKeySet) {
+            removeReceiver(key);
+        }
+        mReceivers.clear();
     }
 
 }

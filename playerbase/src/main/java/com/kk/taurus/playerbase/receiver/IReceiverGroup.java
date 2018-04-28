@@ -25,6 +25,8 @@ package com.kk.taurus.playerbase.receiver;
 
 public interface IReceiverGroup {
 
+    void setOnReceiverGroupChangeListener(OnReceiverGroupChangeListener onReceiverGroupChangeListener);
+
     /**
      * add a receiver, you need put a unique key for this receiver.
      * @param key
@@ -69,6 +71,11 @@ public interface IReceiverGroup {
      * clean receivers.
      */
     void clearReceivers();
+
+    interface OnReceiverGroupChangeListener{
+        void onReceiverAdd(String key, IReceiver receiver);
+        void onReceiverRemove(String key, IReceiver receiver);
+    }
 
     interface OnLoopListener{
         void onEach(IReceiver receiver);

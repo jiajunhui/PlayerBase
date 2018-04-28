@@ -102,6 +102,11 @@ public class RenderSurfaceView extends SurfaceView implements IRender {
         PLog.d(TAG,"onSurfaceViewAttachedToWindow");
     }
 
+    @Override
+    public void release() {
+
+    }
+
     private static final class InternalRenderHolder implements IRenderHolder{
 
         private WeakReference<SurfaceHolder> mSurfaceHolder;

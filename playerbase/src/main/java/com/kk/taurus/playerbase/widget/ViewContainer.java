@@ -139,24 +139,57 @@ public class ViewContainer extends FrameLayout implements OnTouchGestureListener
     }
 
     public final void setReceiverGroup(ReceiverGroup receiverGroup){
-        removeReceivers();
+        //clean all receivers
+        removeAllReceivers();
         if(receiverGroup==null)
             return;
+        //loop attach receivers
         receiverGroup.forEach(new IReceiverGroup.OnLoopListener() {
             @Override
             public void onEach(IReceiver receiver) {
-                //bind the ReceiverEventListener for receivers connect.
-                receiver.bindReceiverEventListener(mInternalReceiverEventListener);
-                PLog.d(TAG, "ReceiverEventListener bind : " + ((BaseReceiver)receiver).getTag());
-                if(receiver instanceof BaseCover){
-                    //add cover view to cover strategy container.
-                    mCoverStrategy.addCover((BaseCover) receiver);
-                }
+                attachReceiver(receiver);
+            }
+        });
+        //set a receiver group change listener, dynamic attach a receiver
+        // when user add it or detach a receiver when user remove it.
+        receiverGroup.setOnReceiverGroupChangeListener(
+                new IReceiverGroup.OnReceiverGroupChangeListener() {
+            @Override
+            public void onReceiverAdd(String key, IReceiver receiver) {
+                attachReceiver(receiver);
+            }
+            @Override
+            public void onReceiverRemove(String key, IReceiver receiver) {
+                detachReceiver(receiver);
             }
         });
         this.mReceiverGroup = receiverGroup;
         //init event dispatcher.
         mEventDispatcher = new EventDispatcher(receiverGroup);
+    }
+
+    //attach receiver, bind receiver event listener
+    // and add cover container if it is a cover instance.
+    private void attachReceiver(IReceiver receiver){
+        //bind the ReceiverEventListener for receivers connect.
+        receiver.bindReceiverEventListener(mInternalReceiverEventListener);
+        PLog.d(TAG, "ReceiverEventListener bind : " + ((BaseReceiver)receiver).getTag());
+        if(receiver instanceof BaseCover){
+            //add cover view to cover strategy container.
+            mCoverStrategy.addCover((BaseCover) receiver);
+        }
+    }
+
+    //detach receiver, unbind receiver event listener
+    // and remove cover container if it is a cover instance.
+    private void detachReceiver(IReceiver receiver){
+        //unbind the ReceiverEventListener for receivers connect.
+        receiver.bindReceiverEventListener(null);
+        PLog.w(TAG, "ReceiverEventListener unbind : " + ((BaseReceiver)receiver).getTag());
+        if(receiver instanceof BaseCover){
+            //remove cover view to cover strategy container.
+            mCoverStrategy.removeCover((BaseCover) receiver);
+        }
     }
 
     private OnReceiverEventListener mInternalReceiverEventListener = new OnReceiverEventListener() {
@@ -174,19 +207,9 @@ public class ViewContainer extends FrameLayout implements OnTouchGestureListener
             mRenderContainer.removeAllViews();
     }
 
-    public final void removeReceivers(){
-        mCoverStrategy.removeAllCovers();
+    public final void removeAllReceivers(){
         if(mReceiverGroup!=null)
             mReceiverGroup.clearReceivers();
-    }
-
-    public final void removeReceiver(String key){
-        if(mReceiverGroup!=null){
-            IReceiver receiver = mReceiverGroup.getReceiver(key);
-            if(receiver instanceof BaseCover)
-                mCoverStrategy.removeCover((BaseCover) receiver);
-            mReceiverGroup.removeReceiver(key);
-        }
     }
 
     //----------------------------------dispatch gesture touch event---------------------------------

@@ -147,6 +147,7 @@ public class SPlayer {
             }
             @Override
             public void onSurfaceDestroy(IRender.IRenderHolder renderHolder) {
+                mRenderHolder = null;
                 mPlayer.setSurface(null);
             }
         });

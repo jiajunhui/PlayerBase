@@ -24,6 +24,7 @@ import com.kk.taurus.playerbase.entity.DataSource;
 import com.kk.taurus.playerbase.event.EventKey;
 import com.kk.taurus.playerbase.event.OnPlayerEventListener;
 import com.kk.taurus.playerbase.receiver.OnReceiverEventListener;
+import com.kk.taurus.playerbase.receiver.ReceiverGroup;
 import com.kk.taurus.playerbase.render.AspectRatio;
 import com.kk.taurus.playerbase.widget.BaseVideoView;
 
@@ -55,6 +56,7 @@ public class VideoViewActivity extends AppCompatActivity implements OnReceiverEv
             VisualizerView.WAVE_TYPE_CURVE};
 
     private int typeIndex;
+    private ReceiverGroup mReceiverGroup;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -124,7 +126,8 @@ public class VideoViewActivity extends AppCompatActivity implements OnReceiverEv
 
         mVideoView.setOnPlayerEventListener(this);
         mVideoView.setOnReceiverEventListener(this);
-        mVideoView.setReceiverGroup(ReceiverGroupManager.get().getReceiverGroup(this));
+        mReceiverGroup = ReceiverGroupManager.get().getReceiverGroup(this);
+        mVideoView.setReceiverGroup(mReceiverGroup);
 
         //设置数据提供者 MonitorDataProvider
         mMonitorDataProvider = new MonitorDataProvider();
@@ -255,6 +258,9 @@ public class VideoViewActivity extends AppCompatActivity implements OnReceiverEv
             case OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_RENDER_START:
                 releaseVisualizer();
                 updateVisualizer();
+                break;
+            case OnPlayerEventListener.PLAYER_EVENT_ON_PLAY_COMPLETE:
+
                 break;
         }
     }

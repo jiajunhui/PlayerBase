@@ -196,6 +196,7 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
 
     @Override
     public void setRenderType(int renderType) {
+        releaseRender();
         nRenderType = renderType;
         switch (renderType){
             case RENDER_TYPE_SURFACE_VIEW:
@@ -204,6 +205,7 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
             default:
             case RENDER_TYPE_TEXTURE_VIEW:
                 mRender = new RenderTextureView(getContext());
+                ((RenderTextureView)mRender).setTakeOverSurfaceTexture(true);
                 break;
         }
         //clear render holder
@@ -303,9 +305,20 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
     @Override
     public void stopPlayback() {
         PLog.e(TAG,"stopPlayback release.");
-        mRenderHolder = null;
-        mPlayer.destroy();
         releaseAudioFocus();
+        mPlayer.destroy();
+        mRenderHolder = null;
+        releaseRender();
+    }
+
+    /**
+     * release render
+     * see also
+     * {@link RenderTextureView#release()}
+     */
+    private void releaseRender(){
+        if(mRender!=null)
+            mRender.release();
     }
 
     private OnPlayerEventListener mInternalPlayerEventListener = new OnPlayerEventListener() {
@@ -389,7 +402,6 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
             PLog.d(TAG,"onSurfaceDestroy...");
             //on surface destroy detach player
             mRenderHolder = null;
-            mPlayer.setDisplay(null);
         }
     };
 
