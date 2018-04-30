@@ -52,17 +52,14 @@ public final class EventDispatcher implements IEventDispatcher{
         DebugLog.onPlayEventLog(eventCode, bundle);
         switch (eventCode){
             case OnPlayerEventListener.PLAYER_EVENT_ON_TIMER_UPDATE:
-                mReceiverGroup.forEach(new IReceiverGroup.OnReceiverFilter() {
-                    @Override
-                    public boolean filter(IReceiver receiver) {
-                        return receiver instanceof OnTimerUpdateListener;
-                    }
-                }, new IReceiverGroup.OnLoopListener() {
+                mReceiverGroup.forEach(new IReceiverGroup.OnLoopListener() {
                     @Override
                     public void onEach(IReceiver receiver) {
-                        ((OnTimerUpdateListener)receiver)
+                        if(receiver instanceof OnTimerUpdateListener)
+                            ((OnTimerUpdateListener)receiver)
                                 .onTimerUpdate(bundle.getInt(EventKey.INT_ARG1),
                                         bundle.getInt(EventKey.INT_ARG2));
+                        receiver.onPlayerEvent(eventCode, bundle);
                     }
                 });
                 break;

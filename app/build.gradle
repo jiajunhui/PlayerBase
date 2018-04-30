@@ -29,10 +29,10 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    compile 'com.jiajunhui.xapp.medialoader:medialoader:1.0.0'
-    compile 'com.android.support:recyclerview-v7:26.1.0'
-    compile 'com.lovedise:permissiongen:0.0.6'
-    compile 'com.kk.taurus.mediadataretriever:mediadataretriever:0.0.1'
+    implementation 'com.jiajunhui.xapp.medialoader:medialoader:1.0.0'
+    implementation 'com.android.support:recyclerview-v7:26.1.0'
+    implementation 'com.lovedise:permissiongen:0.0.6'
+    implementation 'com.kk.taurus.mediadataretriever:mediadataretriever:0.0.1'
     implementation project(':ijkplayer')
 
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'

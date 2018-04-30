@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.kk.taurus.threadpool:threadpool-1.0.6">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/threadpool-1.0.6.aar/dd0ddb7710560f2e205a190a02a6b331/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/threadpool-1.0.6.aar/dd0ddb7710560f2e205a190a02a6b331/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.kk.taurus.threadpool/threadpool/1.0.6/5bc61dfceebb3a59ce0e12c512d79d674505afa7/threadpool-1.0.6-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

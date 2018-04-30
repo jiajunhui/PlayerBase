@@ -28,7 +28,7 @@ import java.util.Set;
  *
  */
 
-public final class GroupValue {
+public final class GroupValue implements Cloneable{
 
     private HashMap<String,Object> mValueMap;
 
@@ -179,4 +179,10 @@ public final class GroupValue {
         return d;
     }
 
+    @Override
+    protected GroupValue clone() throws CloneNotSupportedException {
+        GroupValue groupValue = (GroupValue) super.clone();
+        groupValue.mValueMap = (HashMap<String, Object>) mValueMap.clone();
+        return groupValue;
+    }
 }
