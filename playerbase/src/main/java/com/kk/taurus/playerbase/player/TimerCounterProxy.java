@@ -30,12 +30,17 @@ import com.kk.taurus.playerbase.event.OnPlayerEventListener;
 public class TimerCounterProxy {
 
     private final int MSG_CODE_COUNTER = 1;
-    private final int DEFAULT_INTERVAL = 1000;
-    private int counterInterval = DEFAULT_INTERVAL;
+    private int counterInterval;
 
+    //indicator is start message.
     private boolean start;
 
+    //indicator is in legal state,
+    // eg. maybe in error state.
     private boolean isLegal;
+
+    //proxy state, default use it.
+    private boolean useProxy = true;
 
     private OnCounterUpdateListener onCounterUpdateListener;
 
@@ -45,7 +50,7 @@ public class TimerCounterProxy {
             super.handleMessage(msg);
             switch (msg.what){
                 case MSG_CODE_COUNTER:
-                    if(!start || !isLegal)
+                    if(!useProxy || !start || !isLegal)
                         return;
                     if(onCounterUpdateListener!=null)
                         onCounterUpdateListener.onCounter();
@@ -59,24 +64,45 @@ public class TimerCounterProxy {
         this.counterInterval = counterIntervalMs;
     }
 
+    public void setUseProxy(boolean useProxy) {
+        this.useProxy = useProxy;
+        if(!useProxy){
+            cancel();
+        }else{
+            start();
+        }
+    }
+
     public void setOnCounterUpdateListener(OnCounterUpdateListener onCounterUpdateListener) {
         this.onCounterUpdateListener = onCounterUpdateListener;
     }
 
     public void proxyPlayEvent(int eventCode, Bundle bundle){
+        boolean needStart = false;
+        boolean needCancel = false;
         switch (eventCode){
             case OnPlayerEventListener.PLAYER_EVENT_ON_DATA_SOURCE_SET:
             case OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_RENDER_START:
                 isLegal = true;
-                start();
+                needStart = true;
                 break;
             case OnPlayerEventListener.PLAYER_EVENT_ON_STOP:
             case OnPlayerEventListener.PLAYER_EVENT_ON_DESTROY:
             case OnPlayerEventListener.PLAYER_EVENT_ON_PLAY_COMPLETE:
                 isLegal = false;
-                cancel();
+                needCancel = true;
                 break;
         }
+
+        if(!useProxy)
+            return;
+        if(needStart){
+            start();
+        }
+        if(needCancel){
+            cancel();
+        }
+
     }
 
     public void proxyErrorEvent(int eventCode, Bundle bundle){

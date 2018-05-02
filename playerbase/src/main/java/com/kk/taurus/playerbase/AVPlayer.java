@@ -66,11 +66,7 @@ public final class AVPlayer implements IPlayer{
      * @param useTimerProxy
      */
     public void setUseTimerProxy(boolean useTimerProxy) {
-        if(useTimerProxy){
-            mTimerCounterProxy.start();
-        }else{
-            mTimerCounterProxy.cancel();
-        }
+        mTimerCounterProxy.setUseProxy(useTimerProxy);
     }
 
     private void initListener() {
