@@ -34,6 +34,9 @@ public class TimerCounterProxy {
     private int counterInterval = DEFAULT_INTERVAL;
 
     private boolean start;
+
+    private boolean isLegal;
+
     private OnCounterUpdateListener onCounterUpdateListener;
 
     private Handler mHandler = new Handler(Looper.getMainLooper()){
@@ -42,7 +45,7 @@ public class TimerCounterProxy {
             super.handleMessage(msg);
             switch (msg.what){
                 case MSG_CODE_COUNTER:
-                    if(!start)
+                    if(!start || !isLegal)
                         return;
                     if(onCounterUpdateListener!=null)
                         onCounterUpdateListener.onCounter();
@@ -64,17 +67,20 @@ public class TimerCounterProxy {
         switch (eventCode){
             case OnPlayerEventListener.PLAYER_EVENT_ON_DATA_SOURCE_SET:
             case OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_RENDER_START:
+                isLegal = true;
                 start();
                 break;
             case OnPlayerEventListener.PLAYER_EVENT_ON_STOP:
             case OnPlayerEventListener.PLAYER_EVENT_ON_DESTROY:
             case OnPlayerEventListener.PLAYER_EVENT_ON_PLAY_COMPLETE:
+                isLegal = false;
                 cancel();
                 break;
         }
     }
 
     public void proxyErrorEvent(int eventCode, Bundle bundle){
+        isLegal = false;
         cancel();
     }
 

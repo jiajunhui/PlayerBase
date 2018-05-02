@@ -61,6 +61,18 @@ public final class AVPlayer implements IPlayer{
         mTimerCounterProxy = new TimerCounterProxy(1000);
     }
 
+    /**
+     * setting timer proxy state. default open.
+     * @param useTimerProxy
+     */
+    public void setUseTimerProxy(boolean useTimerProxy) {
+        if(useTimerProxy){
+            mTimerCounterProxy.start();
+        }else{
+            mTimerCounterProxy.cancel();
+        }
+    }
+
     private void initListener() {
         mTimerCounterProxy.setOnCounterUpdateListener(mOnCounterUpdateListener);
         if(mInternalPlayer!=null){
