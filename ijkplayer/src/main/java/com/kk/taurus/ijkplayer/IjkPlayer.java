@@ -1,11 +1,13 @@
 package com.kk.taurus.ijkplayer;
 
+import android.content.Context;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 
+import com.kk.taurus.playerbase.config.AppContextAttach;
 import com.kk.taurus.playerbase.entity.DataSource;
 import com.kk.taurus.playerbase.event.BundlePool;
 import com.kk.taurus.playerbase.event.EventKey;
@@ -13,6 +15,9 @@ import com.kk.taurus.playerbase.event.OnErrorEventListener;
 import com.kk.taurus.playerbase.event.OnPlayerEventListener;
 import com.kk.taurus.playerbase.log.PLog;
 import com.kk.taurus.playerbase.player.BaseInternalPlayer;
+
+import java.io.FileDescriptor;
+import java.util.HashMap;
 
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
@@ -84,7 +89,6 @@ public class IjkPlayer extends BaseInternalPlayer {
                 reset();
                 resetListener();
             }
-            Uri mUri = Uri.parse(dataSource.getData());
             // REMOVED: mAudioSession
             mMediaPlayer.setOnPreparedListener(mPreparedListener);
             mMediaPlayer.setOnVideoSizeChangedListener(mSizeChangedListener);
@@ -95,7 +99,24 @@ public class IjkPlayer extends BaseInternalPlayer {
             mMediaPlayer.setOnBufferingUpdateListener(mBufferingUpdateListener);
             updateStatus(STATE_INITIALIZED);
 
-            mMediaPlayer.setDataSource(mUri.toString());
+            String data = dataSource.getData();
+            Uri uri = dataSource.getUri();
+            HashMap<String, String> headers = dataSource.getExtra();
+            FileDescriptor fileDescriptor = dataSource.getFileDescriptor();
+            if(data!=null){
+                if(headers==null)
+                    mMediaPlayer.setDataSource(data);
+                else
+                    mMediaPlayer.setDataSource(data, headers);
+            }else if(uri!=null){
+                Context applicationContext = AppContextAttach.getApplicationContext();
+                if(headers==null)
+                    mMediaPlayer.setDataSource(applicationContext, uri);
+                else
+                    mMediaPlayer.setDataSource(applicationContext, uri, headers);
+            }else if(fileDescriptor!=null){
+                mMediaPlayer.setDataSource(fileDescriptor);
+            }
 
             mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mMediaPlayer.setScreenOnWhilePlaying(true);

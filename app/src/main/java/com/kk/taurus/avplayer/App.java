@@ -5,6 +5,7 @@ import android.os.Environment;
 
 import com.kk.taurus.ijkplayer.IjkPlayer;
 import com.kk.taurus.playerbase.config.PlayerConfig;
+import com.kk.taurus.playerbase.config.PlayerLibrary;
 import com.kk.taurus.playerbase.entity.DecoderPlan;
 import com.kk.taurus.playerbase.log.PLog;
 import com.squareup.leakcanary.LeakCanary;
@@ -64,6 +65,7 @@ public class App extends Application {
 
         PlayerConfig.addDecoderPlan(new DecoderPlan(PLAN_ID_IJK, IjkPlayer.class.getName(), "IjkPlayer"));
         PlayerConfig.setDefaultPlanId(PLAN_ID_IJK);
+        PlayerLibrary.init(this);
     }
 
 }

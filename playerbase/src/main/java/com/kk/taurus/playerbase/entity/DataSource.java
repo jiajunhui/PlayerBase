@@ -16,8 +16,10 @@
 
 package com.kk.taurus.playerbase.entity;
 
+import android.content.res.AssetFileDescriptor;
 import android.net.Uri;
 
+import java.io.FileDescriptor;
 import java.io.Serializable;
 import java.util.HashMap;
 
@@ -71,6 +73,12 @@ public class DataSource implements Serializable {
      * or some extra data, you can set this field.
      */
     private HashMap<String, String> extra;
+
+    //a FileDescriptor data source, maybe you need.
+    private FileDescriptor fileDescriptor;
+
+    //AssetFileDescriptor data source, you can use it to play files in assets dir.
+    private AssetFileDescriptor assetFileDescriptor;
 
     /**
      * If you want to start play at a specified time,
@@ -144,6 +152,22 @@ public class DataSource implements Serializable {
 
     public void setExtra(HashMap<String, String> extra) {
         this.extra = extra;
+    }
+
+    public FileDescriptor getFileDescriptor() {
+        return fileDescriptor;
+    }
+
+    public void setFileDescriptor(FileDescriptor fileDescriptor) {
+        this.fileDescriptor = fileDescriptor;
+    }
+
+    public AssetFileDescriptor getAssetFileDescriptor() {
+        return assetFileDescriptor;
+    }
+
+    public void setAssetFileDescriptor(AssetFileDescriptor assetFileDescriptor) {
+        this.assetFileDescriptor = assetFileDescriptor;
     }
 
     public int getStartPos() {

@@ -52,7 +52,7 @@ __-等功能……__<br>
 
 ```gradle
 dependencies {
-  compile 'com.kk.taurus.playerbase:playerbase:3.1.1'
+  compile 'com.kk.taurus.playerbase:playerbase:3.1.2'
 }
 ```
 
@@ -63,6 +63,20 @@ dependencies {
 
 -keep public class * implements com.kk.taurus.playerbase.player.IPlayer{*;}
 
+```
+
+初始化
+
+```java
+public class App extends Application {
+
+    @Override
+    public void onCreate() {
+        //...
+        PlayerLibrary.init(this);
+    }
+    
+}
 ```
 
 使用BaseVideoView对象，可写入xml布局中，也可用代码创建。
