@@ -45,7 +45,7 @@ public class SPlayer {
     private SPlayer(){
         mAppContext = App.get().getApplicationContext();
         onPlayerEventListeners = new ArrayList<>();
-        mPlayer = new AVPlayer(mAppContext);
+        mPlayer = new AVPlayer();
         mViewContainer = new ViewContainer(mAppContext);
         mViewContainer.setBackgroundColor(Color.BLACK);
         mViewContainer.setReceiverGroup(ReceiverGroupManager.get().getLiteReceiverGroup(mAppContext));

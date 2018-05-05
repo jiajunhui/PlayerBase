@@ -1,6 +1,5 @@
 package com.kk.taurus.ijkplayer;
 
-import android.content.Context;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,15 +26,11 @@ public class IjkPlayer extends BaseInternalPlayer {
 
     private IjkMediaPlayer mMediaPlayer;
 
-    private Context mAppContext;
-
     private int mTargetState;
 
     private int startSeekPos;
 
-    public IjkPlayer(Context context) {
-        super(context);
-        this.mAppContext = context;
+    public IjkPlayer() {
         init();
     }
 

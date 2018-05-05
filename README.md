@@ -52,7 +52,7 @@ __-等功能……__<br>
 
 ```gradle
 dependencies {
-  compile 'com.kk.taurus.playerbase:playerbase:3.1.0'
+  compile 'com.kk.taurus.playerbase:playerbase:3.1.1'
 }
 ```
 

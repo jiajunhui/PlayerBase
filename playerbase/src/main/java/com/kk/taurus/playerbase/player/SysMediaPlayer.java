@@ -16,7 +16,6 @@
 
 package com.kk.taurus.playerbase.player;
 
-import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -42,8 +41,7 @@ public class SysMediaPlayer extends BaseInternalPlayer {
 
     private int mTargetState;
 
-    public SysMediaPlayer(Context context) {
-        super(context);
+    public SysMediaPlayer() {
         init();
     }
 

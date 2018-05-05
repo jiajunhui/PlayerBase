@@ -16,7 +16,6 @@
 
 package com.kk.taurus.playerbase.player;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import com.kk.taurus.playerbase.event.OnErrorEventListener;
@@ -36,10 +35,6 @@ public abstract class BaseInternalPlayer implements IPlayer {
 
     private OnPlayerEventListener mOnPlayerEventListener;
     private OnErrorEventListener mOnErrorEventListener;
-
-    public BaseInternalPlayer(Context context){
-
-    }
 
     @Override
     public void setOnPlayerEventListener(OnPlayerEventListener onPlayerEventListener) {

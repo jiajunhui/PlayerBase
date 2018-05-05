@@ -97,7 +97,7 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
     }
 
     private void init(Context context, AttributeSet attrs, int defStyleAttr) {
-        mPlayer = createPlayer(getContext());
+        mPlayer = createPlayer();
         //attach listener
         mPlayer.setOnPlayerEventListener(mInternalPlayerEventListener);
         mPlayer.setOnErrorEventListener(mInternalErrorEventListener);
@@ -130,8 +130,8 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
     }
 
     //create player instance.
-    private AVPlayer createPlayer(Context context){
-        return new AVPlayer(context);
+    private AVPlayer createPlayer(){
+        return new AVPlayer();
     }
 
     /**

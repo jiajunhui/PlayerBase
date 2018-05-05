@@ -16,8 +16,6 @@
 
 package com.kk.taurus.playerbase.config;
 
-import android.content.Context;
-
 import com.kk.taurus.playerbase.player.BaseInternalPlayer;
 
 import java.lang.reflect.Constructor;
@@ -32,10 +30,10 @@ import java.lang.reflect.Constructor;
 
 public class PlayerLoader {
 
-    public static BaseInternalPlayer loadInternalPlayer(Context context){
+    public static BaseInternalPlayer loadInternalPlayer(){
         BaseInternalPlayer internalPlayer = null;
         try {
-            Object decoderInstance = getDecoderInstance(context, PlayerConfig.getDefaultPlanId());
+            Object decoderInstance = getDecoderInstance(PlayerConfig.getDefaultPlanId());
             if(decoderInstance instanceof BaseInternalPlayer){
                 internalPlayer = (BaseInternalPlayer) decoderInstance;
             }
@@ -45,14 +43,14 @@ public class PlayerLoader {
         return internalPlayer;
     }
 
-    public static Object getDecoderInstance(Context context, int planId){
+    public static Object getDecoderInstance(int planId){
         Object instance = null;
         try{
             Class clz = getSDKClass(PlayerConfig.getPlan(planId).getClassPath());
             if(clz!=null){
                 Constructor constructor = getConstructor(clz);
                 if(constructor!=null){
-                    instance = constructor.newInstance(context);
+                    instance = constructor.newInstance();
                 }
             }
         }catch (Exception e){
@@ -64,7 +62,7 @@ public class PlayerLoader {
     private static Constructor getConstructor(Class clz){
         Constructor result = null;
         try{
-            result = clz.getConstructor(Context.class);
+            result = clz.getConstructor();
         }catch (Exception e){
             e.printStackTrace();
         }

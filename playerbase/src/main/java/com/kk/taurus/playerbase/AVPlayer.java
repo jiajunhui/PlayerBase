@@ -16,7 +16,6 @@
 
 package com.kk.taurus.playerbase;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -54,9 +53,9 @@ public final class AVPlayer implements IPlayer{
 
     private TimerCounterProxy mTimerCounterProxy;
 
-    public AVPlayer(Context context){
+    public AVPlayer(){
         //loader decoder instance from config.
-        mInternalPlayer = PlayerLoader.loadInternalPlayer(context);
+        mInternalPlayer = PlayerLoader.loadInternalPlayer();
         //init timer counter proxy.
         mTimerCounterProxy = new TimerCounterProxy(1000);
     }
