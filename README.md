@@ -1,6 +1,20 @@
 # 介绍
 PlayerBase是一种将播放业务组件化处理的解决方案框架。无论是播放器内的控制视图还是业务视图，均可以做到组件化处理。将播放器的开发变得清晰简单，更利于产品的迭代。框架内包含系统MediaPlayer的解码实现，demo里面有一套完整的IJKPlayer解码方案的实现和接入，请参见源码可以接入其他播放器解码方案。demo自带了播放控制组件、Loading组件，所有UI功能组件可完全自定义。
 <br>
+
+# 功能
+__-视图的组件化处理__<br>
+__-视图组件的高复用、低耦合__<br>
+__-解码方案的组件化、配置化管理__<br>
+__-自定义接入各种解码方案__<br>
+__-解码方案的切换__<br>
+__-提供自定义数据提供者__<br>
+__-统一的事件下发机制__<br>
+__-扩展事件的添加__<br>
+__-支持列表播放中的无缝续播__<br>
+__-支持视频切角处理，边缘阴影效果-__<br>
+__-等功能……__<br>
+
 # Demo下载
 [Demo下载](http://fir.im/lmhz)
 <br>
@@ -18,17 +32,6 @@ PlayerBase是基于事件分发来完成各组件间协作的问题，定义了�
 ![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_20180420-170146.png)
 ![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_20180420-170251.png)
 
-# 功能
-__-解码方案的组件化、配置化管理__<br>
-__-自定义接入各种解码方案__<br>
-__-解码方案的切换__<br>
-__-提供自定义数据提供者__<br>
-__-视图的组件化处理__<br>
-__-统一的事件下发机制__<br>
-__-扩展事件的添加__<br>
-__-支持列表播放中的无缝续播__<br>
-__-支持视频切角处理，边缘阴影效果-__<br>
-__-等功能……__<br>
 
 # 框架的设计
 ![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/frame_structure01.png)
