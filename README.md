@@ -55,7 +55,7 @@ PlayerBase是基于事件分发来完成各组件间协作的问题，定义了�
 
 ```gradle
 dependencies {
-  compile 'com.kk.taurus.playerbase:playerbase:3.1.2'
+  compile 'com.kk.taurus.playerbase:playerbase:3.1.3'
 }
 ```
 

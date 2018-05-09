@@ -76,6 +76,8 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
     private boolean mGestureEnable = true;
     private boolean mHorizontalSlide;
 
+    private String mTimeFormat;
+
     public ControllerCover(Context context) {
         super(context);
     }
@@ -250,11 +252,11 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
     }
 
     private void setCurrTime(int curr){
-        mCurrTime.setText(TimeUtil.getTimeSmartFormat(curr));
+        mCurrTime.setText(TimeUtil.getTime(mTimeFormat, curr));
     }
 
     private void setTotalTime(int duration){
-        mTotalTime.setText(TimeUtil.getTimeSmartFormat(duration));
+        mTotalTime.setText(TimeUtil.getTime(mTimeFormat, duration));
     }
 
     private void setSeekProgress(int curr, int duration){
@@ -272,6 +274,9 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
     public void onTimerUpdate(int curr, int duration) {
         if(!mTimerUpdateProgressEnable)
             return;
+        if(mTimeFormat==null){
+            mTimeFormat = TimeUtil.getFormat(duration);
+        }
         mCurrentPosition = curr;
         mDuration = duration;
         updateUI(curr, duration);
@@ -289,6 +294,9 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
             case OnPlayerEventListener.PLAYER_EVENT_ON_DATA_SOURCE_SET:
                 mBufferPercentage = 0;
                 updateUI(0, 0);
+                break;
+            case OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_RENDER_START:
+                mTimeFormat = null;
                 break;
             case OnPlayerEventListener.PLAYER_EVENT_ON_BUFFERING_UPDATE:
                 if(bundle!=null){

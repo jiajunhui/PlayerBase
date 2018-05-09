@@ -23,6 +23,8 @@ package com.kk.taurus.playerbase.utils;
  */
 public class TimeUtil {
 
+    private static final long SECONDS_ONE_HOUR = 60*60;
+
     public static final String TIME_FORMAT_01 = "%02d:%02d";
     public static final String TIME_FORMAT_02 = "%02d:%02d:%02d";
 
@@ -36,14 +38,22 @@ public class TimeUtil {
 
     public static String getTimeSmartFormat(long timeMs){
         int totalSeconds = (int) (timeMs / 1000);
-        if(totalSeconds >= 24 * 60 * 60){
+        if(totalSeconds >= SECONDS_ONE_HOUR){
             return getTimeFormat2(timeMs);
         }else{
             return getTimeFormat1(timeMs);
         }
     }
 
-    private static String getTime(String format, long time){
+    public static String getFormat(long maxTimeMs){
+        int totalSeconds = (int) (maxTimeMs / 1000);
+        if(totalSeconds >= SECONDS_ONE_HOUR){
+            return TIME_FORMAT_02;
+        }
+        return TIME_FORMAT_01;
+    }
+
+    public static String getTime(String format, long time){
         if(time <= 0)
             time = 0;
         int totalSeconds = (int) (time / 1000);
