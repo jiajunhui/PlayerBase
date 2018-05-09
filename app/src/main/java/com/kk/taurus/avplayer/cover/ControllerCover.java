@@ -293,10 +293,8 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
         switch (eventCode){
             case OnPlayerEventListener.PLAYER_EVENT_ON_DATA_SOURCE_SET:
                 mBufferPercentage = 0;
-                updateUI(0, 0);
-                break;
-            case OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_RENDER_START:
                 mTimeFormat = null;
+                updateUI(0, 0);
                 break;
             case OnPlayerEventListener.PLAYER_EVENT_ON_BUFFERING_UPDATE:
                 if(bundle!=null){

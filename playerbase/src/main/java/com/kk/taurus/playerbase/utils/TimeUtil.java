@@ -16,6 +16,8 @@
 
 package com.kk.taurus.playerbase.utils;
 
+import android.text.TextUtils;
+
 /**
  * ------------------------------------
  * Created by Taurus on 2016/8/3.
@@ -64,6 +66,9 @@ public class TimeUtil {
             return String.format(format, minutes, seconds);
         }else if(TIME_FORMAT_02.equals(format)){
             return String.format(format, hours, minutes, seconds);
+        }
+        if(TextUtils.isEmpty(format)){
+            format = TIME_FORMAT_02;
         }
         return String.format(format, hours, minutes, seconds);
     }
