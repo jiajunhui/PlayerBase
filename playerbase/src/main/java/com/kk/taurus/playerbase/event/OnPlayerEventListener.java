@@ -156,7 +156,7 @@ public interface OnPlayerEventListener {
     /**
      * not support seek ,may be live.
      */
-    int PLAYER_EVENT_ON_NOT_SEEKABLE = -99026;
+    int PLAYER_EVENT_ON_NOT_SEEK_ABLE = -99026;
 
     /**
      * on meta data update

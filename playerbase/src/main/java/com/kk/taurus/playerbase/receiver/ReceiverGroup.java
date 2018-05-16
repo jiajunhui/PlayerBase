@@ -47,8 +47,8 @@ public final class ReceiverGroup implements IReceiverGroup{
     @Override
     public void addReceiver(String key, IReceiver receiver){
         receiver.bindGroupValue(mGroupValue);
-        //call back method onReceiverCreate().
-        ((BaseReceiver)receiver).onReceiverCreate();
+        //call back method onReceiverBind().
+        receiver.onReceiverBind();
         mReceivers.put(key, receiver);
         mKeySet = mReceivers.keySet();
         if(mOnReceiverGroupChangeListener!=null)
@@ -58,6 +58,9 @@ public final class ReceiverGroup implements IReceiverGroup{
     @Override
     public void removeReceiver(String key) {
         IReceiver receiver = mReceivers.remove(key);
+        //call back method onReceiverUnBind().
+        if(receiver!=null)
+            receiver.onReceiverUnBind();
         if(mOnReceiverGroupChangeListener!=null)
             mOnReceiverGroupChangeListener.onReceiverRemove(key, receiver);
     }

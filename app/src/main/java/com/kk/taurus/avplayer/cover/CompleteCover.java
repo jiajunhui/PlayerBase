@@ -41,8 +41,8 @@ public class CompleteCover extends BaseCover {
     }
 
     @Override
-    public void onReceiverCreate() {
-        super.onReceiverCreate();
+    public void onReceiverBind() {
+        super.onReceiverBind();
         mReplay = findViewById(R.id.tv_replay);
         mNext = findViewById(R.id.tv_next);
 

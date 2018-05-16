@@ -24,7 +24,7 @@ import com.kk.taurus.playerbase.widget.BaseVideoView;
 /**
  * Created by Taurus on 2017/11/19.
  *
- * Picture rendering view,
+ * frame rendering view,
  * using the method can refer to BaseVideoView {@link BaseVideoView}
  *
  */

@@ -24,11 +24,56 @@ import android.os.Bundle;
 
 public interface IReceiver {
 
+    /**
+     * bind group value.
+     * @param groupValue
+     */
     void bindGroupValue(GroupValue groupValue);
+
+    /**
+     * on receiver added to ReceiverGroup.
+     */
+    void onReceiverBind();
+
+    /**
+     * all player event dispatch by this method.
+     * @param eventCode
+     * @param bundle
+     */
     void onPlayerEvent(int eventCode, Bundle bundle);
+
+    /**
+     * error event.
+     * @param eventCode
+     * @param bundle
+     */
     void onErrorEvent(int eventCode, Bundle bundle);
+
+    /**
+     * bind the bridge of receivers communication
+     * @param onReceiverEventListener
+     */
     void bindReceiverEventListener(OnReceiverEventListener onReceiverEventListener);
+
+    /**
+     * receivers event.
+     * @param eventCode
+     * @param bundle
+     */
     void onReceiverEvent(int eventCode, Bundle bundle);
+
+    /**
+     * if you have a receiver instance reference,
+     * you can call this method dispatch private event.
+     * @param eventCode
+     * @param bundle
+     */
     void onPrivateEvent(int eventCode, Bundle bundle);
+
+    /**
+     * on receiver destroy.
+     * when receiver removed, this method will be callback.
+     */
+    void onReceiverUnBind();
 
 }

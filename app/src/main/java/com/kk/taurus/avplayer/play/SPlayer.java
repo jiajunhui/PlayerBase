@@ -101,7 +101,8 @@ public class SPlayer {
 
     public void play(ViewGroup group, DataSource dataSource){
         resetLayoutContainer();
-        final IRender render = new RenderTextureView(mAppContext);
+        final RenderTextureView render = new RenderTextureView(mAppContext);
+        render.setTakeOverSurfaceTexture(true);
 
         //if render change ,need update some params
         render.updateVideoSize(mVideoWidth, mVideoHeight);
@@ -148,7 +149,6 @@ public class SPlayer {
             @Override
             public void onSurfaceDestroy(IRender.IRenderHolder renderHolder) {
                 mRenderHolder = null;
-                mPlayer.setSurface(null);
             }
         });
         mViewContainer.setRenderView(render.getRenderView());

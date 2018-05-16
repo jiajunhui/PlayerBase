@@ -110,8 +110,8 @@ public class DebugLog {
             case OnPlayerEventListener.PLAYER_EVENT_ON_BAD_INTERLEAVING:
                 value = "PLAYER_EVENT_ON_BAD_INTERLEAVING";
                 break;
-            case OnPlayerEventListener.PLAYER_EVENT_ON_NOT_SEEKABLE:
-                value = "PLAYER_EVENT_ON_NOT_SEEKABLE";
+            case OnPlayerEventListener.PLAYER_EVENT_ON_NOT_SEEK_ABLE:
+                value = "PLAYER_EVENT_ON_NOT_SEEK_ABLE";
                 break;
             case OnPlayerEventListener.PLAYER_EVENT_ON_METADATA_UPDATE:
                 value = "PLAYER_EVENT_ON_METADATA_UPDATE";

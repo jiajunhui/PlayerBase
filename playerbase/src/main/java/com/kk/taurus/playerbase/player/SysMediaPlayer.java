@@ -395,7 +395,7 @@ public class SysMediaPlayer extends BaseInternalPlayer {
                             break;
                         case MediaPlayer.MEDIA_INFO_NOT_SEEKABLE:
                             PLog.d(TAG, "MEDIA_INFO_NOT_SEEKABLE:");
-                            submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_NOT_SEEKABLE,null);
+                            submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_NOT_SEEK_ABLE,null);
                             break;
                         case MediaPlayer.MEDIA_INFO_METADATA_UPDATE:
                             PLog.d(TAG, "MEDIA_INFO_METADATA_UPDATE:");

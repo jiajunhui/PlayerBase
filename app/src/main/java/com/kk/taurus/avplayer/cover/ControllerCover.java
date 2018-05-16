@@ -83,8 +83,8 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
     }
 
     @Override
-    public void onReceiverCreate() {
-        super.onReceiverCreate();
+    public void onReceiverBind() {
+        super.onReceiverBind();
         mTopContainer = findViewById(R.id.cover_player_controller_top_container);
         mBottomContainer = findViewById(R.id.cover_player_controller_bottom_container);
 

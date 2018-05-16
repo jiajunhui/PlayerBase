@@ -223,6 +223,11 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
     }
 
     @Override
+    public IRender getRender() {
+        return mRender;
+    }
+
+    @Override
     public boolean isPlaying() {
         return mPlayer.isPlaying();
     }
@@ -309,6 +314,7 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
         mPlayer.destroy();
         mRenderHolder = null;
         releaseRender();
+        mViewContainer.destroy();
     }
 
     /**

@@ -18,6 +18,7 @@ package com.kk.taurus.playerbase.widget;
 
 import com.kk.taurus.playerbase.entity.DataSource;
 import com.kk.taurus.playerbase.render.AspectRatio;
+import com.kk.taurus.playerbase.render.IRender;
 
 /**
  * Created by Taurus on 2018/3/17.
@@ -30,6 +31,7 @@ public interface IVideoView {
     void setRenderType(int renderType);
     void setAspectRatio(AspectRatio aspectRatio);
 
+    IRender getRender();
     boolean isPlaying();
     int getCurrentPosition();
     int getDuration();

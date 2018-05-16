@@ -25,8 +25,8 @@ public class ErrorCover extends BaseCover {
     }
 
     @Override
-    public void onReceiverCreate() {
-        super.onReceiverCreate();
+    public void onReceiverBind() {
+        super.onReceiverBind();
         mRetry = findViewById(R.id.tv_retry);
 
         mRetry.setOnClickListener(new View.OnClickListener() {

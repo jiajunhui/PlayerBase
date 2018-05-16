@@ -192,7 +192,9 @@ public class ViewContainer extends FrameLayout implements OnTouchGestureListener
         }
     }
 
-    private OnReceiverEventListener mInternalReceiverEventListener = new OnReceiverEventListener() {
+    //receiver event listener, a bridge for some receivers communication.
+    private OnReceiverEventListener mInternalReceiverEventListener =
+            new OnReceiverEventListener() {
         @Override
         public void onReceiverEvent(int eventCode, Bundle bundle) {
             if(mOnReceiverEventListener!=null)
@@ -201,6 +203,13 @@ public class ViewContainer extends FrameLayout implements OnTouchGestureListener
                 mEventDispatcher.dispatchReceiverEvent(eventCode, bundle);
         }
     };
+
+    public void destroy(){
+        //and remove render view.
+        removeRender();
+        //last remove all receivers.
+        removeAllReceivers();
+    }
 
     public final void removeRender(){
         if(mRenderContainer!=null)

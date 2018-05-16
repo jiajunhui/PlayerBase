@@ -34,7 +34,12 @@ public abstract class BaseReceiver implements IReceiver {
         this.mAppContext = context.getApplicationContext();
     }
 
-    public void onReceiverCreate(){
+    public void onReceiverBind(){
+
+    }
+
+    @Override
+    public void onReceiverUnBind() {
 
     }
 

@@ -63,10 +63,16 @@ public abstract class BaseCover extends BaseReceiver implements ICover, View.OnA
         onCoverDetachedToWindow();
     }
 
+    /**
+     * when cover view add to window.
+     */
     protected void onCoverAttachedToWindow(){
 
     }
 
+    /**
+     * when cover view removed from window.
+     */
     protected void onCoverDetachedToWindow(){
 
     }
