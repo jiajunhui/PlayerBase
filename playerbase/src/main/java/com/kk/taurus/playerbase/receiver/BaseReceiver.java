@@ -31,7 +31,7 @@ public abstract class BaseReceiver implements IReceiver {
     private GroupValue mGroupValue;
 
     public BaseReceiver(Context context){
-        this.mAppContext = context.getApplicationContext();
+        this.mAppContext = context;
     }
 
     public void onReceiverBind(){
