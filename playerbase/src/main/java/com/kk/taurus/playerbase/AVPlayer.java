@@ -20,8 +20,10 @@ import android.os.Bundle;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 
+import com.kk.taurus.playerbase.config.PlayerConfig;
 import com.kk.taurus.playerbase.config.PlayerLoader;
 import com.kk.taurus.playerbase.entity.DataSource;
+import com.kk.taurus.playerbase.log.PLog;
 import com.kk.taurus.playerbase.player.BaseInternalPlayer;
 import com.kk.taurus.playerbase.event.BundlePool;
 import com.kk.taurus.playerbase.event.EventKey;
@@ -54,10 +56,46 @@ public final class AVPlayer implements IPlayer{
     private TimerCounterProxy mTimerCounterProxy;
 
     public AVPlayer(){
-        //loader decoder instance from config.
-        mInternalPlayer = PlayerLoader.loadInternalPlayer();
+        loadInternalPlayer();
         //init timer counter proxy.
         mTimerCounterProxy = new TimerCounterProxy(1000);
+    }
+
+    /**
+     * init decoder instance according to your config,
+     * if init failure, It's likely that your configuration is wrong.
+     */
+    private void loadInternalPlayer() {
+        //loader decoder instance from config.
+        mInternalPlayer = PlayerLoader.loadInternalPlayer();
+        if(mInternalPlayer==null)
+            throw new RuntimeException(
+                    "init decoder instance failure, please check your config!");
+    }
+
+    /**
+     * With this method, you can switch the decoding plan,
+     * this call will be recreate internal player instance.
+     * and the subsequent operations after switching must be processed by yourself,
+     * such as resetting the data to play and so on.
+     * @param planId
+     */
+    public void changeDecoderPlan(int planId){
+        int defaultPlanId = PlayerConfig.getDefaultPlanId();
+        if(defaultPlanId == planId){
+            PLog.e(this.getClass().getSimpleName(),
+                    "Your incoming planId is the same as the current configuration");
+            return;
+        }
+        if(PlayerConfig.isLegalPlanId(planId)){
+            //if planId legal, update configuration.
+            PlayerConfig.setDefaultPlanId(planId);
+            //and reload internal player instance.
+            loadInternalPlayer();
+        }else{
+            throw new IllegalArgumentException("Illegal plan id = "
+                    + planId + ", please check your config!");
+        }
     }
 
     /**
@@ -97,11 +135,13 @@ public final class AVPlayer implements IPlayer{
             Bundle bundle = BundlePool.obtain();
             bundle.putInt(EventKey.INT_ARG1, curr);
             bundle.putInt(EventKey.INT_ARG2, duration);
-            callBackPlayEventListener(OnPlayerEventListener.PLAYER_EVENT_ON_TIMER_UPDATE, bundle);
+            callBackPlayEventListener(
+                    OnPlayerEventListener.PLAYER_EVENT_ON_TIMER_UPDATE, bundle);
         }
     };
 
-    private OnPlayerEventListener mInternalPlayerEventListener = new OnPlayerEventListener() {
+    private OnPlayerEventListener mInternalPlayerEventListener =
+            new OnPlayerEventListener() {
         @Override
         public void onPlayerEvent(int eventCode, Bundle bundle) {
             mTimerCounterProxy.proxyPlayEvent(eventCode, bundle);
@@ -109,7 +149,8 @@ public final class AVPlayer implements IPlayer{
         }
     };
 
-    private OnErrorEventListener mInternalErrorEventListener = new OnErrorEventListener() {
+    private OnErrorEventListener mInternalErrorEventListener =
+            new OnErrorEventListener() {
         @Override
         public void onErrorEvent(int eventCode, Bundle bundle) {
             mTimerCounterProxy.proxyErrorEvent(eventCode, bundle);
@@ -156,12 +197,14 @@ public final class AVPlayer implements IPlayer{
             this.mDataProvider.setOnProviderListener(mInternalProviderListener);
     }
 
-    private IDataProvider.OnProviderListener mInternalProviderListener = new IDataProvider.OnProviderListener() {
+    private IDataProvider.OnProviderListener mInternalProviderListener =
+            new IDataProvider.OnProviderListener() {
         @Override
         public void onProviderDataStart() {
             if(mOnProviderListener!=null)
                 mOnProviderListener.onProviderDataStart();
-            callBackPlayEventListener(OnPlayerEventListener.PLAYER_EVENT_ON_PROVIDER_DATA_START, null);
+            callBackPlayEventListener(
+                    OnPlayerEventListener.PLAYER_EVENT_ON_PROVIDER_DATA_START, null);
         }
 
         @Override
@@ -172,14 +215,16 @@ public final class AVPlayer implements IPlayer{
                 //on data provider load data success,need set data to decoder player.
                 case IDataProvider.PROVIDER_CODE_SUCCESS_MEDIA_DATA:
                     if(bundle!=null){
-                        DataSource data = (DataSource) bundle.getSerializable(EventKey.SERIALIZABLE_DATA);
+                        DataSource data =
+                                (DataSource) bundle.getSerializable(EventKey.SERIALIZABLE_DATA);
                         if(data!=null){
                             interPlayerSetDataSource(data);
                             internalPlayerStart(data.getStartPos());
                         }
                     }
                     //success video data call back.
-                    callBackPlayEventListener(OnPlayerEventListener.PLAYER_EVENT_ON_PROVIDER_DATA_SUCCESS, bundle);
+                    callBackPlayEventListener(
+                            OnPlayerEventListener.PLAYER_EVENT_ON_PROVIDER_DATA_SUCCESS, bundle);
                     break;
                 default:
                     //success other code ,for example ,maybe IDataProvider.PROVIDER_CODE_EXTRA_DATA
@@ -197,15 +242,18 @@ public final class AVPlayer implements IPlayer{
             Bundle errorBundle = new Bundle(bundle);
             errorBundle.putInt(EventKey.INT_DATA,code);
             //call back player event
-            callBackPlayEventListener(OnPlayerEventListener.PLAYER_EVENT_ON_PROVIDER_DATA_ERROR, bundle);
+            callBackPlayEventListener(
+                    OnPlayerEventListener.PLAYER_EVENT_ON_PROVIDER_DATA_ERROR, bundle);
             //call back error event
-            callBackErrorEventListener(OnErrorEventListener.ERROR_EVENT_DATA_PROVIDER_ERROR,errorBundle);
+            callBackErrorEventListener(
+                    OnErrorEventListener.ERROR_EVENT_DATA_PROVIDER_ERROR,errorBundle);
         }
     };
 
     @Override
     public void setDataSource(DataSource dataSource) {
         this.mDataSource = dataSource;
+        //when data source update, attach listener.
         initListener();
         //if not set DataProvider,will be set data to decoder.
         if(!useProvider())

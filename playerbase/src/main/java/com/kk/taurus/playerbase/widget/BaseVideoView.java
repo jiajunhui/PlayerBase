@@ -327,7 +327,8 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
             mRender.release();
     }
 
-    private OnPlayerEventListener mInternalPlayerEventListener = new OnPlayerEventListener() {
+    private OnPlayerEventListener mInternalPlayerEventListener =
+            new OnPlayerEventListener() {
         @Override
         public void onPlayerEvent(int eventCode, Bundle bundle) {
             //when get video size , need update render for measure.
@@ -373,7 +374,8 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
         }
     };
 
-    private OnErrorEventListener mInternalErrorEventListener = new OnErrorEventListener() {
+    private OnErrorEventListener mInternalErrorEventListener =
+            new OnErrorEventListener() {
         @Override
         public void onErrorEvent(int eventCode, Bundle bundle) {
             PLog.e(TAG,"onError : code = " + eventCode
@@ -400,7 +402,8 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
             bindRenderHolder(mRenderHolder);
         }
         @Override
-        public void onSurfaceChanged(IRender.IRenderHolder renderHolder, int format, int width, int height) {
+        public void onSurfaceChanged(IRender.IRenderHolder renderHolder,
+                                     int format, int width, int height) {
             //not handle some...
         }
         @Override

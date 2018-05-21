@@ -68,4 +68,9 @@ public class PlayerConfig {
         return mPlans.get(planId);
     }
 
+    public static boolean isLegalPlanId(int planId){
+        DecoderPlan plan = getPlan(planId);
+        return plan!=null;
+    }
+
 }

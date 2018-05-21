@@ -139,8 +139,6 @@ public class ViewContainer extends FrameLayout implements OnTouchGestureListener
     }
 
     public final void setReceiverGroup(ReceiverGroup receiverGroup){
-        //clean all receivers
-        removeAllReceivers();
         if(receiverGroup==null)
             return;
         //loop attach receivers

@@ -1,6 +1,8 @@
 package com.kk.taurus.avplayer.cover;
 
+import android.app.Activity;
 import android.content.Context;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -8,6 +10,7 @@ import android.os.Message;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -40,6 +43,13 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
 
     private TextView mCurrTime;
     private TextView mTotalTime;
+
+    private View mVolumeBox;
+    private View mBrightnessBox;
+
+    private ImageView mVolumeIcon;
+    private TextView mVolumeText;
+    private TextView mBrightnessText;
 
     private View mFastForwardBox;
     private TextView mFastForwardStepTime;
@@ -78,6 +88,11 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
 
     private String mTimeFormat;
 
+    private float brightness = -1;
+    private int volume;
+    private AudioManager audioManager;
+    private int mMaxVolume;
+
     public ControllerCover(Context context) {
         super(context);
     }
@@ -93,6 +108,12 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
         mCurrTime = findViewById(R.id.cover_player_controller_text_view_curr_time);
         mTotalTime = findViewById(R.id.cover_player_controller_text_view_total_time);
         mSeekBar = findViewById(R.id.cover_player_controller_seek_bar);
+
+        mVolumeBox = findViewById(R.id.cover_player_gesture_operation_volume_box);
+        mVolumeIcon = findViewById(R.id.cover_player_gesture_operation_volume_icon);
+        mVolumeText = findViewById(R.id.cover_player_gesture_operation_volume_text);
+        mBrightnessBox = findViewById(R.id.cover_player_gesture_operation_brightness_box);
+        mBrightnessText = findViewById(R.id.cover_player_gesture_operation_brightness_text);
 
         mFastForwardBox = findViewById(R.id.cover_player_gesture_operation_fast_forward_box);
         mFastForwardStepTime = findViewById(R.id.cover_player_gesture_operation_fast_forward_text_view_step_time);
@@ -117,6 +138,12 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
         });
 
         mSeekBar.setOnSeekBarChangeListener(onSeekBarChangeListener);
+        initAudioManager(getContext());
+    }
+
+    private void initAudioManager(Context context) {
+        audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        mMaxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
     }
 
     private IReceiverGroup.OnGroupValueUpdateListener mOnGroupValueUpdateListener =
@@ -173,6 +200,36 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
             notifyReceiverEvent(EventConstant.EVENT_CODE_CONTROLLER_REQUEST_SEEK,bundle);
         }
     };
+
+    public void setVolumeBoxState(boolean state) {
+        if(mVolumeBox!=null){
+            mVolumeBox.setVisibility(state?View.VISIBLE:View.GONE);
+        }
+    }
+
+    public void setVolumeIcon(int resId) {
+        if(mVolumeIcon!=null){
+            mVolumeIcon.setImageResource(resId);
+        }
+    }
+
+    public void setVolumeText(String text) {
+        if(mVolumeText!=null){
+            mVolumeText.setText(text);
+        }
+    }
+
+    public void setBrightnessBoxState(boolean state) {
+        if(mBrightnessBox!=null){
+            mBrightnessBox.setVisibility(state?View.VISIBLE:View.GONE);
+        }
+    }
+
+    public void setBrightnessText(String text) {
+        if(mBrightnessText!=null){
+            mBrightnessText.setText(text);
+        }
+    }
 
     private void setFastForwardState(boolean state) {
         mFastForwardBox.setVisibility(state?View.VISIBLE:View.GONE);
@@ -348,6 +405,7 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
     public void onDown(MotionEvent event) {
         mHorizontalSlide = false;
         firstTouch = true;
+        volume = getVolume();
     }
 
     @Override
@@ -405,14 +463,75 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
 
     private void onRightVerticalSlide(float percent){
         mHorizontalSlide = false;
+        int index = (int) (percent * mMaxVolume) + volume;
+        if (index > mMaxVolume)
+            index = mMaxVolume;
+        else if (index < 0)
+            index = 0;
+        // 变更声音
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, index, 0);
+        // 变更进度条
+        int i = (int) (index * 1.0 / mMaxVolume * 100);
+        String s = i + "%";
+        if (i == 0) {
+            s = "OFF";
+        }
+        // 显示
+        setVolumeIcon(i==0?R.mipmap.ic_volume_off_white: R.mipmap.ic_volume_up_white);
+        setBrightnessBoxState(false);
+        setFastForwardState(false);
+        setVolumeBoxState(true);
+        setVolumeText(s);
     }
 
     private void onLeftVerticalSlide(float percent){
         mHorizontalSlide = false;
+        Activity activity = getActivity();
+        if(activity==null)
+            return;
+        if (brightness < 0) {
+            brightness = activity.getWindow().getAttributes().screenBrightness;
+            if (brightness <= 0.00f){
+                brightness = 0.50f;
+            }else if (brightness < 0.01f){
+                brightness = 0.01f;
+            }
+        }
+        setVolumeBoxState(false);
+        setFastForwardState(false);
+        setBrightnessBoxState(true);
+        WindowManager.LayoutParams lpa = activity.getWindow().getAttributes();
+        lpa.screenBrightness = brightness + percent;
+        if (lpa.screenBrightness > 1.0f){
+            lpa.screenBrightness = 1.0f;
+        }else if (lpa.screenBrightness < 0.01f){
+            lpa.screenBrightness = 0.01f;
+        }
+        setBrightnessText(((int) (lpa.screenBrightness * 100))+"%");
+        activity.getWindow().setAttributes(lpa);
+    }
+
+    private Activity getActivity(){
+        Context context = getContext();
+        if(context instanceof Activity){
+            return (Activity) context;
+        }
+        return null;
+    }
+
+    private int getVolume(){
+        volume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        if (volume < 0)
+            volume = 0;
+        return volume;
     }
 
     @Override
     public void onEndGesture() {
+        volume = -1;
+        brightness = -1f;
+        setVolumeBoxState(false);
+        setBrightnessBoxState(false);
         setFastForwardState(false);
         if(newPosition >= 0 && mHorizontalSlide){
             sendSeekEvent((int) newPosition);
