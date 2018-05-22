@@ -111,6 +111,61 @@ mVideoView.setDataSource(mDataSource);
 mVideoView.start();
 ```
 
+AVPlayer的使用
+
+```java
+final RenderTextureView render = new RenderTextureView(mAppContext);
+render.setTakeOverSurfaceTexture(true);
+//....
+
+mPlayer.setOnPlayerEventListener(new OnPlayerEventListener() {
+    @Override
+    public void onPlayerEvent(int eventCode, Bundle bundle) {
+        if(eventCode==OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_SIZE_CHANGE){
+            mVideoWidth = bundle.getInt(EventKey.INT_ARG1);
+            mVideoHeight = bundle.getInt(EventKey.INT_ARG2);
+            mVideoSarNum = bundle.getInt(EventKey.INT_ARG3);
+            mVideoSarDen = bundle.getInt(EventKey.INT_ARG4);
+            render.updateVideoSize(mVideoWidth, mVideoHeight);
+            render.setVideoSampleAspectRatio(mVideoSarNum, mVideoSarDen);
+        }else if(eventCode==OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_ROTATION_CHANGED){
+            mVideoRotation = bundle.getInt(EventKey.INT_DATA);
+            render.setVideoRotation(mVideoRotation);
+        }else if(eventCode==OnPlayerEventListener.PLAYER_EVENT_ON_PREPARED){
+            bindRenderHolder(mRenderHolder);
+        }
+        //将事件分发给子视图
+        mViewContainer.dispatchPlayEvent(eventCode, bundle);
+    }
+});
+mPlayer.setOnErrorEventListener(new OnErrorEventListener() {
+    @Override
+    public void onErrorEvent(int eventCode, Bundle bundle) {
+        //将事件分发给子视图
+        mViewContainer.dispatchErrorEvent(eventCode, bundle);
+    }
+});
+mViewContainer.setOnReceiverEventListener(mInternalReceiverEventListener);
+render.setRenderCallback(new IRender.IRenderCallback() {
+    @Override
+    public void onSurfaceCreated(IRender.IRenderHolder renderHolder, int width, int height) {
+        mRenderHolder = renderHolder;
+        bindRenderHolder(mRenderHolder);
+    }
+    @Override
+    public void onSurfaceChanged(IRender.IRenderHolder renderHolder, int format, int width, int height) {
+
+    }
+    @Override
+    public void onSurfaceDestroy(IRender.IRenderHolder renderHolder) {
+        mRenderHolder = null;
+    }
+});
+mViewContainer.setRenderView(render.getRenderView());
+mPlayer.setDataSource(dataSource);
+mPlayer.start();
+```
+
 # 接入其他播放器
 具体参见项目代码 IjkPlayer。<br>
 使用前做如下配置：<br>
