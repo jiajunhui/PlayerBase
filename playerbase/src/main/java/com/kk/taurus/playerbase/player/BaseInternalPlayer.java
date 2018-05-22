@@ -37,12 +37,17 @@ public abstract class BaseInternalPlayer implements IPlayer {
     private OnErrorEventListener mOnErrorEventListener;
 
     @Override
-    public void setOnPlayerEventListener(OnPlayerEventListener onPlayerEventListener) {
+    public void option(int code, Bundle bundle) {
+        //not handle
+    }
+
+    @Override
+    public final void setOnPlayerEventListener(OnPlayerEventListener onPlayerEventListener) {
         this.mOnPlayerEventListener = onPlayerEventListener;
     }
 
     @Override
-    public void setOnErrorEventListener(OnErrorEventListener onErrorEventListener) {
+    public final void setOnErrorEventListener(OnErrorEventListener onErrorEventListener) {
         this.mOnErrorEventListener = onErrorEventListener;
     }
 
@@ -61,7 +66,7 @@ public abstract class BaseInternalPlayer implements IPlayer {
     }
 
     @Override
-    public int getState() {
+    public final int getState() {
         return mCurrentState;
     }
 }

@@ -14,12 +14,14 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
+import com.kk.taurus.avplayer.App;
 import com.kk.taurus.avplayer.R;
 import com.kk.taurus.avplayer.play.EventConstant;
 import com.kk.taurus.avplayer.play.MonitorDataProvider;
 import com.kk.taurus.avplayer.play.ReceiverGroupManager;
 import com.kk.taurus.avplayer.utils.PUtil;
 import com.kk.taurus.avplayer.view.VisualizerView;
+import com.kk.taurus.playerbase.config.PlayerConfig;
 import com.kk.taurus.playerbase.entity.DataSource;
 import com.kk.taurus.playerbase.event.EventKey;
 import com.kk.taurus.playerbase.event.OnPlayerEventListener;
@@ -180,6 +182,20 @@ public class VideoViewActivity extends AppCompatActivity implements OnReceiverEv
         mVideoView.setAspectRatio(AspectRatio.AspectRatio_ORIGIN);
     }
 
+    public void onDecoderChangeMediaPlayer(View view){
+        int curr = mVideoView.getCurrentPosition();
+        if(mVideoView.switchDecoder(PlayerConfig.DEFAULT_PLAN_ID)){
+            replay(curr);
+        }
+    }
+
+    public void onDecoderChangeIjkPlayer(View view){
+        int curr = mVideoView.getCurrentPosition();
+        if(mVideoView.switchDecoder(App.PLAN_ID_IJK)){
+            replay(curr);
+        }
+    }
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -224,7 +240,7 @@ public class VideoViewActivity extends AppCompatActivity implements OnReceiverEv
                 mVideoView.seekTo(bundle.getInt(EventKey.INT_DATA));
                 break;
             case EventConstant.EVENT_CODE_COMPLETE_REQUEST_REPLAY:
-                replay();
+                replay(0);
                 break;
             case EventConstant.EVENT_CODE_COMPLETE_REQUEST_NEXT:
                 mVideoView.setDataProvider(mMonitorDataProvider);
@@ -232,12 +248,12 @@ public class VideoViewActivity extends AppCompatActivity implements OnReceiverEv
                 mVideoView.start();
                 break;
             case EventConstant.EVENT_CODE_ERROR_REQUEST_RETRY:
-                replay();
+                replay(0);
                 break;
         }
     }
 
-    private void replay(){
+    private void replay(int msc){
         if(TextUtils.isEmpty(mCurrUrl)){
             mVideoView.setDataProvider(mMonitorDataProvider);
             mVideoView.setDataSource(mDataSource);
@@ -245,7 +261,7 @@ public class VideoViewActivity extends AppCompatActivity implements OnReceiverEv
             mVideoView.setDataProvider(null);
             mVideoView.setDataSource(new DataSource(mCurrUrl));
         }
-        mVideoView.start();
+        mVideoView.start(msc);
     }
 
     @Override

@@ -23,6 +23,7 @@ import android.view.SurfaceHolder;
 import com.kk.taurus.playerbase.config.PlayerConfig;
 import com.kk.taurus.playerbase.config.PlayerLoader;
 import com.kk.taurus.playerbase.entity.DataSource;
+import com.kk.taurus.playerbase.entity.DecoderPlan;
 import com.kk.taurus.playerbase.log.PLog;
 import com.kk.taurus.playerbase.player.BaseInternalPlayer;
 import com.kk.taurus.playerbase.event.BundlePool;
@@ -39,6 +40,7 @@ import com.kk.taurus.playerbase.player.TimerCounterProxy;
 
 public final class AVPlayer implements IPlayer{
 
+    private final String TAG = "AVPlayer";
     //decoder instance , default is MediaPlayer
     //You can access other decoders
     private BaseInternalPlayer mInternalPlayer;
@@ -55,22 +57,35 @@ public final class AVPlayer implements IPlayer{
 
     private TimerCounterProxy mTimerCounterProxy;
 
+    private int mDecoderPlanId;
+
     public AVPlayer(){
-        loadInternalPlayer();
         //init timer counter proxy.
         mTimerCounterProxy = new TimerCounterProxy(1000);
+        //init internal player instance.
+        loadInternalPlayer(PlayerConfig.getDefaultPlanId());
     }
 
     /**
      * init decoder instance according to your config,
      * if init failure, It's likely that your configuration is wrong.
      */
-    private void loadInternalPlayer() {
+    private void loadInternalPlayer(int decoderPlanId) {
+        mDecoderPlanId = decoderPlanId;
+        //if internal player not null, destroy it.
+        destroy();
         //loader decoder instance from config.
-        mInternalPlayer = PlayerLoader.loadInternalPlayer();
+        mInternalPlayer = PlayerLoader.loadInternalPlayer(decoderPlanId);
         if(mInternalPlayer==null)
             throw new RuntimeException(
-                    "init decoder instance failure, please check your config!");
+                    "init decoder instance failure, please check your configuration" +
+                            ", maybe your config classpath not found.");
+        DecoderPlan plan = PlayerConfig.getPlan(mDecoderPlanId);
+        PLog.d(TAG,"=============================");
+        PLog.d(TAG,"DecoderPlanInfo : planId      = " + plan.getIdNumber());
+        PLog.d(TAG,"DecoderPlanInfo : classPath   = " + plan.getClassPath());
+        PLog.d(TAG,"DecoderPlanInfo : desc        = " + plan.getDesc());
+        PLog.d(TAG,"=============================");
     }
 
     /**
@@ -78,24 +93,40 @@ public final class AVPlayer implements IPlayer{
      * this call will be recreate internal player instance.
      * and the subsequent operations after switching must be processed by yourself,
      * such as resetting the data to play and so on.
-     * @param planId
+     * after switch, if you want get current planId,
+     * you can get it by {@link PlayerConfig#getDefaultPlanId()}
+     *
+     * @param decoderPlanId the planId is your configuration ids or default id.
+     * @return Whether or not to switch to success.
+ *             if return false, maybe your incoming planId is the same as the current planId
+     *         or your incoming planId is illegal param.
+     *         return true is switch decoder success.
+     *
      */
-    public void changeDecoderPlan(int planId){
-        int defaultPlanId = PlayerConfig.getDefaultPlanId();
-        if(defaultPlanId == planId){
+    public boolean switchDecoder(int decoderPlanId){
+        if(mDecoderPlanId == decoderPlanId){
             PLog.e(this.getClass().getSimpleName(),
-                    "Your incoming planId is the same as the current configuration");
-            return;
+                    "@@Your incoming planId is the same as the current use planId@@");
+            return false;
         }
-        if(PlayerConfig.isLegalPlanId(planId)){
-            //if planId legal, update configuration.
-            PlayerConfig.setDefaultPlanId(planId);
+        if(PlayerConfig.isLegalPlanId(decoderPlanId)){
             //and reload internal player instance.
-            loadInternalPlayer();
+            loadInternalPlayer(decoderPlanId);
+            return true;
         }else{
             throw new IllegalArgumentException("Illegal plan id = "
-                    + planId + ", please check your config!");
+                    + decoderPlanId + ", please check your config!");
         }
+    }
+
+    /**
+     * see {@link IPlayer#option(int, Bundle)}
+     * @param code the code value custom yourself.
+     * @param bundle deliver some data if you need.
+     */
+    @Override
+    public void option(int code, Bundle bundle) {
+        mInternalPlayer.option(code, bundle);
     }
 
     /**
@@ -217,6 +248,7 @@ public final class AVPlayer implements IPlayer{
                     if(bundle!=null){
                         DataSource data =
                                 (DataSource) bundle.getSerializable(EventKey.SERIALIZABLE_DATA);
+                        PLog.d(TAG,"onProviderDataSuccessMediaData : DataSource = " + data);
                         if(data!=null){
                             interPlayerSetDataSource(data);
                             internalPlayerStart(data.getStartPos());
@@ -236,6 +268,7 @@ public final class AVPlayer implements IPlayer{
 
         @Override
         public void onProviderError(int code, Bundle bundle) {
+            PLog.e(TAG,"onProviderError : code = " + code + ", bundle = " + bundle);
             if(mOnProviderListener!=null)
                 mOnProviderListener.onProviderError(code, bundle);
             //need recreate a new bundle, because a bundle will be recycle after call back.

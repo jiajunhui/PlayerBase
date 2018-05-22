@@ -30,10 +30,10 @@ import java.lang.reflect.Constructor;
 
 public class PlayerLoader {
 
-    public static BaseInternalPlayer loadInternalPlayer(){
+    public static BaseInternalPlayer loadInternalPlayer(int decoderPlanId){
         BaseInternalPlayer internalPlayer = null;
         try {
-            Object decoderInstance = getDecoderInstance(PlayerConfig.getDefaultPlanId());
+            Object decoderInstance = getDecoderInstance(decoderPlanId);
             if(decoderInstance instanceof BaseInternalPlayer){
                 internalPlayer = (BaseInternalPlayer) decoderInstance;
             }

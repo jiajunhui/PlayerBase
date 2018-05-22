@@ -26,6 +26,12 @@ public class MainActivity extends AppCompatActivity {
         updateDecoderInfo();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateDecoderInfo();
+    }
+
     private void updateDecoderInfo() {
         DecoderPlan defaultPlan = PlayerConfig.getDefaultPlan();
         mInfo.setText("当前解码方案为:" + defaultPlan.getDesc());

@@ -81,4 +81,11 @@ public class DecoderPlan {
     public void setDesc(String desc) {
         this.desc = desc;
     }
+
+    @Override
+    public String toString() {
+        return "id = " + idNumber +
+                ", classPath = " + classPath +
+                ", desc = " + desc;
+    }
 }

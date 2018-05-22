@@ -16,6 +16,7 @@
 
 package com.kk.taurus.playerbase.player;
 
+import android.os.Bundle;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 
@@ -38,6 +39,14 @@ public interface IPlayer {
     int STATE_PAUSED = 4;
     int STATE_STOPPED = 5;
     int STATE_PLAYBACK_COMPLETE = 6;
+
+    /**
+     * with this method, you can send some params for player init or switch some setting.
+     * such as some configuration option (use mediacodec or timeout or reconnect and so on) for decoder init.
+     * @param code the code value custom yourself.
+     * @param bundle deliver some data if you need.
+     */
+    void option(int code, Bundle bundle);
 
     void setDataSource(DataSource dataSource);
     void setDisplay(SurfaceHolder surfaceHolder);

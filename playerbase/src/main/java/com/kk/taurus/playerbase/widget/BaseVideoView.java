@@ -135,6 +135,17 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
     }
 
     /**
+     * see {@link AVPlayer#switchDecoder(int)}
+     *
+     * @param decoderPlanId the planId is your configuration ids or default id.
+     * @return Whether or not to switch to success.
+     *
+     */
+    public boolean switchDecoder(int decoderPlanId){
+        return mPlayer.switchDecoder(decoderPlanId);
+    }
+
+    /**
      * if you need , you can set a data provider.{@link IDataProvider}
      * you need call this method before {@link this#setDataSource(DataSource)}.
      * @param dataProvider

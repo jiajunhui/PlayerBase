@@ -146,11 +146,39 @@
             android:textColor="#ffffff"/>
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/decoder_set"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:layout_below="@id/aspect_layout"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:background="@color/colorAccent"
+            android:onClick="onDecoderChangeMediaPlayer"
+            android:text="使用MediaPlayer"
+            android:textSize="14sp"
+            android:textColor="#ffffff"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:padding="5dp"
+            android:background="@color/colorAccent"
+            android:onClick="onDecoderChangeIjkPlayer"
+            android:text="使用IjkPlayer"
+            android:textSize="14sp"
+            android:textColor="#ffffff"/>
+    </LinearLayout>
+
     <com.kk.taurus.avplayer.view.VisualizerView
         android:id="@+id/musicWave"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/aspect_layout"/>
+        android:layout_below="@id/decoder_set"/>
 
     <com.kk.taurus.playerbase.widget.BaseVideoView
         android:id="@+id/videoView"

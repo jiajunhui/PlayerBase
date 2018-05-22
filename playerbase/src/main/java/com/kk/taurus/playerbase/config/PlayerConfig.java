@@ -52,10 +52,18 @@ public class PlayerConfig {
         mPlans.put(plan.getIdNumber(), plan);
     }
 
+    /**
+     * setting default DecoderPlanId.
+     * @param planId
+     */
     public static void setDefaultPlanId(int planId){
         defaultPlanId = planId;
     }
 
+    /**
+     * get current DecoderPlanId.
+     * @return
+     */
     public static int getDefaultPlanId(){
         return defaultPlanId;
     }
@@ -68,6 +76,11 @@ public class PlayerConfig {
         return mPlans.get(planId);
     }
 
+    /**
+     * Judging the legality of planId.
+     * @param planId
+     * @return
+     */
     public static boolean isLegalPlanId(int planId){
         DecoderPlan plan = getPlan(planId);
         return plan!=null;
