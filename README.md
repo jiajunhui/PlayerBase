@@ -103,7 +103,13 @@ mVideoView = findViewById(R.id.videoView);
 mDataSource = new DataSource("monitor_id");
 mVideoView.setOnPlayerEventListener(this);
 mVideoView.setOnReceiverEventListener(this);
-mVideoView.setReceiverGroup(ReceiverGroupManager.get().getReceiverGroup(this));
+
+ReceiverGroup receiverGroup = new ReceiverGroup();
+receiverGroup.addReceiver(KEY_LOADING_COVER, new LoadingCover(context));
+receiverGroup.addReceiver(KEY_CONTROLLER_COVER, new ControllerCover(context));
+receiverGroup.addReceiver(KEY_COMPLETE_COVER, new CompleteCover(context));
+receiverGroup.addReceiver(KEY_ERROR_COVER, new ErrorCover(context));
+mVideoView.setReceiverGroup(receiverGroup);
 
 //设置数据提供者 MonitorDataProvider
 mVideoView.setDataProvider(new MonitorDataProvider());
@@ -114,6 +120,14 @@ mVideoView.start();
 AVPlayer的使用
 
 ```java
+ViewContainter mViewContainer = new ViewContainer(context);
+ReceiverGroup receiverGroup = new ReceiverGroup();
+receiverGroup.addReceiver(KEY_LOADING_COVER, new LoadingCover(context));
+receiverGroup.addReceiver(KEY_CONTROLLER_COVER, new ControllerCover(context));
+receiverGroup.addReceiver(KEY_COMPLETE_COVER, new CompleteCover(context));
+receiverGroup.addReceiver(KEY_ERROR_COVER, new ErrorCover(context));
+mViewContainer.setReceiverGroup(receiverGroup);
+
 final RenderTextureView render = new RenderTextureView(mAppContext);
 render.setTakeOverSurfaceTexture(true);
 //....
@@ -179,7 +193,7 @@ PlayerConfig.setDefaultPlanId(1);
 demo自带了Loading组件、Controller组件、CompleteCover组件。<br>
 这些组件均继承自父类BaseCover（覆盖层基类）
 
-自定义覆盖层组件
+自定义覆盖层cover组件
 
 ```java
 public class CustomCover extends BaseCover{
@@ -227,41 +241,30 @@ mPlayer.setReceiverGroup(receiverGroup);
 
 ```java
 public class MonitorDataProvider extends BaseDataProvider {
-
-    private DataSource mDataSource;
-
-    private int mRequestNum;
-
-    private Handler mHandler = new Handler(Looper.getMainLooper()){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-
-        }
-    };
-
+    
     @Override
     public void handleSourceData(DataSource sourceData) {
-        this.mDataSource = sourceData;
-        onProviderDataStart();
-        mHandler.postDelayed(mLoadDataRunnable, 2000);
+        //callback start
+        onProviderDataStart(sourceData);
+        loadData();
     }
-
-    private Runnable mLoadDataRunnable = new Runnable() {
-        @Override
-        public void run() {
-            mRequestNum = mRequestNum%DataUtils.urls.length;
-            mDataSource.setData(DataUtils.urls[mRequestNum]);
-            mRequestNum++;
+    
+    private void loadData(DataSource dataSource){
+        //...
+        if(sucess){
             Bundle bundle = BundlePool.obtain();
             bundle.putSerializable(EventKey.SERIALIZABLE_DATA, mDataSource);
+            //callback success
             onProviderDataSuccess(IDataProvider.PROVIDER_CODE_SUCCESS_MEDIA_DATA, bundle);
+        }else{
+            //callback error
+            onProviderError(IDataProvider.PROVIDER_CODE_DATA_PROVIDER_ERROR, null);
         }
-    };
+    }
 
     @Override
     public void cancel() {
-        mHandler.removeCallbacks(mLoadDataRunnable);
+        //...
     }
 
     @Override
@@ -272,7 +275,7 @@ public class MonitorDataProvider extends BaseDataProvider {
 ```
 
 # 无缝续播的使用
-类似于今日头条等应用的效果，在列表中播放时无缝续播进入详情页或者无缝进入全屏页面。<br><br>
+类似于今日头条等应用的列表播放效果，在列表中播放时无缝续播进入详情页或者无缝进入全屏页面。<br><br>
 原理：解码器动态关联不同的渲染视图（RenderView），比如使用MediaPlayer动态关联SurfaceView，就如同一个电脑主机不断连接不同的显示器。
 <br>
 详见项目代码。
