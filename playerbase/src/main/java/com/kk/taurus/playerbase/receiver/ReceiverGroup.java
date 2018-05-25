@@ -34,8 +34,16 @@ public final class ReceiverGroup implements IReceiverGroup{
     private GroupValue mGroupValue;
 
     public ReceiverGroup(){
+        this(null);
+    }
+
+    public ReceiverGroup(GroupValue groupValue){
         mReceivers = new ConcurrentHashMap<>(16);
-        mGroupValue = new GroupValue();
+        if(groupValue==null){
+            mGroupValue = new GroupValue();
+        }else{
+            mGroupValue = groupValue;
+        }
     }
 
     @Override
@@ -46,7 +54,7 @@ public final class ReceiverGroup implements IReceiverGroup{
 
     @Override
     public void addReceiver(String key, IReceiver receiver){
-        receiver.bindGroupValue(mGroupValue);
+        receiver.bindGroup(this);
         //call back method onReceiverBind().
         receiver.onReceiverBind();
         mReceivers.put(key, receiver);

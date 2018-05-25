@@ -5,25 +5,26 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
-import com.jiajunhui.xapp.medialoader.bean.VideoItem;
 import com.kk.taurus.avplayer.R;
-import com.kk.taurus.avplayer.play.SPlayer;
+import com.kk.taurus.avplayer.bean.VideoBean;
+import com.kk.taurus.avplayer.play.AssistPlayer;
+import com.kk.taurus.avplayer.play.DataInter;
+import com.kk.taurus.avplayer.play.ReceiverGroupManager;
 import com.kk.taurus.avplayer.utils.OrientationHelper;
-import com.kk.taurus.avplayer.utils.PUtil;
 import com.kk.taurus.playerbase.entity.DataSource;
-import com.kk.taurus.playerbase.event.OnPlayerEventListener;
+import com.kk.taurus.playerbase.receiver.OnReceiverEventListener;
+import com.kk.taurus.playerbase.receiver.ReceiverGroup;
 
 /**
  * Created by Taurus on 2018/4/18.
  */
 
 public class DetailPageActivity extends AppCompatActivity
-        implements OrientationHelper.OnOrientationListener, OnPlayerEventListener {
+        implements OrientationHelper.OnOrientationListener, OnReceiverEventListener {
 
     public static final String KEY_ITEM = "item_data";
 
@@ -32,6 +33,7 @@ public class DetailPageActivity extends AppCompatActivity
     private OrientationHelper orientationHelper;
 
     private boolean isLandscape;
+    private ReceiverGroup mReceiverGroup;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,85 +47,64 @@ public class DetailPageActivity extends AppCompatActivity
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN
                 , WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        VideoItem item = (VideoItem) getIntent().getSerializableExtra(KEY_ITEM);
+        VideoBean item = (VideoBean) getIntent().getSerializableExtra(KEY_ITEM);
 
         mLayoutContainer = findViewById(R.id.layoutContainer);
 
-        updateVideoContainer(isLandscape);
+        AssistPlayer.get().addOnReceiverEventListener(this);
 
-        SPlayer.get().addOnPlayerEventListener(this);
+        mReceiverGroup = ReceiverGroupManager.get().getReceiverGroup(this);
+        mReceiverGroup.getGroupValue().putBoolean(DataInter.Key.KEY_CONTROLLER_TOP_ENABLE, true);
+        AssistPlayer.get().setReceiverGroup(mReceiverGroup);
 
         DataSource intentDataSource = new DataSource(item.getPath());
+        intentDataSource.setTitle(item.getDisplayName());
         DataSource dataSource = null;
-        if(!SPlayer.get().isPlaying() || !SPlayer.get().isEqualDataSource(intentDataSource)){
+        if(!AssistPlayer.get().isInPlaybackState()){
             dataSource = intentDataSource;
         }
 
-        SPlayer.get().play(mLayoutContainer, dataSource);
+        mReceiverGroup.getGroupValue().putObject(DataInter.Key.KEY_DATA_SOURCE, intentDataSource);
 
-    }
+        AssistPlayer.get().play(mLayoutContainer, dataSource);
 
-    @Override
-    public void onPlayerEvent(int eventCode, Bundle bundle) {
-        switch (eventCode){
-            case OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_SIZE_CHANGE:
-                updateVideoContainer(isLandscape);
-                break;
-        }
-    }
-
-    @Override
-    public void onOrientationChange(boolean reverse, int orientation, int angle) {
-        isLandscape = orientation==Configuration.ORIENTATION_LANDSCAPE;
-        if(orientation==Configuration.ORIENTATION_LANDSCAPE){
-            if(SPlayer.get().isPlaying()){
-                setRequestedOrientation(reverse?
-                        ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE:
-                        ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-            }
-        }else if(orientation==Configuration.ORIENTATION_PORTRAIT){
-            if(SPlayer.get().isPlaying()){
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            }
-        }
     }
 
     @Override
     public void onSensorUserAgreement() {
-
-    }
-
-    private void updateVideoContainer(boolean landscape){
-        ViewGroup.LayoutParams layoutParams = mLayoutContainer.getLayoutParams();
-        if(landscape){
-            layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
-            layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
-        }else{
-            int w = PUtil.getScreenW(this);
-            int h = w * 9/16;
-            int[] wh = SPlayer.get().getWH();
-            if(wh[1] > wh[0]){
-                h = ViewGroup.LayoutParams.MATCH_PARENT;
-            }
-            layoutParams.width = w;
-            layoutParams.height = h;
-        }
-        mLayoutContainer.setLayoutParams(layoutParams);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if(newConfig.orientation==Configuration.ORIENTATION_LANDSCAPE){
-            updateVideoContainer(true);
-        }else if(newConfig.orientation==Configuration.ORIENTATION_PORTRAIT){
-            updateVideoContainer(false);
-        }
+        orientationHelper.onActivityConfigChanged(newConfig);
+        isLandscape = newConfig.orientation==Configuration.ORIENTATION_LANDSCAPE;
+        mReceiverGroup.getGroupValue().putBoolean(DataInter.Key.KEY_IS_LANDSCAPE, isLandscape);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        SPlayer.get().removeOnPlayerEventListener(this);
+        AssistPlayer.get().removeReceiverEventListener(this);
+
+    }
+
+    @Override
+    public void onReceiverEvent(int eventCode, Bundle bundle) {
+        switch (eventCode){
+            case DataInter.Event.EVENT_CODE_REQUEST_TOGGLE_SCREEN:
+                setRequestedOrientation(isLandscape?
+                        ActivityInfo.SCREEN_ORIENTATION_PORTRAIT:
+                        ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                break;
+            case DataInter.Event.EVENT_CODE_REQUEST_BACK:
+                if(isLandscape){
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                    return;
+                }
+                finish();
+                break;
+        }
     }
 }

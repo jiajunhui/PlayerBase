@@ -142,7 +142,6 @@ public interface OnPlayerEventListener {
      */
     int PLAYER_EVENT_ON_AUDIO_SEEK_RENDERING_START = -99023;
 
-
     /**
      * network bandwidth
      */
@@ -177,6 +176,11 @@ public interface OnPlayerEventListener {
      * Reading the subtitle track takes too long.
      */
     int PLAYER_EVENT_ON_SUBTITLE_TIMED_OUT = -99030;
+
+    /**
+     * on play status update
+     */
+    int PLAYER_EVENT_ON_STATUS_CHANGE = -99031;
 
 
     /**

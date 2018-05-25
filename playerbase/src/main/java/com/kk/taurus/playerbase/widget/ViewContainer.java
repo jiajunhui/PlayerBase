@@ -96,6 +96,10 @@ public class ViewContainer extends FrameLayout implements OnTouchGestureListener
         mTouchHelper.setGestureEnable(enable);
     }
 
+    public void setGestureScrollEnable(boolean enable) {
+        mTouchHelper.setGestureScrollEnable(enable);
+    }
+
     private void initReceiverContainer(Context context) {
         mCoverStrategy = getCoverStrategy(context);
         addView(mCoverStrategy.getContainerView(),
@@ -142,6 +146,13 @@ public class ViewContainer extends FrameLayout implements OnTouchGestureListener
         if(receiverGroup==null
                 || receiverGroup.equals(mReceiverGroup))
             return;
+        //remove all old covers from root container.
+        removeAllCovers();
+
+        this.mReceiverGroup = receiverGroup;
+        //init event dispatcher.
+        mEventDispatcher = new EventDispatcher(receiverGroup);
+
         //loop attach receivers
         receiverGroup.forEach(new IReceiverGroup.OnLoopListener() {
             @Override
@@ -162,9 +173,6 @@ public class ViewContainer extends FrameLayout implements OnTouchGestureListener
                 detachReceiver(receiver);
             }
         });
-        this.mReceiverGroup = receiverGroup;
-        //init event dispatcher.
-        mEventDispatcher = new EventDispatcher(receiverGroup);
     }
 
     //attach receiver, bind receiver event listener
@@ -206,18 +214,24 @@ public class ViewContainer extends FrameLayout implements OnTouchGestureListener
     public void destroy(){
         //and remove render view.
         removeRender();
-        //last remove all receivers.
-        removeAllReceivers();
+        //and remove all covers
+        removeAllCovers();
+        //last remove all receivers from ReceiverGroup.
+        clearReceiverGroup();
     }
 
-    public final void removeRender(){
+    private void removeRender(){
         if(mRenderContainer!=null)
             mRenderContainer.removeAllViews();
     }
 
-    public final void removeAllReceivers(){
+    private void clearReceiverGroup(){
         if(mReceiverGroup!=null)
             mReceiverGroup.clearReceivers();
+    }
+
+    protected void removeAllCovers(){
+        mCoverStrategy.removeAllCovers();
     }
 
     //----------------------------------dispatch gesture touch event---------------------------------

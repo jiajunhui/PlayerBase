@@ -6,9 +6,16 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.kk.taurus.avplayer.R;
-import com.kk.taurus.avplayer.play.EventConstant;
+import com.kk.taurus.avplayer.play.DataInter;
+import com.kk.taurus.avplayer.play.NetworkObserver;
 import com.kk.taurus.playerbase.receiver.BaseCover;
 import com.kk.taurus.playerbase.receiver.ICover;
+import com.kk.taurus.playerbase.receiver.IReceiverGroup;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.Unbinder;
 
 /**
  * Created by Taurus on 2018/4/20.
@@ -16,9 +23,20 @@ import com.kk.taurus.playerbase.receiver.ICover;
 
 public class ErrorCover extends BaseCover {
 
-    private TextView mRetry;
+    final int STATUS_ERROR = -1;
+    final int STATUS_UNDEFINE = 0;
+    final int STATUS_MOBILE = 1;
+    final int STATUS_NETWORK_ERROR = 2;
+
+    int mStatus = STATUS_UNDEFINE;
+
+    @BindView(R.id.tv_error_info)
+    TextView mInfo;
+    @BindView(R.id.tv_retry)
+    TextView mRetry;
 
     private boolean mErrorShow;
+    private Unbinder unbinder;
 
     public ErrorCover(Context context) {
         super(context);
@@ -27,20 +45,112 @@ public class ErrorCover extends BaseCover {
     @Override
     public void onReceiverBind() {
         super.onReceiverBind();
-        mRetry = findViewById(R.id.tv_retry);
 
-        mRetry.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        unbinder = ButterKnife.bind(this, getView());
+
+        getGroupValue().registerOnGroupValueUpdateListener(mOnGroupValueUpdateListener);
+
+    }
+
+    @Override
+    protected void onCoverAttachedToWindow() {
+        super.onCoverAttachedToWindow();
+        handleStatusUI(NetworkObserver.getNetworkState(getContext()));
+    }
+
+    @Override
+    public void onReceiverUnBind() {
+        super.onReceiverUnBind();
+        getGroupValue().unregisterOnGroupValueUpdateListener(mOnGroupValueUpdateListener);
+        unbinder.unbind();
+    }
+
+    @OnClick({R.id.tv_retry})
+    public void onViewClick(View view){
+        switch (view.getId()){
+            case R.id.tv_retry:
+                handleStatus();
+                break;
+        }
+    }
+
+    private void handleStatus(){
+        switch (mStatus){
+            case STATUS_ERROR:
                 setErrorState(false);
-                notifyReceiverEvent(EventConstant.EVENT_CODE_ERROR_REQUEST_RETRY, null);
+                requestRetry(null);
+                break;
+            case STATUS_MOBILE:
+                setErrorState(false);
+                requestResume(null);
+                break;
+            case STATUS_NETWORK_ERROR:
+                setErrorState(false);
+                requestRetry(null);
+                break;
+        }
+    }
+
+    private IReceiverGroup.OnGroupValueUpdateListener mOnGroupValueUpdateListener =
+            new IReceiverGroup.OnGroupValueUpdateListener() {
+        @Override
+        public String[] filterKeys() {
+            return new String[]{
+                    DataInter.Key.KEY_NETWORK_STATE
+            };
+        }
+
+        @Override
+        public void onValueUpdate(String key, Object value) {
+            if(key.equals(DataInter.Key.KEY_NETWORK_STATE)){
+                int networkState = (int) value;
+                if(networkState==NetworkObserver.NETWORK_STATE_WIFI && mErrorShow){
+                    requestRetry(null);
+                }
+                handleStatusUI(networkState);
             }
-        });
+        }
+    };
+
+    private void handleStatusUI(int networkState) {
+        if(!getGroupValue().getBoolean(DataInter.Key.KEY_NETWORK_RESOURCE))
+            return;
+        if(networkState < 0){
+            mStatus = STATUS_NETWORK_ERROR;
+            setErrorInfo("无网络！");
+            setHandleInfo("重试");
+            setErrorState(true);
+        }else{
+            if(networkState== NetworkObserver.NETWORK_STATE_WIFI){
+                if(mErrorShow){
+                    setErrorState(false);
+                }
+            }else{
+                mStatus = STATUS_MOBILE;
+                setErrorInfo("您正在使用移动网络！");
+                setHandleInfo("继续");
+                setErrorState(true);
+            }
+        }
+    }
+
+    private void setErrorInfo(String text){
+        mInfo.setText(text);
+    }
+
+    private void setHandleInfo(String text){
+        mRetry.setText(text);
     }
 
     private void setErrorState(boolean state){
         mErrorShow = state;
         setCoverVisibility(state?View.VISIBLE:View.GONE);
+        if(!state){
+            mStatus = STATUS_UNDEFINE;
+        }else{
+            notifyReceiverEvent(DataInter.Event.EVENT_CODE_ERROR_SHOW, null);
+        }
+        getGroupValue().putBoolean(DataInter.Key.KEY_ERROR_SHOW, state);
     }
 
     @Override
@@ -50,9 +160,11 @@ public class ErrorCover extends BaseCover {
 
     @Override
     public void onErrorEvent(int eventCode, Bundle bundle) {
+        mStatus = STATUS_ERROR;
         if(!mErrorShow){
+            setErrorInfo("出错了！");
+            setHandleInfo("重试");
             setErrorState(true);
-            notifyReceiverEvent(EventConstant.EVENT_CODE_ERROR_SHOW, null);
         }
     }
 

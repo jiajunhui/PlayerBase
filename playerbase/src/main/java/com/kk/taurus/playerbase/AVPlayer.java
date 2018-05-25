@@ -335,6 +335,15 @@ public final class AVPlayer implements IPlayer{
         return mDataProvider!=null;
     }
 
+    public void rePlay(int msc){
+        if(!useProvider() && mDataSource!=null){
+            interPlayerSetDataSource(mDataSource);
+            internalPlayerStart(msc);
+        }else if(useProvider() && mDataSource!=null){
+            mDataProvider.handleSourceData(mDataSource);
+        }
+    }
+
     @Override
     public void setDisplay(SurfaceHolder surfaceHolder) {
         if(isPlayerAvailable())

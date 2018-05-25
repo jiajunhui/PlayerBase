@@ -28,6 +28,7 @@ import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.kk.taurus.playerbase.assist.OnAVPlayerEventHandler;
 import com.kk.taurus.playerbase.log.PLog;
 import com.kk.taurus.playerbase.player.IPlayer;
 import com.kk.taurus.playerbase.AVPlayer;
@@ -67,6 +68,7 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
 
     private OnPlayerEventListener mOnPlayerEventListener;
     private OnErrorEventListener mOnErrorEventListener;
+    private OnReceiverEventListener mOnReceiverEventListener;
 
     //style setter for round rect or oval rect.
     private IStyleSetter mStyleSetter;
@@ -82,6 +84,8 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
 
     //the stream buffer percent
     private int mBufferPercentage;
+
+    private OnAVPlayerEventHandler mEventAssistHandler;
 
     public BaseVideoView(Context context){
         this(context, null);
@@ -104,6 +108,7 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
         //init style setter.
         mStyleSetter = new StyleSetter(this);
         mViewContainer = onCreateViewContainer(context);
+        mViewContainer.setOnReceiverEventListener(mInternalReceiverEventListener);
         addView(mViewContainer,
                 new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT));
@@ -187,6 +192,10 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
         mViewContainer.setReceiverGroup(receiverGroup);
     }
 
+    public void setEventHandler(OnAVPlayerEventHandler eventHandler){
+        this.mEventAssistHandler = eventHandler;
+    }
+
     public void setOnPlayerEventListener(OnPlayerEventListener onPlayerEventListener) {
         this.mOnPlayerEventListener = onPlayerEventListener;
     }
@@ -196,8 +205,19 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
     }
 
     public void setOnReceiverEventListener(OnReceiverEventListener onReceiverEventListener) {
-        mViewContainer.setOnReceiverEventListener(onReceiverEventListener);
+        this.mOnReceiverEventListener = onReceiverEventListener;
     }
+
+    private OnReceiverEventListener mInternalReceiverEventListener =
+            new OnReceiverEventListener() {
+        @Override
+        public void onReceiverEvent(int eventCode, Bundle bundle) {
+            if(mEventAssistHandler!=null)
+                mEventAssistHandler.onAssistHandle(mPlayer, eventCode, bundle);
+            if(mOnReceiverEventListener!=null)
+                mOnReceiverEventListener.onReceiverEvent(eventCode, bundle);
+        }
+    };
 
     @Override
     public void setAspectRatio(AspectRatio aspectRatio) {
@@ -231,6 +251,16 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
         mRender.setVideoRotation(mVideoRotation);
         //add to container
         mViewContainer.setRenderView(mRender.getRenderView());
+    }
+
+    @Override
+    public boolean isInPlaybackState() {
+        int state = getState();
+        return state!= IPlayer.STATE_END
+                && state!= IPlayer.STATE_ERROR
+                && state!= IPlayer.STATE_IDLE
+                && state!= IPlayer.STATE_INITIALIZED
+                && state!= IPlayer.STATE_STOPPED;
     }
 
     @Override

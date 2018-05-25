@@ -1,12 +1,14 @@
 package com.kk.taurus.avplayer.play;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewTreeObserver;
 
-import com.jiajunhui.xapp.medialoader.bean.VideoItem;
 import com.kk.taurus.avplayer.adapter.VideoListAdapter;
+import com.kk.taurus.avplayer.bean.VideoBean;
 import com.kk.taurus.avplayer.utils.PUtil;
 import com.kk.taurus.playerbase.entity.DataSource;
+import com.kk.taurus.playerbase.log.PLog;
 
 /**
  * Created by Taurus on 2018/4/15.
@@ -14,6 +16,7 @@ import com.kk.taurus.playerbase.entity.DataSource;
 
 public class ListPlayLogic {
 
+    private Context mContext;
     private RecyclerView mRecycler;
     private VideoListAdapter mAdapter;
 
@@ -22,7 +25,8 @@ public class ListPlayLogic {
     private int mPlayPosition = -1;
     private int mVerticalRecyclerStart;
 
-    public ListPlayLogic(RecyclerView recycler, VideoListAdapter adapter){
+    public ListPlayLogic(Context context, RecyclerView recycler, VideoListAdapter adapter){
+        this.mContext = context;
         this.mRecycler = recycler;
         this.mAdapter = adapter;
         init();
@@ -46,7 +50,8 @@ public class ListPlayLogic {
                 if(newState==RecyclerView.SCROLL_STATE_IDLE){
                     int itemVisibleRectHeight = getItemVisibleRectHeight(mPlayPosition);
                     if(itemVisibleRectHeight <= 0){
-                        SPlayer.get().stop();
+                        PLog.d("ListPlayLogic","onScrollStateChanged stop");
+                        AssistPlayer.get().stop();
                         mAdapter.notifyItemChanged(mPlayPosition);
                     }
                 }
@@ -72,20 +77,23 @@ public class ListPlayLogic {
     public void attachPlay(){
         VideoListAdapter.VideoItemHolder itemHolder = getItemHolder(mPlayPosition);
         if(itemHolder!=null){
-            SPlayer.get().play(itemHolder.layoutContainer, null);
+            PLog.d("ListPlayLogic","attachPlay...");
+            AssistPlayer.get().play(itemHolder.layoutContainer, null);
         }
     }
 
     public void playPosition(int position){
-        VideoItem item = getItem(position);
+        VideoBean item = getItem(position);
         DataSource dataSource = new DataSource(item.getPath());
+        dataSource.setTitle(item.getDisplayName());
         VideoListAdapter.VideoItemHolder holder = getItemHolder(position);
         if(holder!=null){
-            SPlayer.get().play(holder.layoutContainer, dataSource);
+            PLog.d("ListPlayLogic","playPosition : position = " + position);
+            AssistPlayer.get().play(holder.layoutContainer, dataSource);
         }
     }
 
-    private VideoItem getItem(int position){
+    private VideoBean getItem(int position){
         return mAdapter.getItem(position);
     }
 

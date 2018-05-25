@@ -49,6 +49,10 @@ public class ContainerTouchHelper{
         this.mGestureCallback.setGestureEnable(enable);
     }
 
+    public void setGestureScrollEnable(boolean enable) {
+        this.mGestureCallback.setGestureScrollEnable(enable);
+    }
+
     public void onEndGesture(MotionEvent event) {
         mGestureCallback.onEndGesture(event);
     }

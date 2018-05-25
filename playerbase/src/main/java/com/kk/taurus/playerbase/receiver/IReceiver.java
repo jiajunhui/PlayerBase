@@ -25,10 +25,10 @@ import android.os.Bundle;
 public interface IReceiver {
 
     /**
-     * bind group value.
-     * @param groupValue
+     * bind host group.
+     * @param receiverGroup
      */
-    void bindGroupValue(GroupValue groupValue);
+    void bindGroup(IReceiverGroup receiverGroup);
 
     /**
      * on receiver added to ReceiverGroup.

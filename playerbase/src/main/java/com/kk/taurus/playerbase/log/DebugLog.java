@@ -125,6 +125,9 @@ public class DebugLog {
             case OnPlayerEventListener.PLAYER_EVENT_ON_SUBTITLE_TIMED_OUT:
                 value = "PLAYER_EVENT_ON_SUBTITLE_TIMED_OUT";
                 break;
+            case OnPlayerEventListener.PLAYER_EVENT_ON_STATUS_CHANGE:
+                value = "PLAYER_EVENT_ON_STATUS_CHANGE";
+                break;
 
 
             //--------------------------------provider event-----------------------------

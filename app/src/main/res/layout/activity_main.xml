@@ -1,107 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    tools:context="com.kk.taurus.avplayer.ui.MainActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:id="@+id/tv_info"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/id_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:titleTextColor="#ffffff"
+        app:title="@string/app_name"/>
+
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="left"
-        android:text="当前解码方案为:"
-        android:textSize="14sp"
-        android:textColor="@color/colorPrimary"/>
+        android:layout_below="@id/id_toolbar">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+            <TextView
+                android:id="@+id/tv_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="当前解码方案为:"
+                android:textSize="14sp"
+                android:textColor="@color/colorPrimary"/>
 
-    <TextView
-        android:id="@+id/tv_decoder_media_player"
+            <TextView
+                android:id="@+id/tv_videoView"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/colorPrimary"
+                android:gravity="center"
+                android:onClick="useBaseVideoView"
+                android:text="BaseVideoView和DataProvider的使用"
+                android:textSize="16sp"
+                android:textColor="#FFFFFF"/>
+
+            <TextView
+                android:id="@+id/tv_window_play"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/colorPrimary"
+                android:gravity="center"
+                android:onClick="useWindowManagerPlay"
+                android:text="WindowManager小窗口播放"
+                android:textSize="16sp"
+                android:textColor="#FFFFFF"/>
+
+            <TextView
+                android:id="@+id/tv_avPlayer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="left"
+                android:text="AVPlayer的使用(含列表全屏切换、无缝续播)"
+                android:textSize="14sp"
+                android:textColor="#000000"/>
+
+            <TextView
+                android:id="@+id/tv_local_video"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/colorPrimary"
+                android:gravity="center"
+                android:onClick="useAVPlayerLocalVideos"
+                android:text="本地视频列表"
+                android:textSize="16sp"
+                android:textColor="#FFFFFF"/>
+
+            <TextView
+                android:id="@+id/tv_online_video"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/colorPrimary"
+                android:gravity="center"
+                android:onClick="useAVPlayerOnlineVideos"
+                android:text="在线视频列表"
+                android:textSize="16sp"
+                android:textColor="#FFFFFF"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="left"
+                android:text="MediaPlayer支持的格式有限，如发现出错或不能播放，请尝试使用ijkplayer解码"
+                android:textSize="14sp"
+                android:textColor="#000000"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="left"
+                android:text="注：其它解码方案的接入请参见demo中的ijkplayer的接入示例。"
+                android:textSize="14sp"
+                android:textColor="#ca113f"/>
+        </LinearLayout>
+    </ScrollView>
+
+    <FrameLayout
+        android:id="@+id/fullScreenContainer"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/colorPrimary"
-        android:gravity="center"
-        android:onClick="mediaPlayerDecode"
-        android:text="解码器设置为MediaPlayer"
-        android:textSize="16sp"
-        android:textColor="#FFFFFF"/>
+        android:layout_height="match_parent"/>
 
-    <TextView
-        android:id="@+id/tv_decoder_ijk_player"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/colorPrimary"
-        android:gravity="center"
-        android:onClick="ijkPlayerDecode"
-        android:text="解码器设置为IjkPlayer"
-        android:textSize="16sp"
-        android:textColor="#FFFFFF"/>
-
-    <TextView
-        android:id="@+id/tv_videoView"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/colorPrimary"
-        android:gravity="center"
-        android:onClick="useBaseVideoView"
-        android:text="BaseVideoView和DataProvider的使用"
-        android:textSize="16sp"
-        android:textColor="#FFFFFF"/>
-
-    <TextView
-        android:id="@+id/tv_avPlayer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:gravity="left"
-        android:text="AVPlayer的使用"
-        android:textSize="14sp"
-        android:textColor="#000000"/>
-
-    <TextView
-        android:id="@+id/tv_local_video"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/colorPrimary"
-        android:gravity="center"
-        android:onClick="useAVPlayerLocalVideos"
-        android:text="本地视频列表"
-        android:textSize="16sp"
-        android:textColor="#FFFFFF"/>
-
-    <TextView
-        android:id="@+id/tv_online_video"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/colorPrimary"
-        android:gravity="center"
-        android:onClick="useAVPlayerOnlineVideos"
-        android:text="在线视频列表"
-        android:textSize="16sp"
-        android:textColor="#FFFFFF"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:gravity="left"
-        android:text="MediaPlayer支持的格式有限，如发现出错或不能播放，请尝试使用ijkplayer解码"
-        android:textSize="14sp"
-        android:textColor="#000000"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:gravity="left"
-        android:text="注：其它解码方案的接入请参见demo中的ijkplayer的接入示例。"
-        android:textSize="14sp"
-        android:textColor="#ca113f"/>
-
-</LinearLayout>
+</RelativeLayout>

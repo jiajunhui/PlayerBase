@@ -2,6 +2,7 @@ package com.kk.taurus.avplayer.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -10,8 +11,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jiajunhui.xapp.medialoader.bean.VideoItem;
+import com.kk.taurus.avplayer.bean.VideoBean;
 import com.kk.taurus.avplayer.play.ListPlayLogic;
 import com.kk.taurus.avplayer.R;
+import com.kk.taurus.avplayer.utils.ImageDisplayEngine;
 import com.kk.taurus.avplayer.utils.PUtil;
 import com.kk.taurus.mediadataretriever.MediaRetriever;
 
@@ -24,18 +27,18 @@ import java.util.List;
 public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.VideoItemHolder>{
 
     private Context mContext;
-    private List<VideoItem> mItems;
+    private List<VideoBean> mItems;
     private OnListListener onListListener;
 
     private ListPlayLogic mListPlayLogic;
 
     private int mScreenW;
 
-    public VideoListAdapter(Context context, RecyclerView recyclerView, List<VideoItem> list){
+    public VideoListAdapter(Context context, RecyclerView recyclerView, List<VideoBean> list){
         this.mContext = context;
         this.mItems = list;
         mScreenW = PUtil.getScreenW(context);
-        mListPlayLogic = new ListPlayLogic(recyclerView, this);
+        mListPlayLogic = new ListPlayLogic(context, recyclerView, this);
     }
 
     public ListPlayLogic getListPlayLogic(){
@@ -54,12 +57,16 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
     @Override
     public void onBindViewHolder(final VideoItemHolder holder, final int position) {
         updateWH(holder);
-        final VideoItem item = getItem(position);
-        MediaRetriever
-                .withVideo(item.getPath())
-                .option(MediaRetriever.FULL_SCREEN_KIND)
-                .placeHolder(R.mipmap.ic_launcher)
-                .into(holder.albumImage);
+        final VideoBean item = getItem(position);
+        if(TextUtils.isEmpty(item.getCover())){
+            MediaRetriever
+                    .withVideo(item.getPath())
+                    .option(MediaRetriever.FULL_SCREEN_KIND)
+                    .placeHolder(R.mipmap.ic_launcher)
+                    .into(holder.albumImage);
+        }else{
+            ImageDisplayEngine.display(mContext, holder.albumImage, item.getCover(), R.mipmap.ic_launcher);
+        }
         holder.title.setText(item.getDisplayName());
         holder.layoutContainer.removeAllViews();
         holder.albumLayout.setOnClickListener(new View.OnClickListener() {
@@ -91,7 +98,7 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
         mListPlayLogic.updatePlayPosition(position);
     }
 
-    public VideoItem getItem(int position){
+    public VideoBean getItem(int position){
         if(mItems==null)
             return null;
         return mItems.get(position);
@@ -124,7 +131,7 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
     }
 
     public interface OnListListener{
-        void onTitleClick(VideoItem item, int position);
+        void onTitleClick(VideoBean item, int position);
     }
 
 }

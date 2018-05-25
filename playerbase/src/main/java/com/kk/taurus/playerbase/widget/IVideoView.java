@@ -32,6 +32,8 @@ public interface IVideoView {
     void setAspectRatio(AspectRatio aspectRatio);
 
     IRender getRender();
+
+    boolean isInPlaybackState();
     boolean isPlaying();
     int getCurrentPosition();
     int getDuration();

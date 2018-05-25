@@ -1,13 +1,13 @@
 package com.kk.taurus.avplayer.ui;
 
 import android.Manifest;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.media.audiofx.Visualizer;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -16,16 +16,17 @@ import android.widget.RelativeLayout;
 
 import com.kk.taurus.avplayer.App;
 import com.kk.taurus.avplayer.R;
-import com.kk.taurus.avplayer.play.EventConstant;
+import com.kk.taurus.avplayer.play.DataInter;
 import com.kk.taurus.avplayer.play.MonitorDataProvider;
+import com.kk.taurus.avplayer.play.NetworkObserver;
 import com.kk.taurus.avplayer.play.ReceiverGroupManager;
 import com.kk.taurus.avplayer.utils.PUtil;
 import com.kk.taurus.avplayer.view.VisualizerView;
+import com.kk.taurus.playerbase.AVPlayer;
+import com.kk.taurus.playerbase.assist.OnAVPlayerEventHandler;
 import com.kk.taurus.playerbase.config.PlayerConfig;
 import com.kk.taurus.playerbase.entity.DataSource;
-import com.kk.taurus.playerbase.event.EventKey;
 import com.kk.taurus.playerbase.event.OnPlayerEventListener;
-import com.kk.taurus.playerbase.receiver.OnReceiverEventListener;
 import com.kk.taurus.playerbase.receiver.ReceiverGroup;
 import com.kk.taurus.playerbase.render.AspectRatio;
 import com.kk.taurus.playerbase.widget.BaseVideoView;
@@ -38,7 +39,7 @@ import kr.co.namee.permissiongen.PermissionSuccess;
  * Created by Taurus on 2018/4/19.
  */
 
-public class VideoViewActivity extends AppCompatActivity implements OnReceiverEventListener, OnPlayerEventListener {
+public class VideoViewActivity extends AppCompatActivity implements OnPlayerEventListener {
 
     private BaseVideoView mVideoView;
     private VisualizerView mMusicWave;
@@ -46,9 +47,6 @@ public class VideoViewActivity extends AppCompatActivity implements OnReceiverEv
     private Visualizer mVisualizer;
 
     private int margin;
-    private DataSource mDataSource;
-    private String mCurrUrl;
-    private MonitorDataProvider mMonitorDataProvider;
 
     private boolean permissionSuccess;
 
@@ -59,6 +57,9 @@ public class VideoViewActivity extends AppCompatActivity implements OnReceiverEv
 
     private int typeIndex;
     private ReceiverGroup mReceiverGroup;
+    private boolean isLandscape;
+
+    private long mDataSourceId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,9 +81,6 @@ public class VideoViewActivity extends AppCompatActivity implements OnReceiverEv
 
         mMusicWave.setWaveType(waveType[typeIndex]);
         mMusicWave.setColors(new int[]{Color.YELLOW, Color.BLUE});
-
-        mDataSource = new DataSource();
-        mDataSource.setId(666);
 
         PermissionGen.with(this)
                 .addRequestCode(101)
@@ -127,20 +125,40 @@ public class VideoViewActivity extends AppCompatActivity implements OnReceiverEv
         updateVideo(false);
 
         mVideoView.setOnPlayerEventListener(this);
-        mVideoView.setOnReceiverEventListener(this);
-        mReceiverGroup = ReceiverGroupManager.get().getReceiverGroup(this);
+        mVideoView.setEventHandler(mOnEventAssistHandler);
+        mReceiverGroup = ReceiverGroupManager.get().getReceiverGroup(this, null);
+        mReceiverGroup.getGroupValue().putBoolean(DataInter.Key.KEY_CONTROLLER_TOP_ENABLE, true);
+        mReceiverGroup.getGroupValue().putBoolean(DataInter.Key.KEY_IS_HAS_NEXT, true);
         mVideoView.setReceiverGroup(mReceiverGroup);
 
+        NetworkObserver.get(getApplicationContext()).addOnNetworkStateChangeListener(mOnNetworkStateChangeListener);
+
         //设置数据提供者 MonitorDataProvider
-        mMonitorDataProvider = new MonitorDataProvider();
-        mVideoView.setDataProvider(mMonitorDataProvider);
-        mVideoView.setDataSource(mDataSource);
+        MonitorDataProvider dataProvider = new MonitorDataProvider();
+        mVideoView.setDataProvider(dataProvider);
+        mVideoView.setDataSource(generatorDataSource(mDataSourceId));
         mVideoView.start();
 
         // If you want to start play at a specified time,
         // please set this method.
         //mVideoView.start(30*1000);
     }
+
+    private DataSource generatorDataSource(long id){
+        DataSource dataSource = new DataSource();
+        dataSource.setId(id);
+        return dataSource;
+    }
+
+    private NetworkObserver.OnNetworkStateChangeListener mOnNetworkStateChangeListener =
+            new NetworkObserver.OnNetworkStateChangeListener() {
+                @Override
+                public void onNetworkChange(boolean available, boolean isWifi, int networkState) {
+                    if(mReceiverGroup!=null){
+                        mReceiverGroup.getGroupValue().putInt(DataInter.Key.KEY_NETWORK_STATE, networkState);
+                    }
+                }
+            };
 
     public void setRenderSurfaceView(View view){
         mVideoView.setRenderType(BaseVideoView.RENDER_TYPE_SURFACE_VIEW);
@@ -196,16 +214,6 @@ public class VideoViewActivity extends AppCompatActivity implements OnReceiverEv
         }
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        if(newConfig.orientation==Configuration.ORIENTATION_LANDSCAPE){
-            updateVideo(true);
-        }else if(newConfig.orientation==Configuration.ORIENTATION_PORTRAIT){
-            updateVideo(false);
-        }
-    }
-
     private void updateVideo(boolean landscape){
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mVideoView.getLayoutParams();
         if(landscape){
@@ -223,54 +231,70 @@ public class VideoViewActivity extends AppCompatActivity implements OnReceiverEv
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        NetworkObserver.get(getApplicationContext()).removeNetworkStateChangeListener(mOnNetworkStateChangeListener);
         mVideoView.stopPlayback();
         releaseVisualizer();
     }
 
     @Override
-    public void onReceiverEvent(int eventCode, Bundle bundle) {
-        switch (eventCode){
-            case EventConstant.EVENT_CODE_CONTROLLER_REQUEST_PAUSE:
-                mVideoView.pause();
-                break;
-            case EventConstant.EVENT_CODE_CONTROLLER_REQUEST_RESUME:
-                mVideoView.resume();
-                break;
-            case EventConstant.EVENT_CODE_CONTROLLER_REQUEST_SEEK:
-                mVideoView.seekTo(bundle.getInt(EventKey.INT_DATA));
-                break;
-            case EventConstant.EVENT_CODE_COMPLETE_REQUEST_REPLAY:
-                replay(0);
-                break;
-            case EventConstant.EVENT_CODE_COMPLETE_REQUEST_NEXT:
-                mVideoView.setDataProvider(mMonitorDataProvider);
-                mVideoView.setDataSource(mDataSource);
-                mVideoView.start();
-                break;
-            case EventConstant.EVENT_CODE_ERROR_REQUEST_RETRY:
-                replay(0);
-                break;
+    public void onBackPressed() {
+        if(isLandscape){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            return;
         }
+        super.onBackPressed();
     }
 
-    private void replay(int msc){
-        if(TextUtils.isEmpty(mCurrUrl)){
-            mVideoView.setDataProvider(mMonitorDataProvider);
-            mVideoView.setDataSource(mDataSource);
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if(newConfig.orientation==Configuration.ORIENTATION_LANDSCAPE){
+            isLandscape = true;
+            updateVideo(true);
         }else{
-            mVideoView.setDataProvider(null);
-            mVideoView.setDataSource(new DataSource(mCurrUrl));
+            isLandscape = false;
+            updateVideo(false);
         }
+        mReceiverGroup.getGroupValue().putBoolean(DataInter.Key.KEY_IS_LANDSCAPE, isLandscape);
+    }
+
+    private OnAVPlayerEventHandler mOnEventAssistHandler = new OnAVPlayerEventHandler(){
+        @Override
+        public void onAssistHandle(AVPlayer assist, int eventCode, Bundle bundle) {
+            super.onAssistHandle(assist, eventCode, bundle);
+            switch (eventCode){
+                case DataInter.Event.EVENT_CODE_REQUEST_BACK:
+                    if(isLandscape){
+                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                    }else{
+                        finish();
+                    }
+                    break;
+                case DataInter.Event.EVENT_CODE_REQUEST_NEXT:
+                    mDataSourceId++;
+                    mVideoView.setDataSource(generatorDataSource(mDataSourceId));
+                    mVideoView.start();
+                    break;
+                case DataInter.Event.EVENT_CODE_REQUEST_TOGGLE_SCREEN:
+                    setRequestedOrientation(isLandscape ?
+                            ActivityInfo.SCREEN_ORIENTATION_PORTRAIT:
+                            ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                    break;
+                case DataInter.Event.EVENT_CODE_ERROR_SHOW:
+                    mVideoView.stop();
+                    break;
+            }
+        }
+    };
+
+    private void replay(int msc){
+        mVideoView.setDataSource(generatorDataSource(mDataSourceId));
         mVideoView.start(msc);
     }
 
     @Override
     public void onPlayerEvent(int eventCode, Bundle bundle) {
         switch (eventCode){
-            case OnPlayerEventListener.PLAYER_EVENT_ON_DATA_SOURCE_SET:
-                DataSource dataSource = (DataSource) bundle.getSerializable(EventKey.SERIALIZABLE_DATA);
-                mCurrUrl = dataSource.getData();
-                break;
             case OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_RENDER_START:
                 releaseVisualizer();
                 updateVisualizer();

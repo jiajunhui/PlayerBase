@@ -31,6 +31,7 @@ public class BaseGestureCallbackHandler extends GestureDetector.SimpleOnGestureL
     protected OnTouchGestureListener mOnTouchGestureListener;
 
     private boolean mGestureEnable = true;
+    private boolean mGestureScrollEnable = true;
 
     public BaseGestureCallbackHandler(OnTouchGestureListener onTouchGestureListener){
         this.mOnTouchGestureListener = onTouchGestureListener;
@@ -38,6 +39,10 @@ public class BaseGestureCallbackHandler extends GestureDetector.SimpleOnGestureL
 
     public void setGestureEnable(boolean enable){
         this.mGestureEnable = enable;
+    }
+
+    public void setGestureScrollEnable(boolean gestureScrollEnable) {
+        this.mGestureScrollEnable = gestureScrollEnable;
     }
 
     @Override
@@ -67,7 +72,7 @@ public class BaseGestureCallbackHandler extends GestureDetector.SimpleOnGestureL
 
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        if(mOnTouchGestureListener !=null){
+        if(mOnTouchGestureListener != null && mGestureScrollEnable){
             mOnTouchGestureListener.onScroll(e1, e2, distanceX, distanceY);
         }
         return super.onScroll(e1, e2, distanceX, distanceY);

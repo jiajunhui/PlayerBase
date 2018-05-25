@@ -17,13 +17,17 @@
 package com.kk.taurus.playerbase.receiver;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.View;
+
+import com.kk.taurus.playerbase.assist.InterEvent;
 
 /**
  * Created by Taurus on 2018/3/17.
  */
 
-public abstract class BaseCover extends BaseReceiver implements ICover, View.OnAttachStateChangeListener {
+public abstract class BaseCover extends BaseReceiver implements
+        ICover, ICoverHandle, View.OnAttachStateChangeListener {
 
     private View mCoverView;
 
@@ -31,6 +35,41 @@ public abstract class BaseCover extends BaseReceiver implements ICover, View.OnA
         super(context);
         mCoverView = onCreateCoverView(context);
         mCoverView.addOnAttachStateChangeListener(this);
+    }
+
+    @Override
+    public void requestPause(Bundle bundle) {
+        notifyReceiverEvent(InterEvent.CODE_REQUEST_PAUSE, bundle);
+    }
+
+    @Override
+    public void requestResume(Bundle bundle) {
+        notifyReceiverEvent(InterEvent.CODE_REQUEST_RESUME, bundle);
+    }
+
+    @Override
+    public void requestSeek(Bundle bundle) {
+        notifyReceiverEvent(InterEvent.CODE_REQUEST_SEEK, bundle);
+    }
+
+    @Override
+    public void requestStop(Bundle bundle) {
+        notifyReceiverEvent(InterEvent.CODE_REQUEST_STOP, bundle);
+    }
+
+    @Override
+    public void requestReset(Bundle bundle) {
+        notifyReceiverEvent(InterEvent.CODE_REQUEST_RESET, bundle);
+    }
+
+    @Override
+    public void requestRetry(Bundle bundle) {
+        notifyReceiverEvent(InterEvent.CODE_REQUEST_RETRY, bundle);
+    }
+
+    @Override
+    public void requestReplay(Bundle bundle) {
+        notifyReceiverEvent(InterEvent.CODE_REQUEST_REPLAY, bundle);
     }
 
     protected <T extends View> T findViewById(int id){
@@ -45,12 +84,6 @@ public abstract class BaseCover extends BaseReceiver implements ICover, View.OnA
     @Override
     public View getView(){
         return mCoverView;
-    }
-
-    protected final void post(Runnable runnable){
-        if(mCoverView!=null){
-            mCoverView.post(runnable);
-        }
     }
 
     @Override

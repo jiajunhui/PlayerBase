@@ -18,6 +18,8 @@ package com.kk.taurus.playerbase.player;
 
 import android.os.Bundle;
 
+import com.kk.taurus.playerbase.event.BundlePool;
+import com.kk.taurus.playerbase.event.EventKey;
 import com.kk.taurus.playerbase.event.OnErrorEventListener;
 import com.kk.taurus.playerbase.event.OnPlayerEventListener;
 
@@ -63,6 +65,9 @@ public abstract class BaseInternalPlayer implements IPlayer {
 
     protected final void updateStatus(int status){
         this.mCurrentState = status;
+        Bundle bundle = BundlePool.obtain();
+        bundle.putInt(EventKey.INT_DATA, status);
+        submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_STATUS_CHANGE, bundle);
     }
 
     @Override

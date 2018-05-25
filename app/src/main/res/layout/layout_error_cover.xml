@@ -11,7 +11,7 @@
         android:layout_centerInParent="true"
         android:orientation="horizontal">
         <TextView
-            android:id="@+id/tv_replay"
+            android:id="@+id/tv_error_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="12dp"

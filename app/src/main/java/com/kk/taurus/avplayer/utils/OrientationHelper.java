@@ -54,9 +54,8 @@ public class OrientationHelper {
                     if(mSensorOrientation != Configuration.ORIENTATION_UNDEFINED && mSensorOrientation==mActivityOrientation){
                         if(mOnOrientationListener!=null)
                             mOnOrientationListener.onSensorUserAgreement();
+                        mSensorOrientation = Configuration.ORIENTATION_UNDEFINED;
                     }
-                    if(mOnOrientationListener!=null)
-                        mOnOrientationListener.onOrientationChange(reverse, mSensorOrientation, orientation);
                     break;
             }
         }
@@ -134,7 +133,6 @@ public class OrientationHelper {
     }
 
     public interface OnOrientationListener{
-        void onOrientationChange(boolean reverse, int orientation, int angle);
         void onSensorUserAgreement();
     }
 
