@@ -8,6 +8,8 @@ public interface DataInter {
     interface Event extends InterEvent{
 
         int EVENT_CODE_REQUEST_BACK = -100;
+        int EVENT_CODE_REQUEST_CLOSE = -101;
+
         int EVENT_CODE_REQUEST_TOGGLE_SCREEN = -104;
         int EVENT_CODE_REQUEST_NEXT = -106;
 
@@ -20,6 +22,7 @@ public interface DataInter {
         String KEY_IS_HAS_NEXT = "is_has_next";
         String KEY_COMPLETE_SHOW = "complete_show";
         String KEY_CONTROLLER_TOP_ENABLE = "controller_top_enable";
+        String KEY_CONTROLLER_SCREEN_SWITCH_ENABLE = "screen_switch_enable";
 
         String KEY_TIMER_UPDATE_ENABLE = "timer_update_enable";
 
@@ -33,6 +36,7 @@ public interface DataInter {
         String KEY_GESTURE_COVER = "gesture_cover";
         String KEY_COMPLETE_COVER = "complete_cover";
         String KEY_ERROR_COVER = "error_cover";
+        String KEY_CLOSE_COVER = "close_cover";
     }
 
     interface PrivateEvent{

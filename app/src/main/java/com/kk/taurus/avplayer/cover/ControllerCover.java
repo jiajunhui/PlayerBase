@@ -108,11 +108,23 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
         super.onCoverAttachedToWindow();
         DataSource dataSource = getGroupValue().get(DataInter.Key.KEY_DATA_SOURCE);
         setTitle(dataSource);
+
+        boolean topEnable = getGroupValue().getBoolean(DataInter.Key.KEY_CONTROLLER_TOP_ENABLE, false);
+        mControllerTopEnable = topEnable;
+        if(!topEnable){
+            setTopContainerState(false);
+        }
+
+        boolean screenSwitchEnable = getGroupValue().getBoolean(DataInter.Key.KEY_CONTROLLER_SCREEN_SWITCH_ENABLE, true);
+        setScreenSwitchEnable(screenSwitchEnable);
     }
 
     @Override
     public void onReceiverUnBind() {
         super.onReceiverUnBind();
+
+        cancelTopAnimation();
+        cancelBottomAnimation();
 
         getGroupValue().unregisterOnGroupValueUpdateListener(mOnGroupValueUpdateListener);
         removeDelayHiddenMessage();
@@ -238,18 +250,26 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
         mSwitchScreen.setImageResource(isFullScreen?R.mipmap.icon_exit_full_screen:R.mipmap.icon_full_screen);
     }
 
+    private void setScreenSwitchEnable(boolean screenSwitchEnable) {
+        mSwitchScreen.setVisibility(screenSwitchEnable?View.VISIBLE:View.GONE);
+    }
+
     private void setGestureEnable(boolean gestureEnable) {
         this.mGestureEnable = gestureEnable;
+    }
+
+    private void cancelTopAnimation(){
+        if(mTopAnimator!=null){
+            mTopAnimator.cancel();
+            mTopAnimator.removeAllListeners();
+            mTopAnimator.removeAllUpdateListeners();
+        }
     }
 
     private void setTopContainerState(final boolean state){
         if(mControllerTopEnable){
             mTopContainer.clearAnimation();
-            if(mTopAnimator!=null){
-                mTopAnimator.cancel();
-                mTopAnimator.removeAllListeners();
-                mTopAnimator.removeAllUpdateListeners();
-            }
+            cancelTopAnimation();
             mTopAnimator = ObjectAnimator.ofFloat(mTopContainer,
                             "alpha", state ? 0 : 1, state ? 1 : 0).setDuration(500);
             mTopAnimator.addListener(new AnimatorListenerAdapter() {
@@ -274,13 +294,17 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
         }
     }
 
-    private void setBottomContainerState(final boolean state){
-        mBottomContainer.clearAnimation();
+    private void cancelBottomAnimation(){
         if(mBottomAnimator!=null){
             mBottomAnimator.cancel();
             mBottomAnimator.removeAllListeners();
             mBottomAnimator.removeAllUpdateListeners();
         }
+    }
+
+    private void setBottomContainerState(final boolean state){
+        mBottomContainer.clearAnimation();
+        cancelBottomAnimation();
         mBottomAnimator = ObjectAnimator.ofFloat(mBottomContainer,
                 "alpha", state ? 0 : 1, state ? 1 : 0).setDuration(500);
         mBottomAnimator.addListener(new AnimatorListenerAdapter() {

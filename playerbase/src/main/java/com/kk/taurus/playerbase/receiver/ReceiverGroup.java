@@ -69,7 +69,7 @@ public final class ReceiverGroup implements IReceiverGroup{
         //call back method onReceiverUnBind().
         if(receiver!=null)
             receiver.onReceiverUnBind();
-        if(mOnReceiverGroupChangeListener!=null)
+        if(mOnReceiverGroupChangeListener!=null && receiver!=null)
             mOnReceiverGroupChangeListener.onReceiverRemove(key, receiver);
     }
 

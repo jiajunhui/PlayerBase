@@ -20,6 +20,7 @@ import com.jiajunhui.xapp.medialoader.callback.OnVideoLoaderCallBack;
 import com.kk.taurus.avplayer.R;
 import com.kk.taurus.avplayer.adapter.VideoListAdapter;
 import com.kk.taurus.avplayer.bean.VideoBean;
+import com.kk.taurus.avplayer.cover.GestureCover;
 import com.kk.taurus.avplayer.play.AssistPlayer;
 import com.kk.taurus.avplayer.play.DataInter;
 import com.kk.taurus.avplayer.play.ReceiverGroupManager;
@@ -73,7 +74,6 @@ public class LocalVideoListActivity extends AppCompatActivity
         mRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
         mReceiverGroup = ReceiverGroupManager.get().getLiteReceiverGroup(this);
-        AssistPlayer.get().setReceiverGroup(mReceiverGroup);
 
         PermissionGen.with(this)
                 .addRequestCode(100)
@@ -104,7 +104,18 @@ public class LocalVideoListActivity extends AppCompatActivity
         mReceiverGroup.getGroupValue().putBoolean(DataInter.Key.KEY_IS_LANDSCAPE, isLandScape);
     }
 
+    @Override
+    public void onBackPressed() {
+        if(isLandScape){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            return;
+        }
+        super.onBackPressed();
+    }
+
     private void attachFullScreen(){
+        mReceiverGroup.addReceiver(DataInter.ReceiverKey.KEY_GESTURE_COVER, new GestureCover(this));
+        mReceiverGroup.getGroupValue().putBoolean(DataInter.Key.KEY_CONTROLLER_TOP_ENABLE, true);
         if(AssistPlayer.get().isPlaying())
             AssistPlayer.get().play(mContainer,null);
     }
@@ -148,6 +159,7 @@ public class LocalVideoListActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         toDetail = false;
+        AssistPlayer.get().setReceiverGroup(mReceiverGroup);
         if(isLandScape){
             attachFullScreen();
         }else{
@@ -167,6 +179,8 @@ public class LocalVideoListActivity extends AppCompatActivity
 
     private void attachList() {
         if(mAdapter!=null){
+            mReceiverGroup.removeReceiver(DataInter.ReceiverKey.KEY_GESTURE_COVER);
+            mReceiverGroup.getGroupValue().putBoolean(DataInter.Key.KEY_CONTROLLER_TOP_ENABLE, false);
             mAdapter.getListPlayLogic().attachPlay();
         }
     }
@@ -182,6 +196,9 @@ public class LocalVideoListActivity extends AppCompatActivity
     @Override
     public void onReceiverEvent(int eventCode, Bundle bundle) {
         switch (eventCode){
+            case DataInter.Event.EVENT_CODE_REQUEST_BACK:
+                onBackPressed();
+                break;
             case DataInter.Event.EVENT_CODE_REQUEST_TOGGLE_SCREEN:
                 setRequestedOrientation(isLandScape?
                         ActivityInfo.SCREEN_ORIENTATION_PORTRAIT:

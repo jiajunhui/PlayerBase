@@ -45,14 +45,26 @@
                 android:textColor="#FFFFFF"/>
 
             <TextView
+                android:id="@+id/tv_window_videoView"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/colorPrimary"
+                android:gravity="center"
+                android:onClick="useWindowVideoView"
+                android:text="WindowVideoView的使用"
+                android:textSize="16sp"
+                android:textColor="#FFFFFF"/>
+
+            <TextView
                 android:id="@+id/tv_window_play"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginTop="10dp"
                 android:background="@color/colorPrimary"
                 android:gravity="center"
-                android:onClick="useWindowManagerPlay"
-                android:text="WindowManager小窗口播放"
+                android:onClick="useWindowSwitchPlay"
+                android:text="Window的无缝切播"
                 android:textSize="16sp"
                 android:textColor="#FFFFFF"/>
 

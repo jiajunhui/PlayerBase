@@ -14,13 +14,13 @@ import android.widget.FrameLayout;
 import com.kk.taurus.avplayer.R;
 import com.kk.taurus.avplayer.adapter.VideoListAdapter;
 import com.kk.taurus.avplayer.bean.VideoBean;
+import com.kk.taurus.avplayer.cover.GestureCover;
 import com.kk.taurus.avplayer.play.AssistPlayer;
 import com.kk.taurus.avplayer.play.DataInter;
 import com.kk.taurus.avplayer.play.ReceiverGroupManager;
 import com.kk.taurus.avplayer.utils.DataUtils;
 import com.kk.taurus.avplayer.utils.OrientationHelper;
 import com.kk.taurus.playerbase.event.OnPlayerEventListener;
-import com.kk.taurus.playerbase.receiver.GroupValue;
 import com.kk.taurus.playerbase.receiver.OnReceiverEventListener;
 import com.kk.taurus.playerbase.receiver.ReceiverGroup;
 
@@ -46,6 +46,7 @@ public class OnlineVideoListActivity extends AppCompatActivity implements
     private boolean isLandScape;
 
     private OrientationHelper mOrientationHelper;
+    private ReceiverGroup mReceiverGroup;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,26 +67,14 @@ public class OnlineVideoListActivity extends AppCompatActivity implements
         AssistPlayer.get().addOnReceiverEventListener(this);
         AssistPlayer.get().addOnPlayerEventListener(this);
 
-        ReceiverGroup receiverGroup = ReceiverGroupManager.get().getLiteReceiverGroup(this);
-        receiverGroup.getGroupValue().putBoolean(DataInter.Key.KEY_NETWORK_RESOURCE, true);
-        AssistPlayer.get().setReceiverGroup(receiverGroup);
+        mReceiverGroup = ReceiverGroupManager.get().getLiteReceiverGroup(this);
+        mReceiverGroup.getGroupValue().putBoolean(DataInter.Key.KEY_NETWORK_RESOURCE, true);
 
         mItems.addAll(DataUtils.getVideoList());
         mAdapter = new VideoListAdapter(getApplicationContext(), mRecycler, mItems);
         mAdapter.setOnListListener(OnlineVideoListActivity.this);
         mRecycler.setAdapter(mAdapter);
 
-    }
-
-    private ReceiverGroup getReceiverGroup(){
-        return AssistPlayer.get().getReceiverGroup();
-    }
-
-    private GroupValue getGroupValue(){
-        if(getReceiverGroup()!=null){
-            return getReceiverGroup().getGroupValue();
-        }
-        return null;
     }
 
     @Override
@@ -103,12 +92,21 @@ public class OnlineVideoListActivity extends AppCompatActivity implements
         }else if(newConfig.orientation==Configuration.ORIENTATION_PORTRAIT){
             attachList();
         }
-        if(getGroupValue()!=null){
-            getGroupValue().putBoolean(DataInter.Key.KEY_IS_LANDSCAPE, isLandScape);
+        mReceiverGroup.getGroupValue().putBoolean(DataInter.Key.KEY_IS_LANDSCAPE, isLandScape);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(isLandScape){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            return;
         }
+        super.onBackPressed();
     }
 
     private void attachFullScreen(){
+        mReceiverGroup.addReceiver(DataInter.ReceiverKey.KEY_GESTURE_COVER, new GestureCover(this));
+        mReceiverGroup.getGroupValue().putBoolean(DataInter.Key.KEY_CONTROLLER_TOP_ENABLE, true);
         if(AssistPlayer.get().isPlaying())
             AssistPlayer.get().play(mContainer,null);
     }
@@ -125,15 +123,14 @@ public class OnlineVideoListActivity extends AppCompatActivity implements
     protected void onResume() {
         super.onResume();
         toDetail = false;
+        AssistPlayer.get().setReceiverGroup(mReceiverGroup);
         if(isLandScape){
             attachFullScreen();
         }else{
             attachList();
         }
         AssistPlayer.get().resume();
-        if(getGroupValue()!=null){
-            getGroupValue().putBoolean(DataInter.Key.KEY_CONTROLLER_TOP_ENABLE, false);
-        }
+        mReceiverGroup.getGroupValue().putBoolean(DataInter.Key.KEY_CONTROLLER_TOP_ENABLE, false);
     }
 
     @Override
@@ -146,6 +143,8 @@ public class OnlineVideoListActivity extends AppCompatActivity implements
 
     private void attachList() {
         if(mAdapter!=null){
+            mReceiverGroup.removeReceiver(DataInter.ReceiverKey.KEY_GESTURE_COVER);
+            mReceiverGroup.getGroupValue().putBoolean(DataInter.Key.KEY_CONTROLLER_TOP_ENABLE, false);
             mAdapter.getListPlayLogic().attachPlay();
         }
     }
@@ -161,6 +160,9 @@ public class OnlineVideoListActivity extends AppCompatActivity implements
     @Override
     public void onReceiverEvent(int eventCode, Bundle bundle) {
         switch (eventCode){
+            case DataInter.Event.EVENT_CODE_REQUEST_BACK:
+                onBackPressed();
+                break;
             case DataInter.Event.EVENT_CODE_REQUEST_TOGGLE_SCREEN:
                 setRequestedOrientation(isLandScape?
                         ActivityInfo.SCREEN_ORIENTATION_PORTRAIT:

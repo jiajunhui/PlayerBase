@@ -1,3 +1,4 @@
+![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/playerbase_top_slogen.jpg)
 # 介绍
 PlayerBase是一种将播放业务组件化处理的解决方案框架。无论是播放器内的控制视图还是业务视图，均可以做到组件化处理。将播放器的开发变得清晰简单，更利于产品的迭代。框架内包含系统MediaPlayer的解码实现，demo里面有一套完整的IJKPlayer解码方案的实现和接入，请参见源码可以接入其他播放器解码方案。demo自带了播放控制组件、Loading组件，所有UI功能组件可完全自定义。
 <br>
@@ -6,18 +7,55 @@ PlayerBase是一种将播放业务组件化处理的解决方案框架。无论�
 __-视图的组件化处理__<br>
 __-视图组件的高复用、低耦合__<br>
 __-解码方案的组件化、配置化管理__<br>
+__-视图组件的完全定制__<br>
+__-视图组件的热插拔，用时添加不用时移除__<br>
 __-自定义接入各种解码方案__<br>
 __-解码方案的切换__<br>
+__-支持窗口模式播放__<br>
+__-支持窗口模式的无缝续播__<br>
+__-支持列表模式的无缝续播__<br>
+__-支持VideoView切角处理，边缘阴影效果-__<br>
 __-提供自定义数据提供者__<br>
 __-统一的事件下发机制__<br>
 __-扩展事件的添加__<br>
-__-支持列表播放中的无缝续播__<br>
-__-支持视频切角处理，边缘阴影效果-__<br>
 __-等功能……__<br>
 
 # Demo下载
 [Demo下载](http://fir.im/lmhz)
 <br>
+
+# 特色
+完全将解码器与播放视图组件化处理。不染指任何具体的业务，可随意接入其他播放器，组件完全由用户自定义，组件即插即用。让使用变的更加灵活。如下代码示例，需要什么视图就添加什么视图，不需要时可随时移除。
+
+```java
+ReceiverGroup receiverGroup = new ReceiverGroup();
+receiverGroup.addReceiver("loading_cover", new LoadingCover(context));
+receiverGroup.addReceiver("loading_cover", new ControllerCover(context));
+receiverGroup.addReceiver("loading_cover", new GestureCover(context));
+receiverGroup.addReceiver("loading_cover", new ErrorCover(context));
+
+mVideoView.setReceiverGroup(receiverGroup);
+mVideoView.setDataSource(new DataSource("http://..."))
+mVideoView.start();
+```
+
+解码器的配置化管理，如下代码，将解码器配置为IjkPlayer。
+
+```java
+int PLAN_ID_IJK = 1;
+PlayerConfig.addDecoderPlan(new DecoderPlan(PLAN_ID_IJK, IjkPlayer.class.getName(), "IjkPlayer"));
+PlayerConfig.setDefaultPlanId(PLAN_ID_IJK);
+```
+解码器的切换
+
+
+```java
+int PLAN_ID_IJK = 1;
+mVideoView.switchDecoder(PLAN_ID_IJK);
+mVideoView.setDataSource(dataSource);
+mVideoView.start();
+```
+
 # 设计
 PlayerBase是基于事件分发来完成各组件间协作的问题，定义了接收者Receiver以及覆盖层Cover的概念来进行组件的管理。您可以将控制器视图、Loading视图、Error视图以及其他的视图拆分成多个Cover覆盖层进行管理（详见demo中的ControllerCover、LoadingCover、ErrorCover），使用时添加到ReceiverGroup中即可，不用时remove掉即可，方便功能的管理与业务的迭代。详细设计见PPT和代码。
 
@@ -28,9 +66,8 @@ PlayerBase是基于事件分发来完成各组件间协作的问题，定义了�
 效果<br>
 
 ![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_20180420-170051.png)
-![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_20180420-170103.png)
-![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_20180420-170146.png)
-![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_20180420-170251.png)
+![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_20180420-170103.jpeg)
+![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_20180420-170146.jpeg)
 
 
 # 框架的设计
@@ -55,7 +92,7 @@ PlayerBase是基于事件分发来完成各组件间协作的问题，定义了�
 
 ```gradle
 dependencies {
-  compile 'com.kk.taurus.playerbase:playerbase:3.2.0'
+  compile 'com.kk.taurus.playerbase:playerbase:3.2.1'
 }
 ```
 
@@ -117,7 +154,13 @@ mVideoView.setDataSource(mDataSource);
 mVideoView.start();
 ```
 
-AVPlayer的使用
+## AVPlayer的使用
+如果您想直接使用AVPlayer自己进行处理播放，那么大致步骤如下：
+1.初始化一个AVPlayer对象。
+2.初始化一个ViewContainer对象，将ReceiverGroup设置到ViewContainer中。
+3.使用ViewContainer设置一个渲染视图Render，然后自己处理RenderCallBack并关联解码器。
+
+代码如下：
 
 ```java
 ViewContainter mViewContainer = new ViewContainer(context);
@@ -235,6 +278,99 @@ receiverGroup.addReceiver("loading_cover", new LoadingCover(context));
 receiverGroup.addReceiver("controller_cover", new ControllerCover(context));
 mPlayer.setReceiverGroup(receiverGroup);
 ```
+# 无缝续播的使用
+类似于今日头条等应用的列表播放效果，在列表中播放时无缝续播进入详情页或者无缝进入全屏页面。<br><br>
+原理：解码器动态关联不同的渲染视图（RenderView），比如使用MediaPlayer动态关联SurfaceView，就如同一个电脑主机不断连接不同的显示器。
+
+版本3.2.0之后增加了关联助手，让无缝续播的使用更加简单化。使用关联播放时，您需要提供一个播放视图的容器。比如您要把正在view1容器中播放的画面切换到view2容器中，那么您只需要把view2的容器关联到助手即可。如下示例：
+
+```java
+public class TestActivity extends AppcompatActivity{
+
+	RelationAssist mAssist;
+	ViewGroup view2;
+
+	public void onCreate(Bundle saveInstance){
+		 super.onCreate(saveInstance);
+		 
+		 //...
+		 
+		 mAssist = new RelationAssist(this);
+	    mAssist.setEventAssistHandler(eventHandler);
+	    mReceiverGroup = ReceiverGroupManager.get().getLiteReceiverGroup(this);
+	    mAssist.setReceiverGroup(mReceiverGroup);
+	    DataSource dataSource = new DataSource();
+	    dataSource.setData("http://...");
+	    dataSource.setTitle("xxx");
+	    mAssist.setDataSource(dataSource);
+	    mAssist.attachContainer(mVideoContainer);
+	    mAssist.play();
+	    
+	    //...
+	    switchPlay(view2);
+	}
+	
+	private void switchPlay(ViewGroup container){
+		 mAssist.attachContainer(container);
+	}
+
+}
+```
+更加详细的操作请参见项目demo。
+
+# Window模式播放
+框架提供了一个WindowVideoView，如果您并不需要对Window进行无缝切播的话，请使用这个WindowVideoView，使用很简单，如下代码示例：
+
+```java
+public class WindowVideoViewActivity extends AppCompatActivity {
+
+    WindowVideoView mWindowVideoView;
+
+    DataSource mDataSource;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_window_video_view);
+        int width = 640;
+        int height = 360;
+        mWindowVideoView = new WindowVideoView(this,
+                new FloatWindowParams()
+                        .setX(100)
+                        .setY(100)
+                        .setWidth(width)
+                        .setHeight(height)
+                        .setGravity(Gravity.TOP | Gravity.LEFT));
+        mWindowVideoView.setBackgroundColor(Color.BLACK);
+		 //...
+        mWindowVideoView.setReceiverGroup(receiverGroup);
+
+        mDataSource = new DataSource();
+        mDataSource.setData("http://...");
+        mDataSource.setTitle("xxx");
+    }
+
+    public void activeWindowVideoView(View view){
+        if(mWindowVideoView.isWindowShow()){
+            mWindowVideoView.close();
+        }else{
+            mWindowVideoView.show();
+            mWindowVideoView.setDataSource(mDataSource);
+            mWindowVideoView.start();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mWindowVideoView.close();
+        mWindowVideoView.stopPlayback();
+    }
+}
+```
+
+如果您需要在Window模式下使用无缝续播，那么请将FloatWindow和RelationAssist二者结合使用。
+此处不做代码展示，如需要可进入项目参见WindowSwitchPlayActivity中的代码示例。
 
 # 数据提供者DataProvider的接入
 数据提供者的定义是为了更好的进行播控统一的完整性而设计的。比如Server端给你的是id，你需要用id再去请求某个接口取播放的url，这时我们可以把由id到url这个过程统一的做一个处理，就由DataProvider来完成这个对接过程。
@@ -274,13 +410,20 @@ public class MonitorDataProvider extends BaseDataProvider {
 }
 ```
 
-# 无缝续播的使用
-类似于今日头条等应用的列表播放效果，在列表中播放时无缝续播进入详情页或者无缝进入全屏页面。<br><br>
-原理：解码器动态关联不同的渲染视图（RenderView），比如使用MediaPlayer动态关联SurfaceView，就如同一个电脑主机不断连接不同的显示器。
-<br>
-详见项目代码。
-
-
 # 交流
 联系方式：junhui_jia@163.com
 QQ群：600201778
+
+# License
+```license
+Copyright 2017 jiajunhui<junhui_jia@163.com>
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+   http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```

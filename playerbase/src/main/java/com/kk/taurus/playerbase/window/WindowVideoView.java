@@ -3,13 +3,12 @@ package com.kk.taurus.playerbase.window;
 import android.content.Context;
 import android.os.Build;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
 
 import com.kk.taurus.playerbase.utils.PUtils;
+import com.kk.taurus.playerbase.widget.BaseVideoView;
 
-public class FloatWindow extends FrameLayout {
+public class WindowVideoView extends BaseVideoView {
 
     private final int MIN_MOVE_DISTANCE = 20;
 
@@ -18,12 +17,12 @@ public class FloatWindow extends FrameLayout {
 
     private boolean isWindowShow;
 
-    public FloatWindow(Context context, View windowView, FloatWindowParams params) {
+    public WindowVideoView(Context context, FloatWindowParams params) {
         super(context);
-        init(windowView, params);
+        init(params);
     }
 
-    private void init(View childView, FloatWindowParams params) {
+    private void init(FloatWindowParams params) {
         wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
         wmParams = new WindowManager.LayoutParams();
         wmParams.type = params.getWindowType();
@@ -34,9 +33,6 @@ public class FloatWindow extends FrameLayout {
         wmParams.height = params.getHeight();
         wmParams.x = params.getX();
         wmParams.y = params.getY();
-        if (childView != null) {
-            addView(childView);
-        }
     }
 
     /**
@@ -63,8 +59,7 @@ public class FloatWindow extends FrameLayout {
         if (wm != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 if (!isAttachedToWindow()) {
-                    wm.addView(this, wmParams);
-                    isWindowShow = true;
+                    addViewToWindow();
                     return true;
                 } else {
                     return false;
@@ -72,8 +67,7 @@ public class FloatWindow extends FrameLayout {
             } else {
                 try {
                     if (getParent() == null) {
-                        wm.addView(this, wmParams);
-                        isWindowShow = true;
+                        addViewToWindow();
                     }
                     return true;
                 } catch (Exception e) {
@@ -87,6 +81,11 @@ public class FloatWindow extends FrameLayout {
         }
     }
 
+    private void addViewToWindow(){
+        wm.addView(this, wmParams);
+        isWindowShow = true;
+    }
+
     /**
      * remove from WindowManager
      *
@@ -94,10 +93,10 @@ public class FloatWindow extends FrameLayout {
      */
     public boolean close() {
         if (wm != null) {
+            stop();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 if (isAttachedToWindow()) {
-                    wm.removeViewImmediate(this);
-                    isWindowShow = false;
+                    remove();
                     return true;
                 } else {
                     return false;
@@ -105,8 +104,7 @@ public class FloatWindow extends FrameLayout {
             } else {
                 try {
                     if (getParent() != null) {
-                        wm.removeViewImmediate(this);
-                        isWindowShow = false;
+                        remove();
                     }
                     return true;
                 } catch (Exception e) {
@@ -119,6 +117,11 @@ public class FloatWindow extends FrameLayout {
             return false;
         }
 
+    }
+
+    private void remove(){
+        wm.removeViewImmediate(this);
+        isWindowShow = false;
     }
 
     private float mDownX;
@@ -166,5 +169,6 @@ public class FloatWindow extends FrameLayout {
         }
         return super.onTouchEvent(event);
     }
+
 
 }
