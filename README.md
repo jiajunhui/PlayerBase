@@ -61,8 +61,6 @@ PlayerBase是基于事件分发来完成各组件间协作的问题，定义了�
 
 ![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/widget_struct.jpeg)
 
-遇到问题，请联系作者。QQ：309812983  Email：junhui_jia@163.com
-
 效果<br>
 
 ![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_20180420-170051.png)
@@ -155,9 +153,9 @@ mVideoView.start();
 ```
 
 ## AVPlayer的使用
-如果您想直接使用AVPlayer自己进行处理播放，那么大致步骤如下：
-1.初始化一个AVPlayer对象。
-2.初始化一个ViewContainer对象，将ReceiverGroup设置到ViewContainer中。
+如果您想直接使用AVPlayer自己进行处理播放，那么大致步骤如下：<br>
+1.初始化一个AVPlayer对象。<br>
+2.初始化一个ViewContainer对象，将ReceiverGroup设置到ViewContainer中。<br>
 3.使用ViewContainer设置一个渲染视图Render，然后自己处理RenderCallBack并关联解码器。
 
 代码如下：
@@ -291,23 +289,23 @@ public class TestActivity extends AppcompatActivity{
 	ViewGroup view2;
 
 	public void onCreate(Bundle saveInstance){
-		 super.onCreate(saveInstance);
+		super.onCreate(saveInstance);
 		 
-		 //...
+		//...
 		 
-		 mAssist = new RelationAssist(this);
-	    mAssist.setEventAssistHandler(eventHandler);
-	    mReceiverGroup = ReceiverGroupManager.get().getLiteReceiverGroup(this);
-	    mAssist.setReceiverGroup(mReceiverGroup);
-	    DataSource dataSource = new DataSource();
-	    dataSource.setData("http://...");
-	    dataSource.setTitle("xxx");
-	    mAssist.setDataSource(dataSource);
-	    mAssist.attachContainer(mVideoContainer);
-	    mAssist.play();
-	    
-	    //...
-	    switchPlay(view2);
+		mAssist = new RelationAssist(this);
+		mAssist.setEventAssistHandler(eventHandler);
+		mReceiverGroup = ReceiverGroupManager.get().getLiteReceiverGroup(this);
+		mAssist.setReceiverGroup(mReceiverGroup);
+		DataSource dataSource = new DataSource();
+		dataSource.setData("http://...");
+		dataSource.setTitle("xxx");
+		mAssist.setDataSource(dataSource);
+		mAssist.attachContainer(mVideoContainer);
+		mAssist.play();
+		    
+		//...
+		switchPlay(view2);
 	}
 	
 	private void switchPlay(ViewGroup container){
