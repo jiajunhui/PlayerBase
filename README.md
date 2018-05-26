@@ -23,6 +23,7 @@ __-等功能……__<br>
 # Demo下载
 [Demo下载](http://fir.im/lmhz)
 <br>
+<img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/qrcode.png">
 
 # 特色
 完全将解码器与播放视图组件化处理。不染指任何具体的业务，可随意接入其他播放器，组件完全由用户自定义，组件即插即用。让使用变的更加灵活。如下代码示例，需要什么视图就添加什么视图，不需要时可随时移除。
