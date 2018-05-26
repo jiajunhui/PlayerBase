@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.FrameLayout;
 
 import com.kk.taurus.avplayer.R;
@@ -28,6 +29,7 @@ public class WindowSwitchPlayActivity extends AppCompatActivity {
 
     private int mVideoContainerH;
     private FrameLayout mVideoContainer;
+    private Button mBtnSwitchPlay;
 
     private RelationAssist mAssist;
     private ReceiverGroup mReceiverGroup;
@@ -46,7 +48,7 @@ public class WindowSwitchPlayActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_window_switch_play);
-
+        mBtnSwitchPlay = findViewById(R.id.btn_switch_play);
         mVideoContainer = findViewById(R.id.videoContainer);
         mVideoContainer.post(new Runnable() {
             @Override
@@ -65,6 +67,8 @@ public class WindowSwitchPlayActivity extends AppCompatActivity {
                                         .setX(100)
                                         .setY(400)
                                         .setWidth(width).setHeight(width*9/16));
+        mFloatWindow.setBackgroundColor(Color.BLACK);
+        mFloatWindow.setElevationShadow(50);
 
         mAssist = new RelationAssist(this);
         mAssist.getViewContainer().setBackgroundColor(Color.BLACK);
@@ -76,8 +80,8 @@ public class WindowSwitchPlayActivity extends AppCompatActivity {
         changeMode(false);
 
         DataSource dataSource = new DataSource();
-        dataSource.setData("http://mov.bn.netease.com/open-movie/nos/flv/2017/07/24/SCP786QON_hd.flv");
-        dataSource.setTitle("积极的悲观主义者");
+        dataSource.setData("https://mov.bn.netease.com/open-movie/nos/mp4/2016/01/11/SBC46Q9DV_hd.mp4");
+        dataSource.setTitle("神奇的珊瑚");
 
         mAssist.setDataSource(dataSource);
         mAssist.attachContainer(mVideoContainer);
@@ -158,17 +162,23 @@ public class WindowSwitchPlayActivity extends AppCompatActivity {
     }
 
     private void normalPlay(){
+        mBtnSwitchPlay.setText(R.string.window_play);
         changeMode(false);
         mAssist.attachContainer(mVideoContainer);
         closeWindow();
     }
 
-    public void openWindowPlay(View view){
-        windowPlay();
+    public void switchWindowPlay(View view){
+        if(mFloatWindow.isWindowShow()){
+            normalPlay();
+        }else{
+            windowPlay();
+        }
     }
 
     private void windowPlay() {
         if(!mFloatWindow.isWindowShow()){
+            mBtnSwitchPlay.setText(R.string.page_play);
             changeMode(true);
             mFloatWindow.show();
             mAssist.attachContainer(mWindowVideoContainer);

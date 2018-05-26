@@ -17,6 +17,7 @@
 package com.kk.taurus.playerbase.style;
 
 import android.annotation.TargetApi;
+import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Build;
 import android.support.v4.view.ViewCompat;
@@ -72,7 +73,12 @@ public final class StyleSetter implements IStyleSetter {
 
     @Override
     public void setElevationShadow(float elevation) {
-        ViewCompat.setElevation(mView,elevation);
+        setElevationShadow(Color.BLACK, elevation);
     }
 
+    @Override
+    public void setElevationShadow(int backgroundColor, float elevation) {
+        mView.setBackgroundColor(backgroundColor);
+        ViewCompat.setElevation(mView,elevation);
+    }
 }

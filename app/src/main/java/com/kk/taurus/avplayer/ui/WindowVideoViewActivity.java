@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 
 import com.kk.taurus.avplayer.R;
 import com.kk.taurus.avplayer.cover.CloseCover;
@@ -21,6 +22,8 @@ import com.kk.taurus.playerbase.window.WindowVideoView;
 
 public class WindowVideoViewActivity extends AppCompatActivity {
 
+    Button mActiveWindow;
+
     WindowVideoView mWindowVideoView;
 
     DataSource mDataSource;
@@ -29,6 +32,7 @@ public class WindowVideoViewActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_window_video_view);
+        mActiveWindow = findViewById(R.id.btn_active_window);
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -44,6 +48,7 @@ public class WindowVideoViewActivity extends AppCompatActivity {
                         .setGravity(Gravity.TOP | Gravity.LEFT));
 
         mWindowVideoView.setBackgroundColor(Color.BLACK);
+        mWindowVideoView.setElevationShadow(50);
 
         mWindowVideoView.setEventHandler(eventHandler);
 
@@ -55,8 +60,8 @@ public class WindowVideoViewActivity extends AppCompatActivity {
         mWindowVideoView.setReceiverGroup(receiverGroup);
 
         mDataSource = new DataSource();
-        mDataSource.setData("http://mov.bn.netease.com/open-movie/nos/flv/2017/07/24/SCP786QON_hd.flv");
-        mDataSource.setTitle("积极的悲观主义者");
+        mDataSource.setData("https://mov.bn.netease.com/open-movie/nos/mp4/2016/01/11/SBC46Q9DV_hd.mp4");
+        mDataSource.setTitle("神奇的珊瑚");
 
     }
 
@@ -70,6 +75,7 @@ public class WindowVideoViewActivity extends AppCompatActivity {
                     break;
                 case DataInter.Event.EVENT_CODE_REQUEST_CLOSE:
                     mWindowVideoView.close();
+                    mActiveWindow.setText(R.string.open_window_video_view);
                     break;
             }
         }
@@ -77,8 +83,10 @@ public class WindowVideoViewActivity extends AppCompatActivity {
 
     public void activeWindowVideoView(View view){
         if(mWindowVideoView.isWindowShow()){
+            mActiveWindow.setText(R.string.open_window_video_view);
             mWindowVideoView.close();
         }else{
+            mActiveWindow.setText(R.string.close_window_video_view);
             mWindowVideoView.show();
             mWindowVideoView.setDataSource(mDataSource);
             mWindowVideoView.start();

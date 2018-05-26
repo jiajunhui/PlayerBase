@@ -4,7 +4,10 @@
     <string name="useMediaPlayer">用MediaPlayer解码</string>
     <string name="useIjkPlayer">用IjkPlayer解码</string>
 
-    <string name="open_window_video_view">打开WindowVideoView</string>
-    <string name="close_window_video_view">关闭WindowVideoView</string>
+    <string name="open_window_video_view">打开窗口播放</string>
+    <string name="close_window_video_view">关闭窗口播放</string>
+
+    <string name="window_play">窗口播放</string>
+    <string name="page_play">页面播放</string>
 
 </resources>

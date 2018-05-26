@@ -43,4 +43,11 @@ public interface IStyleSetter {
 
     void setElevationShadow(float elevation);
 
+    /**
+     * must setting a color when set shadow.
+     * @param backgroundColor
+     * @param elevation
+     */
+    void setElevationShadow(int backgroundColor, float elevation);
+
 }

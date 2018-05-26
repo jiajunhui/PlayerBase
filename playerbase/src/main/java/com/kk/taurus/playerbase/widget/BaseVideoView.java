@@ -492,4 +492,8 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
         mStyleSetter.setElevationShadow(elevation);
     }
 
+    @Override
+    public void setElevationShadow(int backgroundColor, float elevation) {
+        mStyleSetter.setElevationShadow(backgroundColor, elevation);
+    }
 }
