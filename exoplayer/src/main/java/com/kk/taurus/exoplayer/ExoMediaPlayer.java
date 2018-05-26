@@ -258,6 +258,12 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
                                        int unappliedRotationDegrees, float pixelWidthHeightRatio) {
             mVideoWidth = width;
             mVideoHeight = height;
+            Bundle bundle = BundlePool.obtain();
+            bundle.putInt(EventKey.INT_ARG1, mVideoWidth);
+            bundle.putInt(EventKey.INT_ARG2, mVideoHeight);
+            bundle.putInt(EventKey.INT_ARG3, 0);
+            bundle.putInt(EventKey.INT_ARG4, 0);
+            submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_SIZE_CHANGE,bundle);
         }
 
         @Override
