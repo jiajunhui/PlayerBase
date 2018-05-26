@@ -58,12 +58,16 @@ mVideoView.start();
 
 效果<br>
 
+<figure class="row1">
 <img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_001.jpeg" width = "250" height = "444" float="left"/>
 <img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_002.jpeg" width = "250" height = "444" float="left"/>
 <img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_003.jpeg" width = "250" height = "444" float="left"/>
+</figure>
+<figure class="row2">
 <img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_004.jpeg" width = "250" height = "444" float="left"/>
 <img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_005.jpeg" width = "250" height = "444" float="left"/>
 <img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_006.jpeg" width = "250" height = "444" float="left"/>
+</figure>
 
 # 框架的设计
 PlayerBase是基于事件分发来完成各组件间协作的问题，定义了接收者Receiver以及覆盖层Cover的概念来进行组件的管理。您可以将控制器视图、Loading视图、Error视图以及其他的视图拆分成多个Cover覆盖层进行管理（详见demo中的ControllerCover、LoadingCover、ErrorCover），使用时添加到ReceiverGroup中即可，不用时remove掉即可，方便功能的管理与业务的迭代。详细设计见PPT和代码。
