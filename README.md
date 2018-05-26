@@ -59,14 +59,15 @@ mVideoView.start();
 效果<br>
 
 <figure class="third">
-<img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_001.jpeg" width = "250" height = "444" float="left"/>
-<img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_002.jpeg" width = "250" height = "444" float="left"/>
-<img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_003.jpeg" width = "250" height = "444" float="left"/>
+<img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_001.jpeg" width = "250" height = "444" />
+<img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_002.jpeg" width = "250" height = "444" />
+<img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_003.jpeg" width = "250" height = "444" />
 </figure>
+
 <figure class="third">
-<img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_004.jpeg" width = "250" height = "444" float="left"/>
-<img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_005.jpeg" width = "250" height = "444" float="left"/>
-<img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_006.jpeg" width = "250" height = "444" float="left"/>
+<img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_004.jpeg" width = "250" height = "444" />
+<img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_005.jpeg" width = "250" height = "444" />
+<img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_006.jpeg" width = "250" height = "444" />
 </figure>
 
 # 框架的设计
