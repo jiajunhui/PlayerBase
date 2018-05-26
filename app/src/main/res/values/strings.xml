@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">AVPlayer</string>
+    <string name="home_title">PlayerBase</string>
 
     <string name="useIjkPlayer">用IjkPlayer解码</string>
     <string name="useMediaPlayer">用MediaPlayer解码</string>

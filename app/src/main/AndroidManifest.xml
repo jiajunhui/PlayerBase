@@ -31,6 +31,7 @@
         </activity>
         <activity
             android:name=".ui.MainActivity"
+            android:label="@string/home_title"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"/>
         <activity

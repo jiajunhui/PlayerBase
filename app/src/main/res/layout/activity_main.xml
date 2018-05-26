@@ -11,7 +11,7 @@
         android:background="?attr/colorPrimary"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:titleTextColor="#ffffff"
-        app:title="@string/app_name"/>
+        app:title="@string/home_title"/>
 
     <ScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -74,7 +74,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:gravity="left"
-                android:text="AVPlayer的使用(含列表全屏切换、无缝续播)"
+                android:text="列表播放全屏切换、无缝续播"
                 android:textSize="14sp"
                 android:textColor="#000000"/>
 
