@@ -43,12 +43,16 @@ public class MainActivity extends AppCompatActivity implements OnReceiverEventLi
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
+            case R.id.switchIjkPlayer:
+                PlayerConfig.setDefaultPlanId(App.PLAN_ID_IJK);
+                updateDecoderInfo();
+                break;
             case R.id.switchMediaPlayer:
                 PlayerConfig.setDefaultPlanId(PlayerConfig.DEFAULT_PLAN_ID);
                 updateDecoderInfo();
                 break;
-            case R.id.switchIjkPlayer:
-                PlayerConfig.setDefaultPlanId(App.PLAN_ID_IJK);
+            case R.id.switchExoPlayer:
+                PlayerConfig.setDefaultPlanId(App.PLAN_ID_EXO);
                 updateDecoderInfo();
                 break;
         }

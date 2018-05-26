@@ -34,6 +34,7 @@ public class AppContextAttach {
     public static Context getApplicationContext(){
         if(mAppContext==null){
             Log.e("AppContextAttach", "app context not init !!!");
+            throw new RuntimeException("if you need context for using decoder, you must call PlayerLibrary.init(context).");
         }
         return mAppContext;
     }

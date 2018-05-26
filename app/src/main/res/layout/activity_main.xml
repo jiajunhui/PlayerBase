@@ -107,7 +107,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:gravity="left"
-                android:text="MediaPlayer支持的格式有限，如发现出错或不能播放，请尝试使用ijkplayer解码"
+                android:text="MediaPlayer和ExoPlayer支持的格式有限，如发现出错或不能播放，请尝试使用ijkplayer解码"
                 android:textSize="14sp"
                 android:textColor="#000000"/>
 

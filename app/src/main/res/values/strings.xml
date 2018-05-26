@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">AVPlayer</string>
 
-    <string name="useMediaPlayer">用MediaPlayer解码</string>
     <string name="useIjkPlayer">用IjkPlayer解码</string>
+    <string name="useMediaPlayer">用MediaPlayer解码</string>
+    <string name="useExoPlayer">用ExoPlayer解码</string>
 
     <string name="open_window_video_view">打开窗口播放</string>
     <string name="close_window_video_view">关闭窗口播放</string>

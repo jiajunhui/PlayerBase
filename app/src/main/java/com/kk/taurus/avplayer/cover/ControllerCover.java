@@ -416,6 +416,7 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
                     mBufferPercentage = bundle.getInt(EventKey.INT_DATA);
                 }
                 break;
+            case OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_RENDER_START:
             case OnPlayerEventListener.PLAYER_EVENT_ON_SEEK_COMPLETE:
                 mTimerUpdateProgressEnable = true;
                 break;

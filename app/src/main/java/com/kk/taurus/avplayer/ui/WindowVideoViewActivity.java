@@ -13,10 +13,10 @@ import com.kk.taurus.avplayer.R;
 import com.kk.taurus.avplayer.cover.CloseCover;
 import com.kk.taurus.avplayer.play.DataInter;
 import com.kk.taurus.avplayer.play.ReceiverGroupManager;
-import com.kk.taurus.playerbase.AVPlayer;
-import com.kk.taurus.playerbase.assist.OnAVPlayerEventHandler;
+import com.kk.taurus.playerbase.assist.OnVideoViewEventHandler;
 import com.kk.taurus.playerbase.entity.DataSource;
 import com.kk.taurus.playerbase.receiver.ReceiverGroup;
+import com.kk.taurus.playerbase.widget.BaseVideoView;
 import com.kk.taurus.playerbase.window.FloatWindowParams;
 import com.kk.taurus.playerbase.window.WindowVideoView;
 
@@ -60,14 +60,14 @@ public class WindowVideoViewActivity extends AppCompatActivity {
         mWindowVideoView.setReceiverGroup(receiverGroup);
 
         mDataSource = new DataSource();
-        mDataSource.setData("https://mov.bn.netease.com/open-movie/nos/mp4/2016/01/11/SBC46Q9DV_hd.mp4");
-        mDataSource.setTitle("神奇的珊瑚");
+        mDataSource.setData("https://mov.bn.netease.com/open-movie/nos/mp4/2018/01/12/SD70VQJ74_sd.mp4");
+        mDataSource.setTitle("不想从被子里出来");
 
     }
 
-    private OnAVPlayerEventHandler eventHandler = new OnAVPlayerEventHandler(){
+    private OnVideoViewEventHandler eventHandler = new OnVideoViewEventHandler(){
         @Override
-        public void onAssistHandle(AVPlayer assist, int eventCode, Bundle bundle) {
+        public void onAssistHandle(BaseVideoView assist, int eventCode, Bundle bundle) {
             super.onAssistHandle(assist, eventCode, bundle);
             switch (eventCode){
                 case DataInter.Event.EVENT_CODE_ERROR_SHOW:

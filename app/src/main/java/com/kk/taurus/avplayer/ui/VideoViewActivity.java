@@ -22,8 +22,7 @@ import com.kk.taurus.avplayer.play.NetworkObserver;
 import com.kk.taurus.avplayer.play.ReceiverGroupManager;
 import com.kk.taurus.avplayer.utils.PUtil;
 import com.kk.taurus.avplayer.view.VisualizerView;
-import com.kk.taurus.playerbase.AVPlayer;
-import com.kk.taurus.playerbase.assist.OnAVPlayerEventHandler;
+import com.kk.taurus.playerbase.assist.OnVideoViewEventHandler;
 import com.kk.taurus.playerbase.config.PlayerConfig;
 import com.kk.taurus.playerbase.entity.DataSource;
 import com.kk.taurus.playerbase.event.OnPlayerEventListener;
@@ -214,6 +213,13 @@ public class VideoViewActivity extends AppCompatActivity implements OnPlayerEven
         }
     }
 
+    public void onDecoderChangeExoPlayer(View view){
+        int curr = mVideoView.getCurrentPosition();
+        if(mVideoView.switchDecoder(App.PLAN_ID_EXO)){
+            replay(curr);
+        }
+    }
+
     private void updateVideo(boolean landscape){
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mVideoView.getLayoutParams();
         if(landscape){
@@ -258,9 +264,9 @@ public class VideoViewActivity extends AppCompatActivity implements OnPlayerEven
         mReceiverGroup.getGroupValue().putBoolean(DataInter.Key.KEY_IS_LANDSCAPE, isLandscape);
     }
 
-    private OnAVPlayerEventHandler mOnEventAssistHandler = new OnAVPlayerEventHandler(){
+    private OnVideoViewEventHandler mOnEventAssistHandler = new OnVideoViewEventHandler(){
         @Override
-        public void onAssistHandle(AVPlayer assist, int eventCode, Bundle bundle) {
+        public void onAssistHandle(BaseVideoView assist, int eventCode, Bundle bundle) {
             super.onAssistHandle(assist, eventCode, bundle);
             switch (eventCode){
                 case DataInter.Event.EVENT_CODE_REQUEST_BACK:

@@ -87,7 +87,7 @@ mVideoView.start();
 
 ```gradle
 dependencies {
-  compile 'com.kk.taurus.playerbase:playerbase:3.2.2'
+  compile 'com.kk.taurus.playerbase:playerbase:3.2.3'
 }
 ```
 

@@ -28,7 +28,7 @@ import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.kk.taurus.playerbase.assist.OnAVPlayerEventHandler;
+import com.kk.taurus.playerbase.assist.OnVideoViewEventHandler;
 import com.kk.taurus.playerbase.log.PLog;
 import com.kk.taurus.playerbase.player.IPlayer;
 import com.kk.taurus.playerbase.AVPlayer;
@@ -85,7 +85,7 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
     //the stream buffer percent
     private int mBufferPercentage;
 
-    private OnAVPlayerEventHandler mEventAssistHandler;
+    private OnVideoViewEventHandler mEventAssistHandler;
 
     public BaseVideoView(Context context){
         this(context, null);
@@ -146,6 +146,7 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
      * @return Whether or not to switch to success.
      *
      */
+    @Override
     public boolean switchDecoder(int decoderPlanId){
         return mPlayer.switchDecoder(decoderPlanId);
     }
@@ -192,7 +193,7 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
         mViewContainer.setReceiverGroup(receiverGroup);
     }
 
-    public void setEventHandler(OnAVPlayerEventHandler eventHandler){
+    public void setEventHandler(OnVideoViewEventHandler eventHandler){
         this.mEventAssistHandler = eventHandler;
     }
 
@@ -213,11 +214,15 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
         @Override
         public void onReceiverEvent(int eventCode, Bundle bundle) {
             if(mEventAssistHandler!=null)
-                mEventAssistHandler.onAssistHandle(mPlayer, eventCode, bundle);
+                mEventAssistHandler.onAssistHandle(BaseVideoView.this, eventCode, bundle);
             if(mOnReceiverEventListener!=null)
                 mOnReceiverEventListener.onReceiverEvent(eventCode, bundle);
         }
     };
+
+    public void rePlay(int msc){
+        mPlayer.rePlay(msc);
+    }
 
     @Override
     public void setAspectRatio(AspectRatio aspectRatio) {

@@ -60,7 +60,9 @@ public class DetailPageActivity extends AppCompatActivity
         DataSource intentDataSource = new DataSource(item.getPath());
         intentDataSource.setTitle(item.getDisplayName());
         DataSource dataSource = null;
-        if(!AssistPlayer.get().isInPlaybackState()){
+        DataSource playData = AssistPlayer.get().getDataSource();
+        boolean dataChange = playData!=null && !playData.getData().equals(intentDataSource.getData());
+        if(!AssistPlayer.get().isInPlaybackState() || dataChange){
             dataSource = intentDataSource;
         }
 

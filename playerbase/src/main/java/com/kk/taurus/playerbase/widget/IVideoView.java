@@ -30,6 +30,7 @@ public interface IVideoView {
 
     void setRenderType(int renderType);
     void setAspectRatio(AspectRatio aspectRatio);
+    boolean switchDecoder(int decoderPlanId);
 
     IRender getRender();
 

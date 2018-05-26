@@ -36,6 +36,7 @@ public interface AssistPlay {
 
     void setOnProviderListener(IDataProvider.OnProviderListener onProviderListener);
     void setDataProvider(IDataProvider dataProvider);
+    boolean switchDecoder(int decoderPlanId);
 
     void setReceiverGroup(ReceiverGroup receiverGroup);
 

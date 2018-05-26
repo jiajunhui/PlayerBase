@@ -172,6 +172,16 @@
             android:text="使用IjkPlayer"
             android:textSize="14sp"
             android:textColor="#ffffff"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:padding="5dp"
+            android:background="@color/colorAccent"
+            android:onClick="onDecoderChangeExoPlayer"
+            android:text="使用ExoPlayer"
+            android:textSize="14sp"
+            android:textColor="#ffffff"/>
     </LinearLayout>
 
     <com.kk.taurus.avplayer.view.VisualizerView

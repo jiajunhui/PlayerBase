@@ -32,6 +32,7 @@ public class SplashActivity extends AppCompatActivity {
                 PermissionGen.with(SplashActivity.this)
                         .addRequestCode(100)
                         .permissions(
+                                Manifest.permission.READ_EXTERNAL_STORAGE,
                                 Manifest.permission.WRITE_EXTERNAL_STORAGE
                         )
                         .request();

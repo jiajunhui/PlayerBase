@@ -3,6 +3,7 @@ package com.kk.taurus.avplayer;
 import android.app.Application;
 import android.os.Environment;
 
+import com.kk.taurus.exoplayer.ExoMediaPlayer;
 import com.kk.taurus.ijkplayer.IjkPlayer;
 import com.kk.taurus.playerbase.config.PlayerConfig;
 import com.kk.taurus.playerbase.config.PlayerLibrary;
@@ -22,6 +23,7 @@ import java.io.File;
 public class App extends Application {
 
     public static final int PLAN_ID_IJK = 1;
+    public static final int PLAN_ID_EXO = 2;
 
     private static App instance;
 
@@ -64,6 +66,7 @@ public class App extends Application {
                         .setMessageTable(true));
 
         PlayerConfig.addDecoderPlan(new DecoderPlan(PLAN_ID_IJK, IjkPlayer.class.getName(), "IjkPlayer"));
+        PlayerConfig.addDecoderPlan(new DecoderPlan(PLAN_ID_EXO, ExoMediaPlayer.class.getName(), "ExoPlayer"));
         PlayerConfig.setDefaultPlanId(PLAN_ID_IJK);
         PlayerLibrary.init(this);
     }

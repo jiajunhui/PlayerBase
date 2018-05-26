@@ -63,7 +63,7 @@ public class RelationAssist implements AssistPlay {
     private OnErrorEventListener mOnErrorEventListener;
     private OnReceiverEventListener mOnReceiverEventListener;
 
-    private OnEventAssistHandler mOnEventAssistHandler;
+    private OnAssistPlayEventHandler mOnEventAssistHandler;
 
     public RelationAssist(Context context){
         this.mContext = context;
@@ -132,8 +132,7 @@ public class RelationAssist implements AssistPlay {
         //not handle
     }
 
-    public void setEventAssistHandler(
-            OnEventAssistHandler onEventAssistHandler) {
+    public void setEventAssistHandler(OnAssistPlayEventHandler onEventAssistHandler) {
         this.mOnEventAssistHandler = onEventAssistHandler;
     }
 
@@ -171,6 +170,11 @@ public class RelationAssist implements AssistPlay {
     @Override
     public void setDataProvider(IDataProvider dataProvider) {
         mPlayer.setDataProvider(dataProvider);
+    }
+
+    @Override
+    public boolean switchDecoder(int decoderPlanId) {
+        return mPlayer.switchDecoder(decoderPlanId);
     }
 
     @Override

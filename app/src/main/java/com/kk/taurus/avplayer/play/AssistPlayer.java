@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import com.kk.taurus.avplayer.App;
 import com.kk.taurus.playerbase.assist.AssistPlay;
 import com.kk.taurus.playerbase.assist.OnAssistPlayEventHandler;
-import com.kk.taurus.playerbase.assist.OnEventAssistHandler;
 import com.kk.taurus.playerbase.entity.DataSource;
 import com.kk.taurus.playerbase.event.OnErrorEventListener;
 import com.kk.taurus.playerbase.event.OnPlayerEventListener;
@@ -29,6 +28,8 @@ public class AssistPlayer {
     private static AssistPlayer i;
 
     private Context mAppContext;
+
+    private DataSource mDataSource;
 
     private AssistPlayer(){
         mAppContext = App.get().getApplicationContext();
@@ -122,7 +123,7 @@ public class AssistPlayer {
         }
     };
 
-    private OnEventAssistHandler mInternalEventAssistHandler =
+    private OnAssistPlayEventHandler mInternalEventAssistHandler =
             new OnAssistPlayEventHandler(){
         @Override
         public void onAssistHandle(AssistPlay assistPlay, int eventCode, Bundle bundle) {
@@ -166,7 +167,14 @@ public class AssistPlayer {
         return mRelationAssist.getReceiverGroup();
     }
 
+    public DataSource getDataSource() {
+        return mDataSource;
+    }
+
     public void play(ViewGroup userContainer, DataSource dataSource){
+        if(dataSource!=null){
+            this.mDataSource = dataSource;
+        }
         attachListener();
         mRelationAssist.attachContainer(userContainer);
         mRelationAssist.setDataSource(dataSource);
