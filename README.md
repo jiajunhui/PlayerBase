@@ -63,12 +63,12 @@ PlayerBase是基于事件分发来完成各组件间协作的问题，定义了�
 
 效果<br>
 
-<img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_001.png" width = "250" height = "444"/>
-<img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_002.png" width = "250" height = "444"/>
-<img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_003.png" width = "250" height = "444"/>
-<img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_004.png" width = "250" height = "444"/>
-<img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_005.png" width = "250" height = "444"/>
-<img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_006.png" width = "250" height = "444"/>
+<img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_001.jpeg" width = "250" height = "444"/>
+<img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_002.jpeg" width = "250" height = "444"/>
+<img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_003.jpeg" width = "250" height = "444"/>
+<img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_004.jpeg" width = "250" height = "444"/>
+<img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_005.jpeg" width = "250" height = "444"/>
+<img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_006.jpeg" width = "250" height = "444"/>
 
 # 框架的设计
 ![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/frame_structure01.png)
