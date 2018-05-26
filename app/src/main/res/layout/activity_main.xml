@@ -116,15 +116,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:gravity="left"
-                android:text="注：其它解码方案的接入请参见demo中的ijkplayer的接入示例。"
+                android:text="注：其它解码方案的接入请参见demo中的ijkplayer和ExoPlayer的接入示例。"
                 android:textSize="14sp"
                 android:textColor="#ca113f"/>
         </LinearLayout>
     </ScrollView>
-
-    <FrameLayout
-        android:id="@+id/fullScreenContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
 
 </RelativeLayout>

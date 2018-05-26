@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.kk.taurus.avplayer.App;
 import com.kk.taurus.avplayer.R;
 import com.kk.taurus.avplayer.play.DataInter;
 import com.kk.taurus.avplayer.play.NetworkObserver;
@@ -81,6 +82,7 @@ public class ErrorCover extends BaseCover {
                 requestRetry(null);
                 break;
             case STATUS_MOBILE:
+                App.ignoreMobile = true;
                 setErrorState(false);
                 requestResume(null);
                 break;
@@ -126,6 +128,8 @@ public class ErrorCover extends BaseCover {
                     setErrorState(false);
                 }
             }else{
+                if(App.ignoreMobile)
+                    return;
                 mStatus = STATUS_MOBILE;
                 setErrorInfo("您正在使用移动网络！");
                 setHandleInfo("继续");

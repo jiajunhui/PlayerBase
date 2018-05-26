@@ -39,9 +39,9 @@ __-等功能……__<br>
 ```java
 ReceiverGroup receiverGroup = new ReceiverGroup();
 receiverGroup.addReceiver("loading_cover", new LoadingCover(context));
-receiverGroup.addReceiver("loading_cover", new ControllerCover(context));
-receiverGroup.addReceiver("loading_cover", new GestureCover(context));
-receiverGroup.addReceiver("loading_cover", new ErrorCover(context));
+receiverGroup.addReceiver("controller_cover", new ControllerCover(context));
+receiverGroup.addReceiver("gesture_cover", new GestureCover(context));
+receiverGroup.addReceiver("error_cover", new ErrorCover(context));
 
 mVideoView.setReceiverGroup(receiverGroup);
 mVideoView.setDataSource(new DataSource("http://..."))

@@ -27,6 +27,8 @@ public class App extends Application {
 
     private static App instance;
 
+    public static boolean ignoreMobile;
+
     public static App get(){
         return instance;
     }

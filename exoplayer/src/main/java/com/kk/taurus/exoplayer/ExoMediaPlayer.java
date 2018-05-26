@@ -66,10 +66,14 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
 
     private int mVideoWidth, mVideoHeight;
 
+    private int mBufferPercentage;
+
     private int mStartPos = -1;
 
     private boolean isPreparing = true;
     private boolean isBuffering = false;
+    private boolean isPendingSeek = false;
+
     private final DefaultBandwidthMeter mBandwidthMeter;
 
     public ExoMediaPlayer(){
@@ -223,6 +227,9 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
 
     @Override
     public void seekTo(int msc) {
+        if(isInPlaybackState()){
+            isPendingSeek = true;
+        }
         mInternalPlayer.seekTo(msc);
         Bundle bundle = BundlePool.obtain();
         bundle.putInt(EventKey.INT_DATA, msc);
@@ -252,6 +259,14 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
         mInternalPlayer.release();
     }
 
+    private boolean isInPlaybackState(){
+        int state = getState();
+        return state!=STATE_END
+                && state!=STATE_ERROR
+                && state!=STATE_INITIALIZED
+                && state!=STATE_STOPPED;
+    }
+
     private SimpleExoPlayer.VideoListener mVideoListener = new SimpleExoPlayer.VideoListener() {
         @Override
         public void onVideoSizeChanged(int width, int height,
@@ -277,7 +292,7 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
     private Player.EventListener mEventListener = new Player.EventListener() {
         @Override
         public void onTimelineChanged(Timeline timeline, Object manifest) {
-
+            PLog.d(TAG,"onTimelineChanged...");
         }
 
         @Override
@@ -287,11 +302,19 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
 
         @Override
         public void onLoadingChanged(boolean isLoading) {
-            PLog.d(TAG,"onLoadingChanged : "+ isLoading);
+            mBufferPercentage = mInternalPlayer.getBufferedPercentage();
+            if(!isLoading){
+                Bundle bundle = BundlePool.obtain();
+                bundle.putInt(EventKey.INT_DATA, mBufferPercentage);
+                submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_BUFFERING_UPDATE,bundle);
+            }
+            PLog.d(TAG,"onLoadingChanged : "+ isLoading + ", bufferPercentage = " + mBufferPercentage);
         }
 
         @Override
         public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+            PLog.d(TAG,"onPlayerStateChanged : playWhenReady = "+ playWhenReady
+                    + ", playbackState = " + playbackState);
 
             if(playWhenReady){
                 updateStatus(IPlayer.STATE_STARTED);
@@ -321,6 +344,15 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
                     case Player.STATE_ENDED:
                         isBuffering = false;
                         submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_BUFFERING_END, null);
+                        break;
+                }
+            }
+
+            if(isPendingSeek){
+                switch (playbackState){
+                    case Player.STATE_READY:
+                        isPendingSeek = false;
+                        submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_SEEK_COMPLETE, null);
                         break;
                 }
             }
@@ -367,7 +399,7 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
 
         @Override
         public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
-
+            PLog.d(TAG,"onPlaybackParametersChanged : " + playbackParameters.toString());
         }
     };
 

@@ -13,9 +13,11 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.kk.taurus.avplayer.App;
 import com.kk.taurus.avplayer.R;
+import com.kk.taurus.avplayer.cover.ControllerCover;
 import com.kk.taurus.avplayer.play.DataInter;
 import com.kk.taurus.avplayer.play.MonitorDataProvider;
 import com.kk.taurus.avplayer.play.NetworkObserver;
@@ -26,6 +28,7 @@ import com.kk.taurus.playerbase.assist.OnVideoViewEventHandler;
 import com.kk.taurus.playerbase.config.PlayerConfig;
 import com.kk.taurus.playerbase.entity.DataSource;
 import com.kk.taurus.playerbase.event.OnPlayerEventListener;
+import com.kk.taurus.playerbase.receiver.IReceiver;
 import com.kk.taurus.playerbase.receiver.ReceiverGroup;
 import com.kk.taurus.playerbase.render.AspectRatio;
 import com.kk.taurus.playerbase.widget.BaseVideoView;
@@ -217,6 +220,19 @@ public class VideoViewActivity extends AppCompatActivity implements OnPlayerEven
         int curr = mVideoView.getCurrentPosition();
         if(mVideoView.switchDecoder(App.PLAN_ID_EXO)){
             replay(curr);
+        }
+    }
+
+    public void removeControllerCover(View view){
+        mReceiverGroup.removeReceiver(DataInter.ReceiverKey.KEY_CONTROLLER_COVER);
+        Toast.makeText(this, "已移除", Toast.LENGTH_SHORT).show();
+    }
+
+    public void addControllerCover(View view){
+        IReceiver receiver = mReceiverGroup.getReceiver(DataInter.ReceiverKey.KEY_CONTROLLER_COVER);
+        if(receiver==null){
+            mReceiverGroup.addReceiver(DataInter.ReceiverKey.KEY_CONTROLLER_COVER, new ControllerCover(this));
+            Toast.makeText(this, "已添加", Toast.LENGTH_SHORT).show();
         }
     }
 
