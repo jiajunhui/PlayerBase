@@ -1,6 +1,13 @@
 ![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/playerbase_top_slogen.jpg)
 # 介绍
-PlayerBase是一种将播放业务组件化处理的解决方案框架。无论是播放器内的控制视图还是业务视图，均可以做到组件化处理。将播放器的开发变得清晰简单，更利于产品的迭代。框架内包含系统MediaPlayer的解码实现，demo里面有一套完整的IJKPlayer解码方案的实现和接入，请参见源码可以接入其他播放器解码方案。demo自带了播放控制组件、Loading组件，所有UI功能组件可完全自定义。
+__PlayerBase__是一种将播放业务组件化处理的解决方案框架。无论是播放器内的控制视图还是业务视图，均可以做到组件化处理。将播放器的开发变得清晰简单，更利于产品的迭代。
+
+框架内包含系统__MediaPlayer__的解码实现，demo里面包含__IJKPlayer__和__ExoPlayer__的解码方案的实现和接入，请参见源码可以接入其他播放器解码方案。
+
+demo自带了播放控制组件__ControllerCover__、加载中组件__LoadingCover__、手势处理组件__GestureCover__、播放完成提示组件__CompleteCover__、错误提示组件__ErrorCover__等。
+
+如果不满足您的需求。没问题，所有UI功能组件可完全自定义接入并无缝对接播放事件。
+
 <br>
 
 # 功能
