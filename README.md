@@ -1,15 +1,13 @@
 ![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/playerbase_top_slogen.jpg)
 # 介绍
-<font color=blue>PlayerBase</font>是一种将播放业务组件化处理的解决方案框架。无论是播放器内的控制视图还是业务视图，均可以做到组件化处理。将播放器的开发变得清晰简单，更利于产品的迭代。
+**PlayerBase**是一种将播放业务组件化处理的解决方案框架。无论是播放器内的控制视图还是业务视图，均可以做到组件化处理。将播放器的开发变得清晰简单，更利于产品的迭代。
 
-框架内包含系统<font color=blue>MediaPlayer</font>的解码实现，demo里面包含<font color=blue>IJKPlayer</font>和<font color=blue>ExoPlayer</font>的解码方案的实现和接入，请参见源码可以接入其他播放器解码方案。
+框架内包含系统**MediaPlayer**的解码实现，demo里面包含**IJKPlayer**和**ExoPlayer**的解码方案的实现和接入，请参见源码可以接入其他播放器解码方案。
 
-demo自带了播放控制组件<font color=blue>ControllerCover</font>、加载中组件<font color=blue>LoadingCover</font>、手势处理组件<font color=blue>GestureCover</font>、播放完成提示组件<font color=blue>CompleteCover</font>、错误提示组件<font color=blue>ErrorCover</font>等。
+demo自带了播放控制组件**ControllerCover**、加载中组件**LoadingCover**、手势处理组件**GestureCover**、播放完成提示组件**CompleteCover**、错误提示组件**ErrorCover**等。
 
 如果不满足您的需求。没问题，所有UI功能组件可完全自定义接入并无缝对接播放事件。
-
 <br>
-
 # 功能
 __-视图的组件化处理__<br>
 __-视图组件的高复用、低耦合__<br>
@@ -432,10 +430,13 @@ QQ群：600201778
 # License
 ```license
 Copyright 2017 jiajunhui<junhui_jia@163.com>
+
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
+
    http://www.apache.org/licenses/LICENSE-2.0
+   
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
