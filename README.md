@@ -70,19 +70,6 @@ mVideoView.start();
 <img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/Screenshot_006.jpeg" width = "250" height = "444" />
 </div>
 
-
-# 框架的设计
-PlayerBase是基于事件分发来完成各组件间协作的问题，定义了接收者Receiver以及覆盖层Cover的概念来进行组件的管理。您可以将控制器视图、Loading视图、Error视图以及其他的视图拆分成多个Cover覆盖层进行管理（详见demo中的ControllerCover、LoadingCover、ErrorCover），使用时添加到ReceiverGroup中即可，不用时remove掉即可，方便功能的管理与业务的迭代。详细设计见PPT和代码。
-
-![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/widget_struct.jpeg)
-![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/frame_structure01.png)
-![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/frame_structure02.png)
-![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/frame_structure03.png)
-![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/frame_structure04.png)
-
-详细设计见PPT附件
-[PPT附件](https://github.com/jiajunhui/PlayerBase/raw/master/player_base_structure.pptx)
-
 # 使用
 
 需要的权限，如果targetSDK版本在Android M以上的，请注意运行时权限的处理。<br>
@@ -413,6 +400,19 @@ public class MonitorDataProvider extends BaseDataProvider {
     }
 }
 ```
+
+# 框架的设计
+PlayerBase是基于事件分发来完成各组件间协作的问题，定义了接收者Receiver以及覆盖层Cover的概念来进行组件的管理。您可以将控制器视图、Loading视图、Error视图以及其他的视图拆分成多个Cover覆盖层进行管理（详见demo中的ControllerCover、LoadingCover、ErrorCover），使用时添加到ReceiverGroup中即可，不用时remove掉即可，方便功能的管理与业务的迭代。详细设计见PPT和代码。
+
+![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/widget_struct.jpeg)
+![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/frame_structure01.png)
+![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/frame_structure02.png)
+![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/frame_structure03.png)
+![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/frame_structure04.png)
+
+详细设计见PPT附件
+[PPT附件](https://github.com/jiajunhui/PlayerBase/raw/master/player_base_structure.pptx)
+
 
 # 交流
 联系方式：junhui_jia@163.com
