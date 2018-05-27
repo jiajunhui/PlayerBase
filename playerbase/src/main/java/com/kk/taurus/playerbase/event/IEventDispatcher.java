@@ -19,6 +19,8 @@ package com.kk.taurus.playerbase.event;
 import android.os.Bundle;
 import android.view.MotionEvent;
 
+import com.kk.taurus.playerbase.receiver.IReceiverGroup;
+
 /**
  * Created by Taurus on 2018/4/15.
  */
@@ -27,6 +29,7 @@ public interface IEventDispatcher {
     void dispatchPlayEvent(int eventCode, Bundle bundle);
     void dispatchErrorEvent(int eventCode, Bundle bundle);
     void dispatchReceiverEvent(int eventCode, Bundle bundle);
+    void dispatchReceiverEvent(int eventCode, Bundle bundle, IReceiverGroup.OnReceiverFilter onReceiverFilter);
     void dispatchTouchEventOnSingleTabUp(MotionEvent event);
     void dispatchTouchEventOnDoubleTabUp(MotionEvent event);
     void dispatchTouchEventOnDown(MotionEvent event);

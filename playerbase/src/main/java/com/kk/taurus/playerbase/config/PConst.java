@@ -14,13 +14,16 @@
  *    limitations under the License.
  */
 
-package com.kk.taurus.playerbase.assist;
+package com.kk.taurus.playerbase.config;
 
-/**
- * Created by Taurus on 2018/5/21.
- */
-public interface InterKey {
+public interface PConst {
 
-    String KEY_NETWORK_STATE = "network_state";
+    int NETWORK_STATE_CONNECTING = -2;
+    int NETWORK_STATE_NONE = -1;
+    int NETWORK_STATE_WIFI = 1;
+    int NETWORK_STATE_2G = 2;
+    int NETWORK_STATE_3G = 3;
+    int NETWORK_STATE_4G = 4;
+    int NETWORK_STATE_MOBILE = 5;
 
 }

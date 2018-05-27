@@ -19,6 +19,9 @@ package com.kk.taurus.playerbase.assist;
 import android.os.Bundle;
 
 /**
+ *
+ * Created by Taurus on 2018/5/21.
+ *
  * This interface is used to handle the basic playback
  * operation event issued by the caller. Such as pause,
  * fast forward and other operations.

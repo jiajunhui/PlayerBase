@@ -31,6 +31,12 @@ import com.kk.taurus.playerbase.widget.BaseVideoView;
 
 public interface IRender {
 
+    //use TextureView for render
+    int RENDER_TYPE_TEXTURE_VIEW = 0;
+
+    //use SurfaceView for render
+    int RENDER_TYPE_SURFACE_VIEW = 1;
+
     void setRenderCallback(IRenderCallback renderCallback);
 
     /**

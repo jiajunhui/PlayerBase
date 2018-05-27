@@ -33,8 +33,6 @@ public interface IDataProvider {
 
     int PROVIDER_CODE_SUCCESS_MEDIA_DATA = -77001;
 
-    int PROVIDER_CODE_EXTRA_DATA = -77002;
-
     int PROVIDER_CODE_DATA_PROVIDER_ERROR = -77003;
 
     void setOnProviderListener(OnProviderListener onProviderListener);

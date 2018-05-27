@@ -26,7 +26,11 @@ import com.kk.taurus.playerbase.receiver.OnReceiverEventListener;
 import com.kk.taurus.playerbase.receiver.ReceiverGroup;
 
 /**
+ *
+ * Created by Taurus on 2018/5/21.
+ *
  * The Association for auxiliary view containers and players
+ *
  */
 public interface AssistPlay {
 

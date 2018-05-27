@@ -31,10 +31,13 @@ import com.kk.taurus.playerbase.provider.IDataProvider;
 import com.kk.taurus.playerbase.receiver.OnReceiverEventListener;
 import com.kk.taurus.playerbase.receiver.ReceiverGroup;
 import com.kk.taurus.playerbase.render.IRender;
+import com.kk.taurus.playerbase.render.RenderSurfaceView;
 import com.kk.taurus.playerbase.render.RenderTextureView;
 import com.kk.taurus.playerbase.widget.ViewContainer;
 
 /**
+ *
+ * Created by Taurus on 2018/5/21.
  *
  * This class is mainly used for association between player and component view.
  * For example, maybe you need to switch playback in different views.
@@ -47,9 +50,18 @@ public class RelationAssist implements AssistPlay {
     private Context mContext;
 
     private AVPlayer mPlayer;
+
+    /**
+     * ViewContainer for ReceiverGroup and Render.
+     */
     private ViewContainer mViewContainer;
+
+    /**
+     * ReceiverGroup from out setting.
+     */
     private ReceiverGroup mReceiverGroup;
 
+    private int mRenderType;
     private IRender mRender;
     private IRender.IRenderHolder mRenderHolder;
 
@@ -140,6 +152,7 @@ public class RelationAssist implements AssistPlay {
             new OnReceiverEventListener() {
         @Override
         public void onReceiverEvent(int eventCode, Bundle bundle) {
+            //if setting AssistEventHandler, call back it to handle.
             if(mOnEventAssistHandler !=null)
                 mOnEventAssistHandler.onAssistHandle(RelationAssist.this, eventCode, bundle);
             if(mOnReceiverEventListener!=null)
@@ -186,6 +199,23 @@ public class RelationAssist implements AssistPlay {
         return mReceiverGroup;
     }
 
+    /**
+     * set render type
+     *
+     * see also
+     * {@link IRender#RENDER_TYPE_TEXTURE_VIEW}
+     * {@link IRender#RENDER_TYPE_SURFACE_VIEW}
+     *
+     * @param renderType
+     */
+    public void setRenderType(int renderType){
+        this.mRenderType = renderType;
+    }
+
+    /**
+     * Associate the playback view to the specified container
+     * @param userContainer
+     */
     @Override
     public void attachContainer(ViewGroup userContainer) {
         mPlayer.setSurface(null);
@@ -195,7 +225,16 @@ public class RelationAssist implements AssistPlay {
             mViewContainer.setReceiverGroup(mReceiverGroup);
         }
         releaseRender();
-        mRender = new RenderTextureView(mContext);
+        switch (mRenderType){
+            case IRender.RENDER_TYPE_SURFACE_VIEW:
+                mRender = new RenderSurfaceView(mContext);
+                break;
+            case IRender.RENDER_TYPE_TEXTURE_VIEW:
+            default:
+                mRender = new RenderTextureView(mContext);
+                ((RenderTextureView)mRender).setTakeOverSurfaceTexture(true);
+                break;
+        }
         mRender.setRenderCallback(mRenderCallback);
         updateRenderParams();
         mViewContainer.setRenderView(mRender.getRenderView());
@@ -342,11 +381,12 @@ public class RelationAssist implements AssistPlay {
 
     @Override
     public void destroy() {
-        detachPlayerListener();
-        detachViewContainer();
-        releaseRender();
-        setReceiverGroup(null);
-        mViewContainer.destroy();
         mPlayer.destroy();
+        detachPlayerListener();
+        mRenderHolder = null;
+        releaseRender();
+        mViewContainer.destroy();
+        detachViewContainer();
+        setReceiverGroup(null);
     }
 }

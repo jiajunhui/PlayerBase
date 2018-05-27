@@ -20,6 +20,9 @@ import android.graphics.PixelFormat;
 import android.view.Gravity;
 import android.view.WindowManager;
 
+/**
+ * Created by Taurus on 2018/5/21.
+ */
 public class FloatWindowParams {
 
     private int windowType = WindowManager.LayoutParams.TYPE_TOAST;

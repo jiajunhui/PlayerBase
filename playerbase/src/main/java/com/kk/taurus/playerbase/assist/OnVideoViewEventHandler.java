@@ -22,6 +22,9 @@ import com.kk.taurus.playerbase.event.EventKey;
 import com.kk.taurus.playerbase.player.IPlayer;
 import com.kk.taurus.playerbase.widget.BaseVideoView;
 
+/**
+ * Created by Taurus on 2018/5/25.
+ */
 public class OnVideoViewEventHandler extends BaseEventAssistHandler<BaseVideoView> {
 
     @Override

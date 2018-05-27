@@ -1,161 +1,50 @@
-package com.kk.taurus.avplayer.play;
+/*
+ * Copyright 2017 jiajunhui<junhui_jia@163.com>
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
 
-import android.content.BroadcastReceiver;
+package com.kk.taurus.playerbase.utils;
+
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.telephony.TelephonyManager;
 
-import java.util.ArrayList;
-import java.util.List;
+import static com.kk.taurus.playerbase.config.PConst.NETWORK_STATE_2G;
+import static com.kk.taurus.playerbase.config.PConst.NETWORK_STATE_3G;
+import static com.kk.taurus.playerbase.config.PConst.NETWORK_STATE_4G;
+import static com.kk.taurus.playerbase.config.PConst.NETWORK_STATE_CONNECTING;
+import static com.kk.taurus.playerbase.config.PConst.NETWORK_STATE_MOBILE;
+import static com.kk.taurus.playerbase.config.PConst.NETWORK_STATE_NONE;
+import static com.kk.taurus.playerbase.config.PConst.NETWORK_STATE_WIFI;
 
-public class NetworkObserver {
-
-    public static final int NETWORK_STATE_CONNECTING = -2;
-    public static final int NETWORK_STATE_NONE = -1;
-    public static final int NETWORK_STATE_WIFI = 1;
-    public static final int NETWORK_STATE_2G = 2;
-    public static final int NETWORK_STATE_3G = 3;
-    public static final int NETWORK_STATE_4G = 4;
-    public static final int NETWORK_STATE_MOBILE = 5;
-
-    private int mState;
-
-    private static final int MSG_CODE_NETWORK_CHANGE = 100;
-
-    private static NetworkObserver i;
-
-    private static Context mAppContext;
-    private NetChangeBroadcastReceiver mBroadcastReceiver;
-
-    private List<OnNetworkStateChangeListener> mOnNetworkStateChangeListeners;
-
-    private Handler mHandler = new Handler(Looper.getMainLooper()){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what){
-                case MSG_CODE_NETWORK_CHANGE:
-                    for(OnNetworkStateChangeListener listener:mOnNetworkStateChangeListeners){
-                        int state = (int) msg.obj;
-                        if(mState==state)
-                            return;
-                        mState = state;
-                        listener.onNetworkChange(state>0, state==1, state);
-                    }
-                    break;
-            }
-        }
-    };
-
-    private NetworkObserver(){}
-
-    private NetworkObserver(Context context){
-        this.mAppContext = context.getApplicationContext();
-        mOnNetworkStateChangeListeners = new ArrayList<>();
-        registerNetChangeReceiver();
-    }
-
-    public static NetworkObserver get(Context context){
-        if(null==i){
-            synchronized (NetworkObserver.class){
-                if(null==i){
-                    i = new NetworkObserver(context);
-                }
-            }
-        }
-        return i;
-    }
-
-    public void addOnNetworkStateChangeListener(OnNetworkStateChangeListener listener){
-        if(listener==null || mOnNetworkStateChangeListeners.contains(listener))
-            return;
-        mOnNetworkStateChangeListeners.add(listener);
-    }
-
-    public boolean removeNetworkStateChangeListener(OnNetworkStateChangeListener listener){
-        return mOnNetworkStateChangeListeners.remove(listener);
-    }
-
-    private void registerNetChangeReceiver(){
-        if(mAppContext!=null){
-            mBroadcastReceiver = new NetChangeBroadcastReceiver(mHandler);
-            IntentFilter intentFilter = new IntentFilter();
-            intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-            mAppContext.registerReceiver(mBroadcastReceiver, intentFilter);
-        }
-    }
-
-    private void unregisterNetChangeReceiver(){
-        try {
-            if(mAppContext!=null && mBroadcastReceiver!=null){
-                mAppContext.unregisterReceiver(mBroadcastReceiver);
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    public void destroy(){
-        if(mBroadcastReceiver!=null)
-            mBroadcastReceiver.destroy();
-        unregisterNetChangeReceiver();
-    }
-
-    public interface OnNetworkStateChangeListener{
-        void onNetworkChange(boolean available, boolean isWifi, int networkState);
-    }
-
-    public static class NetChangeBroadcastReceiver extends BroadcastReceiver {
-
-        private Handler handler;
-
-        public NetChangeBroadcastReceiver(Handler handler){
-            this.handler = handler;
-        }
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if(ConnectivityManager.CONNECTIVITY_ACTION.equals(action)){
-                handler.removeCallbacks(mDelayRunnable);
-                handler.postDelayed(mDelayRunnable, 1000);
-            }
-        }
-
-        private Runnable mDelayRunnable = new Runnable() {
-            @Override
-            public void run() {
-                int networkState = getNetworkState(mAppContext);
-                Message message = Message.obtain();
-                message.what = MSG_CODE_NETWORK_CHANGE;
-                message.obj = networkState;
-                handler.sendMessage(message);
-            }
-        };
-
-        public void destroy(){
-            handler.removeCallbacks(mDelayRunnable);
-        }
-    }
+/**
+ * Created by Taurus on 2018/5/27.
+ */
+public class NetworkUtils {
 
     /**
-     * 获取当前网络连接的类型
+     * get current network connected type
      *
      * @param context context
      * @return int
      */
     public static int getNetworkState(Context context) {
         ConnectivityManager connManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE); // 获取网络服务
-        if (null == connManager) { // 为空则认为无网络
+        if (null == connManager) {
             return NETWORK_STATE_NONE;
         }
-        // 获取网络类型，如果为空，返回无网络
         NetworkInfo networkInfo = connManager.getActiveNetworkInfo();
         if (networkInfo == null) {
             return NETWORK_STATE_NONE;
@@ -168,7 +57,7 @@ public class NetworkObserver {
                 return NETWORK_STATE_NONE;
             }
         }
-        // 判断是否为WIFI
+        // is wifi ?
         NetworkInfo wifiInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
         if (null != wifiInfo) {
             NetworkInfo.State state = wifiInfo.getState();
@@ -178,7 +67,7 @@ public class NetworkObserver {
                 }
             }
         }
-        // 若不是WIFI，则去判断是2G、3G、4G网
+        // 2G、3G、4G ?
         TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         int networkType = telephonyManager.getNetworkType();
         switch (networkType) {
@@ -199,14 +88,14 @@ public class NetworkObserver {
              EHRPD : 3G CDMA2000向LTE 4G的中间产物 Evolved High Rate Packet Data HRPD的升级
              HSPAP : 3G HSPAP 比 HSDPA 快些
              */
-            // 2G网络
+            // 2G
             case TelephonyManager.NETWORK_TYPE_GPRS:
             case TelephonyManager.NETWORK_TYPE_CDMA:
             case TelephonyManager.NETWORK_TYPE_EDGE:
             case TelephonyManager.NETWORK_TYPE_1xRTT:
             case TelephonyManager.NETWORK_TYPE_IDEN:
                 return NETWORK_STATE_2G;
-            // 3G网络
+            // 3G
             case TelephonyManager.NETWORK_TYPE_EVDO_A:
             case TelephonyManager.NETWORK_TYPE_UMTS:
             case TelephonyManager.NETWORK_TYPE_EVDO_0:
@@ -217,7 +106,7 @@ public class NetworkObserver {
             case TelephonyManager.NETWORK_TYPE_EHRPD:
             case TelephonyManager.NETWORK_TYPE_HSPAP:
                 return NETWORK_STATE_3G;
-            // 4G网络
+            // 4G
             case TelephonyManager.NETWORK_TYPE_LTE:
                 return NETWORK_STATE_4G;
             default:
@@ -226,7 +115,7 @@ public class NetworkObserver {
     }
 
     /**
-     * 判断网络是否连接
+     * whether or not network connect.
      *
      * @param context context
      * @return true/false
@@ -245,7 +134,7 @@ public class NetworkObserver {
     }
 
     /**
-     * 判断是否wifi连接
+     * is wifi ?
      *
      * @param context context
      * @return true/false

@@ -20,6 +20,9 @@ import android.os.Bundle;
 
 import com.kk.taurus.playerbase.event.EventKey;
 
+/**
+ * Created by Taurus on 2018/5/21.
+ */
 public class OnAssistPlayEventHandler extends BaseEventAssistHandler<AssistPlay> {
 
     @Override

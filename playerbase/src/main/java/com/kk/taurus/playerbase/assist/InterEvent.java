@@ -16,6 +16,9 @@
 
 package com.kk.taurus.playerbase.assist;
 
+/**
+ * Created by Taurus on 2018/5/21.
+ */
 public interface InterEvent {
 
     int CODE_REQUEST_PAUSE = -66001;

@@ -92,14 +92,19 @@ public final class EventDispatcher implements IEventDispatcher{
         recycleBundle(bundle);
     }
 
+    @Override
+    public void dispatchReceiverEvent(final int eventCode, final Bundle bundle){
+        dispatchReceiverEvent(eventCode, bundle, null);
+    }
+
     /**
      * dispatch receivers event
      * @param eventCode
      * @param bundle
      */
     @Override
-    public void dispatchReceiverEvent(final int eventCode, final Bundle bundle){
-        mReceiverGroup.forEach(new IReceiverGroup.OnLoopListener() {
+    public void dispatchReceiverEvent(final int eventCode, final Bundle bundle, IReceiverGroup.OnReceiverFilter onReceiverFilter) {
+        mReceiverGroup.forEach(onReceiverFilter, new IReceiverGroup.OnLoopListener() {
             @Override
             public void onEach(IReceiver receiver) {
                 receiver.onReceiverEvent(eventCode, bundle);

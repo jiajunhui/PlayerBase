@@ -126,8 +126,8 @@ public class RenderTextureView extends TextureView implements IRender {
 
     @Override
     public void release() {
+        setSurfaceTextureListener(null);
         if(mSurfaceTexture!=null){
-            setSurfaceTextureListener(null);
             mSurfaceTexture.release();
             mSurfaceTexture = null;
         }

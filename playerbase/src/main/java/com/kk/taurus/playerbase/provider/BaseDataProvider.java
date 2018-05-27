@@ -17,6 +17,7 @@
 package com.kk.taurus.playerbase.provider;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 
 /**
  * Created by Taurus on 2018/4/15.
@@ -36,7 +37,21 @@ public abstract class BaseDataProvider implements IDataProvider {
             mOnProviderListener.onProviderDataStart();
     }
 
-    protected final void onProviderDataSuccess(int code, Bundle bundle){
+    /**
+     * send media data for player.
+     * @param bundle
+     */
+    protected final void onProviderMediaDataSuccess(@NonNull Bundle bundle){
+        if(mOnProviderListener!=null)
+            mOnProviderListener.onProviderDataSuccess(PROVIDER_CODE_SUCCESS_MEDIA_DATA, bundle);
+    }
+
+    /**
+     * send extra data, usually custom by yourself according to your need.
+     * @param code
+     * @param bundle
+     */
+    protected final void onProviderExtraDataSuccess(int code, Bundle bundle){
         if(mOnProviderListener!=null)
             mOnProviderListener.onProviderDataSuccess(code, bundle);
     }

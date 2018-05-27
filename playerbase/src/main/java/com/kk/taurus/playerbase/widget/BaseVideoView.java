@@ -46,6 +46,7 @@ import com.kk.taurus.playerbase.render.RenderTextureView;
 import com.kk.taurus.playerbase.style.IStyleSetter;
 import com.kk.taurus.playerbase.style.StyleSetter;
 
+
 /**
  * Created by Taurus on 2018/3/17.
  */
@@ -54,13 +55,7 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
 
     final String TAG = "BaseVideoView";
 
-    //use TextureView for render
-    public static final int RENDER_TYPE_TEXTURE_VIEW = 0;
-
-    //use SurfaceView for render
-    public static final int RENDER_TYPE_SURFACE_VIEW = 1;
-
-    private int nRenderType = RENDER_TYPE_TEXTURE_VIEW;
+    private int mRenderType = IRender.RENDER_TYPE_TEXTURE_VIEW;
     private AVPlayer mPlayer;
 
     //the container for all play view, contain all covers.
@@ -167,7 +162,7 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
         //init AudioManager
         requestAudioFocus();
         //Reconfigure the rendering view each time the resource is switched
-        setRenderType(nRenderType);
+        setRenderType(mRenderType);
         //set data to player
         mPlayer.setDataSource(dataSource);
     }
@@ -233,13 +228,13 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
     @Override
     public void setRenderType(int renderType) {
         releaseRender();
-        nRenderType = renderType;
+        mRenderType = renderType;
         switch (renderType){
-            case RENDER_TYPE_SURFACE_VIEW:
+            case IRender.RENDER_TYPE_SURFACE_VIEW:
                 mRender = new RenderSurfaceView(getContext());
                 break;
             default:
-            case RENDER_TYPE_TEXTURE_VIEW:
+            case IRender.RENDER_TYPE_TEXTURE_VIEW:
                 mRender = new RenderTextureView(getContext());
                 ((RenderTextureView)mRender).setTakeOverSurfaceTexture(true);
                 break;

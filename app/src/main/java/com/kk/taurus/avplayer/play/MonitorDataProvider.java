@@ -11,7 +11,6 @@ import com.kk.taurus.playerbase.entity.DataSource;
 import com.kk.taurus.playerbase.event.BundlePool;
 import com.kk.taurus.playerbase.event.EventKey;
 import com.kk.taurus.playerbase.provider.BaseDataProvider;
-import com.kk.taurus.playerbase.provider.IDataProvider;
 
 import java.util.List;
 
@@ -55,7 +54,7 @@ public class MonitorDataProvider extends BaseDataProvider {
             mDataSource.setTitle(bean.getDisplayName());
             Bundle bundle = BundlePool.obtain();
             bundle.putSerializable(EventKey.SERIALIZABLE_DATA, mDataSource);
-            onProviderDataSuccess(IDataProvider.PROVIDER_CODE_SUCCESS_MEDIA_DATA, bundle);
+            onProviderMediaDataSuccess(bundle);
         }
     };
 

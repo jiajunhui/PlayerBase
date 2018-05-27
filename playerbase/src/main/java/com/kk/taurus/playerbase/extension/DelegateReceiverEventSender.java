@@ -14,13 +14,21 @@
  *    limitations under the License.
  */
 
-package com.kk.taurus.playerbase.assist;
+package com.kk.taurus.playerbase.extension;
+
+import android.os.Bundle;
+
+import com.kk.taurus.playerbase.receiver.IReceiverGroup;
 
 /**
- * Created by Taurus on 2018/5/21.
+ *
+ * Created by Taurus on 2018/5/27.
+ *
  */
-public interface InterKey {
+public interface DelegateReceiverEventSender {
 
-    String KEY_NETWORK_STATE = "network_state";
+    void sendEvent(int eventCode, Bundle bundle, IReceiverGroup.OnReceiverFilter receiverFilter);
+
+    void sendObject(String key, Object value);
 
 }

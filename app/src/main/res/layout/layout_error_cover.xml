@@ -18,7 +18,7 @@
             android:paddingRight="12dp"
             android:paddingTop="6dp"
             android:paddingBottom="6dp"
-            android:textSize="16sp"
+            android:textSize="13sp"
             android:textColor="#FFFFFF"
             android:text="出错了！"/>
 
@@ -32,7 +32,7 @@
             android:paddingTop="6dp"
             android:paddingBottom="6dp"
             android:background="@drawable/shape_next"
-            android:textSize="16sp"
+            android:textSize="13sp"
             android:textColor="#FFFFFF"
             android:text="重试"/>
     </LinearLayout>

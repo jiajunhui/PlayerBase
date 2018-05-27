@@ -8,10 +8,14 @@ import android.widget.TextView;
 import com.kk.taurus.avplayer.App;
 import com.kk.taurus.avplayer.R;
 import com.kk.taurus.avplayer.play.DataInter;
-import com.kk.taurus.avplayer.play.NetworkObserver;
+import com.kk.taurus.playerbase.config.PConst;
+import com.kk.taurus.playerbase.event.BundlePool;
+import com.kk.taurus.playerbase.event.EventKey;
+import com.kk.taurus.playerbase.event.OnPlayerEventListener;
 import com.kk.taurus.playerbase.receiver.BaseCover;
 import com.kk.taurus.playerbase.receiver.ICover;
 import com.kk.taurus.playerbase.receiver.IReceiverGroup;
+import com.kk.taurus.playerbase.utils.NetworkUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,6 +41,9 @@ public class ErrorCover extends BaseCover {
     TextView mRetry;
 
     private boolean mErrorShow;
+
+    private int mCurrPosition;
+
     private Unbinder unbinder;
 
     public ErrorCover(Context context) {
@@ -56,7 +63,7 @@ public class ErrorCover extends BaseCover {
     @Override
     protected void onCoverAttachedToWindow() {
         super.onCoverAttachedToWindow();
-        handleStatusUI(NetworkObserver.getNetworkState(getContext()));
+        handleStatusUI(NetworkUtils.getNetworkState(getContext()));
     }
 
     @Override
@@ -76,19 +83,21 @@ public class ErrorCover extends BaseCover {
     }
 
     private void handleStatus(){
+        Bundle bundle = BundlePool.obtain();
+        bundle.putInt(EventKey.INT_DATA, mCurrPosition);
         switch (mStatus){
             case STATUS_ERROR:
                 setErrorState(false);
-                requestRetry(null);
+                requestRetry(bundle);
                 break;
             case STATUS_MOBILE:
                 App.ignoreMobile = true;
                 setErrorState(false);
-                requestResume(null);
+                requestResume(bundle);
                 break;
             case STATUS_NETWORK_ERROR:
                 setErrorState(false);
-                requestRetry(null);
+                requestRetry(bundle);
                 break;
         }
     }
@@ -106,8 +115,10 @@ public class ErrorCover extends BaseCover {
         public void onValueUpdate(String key, Object value) {
             if(key.equals(DataInter.Key.KEY_NETWORK_STATE)){
                 int networkState = (int) value;
-                if(networkState==NetworkObserver.NETWORK_STATE_WIFI && mErrorShow){
-                    requestRetry(null);
+                if(networkState== PConst.NETWORK_STATE_WIFI && mErrorShow){
+                    Bundle bundle = BundlePool.obtain();
+                    bundle.putInt(EventKey.INT_DATA, mCurrPosition);
+                    requestRetry(bundle);
                 }
                 handleStatusUI(networkState);
             }
@@ -123,7 +134,7 @@ public class ErrorCover extends BaseCover {
             setHandleInfo("重试");
             setErrorState(true);
         }else{
-            if(networkState== NetworkObserver.NETWORK_STATE_WIFI){
+            if(networkState== PConst.NETWORK_STATE_WIFI){
                 if(mErrorShow){
                     setErrorState(false);
                 }
@@ -159,7 +170,14 @@ public class ErrorCover extends BaseCover {
 
     @Override
     public void onPlayerEvent(int eventCode, Bundle bundle) {
-
+        switch (eventCode){
+            case OnPlayerEventListener.PLAYER_EVENT_ON_DATA_SOURCE_SET:
+                handleStatusUI(NetworkUtils.getNetworkState(getContext()));
+                break;
+            case OnPlayerEventListener.PLAYER_EVENT_ON_TIMER_UPDATE:
+                mCurrPosition = bundle.getInt(EventKey.INT_ARG1);
+                break;
+        }
     }
 
     @Override

@@ -14,13 +14,21 @@
  *    limitations under the License.
  */
 
-package com.kk.taurus.playerbase.assist;
+package com.kk.taurus.playerbase.extension;
 
 /**
- * Created by Taurus on 2018/5/21.
+ *
+ * Created by Taurus on 2018/5/27.
+ *
+ * To manage multiple event producers
+ *
  */
-public interface InterKey {
+public interface IProducerGroup {
 
-    String KEY_NETWORK_STATE = "network_state";
+    void addEventProducer(EventProducer eventProducer);
+
+    boolean removeEventProducer(EventProducer eventProducer);
+
+    void destroy();
 
 }

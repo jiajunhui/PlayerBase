@@ -28,6 +28,12 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.kk.taurus.playerbase.event.IEventDispatcher;
+import com.kk.taurus.playerbase.extension.BaseEventProducer;
+import com.kk.taurus.playerbase.extension.IProducerGroup;
+import com.kk.taurus.playerbase.extension.NetworkEventProducer;
+import com.kk.taurus.playerbase.extension.DelegateReceiverEventSender;
+import com.kk.taurus.playerbase.extension.ProducerGroup;
+import com.kk.taurus.playerbase.extension.ProducerEventSender;
 import com.kk.taurus.playerbase.log.PLog;
 import com.kk.taurus.playerbase.receiver.BaseReceiver;
 import com.kk.taurus.playerbase.touch.OnTouchGestureListener;
@@ -41,6 +47,7 @@ import com.kk.taurus.playerbase.event.EventDispatcher;
 import com.kk.taurus.playerbase.receiver.ReceiverGroup;
 import com.kk.taurus.playerbase.touch.BaseGestureCallbackHandler;
 import com.kk.taurus.playerbase.touch.ContainerTouchHelper;
+
 
 /**
  * Created by Taurus on 2018/3/17.
@@ -59,6 +66,9 @@ public class ViewContainer extends FrameLayout implements OnTouchGestureListener
     private OnReceiverEventListener mOnReceiverEventListener;
     private ContainerTouchHelper mTouchHelper;
 
+    private IProducerGroup mProducerGroup;
+    private NetworkEventProducer mNetworkEventProducer;
+
     public ViewContainer(@NonNull Context context) {
         this(context, null);
     }
@@ -73,9 +83,17 @@ public class ViewContainer extends FrameLayout implements OnTouchGestureListener
     }
 
     private void init(Context context, AttributeSet attrs, int defStyleAttr) {
+        initBaseInfo(context);
         initGesture(context);
         initRenderContainer(context);
         initReceiverContainer(context);
+    }
+
+    private void initBaseInfo(Context context) {
+        mNetworkEventProducer = new NetworkEventProducer(context);
+        mProducerGroup = new ProducerGroup(new ProducerEventSender(mDelegateReceiverEventSender));
+        //default add NetworkEventProducer
+        addEventProducer(mNetworkEventProducer);
     }
 
     protected void initGesture(Context context){
@@ -141,6 +159,54 @@ public class ViewContainer extends FrameLayout implements OnTouchGestureListener
     public void setOnReceiverEventListener(OnReceiverEventListener onReceiverEventListener) {
         this.mOnReceiverEventListener = onReceiverEventListener;
     }
+
+    /**
+     * setting NetworkEventProducer enable, default true.
+     * @param enable
+     */
+    public void setNetworkEventProducerEnable(boolean enable){
+        if(enable){
+            addEventProducer(mNetworkEventProducer);
+        }else{
+            removeEventProducer(mNetworkEventProducer);
+        }
+    }
+
+    /**
+     * add a event producer by yourself custom.
+     *
+     * see also {@link NetworkEventProducer}
+     *
+     * @param eventProducer
+     *
+     */
+    public void addEventProducer(BaseEventProducer eventProducer){
+        mProducerGroup.addEventProducer(eventProducer);
+    }
+
+    /**
+     * remove event producer.
+     * @param eventProducer
+     * @return
+     */
+    public boolean removeEventProducer(BaseEventProducer eventProducer){
+        return mProducerGroup.removeEventProducer(eventProducer);
+    }
+
+    private DelegateReceiverEventSender mDelegateReceiverEventSender =
+            new DelegateReceiverEventSender() {
+        @Override
+        public void sendEvent(int eventCode, Bundle bundle,
+                              IReceiverGroup.OnReceiverFilter receiverFilter) {
+            if(mEventDispatcher!=null)
+                mEventDispatcher.dispatchReceiverEvent(eventCode, bundle, receiverFilter);
+        }
+        @Override
+        public void sendObject(String key, Object value) {
+            if(mReceiverGroup!=null)
+                mReceiverGroup.getGroupValue().putObject(key, value);
+        }
+    };
 
     public final void setReceiverGroup(ReceiverGroup receiverGroup){
         if(receiverGroup==null
@@ -212,6 +278,7 @@ public class ViewContainer extends FrameLayout implements OnTouchGestureListener
     };
 
     public void destroy(){
+        mProducerGroup.destroy();
         //and remove render view.
         removeRender();
         //and remove all covers

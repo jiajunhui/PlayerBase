@@ -18,6 +18,10 @@ package com.kk.taurus.playerbase.assist;
 
 import android.os.Bundle;
 
+/**
+ * Created by Taurus on 2018/5/21.
+ * @param <T>
+ */
 public abstract class BaseEventAssistHandler<T> implements OnEventAssistHandler<T> {
 
     @Override

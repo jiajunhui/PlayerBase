@@ -19,6 +19,12 @@ public interface DataInter {
 
     interface Key extends InterKey{
 
+        String KEY_IS_LANDSCAPE = "isLandscape";
+
+        String KEY_DATA_SOURCE = "data_source";
+
+        String KEY_ERROR_SHOW = "error_show";
+
         String KEY_IS_HAS_NEXT = "is_has_next";
         String KEY_COMPLETE_SHOW = "complete_show";
         String KEY_CONTROLLER_TOP_ENABLE = "controller_top_enable";

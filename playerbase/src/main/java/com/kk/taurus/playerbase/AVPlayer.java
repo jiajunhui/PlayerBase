@@ -253,10 +253,10 @@ public final class AVPlayer implements IPlayer{
                             interPlayerSetDataSource(data);
                             internalPlayerStart(data.getStartPos());
                         }
+                        //success video data call back.
+                        callBackPlayEventListener(
+                                OnPlayerEventListener.PLAYER_EVENT_ON_PROVIDER_DATA_SUCCESS, bundle);
                     }
-                    //success video data call back.
-                    callBackPlayEventListener(
-                            OnPlayerEventListener.PLAYER_EVENT_ON_PROVIDER_DATA_SUCCESS, bundle);
                     break;
                 default:
                     //success other code ,for example ,maybe IDataProvider.PROVIDER_CODE_EXTRA_DATA
@@ -340,6 +340,7 @@ public final class AVPlayer implements IPlayer{
             interPlayerSetDataSource(mDataSource);
             internalPlayerStart(msc);
         }else if(useProvider() && mDataSource!=null){
+            mDataSource.setStartPos(msc);
             mDataProvider.handleSourceData(mDataSource);
         }
     }

@@ -39,7 +39,6 @@ public class AssistPlayer {
         mOnPlayerEventListeners = new ArrayList<>();
         mOnErrorEventListeners = new ArrayList<>();
         mOnReceiverEventListeners = new ArrayList<>();
-        NetworkObserver.get(mAppContext).addOnNetworkStateChangeListener(mOnNetworkStateChangeListener);
     }
 
     public static AssistPlayer get(){
@@ -142,17 +141,6 @@ public class AssistPlayer {
         }
     }
 
-    private NetworkObserver.OnNetworkStateChangeListener mOnNetworkStateChangeListener =
-            new NetworkObserver.OnNetworkStateChangeListener() {
-        @Override
-        public void onNetworkChange(boolean available, boolean isWifi, int networkState) {
-            if(mRelationAssist.getReceiverGroup()!=null){
-                mRelationAssist.getReceiverGroup().
-                        getGroupValue().putInt(DataInter.Key.KEY_NETWORK_STATE, networkState);
-            }
-        }
-    };
-
     private void attachListener(){
         mRelationAssist.setOnPlayerEventListener(mInternalPlayerEventListener);
         mRelationAssist.setOnErrorEventListener(mInternalErrorEventListener);
@@ -225,11 +213,6 @@ public class AssistPlayer {
     }
 
     public void destroy() {
-        if(mAppContext!=null){
-            NetworkObserver
-                    .get(mAppContext)
-                    .removeNetworkStateChangeListener(mOnNetworkStateChangeListener);
-        }
         mOnPlayerEventListeners.clear();
         mOnErrorEventListeners.clear();
         mOnReceiverEventListeners.clear();

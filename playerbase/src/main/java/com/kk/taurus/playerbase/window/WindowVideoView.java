@@ -24,6 +24,19 @@ import android.view.WindowManager;
 import com.kk.taurus.playerbase.utils.PUtils;
 import com.kk.taurus.playerbase.widget.BaseVideoView;
 
+/**
+ *
+ * Created by Taurus on 2018/5/21.
+ *
+ * Used for window playback. Automatically add and remove on WindowManager.
+ * The default window type is TYPE_TOAST{@link WindowManager.LayoutParams#TYPE_TOAST}.
+ * If you need to customize your window parameter, you can make relevant settings
+ * through FloatWindowParams {@link FloatWindowParams} in
+ * WindowVideoView Constructor{@link WindowVideoView#WindowVideoView(Context, FloatWindowParams)}
+ * The window drag event is handled by default.If you do not need to,
+ * you can set drag disable{@link WindowVideoView#setDragEnable(boolean)}.
+ *
+ */
 public class WindowVideoView extends BaseVideoView {
 
     private final int MIN_MOVE_DISTANCE = 20;
@@ -32,6 +45,8 @@ public class WindowVideoView extends BaseVideoView {
     private WindowManager wm;
 
     private boolean isWindowShow;
+
+    private boolean mDragEnable = true;
 
     public WindowVideoView(Context context, FloatWindowParams params) {
         super(context);
@@ -49,6 +64,14 @@ public class WindowVideoView extends BaseVideoView {
         wmParams.height = params.getHeight();
         wmParams.x = params.getX();
         wmParams.y = params.getY();
+    }
+
+    /**
+     * Whether or not the window needs to be dragged
+     * @param dragEnable
+     */
+    public void setDragEnable(boolean dragEnable) {
+        this.mDragEnable = dragEnable;
     }
 
     /**
@@ -90,8 +113,6 @@ public class WindowVideoView extends BaseVideoView {
                     return false;
                 }
             }
-
-
         } else {
             return false;
         }
@@ -127,12 +148,9 @@ public class WindowVideoView extends BaseVideoView {
                     return false;
                 }
             }
-
-
         } else {
             return false;
         }
-
     }
 
     private void remove(){
@@ -145,6 +163,8 @@ public class WindowVideoView extends BaseVideoView {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
+        if(!mDragEnable)
+            return super.onInterceptTouchEvent(ev);
         switch (ev.getAction()){
             case MotionEvent.ACTION_DOWN:
                 mDownX = ev.getRawX();
@@ -166,6 +186,8 @@ public class WindowVideoView extends BaseVideoView {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if(!mDragEnable)
+            return super.onTouchEvent(event);
         final int X = (int) event.getRawX();
         final int Y = (int) event.getRawY();
         switch (event.getAction()) {

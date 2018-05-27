@@ -14,13 +14,24 @@
  *    limitations under the License.
  */
 
-package com.kk.taurus.playerbase.assist;
+package com.kk.taurus.playerbase.extension;
 
 /**
- * Created by Taurus on 2018/5/21.
+ *
+ * Created by Taurus on 2018/5/27.
+ *
  */
-public interface InterKey {
+public abstract class BaseEventProducer implements EventProducer {
 
-    String KEY_NETWORK_STATE = "network_state";
+    private ReceiverEventSender mReceiverEventSender;
+
+    public final void attachSender(ReceiverEventSender receiverEventSender){
+        this.mReceiverEventSender = receiverEventSender;
+    }
+
+    @Override
+    public ReceiverEventSender getSender() {
+        return mReceiverEventSender;
+    }
 
 }

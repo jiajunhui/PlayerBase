@@ -75,6 +75,7 @@ public class WindowSwitchPlayActivity extends AppCompatActivity {
         mAssist.setEventAssistHandler(eventHandler);
 
         mReceiverGroup = ReceiverGroupManager.get().getLiteReceiverGroup(this);
+        mReceiverGroup.getGroupValue().putBoolean(DataInter.Key.KEY_NETWORK_RESOURCE, true);
         mAssist.setReceiverGroup(mReceiverGroup);
 
         changeMode(false);

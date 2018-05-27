@@ -14,13 +14,27 @@
  *    limitations under the License.
  */
 
-package com.kk.taurus.playerbase.assist;
+package com.kk.taurus.playerbase.extension;
 
 /**
- * Created by Taurus on 2018/5/21.
+ *
+ * Created by Taurus on 2018/5/27.
+ *
+ * The producer of the event. It is usually added by the users themselves,
+ * such as the system's power change events or network change events.
+ * The framework adds the network change event producer by default.
+ *
  */
-public interface InterKey {
+public interface EventProducer {
 
-    String KEY_NETWORK_STATE = "network_state";
+    void attachSender(ReceiverEventSender receiverEventSender);
+
+    void onAdded();
+
+    void onRemoved();
+
+    ReceiverEventSender getSender();
+
+    void destroy();
 
 }

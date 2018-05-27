@@ -54,6 +54,7 @@ public class WindowVideoViewActivity extends AppCompatActivity {
 
         ReceiverGroup receiverGroup = ReceiverGroupManager.get().getLiteReceiverGroup(this);
         receiverGroup.addReceiver(DataInter.ReceiverKey.KEY_CLOSE_COVER, new CloseCover(this));
+        receiverGroup.getGroupValue().putBoolean(DataInter.Key.KEY_NETWORK_RESOURCE, true);
         receiverGroup.getGroupValue().putBoolean(DataInter.Key.KEY_CONTROLLER_TOP_ENABLE, false);
         receiverGroup.getGroupValue().putBoolean(DataInter.Key.KEY_CONTROLLER_SCREEN_SWITCH_ENABLE, false);
 

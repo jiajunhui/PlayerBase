@@ -20,7 +20,6 @@ import com.kk.taurus.avplayer.R;
 import com.kk.taurus.avplayer.cover.ControllerCover;
 import com.kk.taurus.avplayer.play.DataInter;
 import com.kk.taurus.avplayer.play.MonitorDataProvider;
-import com.kk.taurus.avplayer.play.NetworkObserver;
 import com.kk.taurus.avplayer.play.ReceiverGroupManager;
 import com.kk.taurus.avplayer.utils.PUtil;
 import com.kk.taurus.avplayer.view.VisualizerView;
@@ -31,6 +30,7 @@ import com.kk.taurus.playerbase.event.OnPlayerEventListener;
 import com.kk.taurus.playerbase.receiver.IReceiver;
 import com.kk.taurus.playerbase.receiver.ReceiverGroup;
 import com.kk.taurus.playerbase.render.AspectRatio;
+import com.kk.taurus.playerbase.render.IRender;
 import com.kk.taurus.playerbase.widget.BaseVideoView;
 
 import kr.co.namee.permissiongen.PermissionFail;
@@ -129,11 +129,10 @@ public class VideoViewActivity extends AppCompatActivity implements OnPlayerEven
         mVideoView.setOnPlayerEventListener(this);
         mVideoView.setEventHandler(mOnEventAssistHandler);
         mReceiverGroup = ReceiverGroupManager.get().getReceiverGroup(this, null);
+        mReceiverGroup.getGroupValue().putBoolean(DataInter.Key.KEY_NETWORK_RESOURCE, true);
         mReceiverGroup.getGroupValue().putBoolean(DataInter.Key.KEY_CONTROLLER_TOP_ENABLE, true);
         mReceiverGroup.getGroupValue().putBoolean(DataInter.Key.KEY_IS_HAS_NEXT, true);
         mVideoView.setReceiverGroup(mReceiverGroup);
-
-        NetworkObserver.get(getApplicationContext()).addOnNetworkStateChangeListener(mOnNetworkStateChangeListener);
 
         //设置数据提供者 MonitorDataProvider
         MonitorDataProvider dataProvider = new MonitorDataProvider();
@@ -152,22 +151,12 @@ public class VideoViewActivity extends AppCompatActivity implements OnPlayerEven
         return dataSource;
     }
 
-    private NetworkObserver.OnNetworkStateChangeListener mOnNetworkStateChangeListener =
-            new NetworkObserver.OnNetworkStateChangeListener() {
-                @Override
-                public void onNetworkChange(boolean available, boolean isWifi, int networkState) {
-                    if(mReceiverGroup!=null){
-                        mReceiverGroup.getGroupValue().putInt(DataInter.Key.KEY_NETWORK_STATE, networkState);
-                    }
-                }
-            };
-
     public void setRenderSurfaceView(View view){
-        mVideoView.setRenderType(BaseVideoView.RENDER_TYPE_SURFACE_VIEW);
+        mVideoView.setRenderType(IRender.RENDER_TYPE_SURFACE_VIEW);
     }
 
     public void setRenderTextureView(View view){
-        mVideoView.setRenderType(BaseVideoView.RENDER_TYPE_TEXTURE_VIEW);
+        mVideoView.setRenderType(IRender.RENDER_TYPE_TEXTURE_VIEW);
     }
 
     public void onStyleSetRoundRect(View view){
@@ -253,7 +242,6 @@ public class VideoViewActivity extends AppCompatActivity implements OnPlayerEven
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        NetworkObserver.get(getApplicationContext()).removeNetworkStateChangeListener(mOnNetworkStateChangeListener);
         mVideoView.stopPlayback();
         releaseVisualizer();
     }
