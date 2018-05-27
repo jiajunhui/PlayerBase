@@ -207,6 +207,6 @@ public class ErrorCover extends BaseCover {
 
     @Override
     public int getCoverLevel() {
-        return ICover.COVER_LEVEL_HIGH;
+        return ICover.COVER_LEVEL_MEDIUM;
     }
 }

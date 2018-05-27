@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import com.kk.taurus.avplayer.R;
 import com.kk.taurus.avplayer.play.DataInter;
 import com.kk.taurus.playerbase.receiver.BaseCover;
+import com.kk.taurus.playerbase.receiver.ICover;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -67,4 +68,8 @@ public class CloseCover extends BaseCover {
 
     }
 
+    @Override
+    public int getCoverLevel() {
+        return ICover.COVER_LEVEL_HIGH;
+    }
 }
