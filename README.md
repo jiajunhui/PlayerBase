@@ -9,24 +9,24 @@ demo自带了播放控制组件**ControllerCover**、加载中组件**LoadingCov
 如果不满足您的需求。没问题，所有UI功能组件可完全自定义接入并无缝对接播放事件。
 <br>
 # 功能
-__-视图的组件化处理__<br>
-__-视图组件的高复用、低耦合__<br>
-__-解码方案的组件化、配置化管理__<br>
-__-视图组件的完全定制__<br>
-__-视图组件的热插拔，用时添加不用时移除__<br>
-__-自定义接入各种解码方案__<br>
-__-解码方案的切换__<br>
-__-支持窗口模式播放__<br>
-__-支持窗口模式的无缝续播__<br>
-__-支持列表模式的无缝续播__<br>
-__-支持跨页面无缝续播__<br>
-__-支持调整画面显示比例__<br>
-__-支持动态调整渲染视图类型__<br>
-__-支持VideoView切角处理，边缘阴影效果-__<br>
-__-提供自定义数据提供者__<br>
-__-统一的事件下发机制__<br>
-__-扩展事件的添加__<br>
-__-等功能……__<br>
+* **视图的组件化处理**<br>
+* **视图组件的高复用、低耦合**<br>
+* **解码方案的组件化、配置化管理**<br>
+* **视图组件的完全定制**<br>
+* **视图组件的热插拔，用时添加不用时移除**<br>
+* **自定义接入各种解码方案**<br>
+* **解码方案的切换**<br>
+* **支持窗口模式播放**<br>
+* **支持窗口模式的无缝续播**<br>
+* **支持列表模式的无缝续播**<br>
+* **支持跨页面无缝续播**<br>
+* **支持调整画面显示比例**<br>
+* **支持动态调整渲染视图类型**<br>
+* **支持VideoView切角处理，边缘阴影效果**<br>
+* **提供自定义数据提供者**<br>
+* **统一的事件下发机制**<br>
+* **扩展事件的添加**<br>
+* **等功能……**<br>
 
 # Demo下载
 [Demo下载](http://fir.im/lmhz)
@@ -36,34 +36,9 @@ __-等功能……__<br>
 # 特色
 完全将解码器与播放视图组件化处理。不染指任何具体的业务，可随意接入其他播放器，组件完全由用户自定义，组件即插即用。让使用变的更加灵活。如下代码示例，需要什么视图就添加什么视图，不需要时可随时移除。
 
-```java
-ReceiverGroup receiverGroup = new ReceiverGroup();
-receiverGroup.addReceiver("loading_cover", new LoadingCover(context));
-receiverGroup.addReceiver("controller_cover", new ControllerCover(context));
-receiverGroup.addReceiver("gesture_cover", new GestureCover(context));
-receiverGroup.addReceiver("error_cover", new ErrorCover(context));
+框架自带MediaPlayer解码，其他解码器的接入只需要实现框架定义的接口并做配置引入即可。
 
-mVideoView.setReceiverGroup(receiverGroup);
-mVideoView.setDataSource(new DataSource("http://..."))
-mVideoView.start();
-```
-
-解码器的配置化管理，如下代码，将解码器配置为IjkPlayer。
-
-```java
-int PLAN_ID_IJK = 1;
-PlayerConfig.addDecoderPlan(new DecoderPlan(PLAN_ID_IJK, IjkPlayer.class.getName(), "IjkPlayer"));
-PlayerConfig.setDefaultPlanId(PLAN_ID_IJK);
-```
-解码器的切换
-
-
-```java
-int PLAN_ID_IJK = 1;
-mVideoView.switchDecoder(PLAN_ID_IJK);
-mVideoView.setDataSource(dataSource);
-mVideoView.start();
-```
+解码器的配置化管理，存在多种解码方案时，可随时切换解码器。
 
 效果<br>
 
@@ -105,7 +80,7 @@ dependencies {
 
 ```
 
-初始化
+**初始化**
 
 ```java
 public class App extends Application {
@@ -134,6 +109,8 @@ public class App extends Application {
 
 </RelativeLayout>
 ```
+
+**添加组件设置数据**
 
 ```java
 mVideoView = findViewById(R.id.videoView);
@@ -230,6 +207,15 @@ mPlayer.start();
 ```java
 PlayerConfig.addDecoderPlan(new DecoderPlan(1, IjkPlayer.class.getName(), "IjkPlayer"));
 PlayerConfig.setDefaultPlanId(1);
+```
+
+**解码器的切换**
+
+```java
+int PLAN_ID_IJK = 1;
+mVideoView.switchDecoder(PLAN_ID_IJK);
+mVideoView.setDataSource(dataSource);
+mVideoView.start();
 ```
 
 # 组件视图
