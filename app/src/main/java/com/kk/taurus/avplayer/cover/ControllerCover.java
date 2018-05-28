@@ -434,7 +434,7 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
     }
 
     @Override
-    public void onPrivateEvent(int eventCode, Bundle bundle) {
+    public Bundle onPrivateEvent(int eventCode, Bundle bundle) {
         switch (eventCode){
             case DataInter.PrivateEvent.EVENT_CODE_UPDATE_SEEK:
                 if(bundle!=null){
@@ -444,6 +444,7 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
                 }
                 break;
         }
+        return null;
     }
 
     @Override

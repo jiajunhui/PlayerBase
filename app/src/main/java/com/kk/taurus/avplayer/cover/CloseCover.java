@@ -64,11 +64,6 @@ public class CloseCover extends BaseCover {
     }
 
     @Override
-    public void onPrivateEvent(int eventCode, Bundle bundle) {
-
-    }
-
-    @Override
     public int getCoverLevel() {
         return ICover.COVER_LEVEL_HIGH;
     }

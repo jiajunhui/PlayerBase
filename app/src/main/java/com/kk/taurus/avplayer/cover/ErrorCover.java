@@ -196,11 +196,6 @@ public class ErrorCover extends BaseCover {
     }
 
     @Override
-    public void onPrivateEvent(int eventCode, Bundle bundle) {
-
-    }
-
-    @Override
     public View onCreateCoverView(Context context) {
         return View.inflate(context, R.layout.layout_error_cover, null);
     }

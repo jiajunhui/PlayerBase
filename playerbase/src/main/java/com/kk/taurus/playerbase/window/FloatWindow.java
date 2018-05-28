@@ -151,11 +151,13 @@ public class FloatWindow extends FrameLayout implements IWindow, IStyleSetter{
      */
     @Override
     public void close() {
+        setElevationShadow(0);
         mWindowHelper.close();
     }
 
     @Override
     public void close(Animator... items) {
+        setElevationShadow(0);
         mWindowHelper.close(items);
     }
 

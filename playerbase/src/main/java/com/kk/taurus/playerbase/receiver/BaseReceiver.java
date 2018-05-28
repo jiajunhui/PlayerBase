@@ -19,6 +19,7 @@ package com.kk.taurus.playerbase.receiver;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.kk.taurus.playerbase.log.PLog;
@@ -68,7 +69,7 @@ public abstract class BaseReceiver implements IReceiver {
      * @param receiverGroup
      */
     @Override
-    public final void bindGroup(IReceiverGroup receiverGroup) {
+    public final void bindGroup(@NonNull IReceiverGroup receiverGroup) {
         this.mHostGroup = receiverGroup;
     }
 
@@ -83,7 +84,7 @@ public abstract class BaseReceiver implements IReceiver {
      * @param onReceiverEventListener
      */
     @Override
-    public final void bindReceiverEventListener(OnReceiverEventListener onReceiverEventListener) {
+    public final void bindReceiverEventListener(@NonNull OnReceiverEventListener onReceiverEventListener) {
         this.mOnReceiverEventListener = onReceiverEventListener;
     }
 
@@ -104,18 +105,27 @@ public abstract class BaseReceiver implements IReceiver {
      * @param key The unique value of a receiver can be found.
      * @param eventCode
      * @param bundle
+     *
+     * @return Bundle Return value after the receiver's response, nullable.
+     *
      */
-    protected final void notifyReceiverPrivateEvent(
+    protected final @Nullable Bundle notifyReceiverPrivateEvent(
             @NonNull String key, int eventCode, Bundle bundle){
         if(mHostGroup!=null && !TextUtils.isEmpty(key)){
             IReceiver receiver = mHostGroup.getReceiver(key);
             if(receiver!=null){
-                receiver.onPrivateEvent(eventCode, bundle);
+                return receiver.onPrivateEvent(eventCode, bundle);
             }else{
                 PLog.e("BaseReceiver",
                         "not found receiver use you incoming key.");
             }
         }
+        return null;
+    }
+
+    @Override
+    public Bundle onPrivateEvent(int eventCode, Bundle bundle) {
+        return null;
     }
 
     protected final Context getContext(){

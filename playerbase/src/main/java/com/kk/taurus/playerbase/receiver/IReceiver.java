@@ -17,6 +17,8 @@
 package com.kk.taurus.playerbase.receiver;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 /**
  * Created by Taurus on 2018/3/17.
@@ -28,7 +30,7 @@ public interface IReceiver {
      * bind host group.
      * @param receiverGroup
      */
-    void bindGroup(IReceiverGroup receiverGroup);
+    void bindGroup(@NonNull IReceiverGroup receiverGroup);
 
     /**
      * on receiver added to ReceiverGroup.
@@ -53,7 +55,7 @@ public interface IReceiver {
      * bind the bridge of receivers communication
      * @param onReceiverEventListener
      */
-    void bindReceiverEventListener(OnReceiverEventListener onReceiverEventListener);
+    void bindReceiverEventListener(@NonNull OnReceiverEventListener onReceiverEventListener);
 
     /**
      * receivers event.
@@ -65,10 +67,14 @@ public interface IReceiver {
     /**
      * if you have a receiver instance reference,
      * you can call this method dispatch private event.
+     *
      * @param eventCode
      * @param bundle
+     *
+     * @return Bundle Return value after the receiver's response, nullable.
      */
-    void onPrivateEvent(int eventCode, Bundle bundle);
+    @Nullable
+    Bundle onPrivateEvent(int eventCode, Bundle bundle);
 
     /**
      * on receiver destroy.

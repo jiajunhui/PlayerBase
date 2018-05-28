@@ -233,11 +233,6 @@ public class GestureCover extends BaseCover implements OnTouchGestureListener {
     }
 
     @Override
-    public void onPrivateEvent(int eventCode, Bundle bundle) {
-
-    }
-
-    @Override
     public void onSingleTapUp(MotionEvent event) {
 
     }

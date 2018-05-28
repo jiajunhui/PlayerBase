@@ -26,6 +26,7 @@ import com.kk.taurus.playerbase.entity.DataSource;
 import com.kk.taurus.playerbase.event.EventKey;
 import com.kk.taurus.playerbase.event.OnErrorEventListener;
 import com.kk.taurus.playerbase.event.OnPlayerEventListener;
+import com.kk.taurus.playerbase.extension.NetworkEventProducer;
 import com.kk.taurus.playerbase.player.IPlayer;
 import com.kk.taurus.playerbase.provider.IDataProvider;
 import com.kk.taurus.playerbase.receiver.OnReceiverEventListener;
@@ -78,9 +79,17 @@ public class RelationAssist implements AssistPlay {
     private OnAssistPlayEventHandler mOnEventAssistHandler;
 
     public RelationAssist(Context context){
+        this(context, null);
+    }
+
+    public RelationAssist(Context context, ViewContainer viewContainer){
         this.mContext = context;
         mPlayer = new AVPlayer();
-        mViewContainer = new ViewContainer(context);
+        if(viewContainer==null){
+            viewContainer = new ViewContainer(context);
+            viewContainer.addEventProducer(new NetworkEventProducer(context));
+        }
+        mViewContainer = viewContainer;
     }
 
     public ViewContainer getViewContainer() {

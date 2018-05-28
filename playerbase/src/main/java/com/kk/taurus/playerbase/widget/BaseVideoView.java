@@ -29,6 +29,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.kk.taurus.playerbase.assist.OnVideoViewEventHandler;
+import com.kk.taurus.playerbase.extension.NetworkEventProducer;
 import com.kk.taurus.playerbase.log.PLog;
 import com.kk.taurus.playerbase.player.IPlayer;
 import com.kk.taurus.playerbase.AVPlayer;
@@ -123,10 +124,13 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
     }
 
     //default return a ViewContainer for frame default.
+    //default add NetworkEventProducer.
     //if you want custom you container ,
     //you can return a custom container extends ViewContainer.
     protected ViewContainer onCreateViewContainer(Context context){
-        return new ViewContainer(context);
+        ViewContainer viewContainer = new ViewContainer(context);
+        viewContainer.addEventProducer(new NetworkEventProducer(context));
+        return viewContainer;
     }
 
     //create player instance.

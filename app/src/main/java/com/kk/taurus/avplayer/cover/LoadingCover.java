@@ -49,11 +49,6 @@ public class LoadingCover extends BaseCover {
 
     }
 
-    @Override
-    public void onPrivateEvent(int eventCode, Bundle bundle) {
-
-    }
-
     private void setLoadingState(boolean show){
         setCoverVisibility(show?View.VISIBLE:View.GONE);
     }

@@ -30,7 +30,6 @@ import android.widget.FrameLayout;
 import com.kk.taurus.playerbase.event.IEventDispatcher;
 import com.kk.taurus.playerbase.extension.BaseEventProducer;
 import com.kk.taurus.playerbase.extension.IProducerGroup;
-import com.kk.taurus.playerbase.extension.NetworkEventProducer;
 import com.kk.taurus.playerbase.extension.DelegateReceiverEventSender;
 import com.kk.taurus.playerbase.extension.ProducerGroup;
 import com.kk.taurus.playerbase.extension.ProducerEventSender;
@@ -67,7 +66,6 @@ public class ViewContainer extends FrameLayout implements OnTouchGestureListener
     private ContainerTouchHelper mTouchHelper;
 
     private IProducerGroup mProducerGroup;
-    private NetworkEventProducer mNetworkEventProducer;
 
     public ViewContainer(@NonNull Context context) {
         this(context, null);
@@ -90,10 +88,7 @@ public class ViewContainer extends FrameLayout implements OnTouchGestureListener
     }
 
     private void initBaseInfo(Context context) {
-        mNetworkEventProducer = new NetworkEventProducer(context);
         mProducerGroup = new ProducerGroup(new ProducerEventSender(mDelegateReceiverEventSender));
-        //default add NetworkEventProducer
-        addEventProducer(mNetworkEventProducer);
     }
 
     protected void initGesture(Context context){
@@ -161,21 +156,7 @@ public class ViewContainer extends FrameLayout implements OnTouchGestureListener
     }
 
     /**
-     * setting NetworkEventProducer enable, default true.
-     * @param enable
-     */
-    public void setNetworkEventProducerEnable(boolean enable){
-        if(enable){
-            addEventProducer(mNetworkEventProducer);
-        }else{
-            removeEventProducer(mNetworkEventProducer);
-        }
-    }
-
-    /**
      * add a event producer by yourself custom.
-     *
-     * see also {@link NetworkEventProducer}
      *
      * @param eventProducer
      *
