@@ -224,7 +224,7 @@ mVideoView.start();
 ```
 
 # 组件视图
-demo自带了Loading组件、Controller组件、CompleteCover组件。<br>
+demo示例代码演示接入了Loading组件、Controller组件、CompleteCover组件。<br>
 这些组件均继承自父类BaseCover（覆盖层基类）
 
 自定义覆盖层cover组件
@@ -265,8 +265,7 @@ public class CustomCover extends BaseCover{
 
 ```java
 ReceiverGroup receiverGroup = new ReceiverGroup();
-receiverGroup.addReceiver("loading_cover", new LoadingCover(context));
-receiverGroup.addReceiver("controller_cover", new ControllerCover(context));
+receiverGroup.addReceiver("loading_cover", new CustomCover(context));
 mPlayer.setReceiverGroup(receiverGroup);
 ```
 # 无缝续播的使用
