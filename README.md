@@ -1,12 +1,14 @@
 ![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/playerbase_top_slogen.jpg)
 # 介绍
-**PlayerBase**是一种将播放业务组件化处理的解决方案框架。无论是播放器内的控制视图还是业务视图，均可以做到组件化处理。将播放器的开发变得清晰简单，更利于产品的迭代。
+**请注意！** **请注意！** **请注意！** **PlayerBase**区别于大部分播放器封装库。
+
+**PlayerBase**是一种将解码器和播放视图组件化处理的解决方案框架。您需要什么解码器实现抽象引入即可，对于视图，无论是播放器内的控制视图还是业务视图，均可以做到组件化处理。将播放器的开发变得清晰简单，更利于产品的迭代。PlayerBase不会为您做任何多余的功能，有别于大部分播放器封装库的继承然后重写然后定制你需要的功能组件和屏蔽你不需要的功能组件（low!!!）。正确的方向应该是需要什么组件就拓展添加什么组件，而不是已经提供了该组件去选择用不用。
 
 框架内包含系统**MediaPlayer**的解码实现，demo里面包含**IJKPlayer**和**ExoPlayer**的解码方案的实现和接入，请参见源码可以接入其他播放器解码方案。
 
 demo自带了播放控制组件**ControllerCover**、加载中组件**LoadingCover**、手势处理组件**GestureCover**、播放完成提示组件**CompleteCover**、错误提示组件**ErrorCover**等。
 
-如果不满足您的需求。没问题，所有UI功能组件可完全自定义接入并无缝对接播放事件。
+如果不满足您的需求。没问题，所有UI功能组件您可完全自定义接入并无缝对接播放事件。
 <br>
 # 功能特色
 * **视图的组件化处理**<br>
@@ -16,8 +18,9 @@ demo自带了播放控制组件**ControllerCover**、加载中组件**LoadingCov
 * **视图组件的热插拔，用时添加不用时移除**<br>
 * **自定义接入各种解码方案**<br>
 * **解码方案的切换**<br>
-* **支持窗口模式播放**<br>
-* **支持窗口模式的无缝续播**<br>
+* **支持倍速播放**<br>
+* **支持Window模式播放**<br>
+* **支持Window模式的无缝续播**<br>
 * **支持列表模式的无缝续播**<br>
 * **支持跨页面无缝续播**<br>
 * **支持调整画面显示比例**<br>
@@ -67,7 +70,7 @@ demo自带了播放控制组件**ControllerCover**、加载中组件**LoadingCov
 
 ```gradle
 dependencies {
-  compile 'com.kk.taurus.playerbase:playerbase:3.2.6'
+  compile 'com.kk.taurus.playerbase:playerbase:3.2.6.1'
 }
 ```
 

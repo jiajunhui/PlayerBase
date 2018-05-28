@@ -42,6 +42,9 @@ public interface AssistPlay {
     void setDataProvider(IDataProvider dataProvider);
     boolean switchDecoder(int decoderPlanId);
 
+    void setVolume(float left, float right);
+    void setSpeed(float speed);
+
     void setReceiverGroup(ReceiverGroup receiverGroup);
 
     void attachContainer(ViewGroup userContainer);

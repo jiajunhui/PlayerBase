@@ -221,6 +221,16 @@ public class RelationAssist implements AssistPlay {
         this.mRenderType = renderType;
     }
 
+    @Override
+    public void setVolume(float left, float right) {
+        mPlayer.setVolume(left, right);
+    }
+
+    @Override
+    public void setSpeed(float speed) {
+        mPlayer.setSpeed(speed);
+    }
+
     /**
      * Associate the playback view to the specified container
      * @param userContainer

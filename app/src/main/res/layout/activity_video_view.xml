@@ -8,7 +8,8 @@
         android:id="@+id/render_set"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:paddingLeft="16dp"
+        android:layout_marginTop="8dp"
         android:layout_below="@id/videoView"
         android:orientation="horizontal">
         <TextView
@@ -38,7 +39,7 @@
         android:layout_height="wrap_content"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:paddingBottom="16dp"
+        android:layout_marginTop="8dp"
         android:layout_below="@id/render_set"
         android:orientation="horizontal">
         <TextView
@@ -78,6 +79,7 @@
         android:layout_height="wrap_content"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
+        android:layout_marginTop="8dp"
         android:layout_below="@id/style_layout"
         android:orientation="horizontal">
         <TextView
@@ -150,7 +152,8 @@
         android:id="@+id/decoder_set"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:layout_marginTop="8dp"
+        android:paddingLeft="16dp"
         android:layout_below="@id/aspect_layout"
         android:orientation="horizontal">
         <TextView
@@ -185,11 +188,51 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/speed_setting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:paddingLeft="16dp"
+        android:layout_below="@id/decoder_set"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:background="#9aef1b"
+            android:onClick="halfSpeedPlay"
+            android:text="0.5倍速播放"
+            android:textSize="14sp"
+            android:textColor="#000000"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:layout_marginLeft="8dp"
+            android:background="#9aef1b"
+            android:onClick="doubleSpeedPlay"
+            android:text="2倍速播放"
+            android:textSize="14sp"
+            android:textColor="#000000"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:padding="5dp"
+            android:background="#71b904"
+            android:onClick="normalSpeedPlay"
+            android:text="恢复1倍速"
+            android:textSize="14sp"
+            android:textColor="#000000"/>
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/component_setting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:paddingLeft="16dp"
-        android:layout_below="@id/decoder_set"
+        android:layout_below="@id/speed_setting"
         android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"

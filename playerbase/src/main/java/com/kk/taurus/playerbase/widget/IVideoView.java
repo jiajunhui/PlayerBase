@@ -32,6 +32,9 @@ public interface IVideoView {
     void setAspectRatio(AspectRatio aspectRatio);
     boolean switchDecoder(int decoderPlanId);
 
+    void setVolume(float left, float right);
+    void setSpeed(float speed);
+
     IRender getRender();
 
     boolean isInPlaybackState();

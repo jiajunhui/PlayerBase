@@ -364,6 +364,12 @@ public final class AVPlayer implements IPlayer{
     }
 
     @Override
+    public void setSpeed(float speed) {
+        if(isPlayerAvailable())
+            mInternalPlayer.setSpeed(speed);
+    }
+
+    @Override
     public boolean isPlaying() {
         if(isPlayerAvailable())
             return mInternalPlayer.isPlaying();

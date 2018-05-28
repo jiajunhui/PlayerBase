@@ -164,6 +164,12 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
     }
 
     @Override
+    public void setSpeed(float speed) {
+        PlaybackParameters parameters = new PlaybackParameters(speed, 1f);
+        mInternalPlayer.setPlaybackParameters(parameters);
+    }
+
+    @Override
     public boolean isPlaying() {
         if (mInternalPlayer == null)
             return false;
@@ -342,8 +348,12 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
                 switch (playbackState){
                     case Player.STATE_READY:
                     case Player.STATE_ENDED:
+                        long bitrateEstimate = mBandwidthMeter.getBitrateEstimate();
+                        PLog.d(TAG,"buffer_end, BandWidth : " + bitrateEstimate);
                         isBuffering = false;
-                        submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_BUFFERING_END, null);
+                        Bundle bundle = BundlePool.obtain();
+                        bundle.putLong(EventKey.LONG_DATA, bitrateEstimate);
+                        submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_BUFFERING_END, bundle);
                         break;
                 }
             }
@@ -359,8 +369,12 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
 
             switch (playbackState){
                 case Player.STATE_BUFFERING:
+                    long bitrateEstimate = mBandwidthMeter.getBitrateEstimate();
+                    PLog.d(TAG,"buffer_start, BandWidth : " + bitrateEstimate);
                     isBuffering = true;
-                    submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_BUFFERING_START, null);
+                    Bundle bundle = BundlePool.obtain();
+                    bundle.putLong(EventKey.LONG_DATA, bitrateEstimate);
+                    submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_BUFFERING_START, bundle);
                     break;
                 case Player.STATE_ENDED:
                     updateStatus(IPlayer.STATE_PLAYBACK_COMPLETE);

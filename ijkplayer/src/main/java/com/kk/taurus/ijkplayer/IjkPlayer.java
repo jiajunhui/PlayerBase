@@ -315,6 +315,13 @@ public class IjkPlayer extends BaseInternalPlayer {
     }
 
     @Override
+    public void setSpeed(float speed) {
+        if(available()){
+            mMediaPlayer.setSpeed(speed);
+        }
+    }
+
+    @Override
     public int getAudioSessionId() {
         if(available()){
             return mMediaPlayer.getAudioSessionId();
@@ -399,7 +406,6 @@ public class IjkPlayer extends BaseInternalPlayer {
                             PLog.d(TAG, "MEDIA_INFO_VIDEO_TRACK_LAGGING:");
                             break;
                         case IMediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START:
-//                            Log.d(TAG, "MEDIA_INFO_VIDEO_RENDERING_START:" + " renderView == SurfaceView : " + (mCurrentRender==RENDER_SURFACE_VIEW));
                             PLog.d(TAG, "MEDIA_INFO_VIDEO_RENDERING_START");
                             startSeekPos = 0;
                             submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_RENDER_START,null);
@@ -413,10 +419,7 @@ public class IjkPlayer extends BaseInternalPlayer {
                             submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_BUFFERING_END,null);
                             break;
                         case IMediaPlayer.MEDIA_INFO_NETWORK_BANDWIDTH:
-                            PLog.d(TAG, "MEDIA_INFO_NETWORK_BANDWIDTH: " + arg2);
-                            Bundle obtain = BundlePool.obtain();
-                            obtain.putInt(EventKey.INT_DATA,arg2);
-                            submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_NETWORK_BANDWIDTH,obtain);
+                            //not support
                             break;
                         case IMediaPlayer.MEDIA_INFO_BAD_INTERLEAVING:
                             PLog.d(TAG, "MEDIA_INFO_BAD_INTERLEAVING:");

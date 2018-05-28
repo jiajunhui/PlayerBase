@@ -230,6 +230,16 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
     }
 
     @Override
+    public void setVolume(float left, float right){
+        mPlayer.setVolume(left, right);
+    }
+
+    @Override
+    public void setSpeed(float speed){
+        mPlayer.setSpeed(speed);
+    }
+
+    @Override
     public void setRenderType(int renderType) {
         releaseRender();
         mRenderType = renderType;

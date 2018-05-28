@@ -225,6 +225,18 @@ public class VideoViewActivity extends AppCompatActivity implements OnPlayerEven
         }
     }
 
+    public void halfSpeedPlay(View view){
+        mVideoView.setSpeed(0.5f);
+    }
+
+    public void doubleSpeedPlay(View view){
+        mVideoView.setSpeed(2f);
+    }
+
+    public void normalSpeedPlay(View view){
+        mVideoView.setSpeed(1f);
+    }
+
     private void updateVideo(boolean landscape){
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) mVideoView.getLayoutParams();
         if(landscape){

@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.PlaybackParams;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -44,9 +45,14 @@ import java.util.HashMap;
 public class SysMediaPlayer extends BaseInternalPlayer {
 
     final String TAG = "SysMediaPlayer";
+
+    private final int MEDIA_INFO_NETWORK_BANDWIDTH = 703;
+
     private MediaPlayer mMediaPlayer;
 
     private int mTargetState;
+
+    private long mBandWidth;
 
     public SysMediaPlayer() {
         init();
@@ -141,6 +147,17 @@ public class SysMediaPlayer extends BaseInternalPlayer {
     public void setVolume(float left, float right) {
         if(available()){
             mMediaPlayer.setVolume(left, right);
+        }
+    }
+
+    @Override
+    public void setSpeed(float speed) {
+        if(available() && Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
+            PlaybackParams playbackParams = mMediaPlayer.getPlaybackParams();
+            playbackParams.setSpeed(speed);
+            mMediaPlayer.setPlaybackParams(playbackParams);
+        }else{
+            PLog.e(TAG,"not support play speed setting.");
         }
     }
 
@@ -382,12 +399,16 @@ public class SysMediaPlayer extends BaseInternalPlayer {
                             submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_RENDER_START,null);
                             break;
                         case MediaPlayer.MEDIA_INFO_BUFFERING_START:
-                            PLog.d(TAG, "MEDIA_INFO_BUFFERING_START:");
-                            submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_BUFFERING_START,null);
+                            PLog.d(TAG, "MEDIA_INFO_BUFFERING_START:" + arg2);
+                            Bundle bundle = BundlePool.obtain();
+                            bundle.putLong(EventKey.LONG_DATA, mBandWidth);
+                            submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_BUFFERING_START,bundle);
                             break;
                         case MediaPlayer.MEDIA_INFO_BUFFERING_END:
-                            PLog.d(TAG, "MEDIA_INFO_BUFFERING_END:");
-                            submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_BUFFERING_END,null);
+                            PLog.d(TAG, "MEDIA_INFO_BUFFERING_END:" + arg2);
+                            Bundle bundle1 = BundlePool.obtain();
+                            bundle1.putLong(EventKey.LONG_DATA, mBandWidth);
+                            submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_BUFFERING_END,bundle1);
                             break;
                         case MediaPlayer.MEDIA_INFO_BAD_INTERLEAVING:
                             PLog.d(TAG, "MEDIA_INFO_BAD_INTERLEAVING:");
@@ -408,6 +429,10 @@ public class SysMediaPlayer extends BaseInternalPlayer {
                         case MediaPlayer.MEDIA_INFO_SUBTITLE_TIMED_OUT:
                             PLog.d(TAG, "MEDIA_INFO_SUBTITLE_TIMED_OUT:");
                             submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_SUBTITLE_TIMED_OUT,null);
+                            break;
+                        case MEDIA_INFO_NETWORK_BANDWIDTH:
+                            PLog.d(TAG,"band_width : " + arg2);
+                            mBandWidth = arg2 * 1000;
                             break;
                     }
                     return true;
