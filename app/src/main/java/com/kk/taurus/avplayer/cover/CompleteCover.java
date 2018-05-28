@@ -56,6 +56,12 @@ public class CompleteCover extends BaseCover {
     }
 
     @Override
+    protected void onCoverDetachedToWindow() {
+        super.onCoverDetachedToWindow();
+        setPlayCompleteState(false);
+    }
+
+    @Override
     public void onReceiverUnBind() {
         super.onReceiverUnBind();
         getGroupValue().unregisterOnGroupValueUpdateListener(mOnGroupValueUpdateListener);

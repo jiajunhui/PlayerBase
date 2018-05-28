@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -44,11 +43,9 @@ public class WindowVideoViewActivity extends AppCompatActivity {
                         .setX(100)
                         .setY(100)
                         .setWidth(width)
-                        .setHeight(height)
-                        .setGravity(Gravity.TOP | Gravity.LEFT));
+                        .setHeight(height));
 
         mWindowVideoView.setBackgroundColor(Color.BLACK);
-        mWindowVideoView.setElevationShadow(50);
 
         mWindowVideoView.setEventHandler(eventHandler);
 
@@ -88,6 +85,7 @@ public class WindowVideoViewActivity extends AppCompatActivity {
             mWindowVideoView.close();
         }else{
             mActiveWindow.setText(R.string.close_window_video_view);
+            mWindowVideoView.setElevationShadow(20);
             mWindowVideoView.show();
             mWindowVideoView.setDataSource(mDataSource);
             mWindowVideoView.start();

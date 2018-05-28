@@ -32,24 +32,20 @@ public class RectUtils {
         int top;
         int right;
         int bottom;
+        int dW = width/2;
+        int dH = height/2;
         if(width > height){
-            left   = width/2 - height/2;
+            left   = dW - dH;
             top    = 0;
-            right  = width/2 + height/2;
-            bottom = height;
+            right  = dW + dH;
+            bottom = dH * 2;
         }else{
-            left = height/2 - width/2;
+            left = dH - dW;
             top = 0;
-            right = height/2 + width/2;
-            bottom = width;
+            right = dH + dW;
+            bottom = dW * 2;
         }
-
-        Rect selfRect = new Rect(
-                left,
-                top,
-                right,
-                bottom);
-        return selfRect;
+        return new Rect(left, top, right, bottom);
     }
 
 }

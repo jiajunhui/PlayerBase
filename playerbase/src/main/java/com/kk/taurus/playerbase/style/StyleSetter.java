@@ -68,7 +68,6 @@ public final class StyleSetter implements IStyleSetter {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void clearShapeStyle() {
         this.mView.setClipToOutline(false);
-        this.mView.setOutlineProvider(null);
     }
 
     @Override
@@ -80,5 +79,6 @@ public final class StyleSetter implements IStyleSetter {
     public void setElevationShadow(int backgroundColor, float elevation) {
         mView.setBackgroundColor(backgroundColor);
         ViewCompat.setElevation(mView,elevation);
+        mView.invalidate();
     }
 }

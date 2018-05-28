@@ -10,13 +10,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.jiajunhui.xapp.medialoader.bean.VideoItem;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.kk.taurus.avplayer.bean.VideoBean;
 import com.kk.taurus.avplayer.play.ListPlayLogic;
 import com.kk.taurus.avplayer.R;
 import com.kk.taurus.avplayer.utils.ImageDisplayEngine;
 import com.kk.taurus.avplayer.utils.PUtil;
-import com.kk.taurus.mediadataretriever.MediaRetriever;
 
 import java.util.List;
 
@@ -59,10 +59,14 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
         updateWH(holder);
         final VideoBean item = getItem(position);
         if(TextUtils.isEmpty(item.getCover())){
-            MediaRetriever
-                    .withVideo(item.getPath())
-                    .option(MediaRetriever.FULL_SCREEN_KIND)
-                    .placeHolder(R.mipmap.ic_launcher)
+            Glide.with(mContext)
+                    .setDefaultRequestOptions(
+                            new RequestOptions()
+                                    .frame(1500*1000)
+                                    .centerCrop()
+                                    .error(R.mipmap.ic_launcher)
+                                    .placeholder(R.mipmap.ic_launcher))
+                    .load(item.getPath())
                     .into(holder.albumImage);
         }else{
             ImageDisplayEngine.display(mContext, holder.albumImage, item.getCover(), R.mipmap.ic_launcher);

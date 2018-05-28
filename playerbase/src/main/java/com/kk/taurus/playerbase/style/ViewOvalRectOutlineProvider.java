@@ -39,14 +39,14 @@ public class ViewOvalRectOutlineProvider extends ViewOutlineProvider {
     }
 
     @Override
-    public void getOutline(View view, Outline outline) {
-        Rect rect = new Rect();
-        view.getGlobalVisibleRect(rect);
-
-        Rect selfRect = RectUtils.getOvalRect(rect);
-
+    public void getOutline(final View view, final Outline outline) {
+        Rect selfRect;
         if(mRect!=null){
             selfRect = mRect;
+        }else{
+            Rect rect = new Rect();
+            view.getGlobalVisibleRect(rect);
+            selfRect = RectUtils.getOvalRect(rect);
         }
         outline.setOval(selfRect);
     }

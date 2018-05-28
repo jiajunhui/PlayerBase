@@ -38,37 +38,37 @@ public abstract class BaseCover extends BaseReceiver implements
     }
 
     @Override
-    public void requestPause(Bundle bundle) {
+    public final void requestPause(Bundle bundle) {
         notifyReceiverEvent(InterEvent.CODE_REQUEST_PAUSE, bundle);
     }
 
     @Override
-    public void requestResume(Bundle bundle) {
+    public final void requestResume(Bundle bundle) {
         notifyReceiverEvent(InterEvent.CODE_REQUEST_RESUME, bundle);
     }
 
     @Override
-    public void requestSeek(Bundle bundle) {
+    public final void requestSeek(Bundle bundle) {
         notifyReceiverEvent(InterEvent.CODE_REQUEST_SEEK, bundle);
     }
 
     @Override
-    public void requestStop(Bundle bundle) {
+    public final void requestStop(Bundle bundle) {
         notifyReceiverEvent(InterEvent.CODE_REQUEST_STOP, bundle);
     }
 
     @Override
-    public void requestReset(Bundle bundle) {
+    public final void requestReset(Bundle bundle) {
         notifyReceiverEvent(InterEvent.CODE_REQUEST_RESET, bundle);
     }
 
     @Override
-    public void requestRetry(Bundle bundle) {
+    public final void requestRetry(Bundle bundle) {
         notifyReceiverEvent(InterEvent.CODE_REQUEST_RETRY, bundle);
     }
 
     @Override
-    public void requestReplay(Bundle bundle) {
+    public final void requestReplay(Bundle bundle) {
         notifyReceiverEvent(InterEvent.CODE_REQUEST_REPLAY, bundle);
     }
 

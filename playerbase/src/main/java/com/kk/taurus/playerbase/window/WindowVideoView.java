@@ -16,111 +16,82 @@
 
 package com.kk.taurus.playerbase.window;
 
+import android.animation.Animator;
 import android.content.Context;
-import android.os.Build;
 import android.view.MotionEvent;
-import android.view.WindowManager;
 
-import com.kk.taurus.playerbase.utils.PUtils;
 import com.kk.taurus.playerbase.widget.BaseVideoView;
 
 /**
+ * Created by Taurus on 2018/5/25.
  *
- * Created by Taurus on 2018/5/21.
- *
- * Used for window playback. Automatically add and remove on WindowManager.
- * The default window type is TYPE_TOAST{@link WindowManager.LayoutParams#TYPE_TOAST}.
- * If you need to customize your window parameter, you can make relevant settings
- * through FloatWindowParams {@link FloatWindowParams} in
- * WindowVideoView Constructor{@link WindowVideoView#WindowVideoView(Context, FloatWindowParams)}
- * The window drag event is handled by default.If you do not need to,
- * you can set drag disable{@link WindowVideoView#setDragEnable(boolean)}.
+ * see also IWindow{@link IWindow}
  *
  */
-public class WindowVideoView extends BaseVideoView {
+public class WindowVideoView extends BaseVideoView implements IWindow {
 
-    private final int MIN_MOVE_DISTANCE = 20;
+    private WindowHelper mWindowHelper;
 
-    private WindowManager.LayoutParams wmParams;
-    private WindowManager wm;
-
-    private boolean isWindowShow;
-
-    private boolean mDragEnable = true;
+    private OnWindowListener onWindowListener;
 
     public WindowVideoView(Context context, FloatWindowParams params) {
         super(context);
-        init(params);
+        init(context, params);
     }
 
-    private void init(FloatWindowParams params) {
-        wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-        wmParams = new WindowManager.LayoutParams();
-        wmParams.type = params.getWindowType();
-        wmParams.gravity = params.getGravity();
-        wmParams.format = params.getFormat();
-        wmParams.flags = params.getFlag();
-        wmParams.width = params.getWidth();
-        wmParams.height = params.getHeight();
-        wmParams.x = params.getX();
-        wmParams.y = params.getY();
+    private void init(Context context, FloatWindowParams params) {
+        mWindowHelper = new WindowHelper(context, this, params);
+        mWindowHelper.setOnWindowListener(mInternalWindowListener);
     }
 
-    /**
-     * Whether or not the window needs to be dragged
-     * @param dragEnable
-     */
+    private OnWindowListener mInternalWindowListener =
+            new OnWindowListener() {
+        @Override
+        public void onShow() {
+            if(onWindowListener!=null)
+                onWindowListener.onShow();
+        }
+        @Override
+        public void onClose() {
+            stop();
+            resetStyle();
+            if(onWindowListener!=null)
+                onWindowListener.onClose();
+        }
+    };
+
+    @Override
+    public void setOnWindowListener(OnWindowListener onWindowListener) {
+        this.onWindowListener = onWindowListener;
+    }
+
+    @Override
     public void setDragEnable(boolean dragEnable) {
-        this.mDragEnable = dragEnable;
+        mWindowHelper.setDragEnable(dragEnable);
     }
 
-    /**
-     * update location position
-     *
-     * @param x
-     * @param y
-     */
-    public void updateFloatViewPosition(int x, int y) {
-        wmParams.x = x;
-        wmParams.y = y;
-        wm.updateViewLayout(this, wmParams);
-    }
-
+    @Override
     public boolean isWindowShow() {
-        return isWindowShow;
+        return mWindowHelper.isWindowShow();
+    }
+
+    @Override
+    public void updateWindowViewLayout(int x, int y) {
+        mWindowHelper.updateWindowViewLayout(x, y);
     }
 
     /**
      * add to WindowManager
      * @return
      */
+    @Override
     public boolean show() {
-        if (wm != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                if (!isAttachedToWindow()) {
-                    addViewToWindow();
-                    return true;
-                } else {
-                    return false;
-                }
-            } else {
-                try {
-                    if (getParent() == null) {
-                        addViewToWindow();
-                    }
-                    return true;
-                } catch (Exception e) {
-                    return false;
-                }
-            }
-        } else {
-            return false;
-        }
+        return mWindowHelper.show();
     }
 
-    private void addViewToWindow(){
-        wm.addView(this, wmParams);
-        isWindowShow = true;
+    @Override
+    public boolean show(Animator... items) {
+        return mWindowHelper.show(items);
     }
 
     /**
@@ -128,85 +99,35 @@ public class WindowVideoView extends BaseVideoView {
      *
      * @return
      */
-    public boolean close() {
-        if (wm != null) {
-            stop();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                if (isAttachedToWindow()) {
-                    remove();
-                    return true;
-                } else {
-                    return false;
-                }
-            } else {
-                try {
-                    if (getParent() != null) {
-                        remove();
-                    }
-                    return true;
-                } catch (Exception e) {
-                    return false;
-                }
-            }
-        } else {
-            return false;
-        }
+    @Override
+    public void close() {
+        mWindowHelper.close();
     }
 
-    private void remove(){
-        wm.removeViewImmediate(this);
-        isWindowShow = false;
+    @Override
+    public void close(Animator... items) {
+        mWindowHelper.close(items);
     }
 
-    private float mDownX;
-    private float mDownY;
+    private void resetStyle() {
+        setElevationShadow(0);
+        clearShapeStyle();
+    }
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        if(!mDragEnable)
-            return super.onInterceptTouchEvent(ev);
-        switch (ev.getAction()){
-            case MotionEvent.ACTION_DOWN:
-                mDownX = ev.getRawX();
-                mDownY = ev.getRawY();
-                break;
-            case MotionEvent.ACTION_MOVE:
-                if(Math.abs(ev.getRawX() - mDownX) > MIN_MOVE_DISTANCE
-                        || Math.abs(ev.getRawY() - mDownY) > MIN_MOVE_DISTANCE){
-                    return true;
-                }
-                return super.onInterceptTouchEvent(ev);
+        if(mWindowHelper.onInterceptTouchEvent(ev)){
+            return true;
         }
         return super.onInterceptTouchEvent(ev);
     }
 
-    private int floatX;
-    private int floatY;
-    private boolean firstTouch = true;
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if(!mDragEnable)
-            return super.onTouchEvent(event);
-        final int X = (int) event.getRawX();
-        final int Y = (int) event.getRawY();
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_UP:
-                firstTouch = true;
-                break;
-            case MotionEvent.ACTION_MOVE:
-                if (firstTouch) {
-                    floatX = (int) event.getX();
-                    floatY = (int) (event.getY() + PUtils.getStatusBarHeight(getContext()));
-                    firstTouch = false;
-                }
-                wmParams.x = X - floatX;
-                wmParams.y = Y - floatY;
-                wm.updateViewLayout(this, wmParams);
-                break;
+        if(mWindowHelper.onTouchEvent(event)){
+            return true;
         }
         return super.onTouchEvent(event);
     }
-
 
 }

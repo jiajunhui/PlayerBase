@@ -64,11 +64,11 @@ public class WindowSwitchPlayActivity extends AppCompatActivity {
         mWindowVideoContainer = new FrameLayout(this);
         mFloatWindow = new FloatWindow(this, mWindowVideoContainer,
                                         new FloatWindowParams()
-                                        .setX(100)
-                                        .setY(400)
-                                        .setWidth(width).setHeight(width*9/16));
+                                            .setX(100)
+                                            .setY(400)
+                                            .setWidth(width)
+                                            .setHeight(width*9/16));
         mFloatWindow.setBackgroundColor(Color.BLACK);
-        mFloatWindow.setElevationShadow(50);
 
         mAssist = new RelationAssist(this);
         mAssist.getViewContainer().setBackgroundColor(Color.BLACK);
@@ -181,6 +181,8 @@ public class WindowSwitchPlayActivity extends AppCompatActivity {
         if(!mFloatWindow.isWindowShow()){
             mBtnSwitchPlay.setText(R.string.page_play);
             changeMode(true);
+            mFloatWindow.setElevationShadow(20);
+            mFloatWindow.setRoundRectShape(50);
             mFloatWindow.show();
             mAssist.attachContainer(mWindowVideoContainer);
         }

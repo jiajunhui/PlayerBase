@@ -33,6 +33,7 @@ public class FloatWindowParams {
     private int y;
     private int width = WindowManager.LayoutParams.WRAP_CONTENT;
     private int height = WindowManager.LayoutParams.WRAP_CONTENT;
+    private boolean defaultAnimation = true;
 
     public int getWindowType() {
         return windowType;
@@ -103,6 +104,15 @@ public class FloatWindowParams {
 
     public FloatWindowParams setHeight(int height) {
         this.height = height;
+        return this;
+    }
+
+    public boolean isDefaultAnimation() {
+        return defaultAnimation;
+    }
+
+    public FloatWindowParams setDefaultAnimation(boolean defaultAnimation) {
+        this.defaultAnimation = defaultAnimation;
         return this;
     }
 }

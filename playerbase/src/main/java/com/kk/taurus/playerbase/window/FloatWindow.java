@@ -16,45 +16,85 @@
 
 package com.kk.taurus.playerbase.window;
 
+import android.animation.Animator;
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Build;
+import android.graphics.Rect;
 import android.support.v4.view.ViewCompat;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 
-import com.kk.taurus.playerbase.utils.PUtils;
+import com.kk.taurus.playerbase.style.IStyleSetter;
+import com.kk.taurus.playerbase.style.StyleSetter;
 
-public class FloatWindow extends FrameLayout {
+/**
+ * Created by Taurus on 2018/5/25.
+ *
+ * see also IWindow{@link IWindow}
+ *
+ */
+public class FloatWindow extends FrameLayout implements IWindow, IStyleSetter{
 
-    private final int MIN_MOVE_DISTANCE = 20;
+    private IStyleSetter mStyleSetter;
 
-    private WindowManager.LayoutParams wmParams;
-    private WindowManager wm;
+    private WindowHelper mWindowHelper;
 
-    private boolean isWindowShow;
+    private OnWindowListener onWindowListener;
 
     public FloatWindow(Context context, View windowView, FloatWindowParams params) {
         super(context);
-        init(windowView, params);
+        if (windowView != null) {
+            addView(windowView);
+        }
+        mStyleSetter = new StyleSetter(this);
+        mWindowHelper = new WindowHelper(context, this, params);
+        mWindowHelper.setOnWindowListener(mInternalWindowListener);
     }
 
-    private void init(View childView, FloatWindowParams params) {
-        wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-        wmParams = new WindowManager.LayoutParams();
-        wmParams.type = params.getWindowType();
-        wmParams.gravity = params.getGravity();
-        wmParams.format = params.getFormat();
-        wmParams.flags = params.getFlag();
-        wmParams.width = params.getWidth();
-        wmParams.height = params.getHeight();
-        wmParams.x = params.getX();
-        wmParams.y = params.getY();
-        if (childView != null) {
-            addView(childView);
-        }
+    private OnWindowListener mInternalWindowListener =
+            new OnWindowListener() {
+                @Override
+                public void onShow() {
+                    if(onWindowListener!=null)
+                        onWindowListener.onShow();
+                }
+                @Override
+                public void onClose() {
+                    resetStyle();
+                    if(onWindowListener!=null)
+                        onWindowListener.onClose();
+                }
+            };
+
+    @Override
+    public void setOnWindowListener(OnWindowListener onWindowListener) {
+        this.onWindowListener = onWindowListener;
+    }
+
+    @Override
+    public void setRoundRectShape(float radius) {
+        mStyleSetter.setRoundRectShape(radius);
+    }
+
+    @Override
+    public void setRoundRectShape(Rect rect, float radius) {
+        mStyleSetter.setRoundRectShape(rect, radius);
+    }
+
+    @Override
+    public void setOvalRectShape() {
+        mStyleSetter.setOvalRectShape();
+    }
+
+    @Override
+    public void setOvalRectShape(Rect rect) {
+        mStyleSetter.setOvalRectShape(rect);
+    }
+
+    @Override
+    public void clearShapeStyle() {
+        mStyleSetter.clearShapeStyle();
     }
 
     /**
@@ -66,7 +106,7 @@ public class FloatWindow extends FrameLayout {
     }
 
     /**
-     * must setting a color when set shadow.
+     * must setting a color when set shadow, not transparent.
      * @param backgroundColor
      * @param elevation
      */
@@ -75,52 +115,33 @@ public class FloatWindow extends FrameLayout {
         ViewCompat.setElevation(this, elevation);
     }
 
-    /**
-     * update location position
-     *
-     * @param x
-     * @param y
-     */
-    public void updateFloatViewPosition(int x, int y) {
-        wmParams.x = x;
-        wmParams.y = y;
-        wm.updateViewLayout(this, wmParams);
+    @Override
+    public void setDragEnable(boolean dragEnable) {
+        mWindowHelper.setDragEnable(dragEnable);
     }
 
+    @Override
     public boolean isWindowShow() {
-        return isWindowShow;
+        return mWindowHelper.isWindowShow();
+    }
+
+    @Override
+    public void updateWindowViewLayout(int x, int y) {
+        mWindowHelper.updateWindowViewLayout(x, y);
     }
 
     /**
      * add to WindowManager
      * @return
      */
+    @Override
     public boolean show() {
-        if (wm != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                if (!isAttachedToWindow()) {
-                    wm.addView(this, wmParams);
-                    isWindowShow = true;
-                    return true;
-                } else {
-                    return false;
-                }
-            } else {
-                try {
-                    if (getParent() == null) {
-                        wm.addView(this, wmParams);
-                        isWindowShow = true;
-                    }
-                    return true;
-                } catch (Exception e) {
-                    return false;
-                }
-            }
+        return mWindowHelper.show();
+    }
 
-
-        } else {
-            return false;
-        }
+    @Override
+    public boolean show(Animator... items) {
+        return mWindowHelper.show(items);
     }
 
     /**
@@ -128,77 +149,33 @@ public class FloatWindow extends FrameLayout {
      *
      * @return
      */
-    public boolean close() {
-        if (wm != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                if (isAttachedToWindow()) {
-                    wm.removeViewImmediate(this);
-                    isWindowShow = false;
-                    return true;
-                } else {
-                    return false;
-                }
-            } else {
-                try {
-                    if (getParent() != null) {
-                        wm.removeViewImmediate(this);
-                        isWindowShow = false;
-                    }
-                    return true;
-                } catch (Exception e) {
-                    return false;
-                }
-            }
-
-
-        } else {
-            return false;
-        }
-
+    @Override
+    public void close() {
+        mWindowHelper.close();
     }
 
-    private float mDownX;
-    private float mDownY;
+    @Override
+    public void close(Animator... items) {
+        mWindowHelper.close(items);
+    }
+
+    private void resetStyle() {
+        setElevationShadow(0);
+        clearShapeStyle();
+    }
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        switch (ev.getAction()){
-            case MotionEvent.ACTION_DOWN:
-                mDownX = ev.getRawX();
-                mDownY = ev.getRawY();
-                break;
-            case MotionEvent.ACTION_MOVE:
-                if(Math.abs(ev.getRawX() - mDownX) > MIN_MOVE_DISTANCE
-                        || Math.abs(ev.getRawY() - mDownY) > MIN_MOVE_DISTANCE){
-                    return true;
-                }
-                return super.onInterceptTouchEvent(ev);
+        if(mWindowHelper.onInterceptTouchEvent(ev)){
+            return true;
         }
         return super.onInterceptTouchEvent(ev);
     }
 
-    private int floatX;
-    private int floatY;
-    private boolean firstTouch = true;
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        final int X = (int) event.getRawX();
-        final int Y = (int) event.getRawY();
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_UP:
-                firstTouch = true;
-                break;
-            case MotionEvent.ACTION_MOVE:
-                if (firstTouch) {
-                    floatX = (int) event.getX();
-                    floatY = (int) (event.getY() + PUtils.getStatusBarHeight(getContext()));
-                    firstTouch = false;
-                }
-                wmParams.x = X - floatX;
-                wmParams.y = Y - floatY;
-                wm.updateViewLayout(this, wmParams);
-                break;
+        if(mWindowHelper.onTouchEvent(event)){
+            return true;
         }
         return super.onTouchEvent(event);
     }
