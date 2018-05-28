@@ -232,7 +232,7 @@ demo示例代码演示接入了Loading组件、Controller组件、CompleteCover�
 ```java
 public class CustomCover extends BaseCover{
 	
-	public CustomCover(Context context) {
+    public CustomCover(Context context) {
         super(context);
     }
 
@@ -240,24 +240,22 @@ public class CustomCover extends BaseCover{
     public void onPlayerEvent(int eventCode, Bundle bundle) {
         //...
     }
-
+    
     @Override
-    public void onReceiverEvent(int eventCode, Bundle bundle) {
-		//...
+    public void onErrorEvent(int eventCode, Bundle bundle) {
+        //...
     }
 
     @Override
-    public void onPrivateEvent(int eventCode, Bundle bundle) {
-		//...
+    public void onReceiverEvent(int eventCode, Bundle bundle) {
+	//...
     }
 
     @Override
     public View onCreateCoverView(Context context) {
         return View.inflate(context, R.layout.layout_custom_cover, null);
     }
-    
-    //......
-	
+    //......	
 }
 ```
 
@@ -381,7 +379,7 @@ public class MonitorDataProvider extends BaseDataProvider {
             Bundle bundle = BundlePool.obtain();
             bundle.putSerializable(EventKey.SERIALIZABLE_DATA, mDataSource);
             //callback success
-            onProviderDataSuccess(IDataProvider.PROVIDER_CODE_SUCCESS_MEDIA_DATA, bundle);
+            onProviderMediaDataSuccess(bundle);
         }else{
             //callback error
             onProviderError(IDataProvider.PROVIDER_CODE_DATA_PROVIDER_ERROR, null);
