@@ -8,7 +8,7 @@
 
 框架内包含系统**MediaPlayer**的解码实现，demo里面包含**IJKPlayer**和**ExoPlayer**的解码方案的实现和接入，请参见源码可以接入其他播放器解码方案。
 
-demo自带了播放控制组件**ControllerCover**、加载中组件**LoadingCover**、手势处理组件**GestureCover**、播放完成提示组件**CompleteCover**、错误提示组件**ErrorCover**等。
+demo示例集成了播放控制组件**ControllerCover**、加载中组件**LoadingCover**、手势处理组件**GestureCover**、播放完成提示组件**CompleteCover**、错误提示组件**ErrorCover**等。
 
 如果不满足您的需求。没问题，所有UI功能组件您可完全自定义接入并无缝对接播放事件。
 <br>
