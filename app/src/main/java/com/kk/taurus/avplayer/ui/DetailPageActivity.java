@@ -1,6 +1,5 @@
 package com.kk.taurus.avplayer.ui;
 
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -23,17 +22,16 @@ import com.kk.taurus.playerbase.receiver.ReceiverGroup;
  * Created by Taurus on 2018/4/18.
  */
 
-public class DetailPageActivity extends AppCompatActivity
-        implements OrientationHelper.OnOrientationListener, OnReceiverEventListener {
+public class DetailPageActivity extends AppCompatActivity implements OnReceiverEventListener {
 
     public static final String KEY_ITEM = "item_data";
 
     private RelativeLayout mLayoutContainer;
 
-    private OrientationHelper orientationHelper;
-
     private boolean isLandscape;
     private ReceiverGroup mReceiverGroup;
+
+    private OrientationHelper mOrientationHelper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,11 +39,11 @@ public class DetailPageActivity extends AppCompatActivity
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_detail_page);
 
-        orientationHelper = new OrientationHelper(this, this);
-
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN
                 , WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        mOrientationHelper = new OrientationHelper(this);
 
         VideoBean item = (VideoBean) getIntent().getSerializableExtra(KEY_ITEM);
 
@@ -73,16 +71,22 @@ public class DetailPageActivity extends AppCompatActivity
     }
 
     @Override
-    public void onSensorUserAgreement() {
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        isLandscape = newConfig.orientation==Configuration.ORIENTATION_LANDSCAPE;
+        mReceiverGroup.getGroupValue().putBoolean(DataInter.Key.KEY_IS_LANDSCAPE, isLandscape);
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        orientationHelper.onActivityConfigChanged(newConfig);
-        isLandscape = newConfig.orientation==Configuration.ORIENTATION_LANDSCAPE;
-        mReceiverGroup.getGroupValue().putBoolean(DataInter.Key.KEY_IS_LANDSCAPE, isLandscape);
+    protected void onStart() {
+        super.onStart();
+        mOrientationHelper.enable();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mOrientationHelper.disable();
     }
 
     @Override
@@ -93,19 +97,22 @@ public class DetailPageActivity extends AppCompatActivity
     }
 
     @Override
+    public void onBackPressed() {
+        if(!mOrientationHelper.isPortrait()){
+            mOrientationHelper.toggleScreen();
+            return;
+        }
+        super.onBackPressed();
+    }
+
+    @Override
     public void onReceiverEvent(int eventCode, Bundle bundle) {
         switch (eventCode){
             case DataInter.Event.EVENT_CODE_REQUEST_TOGGLE_SCREEN:
-                setRequestedOrientation(isLandscape?
-                        ActivityInfo.SCREEN_ORIENTATION_PORTRAIT:
-                        ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                mOrientationHelper.toggleScreen();
                 break;
             case DataInter.Event.EVENT_CODE_REQUEST_BACK:
-                if(isLandscape){
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                    return;
-                }
-                finish();
+                onBackPressed();
                 break;
         }
     }

@@ -51,7 +51,7 @@
         <activity
             android:name=".ui.DetailPageActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="sensor"/>
+            android:screenOrientation="portrait"/>
         <activity android:name=".ui.WindowVideoViewActivity" />
         <activity
             android:name=".ui.WindowSwitchPlayActivity"

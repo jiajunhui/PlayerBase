@@ -19,7 +19,6 @@ import com.kk.taurus.avplayer.play.AssistPlayer;
 import com.kk.taurus.avplayer.play.DataInter;
 import com.kk.taurus.avplayer.play.ReceiverGroupManager;
 import com.kk.taurus.avplayer.utils.DataUtils;
-import com.kk.taurus.avplayer.utils.OrientationHelper;
 import com.kk.taurus.playerbase.event.OnPlayerEventListener;
 import com.kk.taurus.playerbase.receiver.OnReceiverEventListener;
 import com.kk.taurus.playerbase.receiver.ReceiverGroup;
@@ -33,7 +32,6 @@ import java.util.List;
 
 public class OnlineVideoListActivity extends AppCompatActivity implements
         VideoListAdapter.OnListListener,
-        OrientationHelper.OnOrientationListener,
         OnReceiverEventListener, OnPlayerEventListener {
 
     private List<VideoBean> mItems = new ArrayList<>();
@@ -45,7 +43,6 @@ public class OnlineVideoListActivity extends AppCompatActivity implements
     private boolean toDetail;
     private boolean isLandScape;
 
-    private OrientationHelper mOrientationHelper;
     private ReceiverGroup mReceiverGroup;
 
     @Override
@@ -56,8 +53,6 @@ public class OnlineVideoListActivity extends AppCompatActivity implements
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         setTitle("在线视频");
-
-        mOrientationHelper = new OrientationHelper(this, this);
 
         mRecycler = findViewById(R.id.recycler);
         mContainer = findViewById(R.id.listPlayContainer);
@@ -78,15 +73,9 @@ public class OnlineVideoListActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onSensorUserAgreement() {
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-    }
-
-    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         isLandScape = newConfig.orientation==Configuration.ORIENTATION_LANDSCAPE;
-        mOrientationHelper.onActivityConfigChanged(newConfig);
         if(newConfig.orientation==Configuration.ORIENTATION_LANDSCAPE){
             attachFullScreen();
         }else if(newConfig.orientation==Configuration.ORIENTATION_PORTRAIT){
@@ -173,10 +162,6 @@ public class OnlineVideoListActivity extends AppCompatActivity implements
 
     @Override
     public void onPlayerEvent(int eventCode, Bundle bundle) {
-        switch (eventCode){
-            case OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_RENDER_START:
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-                break;
-        }
+
     }
 }

@@ -1,6 +1,7 @@
 package com.kk.taurus.avplayer.adapter;
 
 import android.content.Context;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
@@ -32,12 +33,12 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
 
     private ListPlayLogic mListPlayLogic;
 
-    private int mScreenW;
+    private int mScreenUseW;
 
     public VideoListAdapter(Context context, RecyclerView recyclerView, List<VideoBean> list){
         this.mContext = context;
         this.mItems = list;
-        mScreenW = PUtil.getScreenW(context);
+        mScreenUseW = PUtil.getScreenW(context) - PUtil.dip2px(context, 6*2);
         mListPlayLogic = new ListPlayLogic(context, recyclerView, this);
     }
 
@@ -56,6 +57,7 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
 
     @Override
     public void onBindViewHolder(final VideoItemHolder holder, final int position) {
+        ViewCompat.setElevation(holder.card, PUtil.dip2px(mContext, 3));
         updateWH(holder);
         final VideoBean item = getItem(position);
         if(TextUtils.isEmpty(item.getCover())){
@@ -93,8 +95,8 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
 
     private void updateWH(VideoItemHolder holder) {
         ViewGroup.LayoutParams layoutParams = holder.layoutBox.getLayoutParams();
-        layoutParams.width = mScreenW;
-        layoutParams.height = mScreenW * 9/16;
+        layoutParams.width = mScreenUseW;
+        layoutParams.height = mScreenUseW * 9/16;
         holder.layoutBox.setLayoutParams(layoutParams);
     }
 
@@ -117,6 +119,7 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
 
     public static class VideoItemHolder extends RecyclerView.ViewHolder{
 
+        View card;
         public FrameLayout layoutContainer;
         public RelativeLayout layoutBox;
         View albumLayout;
@@ -125,6 +128,7 @@ public class VideoListAdapter extends RecyclerView.Adapter<VideoListAdapter.Vide
 
         public VideoItemHolder(View itemView) {
             super(itemView);
+            card = itemView.findViewById(R.id.card);
             layoutContainer = itemView.findViewById(R.id.layoutContainer);
             layoutBox = itemView.findViewById(R.id.layBox);
             albumLayout = itemView.findViewById(R.id.album_layout);
