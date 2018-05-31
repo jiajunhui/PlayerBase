@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 
 import com.kk.taurus.playerbase.AVPlayer;
+import com.kk.taurus.playerbase.config.PlayerConfig;
 import com.kk.taurus.playerbase.entity.DataSource;
 import com.kk.taurus.playerbase.event.EventKey;
 import com.kk.taurus.playerbase.event.OnErrorEventListener;
@@ -85,10 +86,11 @@ public final class RelationAssist implements AssistPlay {
     public RelationAssist(Context context, SuperContainer superContainer){
         this.mContext = context;
         mPlayer = new AVPlayer();
-        if(superContainer ==null){
+        if(superContainer == null){
             superContainer = new SuperContainer(context);
-            superContainer.addEventProducer(new NetworkEventProducer(context));
         }
+        if(PlayerConfig.isUseDefaultNetworkEventProducer())
+            superContainer.addEventProducer(new NetworkEventProducer(context));
         mSuperContainer = superContainer;
     }
 

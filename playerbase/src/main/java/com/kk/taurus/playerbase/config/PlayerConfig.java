@@ -34,9 +34,15 @@ public class PlayerConfig {
 
     public static final int DEFAULT_PLAN_ID = 0;
 
+    //default decoder plan id is use System MediaPlayer.
     private static int defaultPlanId = DEFAULT_PLAN_ID;
 
+    //decoder plans arrays.
     private static SparseArrayCompat<DecoderPlan> mPlans;
+
+    //Whether or not use the default NetworkEventProducer.
+    //default state false.
+    private static boolean useDefaultNetworkEventProducer = false;
 
     static {
         mPlans = new SparseArrayCompat<>(2);
@@ -86,4 +92,12 @@ public class PlayerConfig {
         return plan!=null;
     }
 
+    //if you want to use default NetworkEventProducer, set it true.
+    public static void setUseDefaultNetworkEventProducer(boolean useDefaultNetworkEventProducer) {
+        PlayerConfig.useDefaultNetworkEventProducer = useDefaultNetworkEventProducer;
+    }
+
+    public static boolean isUseDefaultNetworkEventProducer() {
+        return useDefaultNetworkEventProducer;
+    }
 }

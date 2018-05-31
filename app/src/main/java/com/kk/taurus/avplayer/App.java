@@ -70,6 +70,10 @@ public class App extends Application {
         PlayerConfig.addDecoderPlan(new DecoderPlan(PLAN_ID_IJK, IjkPlayer.class.getName(), "IjkPlayer"));
         PlayerConfig.addDecoderPlan(new DecoderPlan(PLAN_ID_EXO, ExoMediaPlayer.class.getName(), "ExoPlayer"));
         PlayerConfig.setDefaultPlanId(PLAN_ID_IJK);
+
+        //use default NetworkEventProducer.
+        PlayerConfig.setUseDefaultNetworkEventProducer(true);
+
         PlayerLibrary.init(this);
     }
 

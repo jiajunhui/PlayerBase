@@ -47,13 +47,16 @@ public final class GroupValue implements Cloneable{
             return;
         mOnGroupValueUpdateListeners.add(onGroupValueUpdateListener);
         //when listener add, if user observe keys in current KeySet, call back it.
-        checkCurrentKeySet();
+        checkCurrentKeySet(onGroupValueUpdateListener);
     }
 
-    private void checkCurrentKeySet() {
+    private void checkCurrentKeySet(
+            IReceiverGroup.OnGroupValueUpdateListener onGroupValueUpdateListener) {
         Set<String> keys = mValueMap.keySet();
         for(String key : keys){
-            callBackValueUpdate(key, mValueMap.get(key));
+            if(containsKey(onGroupValueUpdateListener.filterKeys(), key)){
+                onGroupValueUpdateListener.onValueUpdate(key, mValueMap.get(key));
+            }
         }
     }
 

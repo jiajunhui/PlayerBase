@@ -29,6 +29,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.kk.taurus.playerbase.assist.OnVideoViewEventHandler;
+import com.kk.taurus.playerbase.config.PlayerConfig;
 import com.kk.taurus.playerbase.extension.NetworkEventProducer;
 import com.kk.taurus.playerbase.log.PLog;
 import com.kk.taurus.playerbase.player.IPlayer;
@@ -129,7 +130,8 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
     //you can return a custom container extends ViewContainer.
     protected SuperContainer onCreateSuperContainer(Context context){
         SuperContainer superContainer = new SuperContainer(context);
-        superContainer.addEventProducer(new NetworkEventProducer(context));
+        if(PlayerConfig.isUseDefaultNetworkEventProducer())
+            superContainer.addEventProducer(new NetworkEventProducer(context));
         return superContainer;
     }
 

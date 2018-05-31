@@ -72,7 +72,7 @@ demo示例集成了播放控制组件**ControllerCover**、加载中组件**Load
 
 ```gradle
 dependencies {
-  compile 'com.kk.taurus.playerbase:playerbase:3.2.7'
+  compile 'com.kk.taurus.playerbase:playerbase:3.2.7.1'
 }
 ```
 
@@ -93,6 +93,11 @@ public class App extends Application {
     @Override
     public void onCreate() {
         //...
+        
+        //如果您想使用默认的网络状态事件生产者，请添加此行配置。
+        //并需要添加权限 android.permission.ACCESS_NETWORK_STATE
+        PlayerConfig.setUseDefaultNetworkEventProducer(true);
+        //初始化库
         PlayerLibrary.init(this);
     }
     
