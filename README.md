@@ -139,13 +139,13 @@ mVideoView.start();
 ## AVPlayer的使用
 如果您想直接使用AVPlayer自己进行处理播放，那么大致步骤如下：<br>
 1.初始化一个AVPlayer对象。<br>
-2.初始化一个ViewContainer对象，将ReceiverGroup设置到ViewContainer中。<br>
+2.初始化一个SuperContainer对象，将ReceiverGroup设置到SuperContainer中。<br>
 3.使用SuperContainer设置一个渲染视图Render，然后自己处理RenderCallBack并关联解码器。
 
 代码如下：
 
 ```java
-SuperContainer mViewContainer = new SuperContainer(context);
+SuperContainer mSuperContainer = new SuperContainer(context);
 ReceiverGroup receiverGroup = new ReceiverGroup();
 receiverGroup.addReceiver(KEY_LOADING_COVER, new LoadingCover(context));
 receiverGroup.addReceiver(KEY_CONTROLLER_COVER, new ControllerCover(context));
@@ -184,7 +184,7 @@ mPlayer.setOnErrorEventListener(new OnErrorEventListener() {
         mSuperContainer.dispatchErrorEvent(eventCode, bundle);
     }
 });
-mViewContainer.setOnReceiverEventListener(mInternalReceiverEventListener);
+mSuperContainer.setOnReceiverEventListener(mInternalReceiverEventListener);
 render.setRenderCallback(new IRender.IRenderCallback() {
     @Override
     public void onSurfaceCreated(IRender.IRenderHolder renderHolder, int width, int height) {
