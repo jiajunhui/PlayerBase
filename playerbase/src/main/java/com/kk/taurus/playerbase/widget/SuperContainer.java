@@ -19,8 +19,6 @@ package com.kk.taurus.playerbase.widget;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -52,9 +50,9 @@ import com.kk.taurus.playerbase.touch.ContainerTouchHelper;
  * Created by Taurus on 2018/3/17.
  */
 
-public class ViewContainer extends FrameLayout implements OnTouchGestureListener {
+public class SuperContainer extends FrameLayout implements OnTouchGestureListener {
 
-    final String TAG = "ViewContainer";
+    final String TAG = "SuperContainer";
 
     private FrameLayout mRenderContainer;
     private ICoverStrategy mCoverStrategy;
@@ -67,20 +65,12 @@ public class ViewContainer extends FrameLayout implements OnTouchGestureListener
 
     private IProducerGroup mProducerGroup;
 
-    public ViewContainer(@NonNull Context context) {
-        this(context, null);
+    public SuperContainer(@NonNull Context context) {
+        super(context);
+        init(context);
     }
 
-    public ViewContainer(@NonNull Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs, 0);
-    }
-
-    public ViewContainer(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        init(context, attrs, defStyleAttr);
-    }
-
-    private void init(Context context, AttributeSet attrs, int defStyleAttr) {
+    private void init(Context context) {
         initBaseInfo(context);
         initGesture(context);
         initRenderContainer(context);

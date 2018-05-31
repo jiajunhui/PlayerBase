@@ -25,7 +25,7 @@ import java.util.List;
  * Created by Taurus on 2018/5/27.
  *
  */
-public class ProducerGroup implements IProducerGroup {
+public final class ProducerGroup implements IProducerGroup {
 
     private ReceiverEventSender mEventSender;
 

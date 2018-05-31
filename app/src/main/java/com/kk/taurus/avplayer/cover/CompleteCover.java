@@ -94,6 +94,7 @@ public class CompleteCover extends BaseCover {
                     break;
             }
             setPlayCompleteState(false);
+            getGroupValue().putBoolean(DataInter.Key.KEY_COMPLETE_SHOW, false);
         }
     };
 
@@ -103,7 +104,6 @@ public class CompleteCover extends BaseCover {
 
     private void setPlayCompleteState(boolean state){
         setCoverVisibility(state?View.VISIBLE:View.GONE);
-        getGroupValue().putBoolean(DataInter.Key.KEY_COMPLETE_SHOW, state);
     }
 
     @Override
@@ -111,6 +111,7 @@ public class CompleteCover extends BaseCover {
         switch (eventCode){
             case OnPlayerEventListener.PLAYER_EVENT_ON_PLAY_COMPLETE:
                 setPlayCompleteState(true);
+                getGroupValue().putBoolean(DataInter.Key.KEY_COMPLETE_SHOW, true);
                 break;
         }
     }

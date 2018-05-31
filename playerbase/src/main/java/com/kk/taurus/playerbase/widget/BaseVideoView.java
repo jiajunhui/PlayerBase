@@ -60,7 +60,7 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
     private AVPlayer mPlayer;
 
     //the container for all play view, contain all covers.
-    private ViewContainer mViewContainer;
+    private SuperContainer mSuperContainer;
 
     private OnPlayerEventListener mOnPlayerEventListener;
     private OnErrorEventListener mOnErrorEventListener;
@@ -103,9 +103,9 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
         mPlayer.setOnErrorEventListener(mInternalErrorEventListener);
         //init style setter.
         mStyleSetter = new StyleSetter(this);
-        mViewContainer = onCreateViewContainer(context);
-        mViewContainer.setOnReceiverEventListener(mInternalReceiverEventListener);
-        addView(mViewContainer,
+        mSuperContainer = onCreateSuperContainer(context);
+        mSuperContainer.setOnReceiverEventListener(mInternalReceiverEventListener);
+        addView(mSuperContainer,
                 new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT));
     }
@@ -114,23 +114,23 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
      * you can get the ViewContainer instance ,and dispatch your custom event.
      *
      * see also
-     * {@link ViewContainer#dispatchPlayEvent(int, Bundle)}
-     * {@link ViewContainer#dispatchErrorEvent(int, Bundle)}
+     * {@link SuperContainer#dispatchPlayEvent(int, Bundle)}
+     * {@link SuperContainer#dispatchErrorEvent(int, Bundle)}
      *
      * @return
      */
-    public ViewContainer getViewContainer(){
-        return mViewContainer;
+    public SuperContainer getSuperContainer(){
+        return mSuperContainer;
     }
 
     //default return a ViewContainer for frame default.
     //default add NetworkEventProducer.
     //if you want custom you container ,
     //you can return a custom container extends ViewContainer.
-    protected ViewContainer onCreateViewContainer(Context context){
-        ViewContainer viewContainer = new ViewContainer(context);
-        viewContainer.addEventProducer(new NetworkEventProducer(context));
-        return viewContainer;
+    protected SuperContainer onCreateSuperContainer(Context context){
+        SuperContainer superContainer = new SuperContainer(context);
+        superContainer.addEventProducer(new NetworkEventProducer(context));
+        return superContainer;
     }
 
     //create player instance.
@@ -189,7 +189,7 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
      * @param receiverGroup
      */
     public void setReceiverGroup(ReceiverGroup receiverGroup){
-        mViewContainer.setReceiverGroup(receiverGroup);
+        mSuperContainer.setReceiverGroup(receiverGroup);
     }
 
     public void setEventHandler(OnVideoViewEventHandler eventHandler){
@@ -264,7 +264,7 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
         //update video rotation
         mRender.setVideoRotation(mVideoRotation);
         //add to container
-        mViewContainer.setRenderView(mRender.getRenderView());
+        mSuperContainer.setRenderView(mRender.getRenderView());
     }
 
     @Override
@@ -369,7 +369,7 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
         mPlayer.destroy();
         mRenderHolder = null;
         releaseRender();
-        mViewContainer.destroy();
+        mSuperContainer.destroy();
     }
 
     /**
@@ -425,7 +425,7 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
             if(mOnPlayerEventListener!=null)
                 mOnPlayerEventListener.onPlayerEvent(eventCode, bundle);
             //last dispatch event , because bundle will be recycle after dispatch.
-            mViewContainer.dispatchPlayEvent(eventCode, bundle);
+            mSuperContainer.dispatchPlayEvent(eventCode, bundle);
         }
     };
 
@@ -438,7 +438,7 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
             if(mOnErrorEventListener!=null)
                 mOnErrorEventListener.onErrorEvent(eventCode, bundle);
             //last dispatch event , because bundle will be recycle after dispatch.
-            mViewContainer.dispatchErrorEvent(eventCode, bundle);
+            mSuperContainer.dispatchErrorEvent(eventCode, bundle);
         }
     };
 

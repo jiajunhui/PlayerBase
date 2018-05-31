@@ -35,7 +35,7 @@ public class AssistPlayer {
         mAppContext = App.get().getApplicationContext();
         mRelationAssist = new RelationAssist(mAppContext);
         mRelationAssist.setEventAssistHandler(mInternalEventAssistHandler);
-        mRelationAssist.getViewContainer().setBackgroundColor(Color.BLACK);
+        mRelationAssist.getSuperContainer().setBackgroundColor(Color.BLACK);
         mOnPlayerEventListeners = new ArrayList<>();
         mOnErrorEventListeners = new ArrayList<>();
         mOnReceiverEventListeners = new ArrayList<>();

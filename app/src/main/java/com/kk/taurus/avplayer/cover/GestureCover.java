@@ -133,7 +133,7 @@ public class GestureCover extends BaseCover implements OnTouchGestureListener {
                 @Override
                 public void onValueUpdate(String key, Object value) {
                     if(key.equals(DataInter.Key.KEY_COMPLETE_SHOW)){
-                        setGestureEnable((boolean) value);
+                        setGestureEnable(!(boolean) value);
                     }
                 }
             };

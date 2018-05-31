@@ -65,7 +65,6 @@ public interface IReceiver {
     void onReceiverEvent(int eventCode, Bundle bundle);
 
     /**
-     * if you have a receiver instance reference,
      * you can call this method dispatch private event.
      *
      * @param eventCode

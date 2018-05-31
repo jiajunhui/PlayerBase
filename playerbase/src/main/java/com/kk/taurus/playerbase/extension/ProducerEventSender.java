@@ -20,7 +20,7 @@ import android.os.Bundle;
 
 import com.kk.taurus.playerbase.receiver.IReceiverGroup;
 
-public class ProducerEventSender implements ReceiverEventSender {
+public final class ProducerEventSender implements ReceiverEventSender {
     
     private DelegateReceiverEventSender mEventSender;
 

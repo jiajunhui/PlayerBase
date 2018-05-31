@@ -115,6 +115,6 @@ public abstract class BaseCover extends BaseReceiver implements
 
     @Override
     public int getCoverLevel() {
-        return ICover.COVER_LEVEL_MEDIUM;
+        return ICover.COVER_LEVEL_LOW;
     }
 }

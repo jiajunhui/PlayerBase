@@ -34,7 +34,7 @@ import com.kk.taurus.playerbase.receiver.ReceiverGroup;
 import com.kk.taurus.playerbase.render.IRender;
 import com.kk.taurus.playerbase.render.RenderSurfaceView;
 import com.kk.taurus.playerbase.render.RenderTextureView;
-import com.kk.taurus.playerbase.widget.ViewContainer;
+import com.kk.taurus.playerbase.widget.SuperContainer;
 
 /**
  *
@@ -46,7 +46,7 @@ import com.kk.taurus.playerbase.widget.ViewContainer;
  * You only need to import your layout container and playback resources.
  *
  */
-public class RelationAssist implements AssistPlay {
+public final class RelationAssist implements AssistPlay {
 
     private Context mContext;
 
@@ -55,7 +55,7 @@ public class RelationAssist implements AssistPlay {
     /**
      * ViewContainer for ReceiverGroup and Render.
      */
-    private ViewContainer mViewContainer;
+    private SuperContainer mSuperContainer;
 
     /**
      * ReceiverGroup from out setting.
@@ -82,30 +82,30 @@ public class RelationAssist implements AssistPlay {
         this(context, null);
     }
 
-    public RelationAssist(Context context, ViewContainer viewContainer){
+    public RelationAssist(Context context, SuperContainer superContainer){
         this.mContext = context;
         mPlayer = new AVPlayer();
-        if(viewContainer==null){
-            viewContainer = new ViewContainer(context);
-            viewContainer.addEventProducer(new NetworkEventProducer(context));
+        if(superContainer ==null){
+            superContainer = new SuperContainer(context);
+            superContainer.addEventProducer(new NetworkEventProducer(context));
         }
-        mViewContainer = viewContainer;
+        mSuperContainer = superContainer;
     }
 
-    public ViewContainer getViewContainer() {
-        return mViewContainer;
+    public SuperContainer getSuperContainer() {
+        return mSuperContainer;
     }
 
     private void attachPlayerListener(){
         mPlayer.setOnPlayerEventListener(mInternalPlayerEventListener);
         mPlayer.setOnErrorEventListener(mInternalErrorEventListener);
-        mViewContainer.setOnReceiverEventListener(mInternalReceiverEventListener);
+        mSuperContainer.setOnReceiverEventListener(mInternalReceiverEventListener);
     }
 
     private void detachPlayerListener(){
         mPlayer.setOnPlayerEventListener(null);
         mPlayer.setOnErrorEventListener(null);
-        mViewContainer.setOnReceiverEventListener(null);
+        mSuperContainer.setOnReceiverEventListener(null);
     }
 
     private OnPlayerEventListener mInternalPlayerEventListener =
@@ -113,7 +113,7 @@ public class RelationAssist implements AssistPlay {
         @Override
         public void onPlayerEvent(int eventCode, Bundle bundle) {
             onInternalHandlePlayerEvent(eventCode, bundle);
-            mViewContainer.dispatchPlayEvent(eventCode, bundle);
+            mSuperContainer.dispatchPlayEvent(eventCode, bundle);
             if(mOnPlayerEventListener!=null)
                 mOnPlayerEventListener.onPlayerEvent(eventCode, bundle);
         }
@@ -143,7 +143,7 @@ public class RelationAssist implements AssistPlay {
         @Override
         public void onErrorEvent(int eventCode, Bundle bundle) {
             onInternalHandleErrorEvent(eventCode, bundle);
-            mViewContainer.dispatchErrorEvent(eventCode, bundle);
+            mSuperContainer.dispatchErrorEvent(eventCode, bundle);
             if(mOnErrorEventListener!=null)
                 mOnErrorEventListener.onErrorEvent(eventCode, bundle);
         }
@@ -241,7 +241,7 @@ public class RelationAssist implements AssistPlay {
         attachPlayerListener();
         detachViewContainer();
         if(mReceiverGroup!=null){
-            mViewContainer.setReceiverGroup(mReceiverGroup);
+            mSuperContainer.setReceiverGroup(mReceiverGroup);
         }
         releaseRender();
         switch (mRenderType){
@@ -256,9 +256,9 @@ public class RelationAssist implements AssistPlay {
         }
         mRender.setRenderCallback(mRenderCallback);
         updateRenderParams();
-        mViewContainer.setRenderView(mRender.getRenderView());
+        mSuperContainer.setRenderView(mRender.getRenderView());
         if(userContainer!=null){
-            userContainer.addView(mViewContainer,
+            userContainer.addView(mSuperContainer,
                     new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                             ViewGroup.LayoutParams.MATCH_PARENT));
         }
@@ -316,9 +316,9 @@ public class RelationAssist implements AssistPlay {
     }
 
     private void detachViewContainer(){
-        ViewParent parent = mViewContainer.getParent();
+        ViewParent parent = mSuperContainer.getParent();
         if(parent!=null && parent instanceof ViewGroup){
-            ((ViewGroup) parent).removeView(mViewContainer);
+            ((ViewGroup) parent).removeView(mSuperContainer);
         }
     }
 
@@ -404,7 +404,7 @@ public class RelationAssist implements AssistPlay {
         detachPlayerListener();
         mRenderHolder = null;
         releaseRender();
-        mViewContainer.destroy();
+        mSuperContainer.destroy();
         detachViewContainer();
         setReceiverGroup(null);
     }

@@ -71,7 +71,7 @@ public class WindowSwitchPlayActivity extends AppCompatActivity {
         mFloatWindow.setBackgroundColor(Color.BLACK);
 
         mAssist = new RelationAssist(this);
-        mAssist.getViewContainer().setBackgroundColor(Color.BLACK);
+        mAssist.getSuperContainer().setBackgroundColor(Color.BLACK);
         mAssist.setEventAssistHandler(eventHandler);
 
         mReceiverGroup = ReceiverGroupManager.get().getLiteReceiverGroup(this);

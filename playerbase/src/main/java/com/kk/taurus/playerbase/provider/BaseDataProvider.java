@@ -28,17 +28,20 @@ public abstract class BaseDataProvider implements IDataProvider {
     private OnProviderListener mOnProviderListener;
 
     @Override
-    public void setOnProviderListener(OnProviderListener onProviderListener) {
+    public final void setOnProviderListener(OnProviderListener onProviderListener) {
         this.mOnProviderListener = onProviderListener;
     }
 
+    /**
+     * call back provider start. Recommended invocation.
+     */
     protected final void onProviderDataStart(){
         if(mOnProviderListener!=null)
             mOnProviderListener.onProviderDataStart();
     }
 
     /**
-     * send media data for player.
+     * send media data for player. must invocation.
      * @param bundle
      */
     protected final void onProviderMediaDataSuccess(@NonNull Bundle bundle){
@@ -56,6 +59,11 @@ public abstract class BaseDataProvider implements IDataProvider {
             mOnProviderListener.onProviderDataSuccess(code, bundle);
     }
 
+    /**
+     * if occur error, It is strongly recommended to call the method.
+     * @param code
+     * @param bundle
+     */
     protected final void onProviderError(int code, Bundle bundle){
         if(mOnProviderListener!=null)
             mOnProviderListener.onProviderError(code, bundle);
