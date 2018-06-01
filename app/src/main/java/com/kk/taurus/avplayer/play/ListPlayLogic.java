@@ -53,6 +53,7 @@ public class ListPlayLogic {
                         PLog.d("ListPlayLogic","onScrollStateChanged stop");
                         AssistPlayer.get().stop();
                         mAdapter.notifyItemChanged(mPlayPosition);
+                        mPlayPosition = -1;
                     }
                 }
             }
