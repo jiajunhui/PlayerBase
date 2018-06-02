@@ -112,7 +112,7 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
     }
 
     /**
-     * you can get the ViewContainer instance ,and dispatch your custom event.
+     * you can get the SuperContainer instance ,and dispatch your custom event.
      *
      * see also
      * {@link SuperContainer#dispatchPlayEvent(int, Bundle)}
@@ -124,10 +124,10 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
         return mSuperContainer;
     }
 
-    //default return a ViewContainer for frame default.
+    //default return a SuperContainer for frame default.
     //default add NetworkEventProducer.
     //if you want custom you container ,
-    //you can return a custom container extends ViewContainer.
+    //you can return a custom container extends SuperContainer.
     protected SuperContainer onCreateSuperContainer(Context context){
         SuperContainer superContainer = new SuperContainer(context);
         if(PlayerConfig.isUseDefaultNetworkEventProducer())
@@ -141,6 +141,15 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
     }
 
     /**
+     * see {@link IPlayer#option(int, Bundle)}
+     * @param code the code value custom yourself.
+     * @param bundle deliver some data if you need.
+     */
+    public void option(int code, Bundle bundle){
+        mPlayer.option(code, bundle);
+    }
+
+    /**
      * see {@link AVPlayer#switchDecoder(int)}
      *
      * @param decoderPlanId the planId is your configuration ids or default id.
@@ -148,7 +157,7 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
      *
      */
     @Override
-    public boolean switchDecoder(int decoderPlanId){
+    public final boolean switchDecoder(int decoderPlanId){
         return mPlayer.switchDecoder(decoderPlanId);
     }
 

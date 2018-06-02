@@ -118,18 +118,12 @@ public class WindowVideoView extends BaseVideoView implements IWindow {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        if(mWindowHelper.onInterceptTouchEvent(ev)){
-            return true;
-        }
-        return super.onInterceptTouchEvent(ev);
+        return mWindowHelper.onInterceptTouchEvent(ev) || super.onInterceptTouchEvent(ev);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if(mWindowHelper.onTouchEvent(event)){
-            return true;
-        }
-        return super.onTouchEvent(event);
+        return mWindowHelper.onTouchEvent(event) || super.onTouchEvent(event);
     }
 
 }

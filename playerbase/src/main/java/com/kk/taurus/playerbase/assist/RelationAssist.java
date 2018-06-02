@@ -54,7 +54,7 @@ public final class RelationAssist implements AssistPlay {
     private AVPlayer mPlayer;
 
     /**
-     * ViewContainer for ReceiverGroup and Render.
+     * SuperContainer for ReceiverGroup and Render.
      */
     private SuperContainer mSuperContainer;
 
@@ -241,7 +241,7 @@ public final class RelationAssist implements AssistPlay {
     public void attachContainer(ViewGroup userContainer) {
         mPlayer.setSurface(null);
         attachPlayerListener();
-        detachViewContainer();
+        detachSuperContainer();
         if(mReceiverGroup!=null){
             mSuperContainer.setReceiverGroup(mReceiverGroup);
         }
@@ -317,7 +317,7 @@ public final class RelationAssist implements AssistPlay {
             mRender.release();
     }
 
-    private void detachViewContainer(){
+    private void detachSuperContainer(){
         ViewParent parent = mSuperContainer.getParent();
         if(parent!=null && parent instanceof ViewGroup){
             ((ViewGroup) parent).removeView(mSuperContainer);
@@ -407,7 +407,7 @@ public final class RelationAssist implements AssistPlay {
         mRenderHolder = null;
         releaseRender();
         mSuperContainer.destroy();
-        detachViewContainer();
+        detachSuperContainer();
         setReceiverGroup(null);
     }
 }
