@@ -1,4 +1,6 @@
 ![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/playerbase_top_slogen.jpg)
+<br><br><br>
+**博文地址** ：[Android播放器基础封装库PlayerBase](https://juejin.im/post/5b0d4e6bf265da090f7376d2)
 # 介绍
 **请注意！** **请注意！** **请注意！** **PlayerBase**区别于大部分播放器封装库。
 
