@@ -40,6 +40,10 @@ demo示例集成了播放控制组件**ControllerCover**、加载中组件**Load
 <br>
 <img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/qrcode.png" width="180" height="180">
 
+# 交流群
+<img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/qrcode_qq_group.jpg" width="270" height="370">
+
+
 # 特色
 完全将解码器与播放视图组件化处理。不染指任何具体的业务，可随意接入其他播放器，组件完全由用户自定义，组件即插即用。让使用变的更加灵活。如下代码示例，需要什么视图就添加什么视图，不需要时可随时移除。
 
