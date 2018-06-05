@@ -84,6 +84,18 @@ public class DetailPageActivity extends AppCompatActivity implements OnReceiverE
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        AssistPlayer.get().pause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AssistPlayer.get().resume();
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
         mOrientationHelper.disable();

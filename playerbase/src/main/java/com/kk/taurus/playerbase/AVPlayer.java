@@ -60,10 +60,19 @@ public final class AVPlayer implements IPlayer{
     private int mDecoderPlanId;
 
     public AVPlayer(){
+        //default load config plan id.
+        this(PlayerConfig.getDefaultPlanId());
+    }
+
+    /**
+     * setting a decoder plan id for init instance.
+     * @param decoderPlanId
+     */
+    public AVPlayer(int decoderPlanId){
         //init timer counter proxy.
         mTimerCounterProxy = new TimerCounterProxy(1000);
         //init internal player instance.
-        loadInternalPlayer(PlayerConfig.getDefaultPlanId());
+        loadInternalPlayer(decoderPlanId);
     }
 
     /**

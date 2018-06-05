@@ -66,8 +66,6 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
 
     private int mVideoWidth, mVideoHeight;
 
-    private int mBufferPercentage;
-
     private int mStartPos = -1;
 
     private boolean isPreparing = true;
@@ -308,13 +306,13 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
 
         @Override
         public void onLoadingChanged(boolean isLoading) {
-            mBufferPercentage = mInternalPlayer.getBufferedPercentage();
+            int bufferPercentage = mInternalPlayer.getBufferedPercentage();
             if(!isLoading){
                 Bundle bundle = BundlePool.obtain();
-                bundle.putInt(EventKey.INT_DATA, mBufferPercentage);
+                bundle.putInt(EventKey.INT_DATA, bufferPercentage);
                 submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_BUFFERING_UPDATE,bundle);
             }
-            PLog.d(TAG,"onLoadingChanged : "+ isLoading + ", bufferPercentage = " + mBufferPercentage);
+            PLog.d(TAG,"onLoadingChanged : "+ isLoading + ", bufferPercentage = " + bufferPercentage);
         }
 
         @Override
