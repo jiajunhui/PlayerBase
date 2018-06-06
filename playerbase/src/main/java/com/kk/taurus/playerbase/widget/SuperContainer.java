@@ -33,6 +33,7 @@ import com.kk.taurus.playerbase.extension.ProducerGroup;
 import com.kk.taurus.playerbase.extension.ProducerEventSender;
 import com.kk.taurus.playerbase.log.PLog;
 import com.kk.taurus.playerbase.receiver.BaseReceiver;
+import com.kk.taurus.playerbase.receiver.StateGetterImpl;
 import com.kk.taurus.playerbase.touch.OnTouchGestureListener;
 import com.kk.taurus.playerbase.receiver.BaseCover;
 import com.kk.taurus.playerbase.receiver.DefaultLevelCoverContainer;
@@ -65,6 +66,8 @@ public class SuperContainer extends FrameLayout implements OnTouchGestureListene
 
     private IProducerGroup mProducerGroup;
 
+    private StateGetterImpl mStateGetter;
+
     public SuperContainer(@NonNull Context context) {
         super(context);
         init(context);
@@ -78,6 +81,7 @@ public class SuperContainer extends FrameLayout implements OnTouchGestureListene
     }
 
     private void initBaseInfo(Context context) {
+        mStateGetter = new StateGetterImpl();
         mProducerGroup = new ProducerGroup(new ProducerEventSender(mDelegateReceiverEventSender));
     }
 
@@ -132,8 +136,13 @@ public class SuperContainer extends FrameLayout implements OnTouchGestureListene
     }
 
     public final void dispatchPlayEvent(int eventCode, Bundle bundle){
+        handleStateGetter(eventCode, bundle);
         if(mEventDispatcher !=null)
             mEventDispatcher.dispatchPlayEvent(eventCode, bundle);
+    }
+
+    private void handleStateGetter(int eventCode, Bundle bundle) {
+        mStateGetter.proxyPlayerEvent(eventCode, bundle);
     }
 
     public final void dispatchErrorEvent(int eventCode, Bundle bundle){
@@ -217,6 +226,7 @@ public class SuperContainer extends FrameLayout implements OnTouchGestureListene
     private void attachReceiver(IReceiver receiver){
         //bind the ReceiverEventListener for receivers connect.
         receiver.bindReceiverEventListener(mInternalReceiverEventListener);
+        receiver.bindStateGetter(mStateGetter);
         PLog.d(TAG, "ReceiverEventListener bind : " + ((BaseReceiver)receiver).getTag());
         if(receiver instanceof BaseCover){
             //add cover view to cover strategy container.
@@ -229,6 +239,7 @@ public class SuperContainer extends FrameLayout implements OnTouchGestureListene
     private void detachReceiver(IReceiver receiver){
         //unbind the ReceiverEventListener for receivers connect.
         receiver.bindReceiverEventListener(null);
+        receiver.bindStateGetter(null);
         PLog.w(TAG, "ReceiverEventListener unbind : " + ((BaseReceiver)receiver).getTag());
         if(receiver instanceof BaseCover){
             //remove cover view to cover strategy container.

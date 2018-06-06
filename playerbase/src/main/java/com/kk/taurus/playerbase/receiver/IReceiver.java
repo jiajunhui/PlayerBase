@@ -52,10 +52,16 @@ public interface IReceiver {
     void onErrorEvent(int eventCode, Bundle bundle);
 
     /**
+     * bind a state getter.
+     * @param stateGetter
+     */
+    void bindStateGetter(StateGetter stateGetter);
+
+    /**
      * bind the bridge of receivers communication
      * @param onReceiverEventListener
      */
-    void bindReceiverEventListener(@NonNull OnReceiverEventListener onReceiverEventListener);
+    void bindReceiverEventListener(OnReceiverEventListener onReceiverEventListener);
 
     /**
      * receivers event.

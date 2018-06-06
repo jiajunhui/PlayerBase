@@ -28,12 +28,13 @@ import com.kk.taurus.playerbase.log.PLog;
  * Created by Taurus on 2018/3/17.
  */
 
-public abstract class BaseReceiver implements IReceiver {
+public abstract class BaseReceiver implements IReceiver, StateGetter {
 
     private Context mContext;
     private OnReceiverEventListener mOnReceiverEventListener;
 
     private IReceiverGroup mHostGroup;
+    private StateGetter mStateGetter;
 
     /**
      * If you want to use Activity related functions or features,
@@ -77,6 +78,19 @@ public abstract class BaseReceiver implements IReceiver {
         return mHostGroup.getGroupValue();
     }
 
+    @Override
+    public final void bindStateGetter(StateGetter stateGetter) {
+        this.mStateGetter = stateGetter;
+    }
+
+    @Override
+    @Nullable
+    public final PlayerStateGetter getPlayerStateGetter() {
+        if(mStateGetter!=null)
+            return mStateGetter.getPlayerStateGetter();
+        return null;
+    }
+
     /**
      * Bind the listener. This method is called by the inside of the framework.
      * Please do not call this method.
@@ -84,7 +98,7 @@ public abstract class BaseReceiver implements IReceiver {
      * @param onReceiverEventListener
      */
     @Override
-    public final void bindReceiverEventListener(@NonNull OnReceiverEventListener onReceiverEventListener) {
+    public final void bindReceiverEventListener(OnReceiverEventListener onReceiverEventListener) {
         this.mOnReceiverEventListener = onReceiverEventListener;
     }
 

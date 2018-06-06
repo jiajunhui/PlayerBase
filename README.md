@@ -78,7 +78,7 @@ demo示例集成了播放控制组件**ControllerCover**、加载中组件**Load
 
 ```gradle
 dependencies {
-  compile 'com.kk.taurus.playerbase:playerbase:3.2.7.3'
+  compile 'com.kk.taurus.playerbase:playerbase:3.2.7.4'
 }
 ```
 

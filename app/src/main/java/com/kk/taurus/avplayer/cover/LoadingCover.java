@@ -8,6 +8,7 @@ import com.kk.taurus.avplayer.R;
 import com.kk.taurus.playerbase.event.OnPlayerEventListener;
 import com.kk.taurus.playerbase.receiver.BaseCover;
 import com.kk.taurus.playerbase.receiver.ICover;
+import com.kk.taurus.playerbase.receiver.PlayerStateGetter;
 
 /**
  * Created by Taurus on 2018/4/15.
@@ -17,6 +18,15 @@ public class LoadingCover extends BaseCover {
 
     public LoadingCover(Context context) {
         super(context);
+    }
+
+    @Override
+    protected void onCoverAttachedToWindow() {
+        super.onCoverAttachedToWindow();
+        PlayerStateGetter playerStateGetter = getPlayerStateGetter();
+        if(playerStateGetter!=null){
+            setLoadingState(playerStateGetter.isBuffering());
+        }
     }
 
     @Override
