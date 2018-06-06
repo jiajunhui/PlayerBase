@@ -64,10 +64,11 @@ public class WindowSwitchPlayActivity extends AppCompatActivity {
         mWindowVideoContainer = new FrameLayout(this);
         mFloatWindow = new FloatWindow(this, mWindowVideoContainer,
                                         new FloatWindowParams()
-                                            .setX(100)
-                                            .setY(400)
-                                            .setWidth(width)
-                                            .setHeight(width*9/16));
+                                                .setWindowType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT)
+                                                .setX(100)
+                                                .setY(400)
+                                                .setWidth(width)
+                                                .setHeight(width*9/16));
         mFloatWindow.setBackgroundColor(Color.BLACK);
 
         mAssist = new RelationAssist(this);

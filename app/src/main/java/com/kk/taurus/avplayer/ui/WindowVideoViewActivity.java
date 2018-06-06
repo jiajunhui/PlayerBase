@@ -40,6 +40,7 @@ public class WindowVideoViewActivity extends AppCompatActivity {
         int height = width * 9/16;
         mWindowVideoView = new WindowVideoView(this,
                 new FloatWindowParams()
+                        .setWindowType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT)
                         .setX(100)
                         .setY(100)
                         .setWidth(width)
