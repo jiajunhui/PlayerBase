@@ -141,6 +141,9 @@ receiverGroup.addReceiver(KEY_COMPLETE_COVER, new CompleteCover(context));
 receiverGroup.addReceiver(KEY_ERROR_COVER, new ErrorCover(context));
 mVideoView.setReceiverGroup(receiverGroup);
 
+//设置一个事件处理器
+mVideoView.setEventHandler(new OnVideoViewEventHandler());
+
 //设置数据提供者 MonitorDataProvider
 mVideoView.setDataProvider(new MonitorDataProvider());
 mVideoView.setDataSource(mDataSource);
