@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.kk.taurus.avplayer.R;
 import com.kk.taurus.playerbase.event.OnPlayerEventListener;
+import com.kk.taurus.playerbase.player.IPlayer;
 import com.kk.taurus.playerbase.receiver.BaseCover;
 import com.kk.taurus.playerbase.receiver.ICover;
 import com.kk.taurus.playerbase.receiver.PlayerStateGetter;
@@ -24,9 +25,18 @@ public class LoadingCover extends BaseCover {
     protected void onCoverAttachedToWindow() {
         super.onCoverAttachedToWindow();
         PlayerStateGetter playerStateGetter = getPlayerStateGetter();
-        if(playerStateGetter!=null){
+        if(playerStateGetter!=null && isInPlaybackState(playerStateGetter)){
             setLoadingState(playerStateGetter.isBuffering());
         }
+    }
+
+    private boolean isInPlaybackState(PlayerStateGetter playerStateGetter){
+        int state = playerStateGetter.getState();
+        return state!= IPlayer.STATE_END
+                && state!= IPlayer.STATE_ERROR
+                && state!= IPlayer.STATE_IDLE
+                && state!= IPlayer.STATE_INITIALIZED
+                && state!= IPlayer.STATE_STOPPED;
     }
 
     @Override
