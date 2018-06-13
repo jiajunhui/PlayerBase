@@ -66,7 +66,7 @@ public class CompleteCover extends BaseCover {
     @Override
     protected void onCoverDetachedToWindow() {
         super.onCoverDetachedToWindow();
-//        setPlayCompleteState(false);
+        setCoverVisibility(View.GONE);
     }
 
     @Override

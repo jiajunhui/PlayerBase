@@ -106,7 +106,7 @@ public class LocalVideoListActivity extends AppCompatActivity
     private void attachFullScreen(){
         mReceiverGroup.addReceiver(DataInter.ReceiverKey.KEY_GESTURE_COVER, new GestureCover(this));
         mReceiverGroup.getGroupValue().putBoolean(DataInter.Key.KEY_CONTROLLER_TOP_ENABLE, true);
-        if(AssistPlayer.get().isPlaying())
+//        if(AssistPlayer.get().isPlaying())
             AssistPlayer.get().play(mContainer,null);
     }
 
