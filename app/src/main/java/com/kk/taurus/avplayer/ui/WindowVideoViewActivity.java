@@ -1,6 +1,7 @@
 package com.kk.taurus.avplayer.ui;
 
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -38,9 +39,17 @@ public class WindowVideoViewActivity extends AppCompatActivity {
         int SW = getResources().getDisplayMetrics().widthPixels;
         int width = (int) (SW * 0.7f);
         int height = width * 9/16;
+
+        int type;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){//8.0+
+            type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+        }else {
+            type =  WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+        }
+
         mWindowVideoView = new WindowVideoView(this,
                 new FloatWindowParams()
-                        .setWindowType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT)
+                        .setWindowType(type)
                         .setX(100)
                         .setY(100)
                         .setWidth(width)

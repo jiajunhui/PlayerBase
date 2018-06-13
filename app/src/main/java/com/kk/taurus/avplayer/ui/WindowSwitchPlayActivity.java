@@ -3,6 +3,7 @@ package com.kk.taurus.avplayer.ui;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -61,10 +62,18 @@ public class WindowSwitchPlayActivity extends AppCompatActivity {
 
         int widthPixels = getResources().getDisplayMetrics().widthPixels;
         int width = (int) (widthPixels * 0.8f);
+
+        int type;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){//8.0+
+            type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+        }else {
+            type =  WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+        }
+
         mWindowVideoContainer = new FrameLayout(this);
         mFloatWindow = new FloatWindow(this, mWindowVideoContainer,
                                         new FloatWindowParams()
-                                                .setWindowType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT)
+                                                .setWindowType(type)
                                                 .setX(100)
                                                 .setY(400)
                                                 .setWidth(width)
