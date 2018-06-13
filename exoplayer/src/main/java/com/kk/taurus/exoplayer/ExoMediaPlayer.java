@@ -221,12 +221,14 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
 
     @Override
     public void pause() {
-        mInternalPlayer.setPlayWhenReady(false);
+        if(isInPlaybackState())
+            mInternalPlayer.setPlayWhenReady(false);
     }
 
     @Override
     public void resume() {
-        mInternalPlayer.setPlayWhenReady(true);
+        if(isInPlaybackState())
+            mInternalPlayer.setPlayWhenReady(true);
     }
 
     @Override
@@ -320,12 +322,14 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
             PLog.d(TAG,"onPlayerStateChanged : playWhenReady = "+ playWhenReady
                     + ", playbackState = " + playbackState);
 
-            if(playWhenReady){
-                updateStatus(IPlayer.STATE_STARTED);
-                submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_RESUME, null);
-            }else{
-                updateStatus(IPlayer.STATE_PAUSED);
-                submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_PAUSE, null);
+            if(!isPreparing){
+                if(playWhenReady){
+                    updateStatus(IPlayer.STATE_STARTED);
+                    submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_RESUME, null);
+                }else{
+                    updateStatus(IPlayer.STATE_PAUSED);
+                    submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_PAUSE, null);
+                }
             }
 
             if(isPreparing){
@@ -365,19 +369,21 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
                 }
             }
 
-            switch (playbackState){
-                case Player.STATE_BUFFERING:
-                    long bitrateEstimate = mBandwidthMeter.getBitrateEstimate();
-                    PLog.d(TAG,"buffer_start, BandWidth : " + bitrateEstimate);
-                    isBuffering = true;
-                    Bundle bundle = BundlePool.obtain();
-                    bundle.putLong(EventKey.LONG_DATA, bitrateEstimate);
-                    submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_BUFFERING_START, bundle);
-                    break;
-                case Player.STATE_ENDED:
-                    updateStatus(IPlayer.STATE_PLAYBACK_COMPLETE);
-                    submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_PLAY_COMPLETE, null);
-                    break;
+            if(!isPreparing){
+                switch (playbackState){
+                    case Player.STATE_BUFFERING:
+                        long bitrateEstimate = mBandwidthMeter.getBitrateEstimate();
+                        PLog.d(TAG,"buffer_start, BandWidth : " + bitrateEstimate);
+                        isBuffering = true;
+                        Bundle bundle = BundlePool.obtain();
+                        bundle.putLong(EventKey.LONG_DATA, bitrateEstimate);
+                        submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_BUFFERING_START, bundle);
+                        break;
+                    case Player.STATE_ENDED:
+                        updateStatus(IPlayer.STATE_PLAYBACK_COMPLETE);
+                        submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_PLAY_COMPLETE, null);
+                        break;
+                }
             }
 
         }

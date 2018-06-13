@@ -201,6 +201,15 @@ public final class RelationAssist implements AssistPlay {
         return mPlayer.switchDecoder(decoderPlanId);
     }
 
+    /**
+     * see also {@link AVPlayer#option(int, Bundle)}
+     * @param code
+     * @param bundle
+     */
+    public void option(int code, Bundle bundle){
+        mPlayer.option(code, bundle);
+    }
+
     @Override
     public void setReceiverGroup(ReceiverGroup receiverGroup) {
         this.mReceiverGroup = receiverGroup;
@@ -313,6 +322,7 @@ public final class RelationAssist implements AssistPlay {
     }
 
     private void releaseRender(){
+        mRenderHolder = null;
         if(mRender!=null)
             mRender.release();
     }
