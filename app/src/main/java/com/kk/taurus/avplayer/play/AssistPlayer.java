@@ -172,7 +172,8 @@ public class AssistPlayer {
                 && receiverGroup.getGroupValue().getBoolean(DataInter.Key.KEY_ERROR_SHOW)){
             return;
         }
-        mRelationAssist.play();
+        if(dataSource!=null)
+            mRelationAssist.play();
     }
 
     public void setDataProvider(IDataProvider dataProvider){

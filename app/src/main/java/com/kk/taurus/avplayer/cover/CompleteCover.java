@@ -56,9 +56,17 @@ public class CompleteCover extends BaseCover {
     }
 
     @Override
+    protected void onCoverAttachedToWindow() {
+        super.onCoverAttachedToWindow();
+        if(getGroupValue().getBoolean(DataInter.Key.KEY_COMPLETE_SHOW)){
+            setPlayCompleteState(true);
+        }
+    }
+
+    @Override
     protected void onCoverDetachedToWindow() {
         super.onCoverDetachedToWindow();
-        setPlayCompleteState(false);
+//        setPlayCompleteState(false);
     }
 
     @Override
