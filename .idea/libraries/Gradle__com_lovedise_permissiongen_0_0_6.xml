@@ -1,8 +1,8 @@
 <component name="libraryTable">
   <library name="Gradle: com.lovedise:permissiongen-0.0.6">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/permissiongen-0.0.6.aar/6cf76e2d220c2412e8d91d0827d6f0b3/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/permissiongen-0.0.6.aar/6cf76e2d220c2412e8d91d0827d6f0b3/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/permissiongen-0.0.6.aar/03d802379d5d9540a51649238242b813/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/permissiongen-0.0.6.aar/03d802379d5d9540a51649238242b813/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>

@@ -164,10 +164,13 @@ public class AssistPlayer {
             this.mDataSource = dataSource;
         }
         attachListener();
+        ReceiverGroup receiverGroup = getReceiverGroup();
+        if(receiverGroup!=null && dataSource!=null){
+            receiverGroup.getGroupValue().putBoolean(DataInter.Key.KEY_COMPLETE_SHOW, false);
+        }
         mRelationAssist.attachContainer(userContainer);
         if(dataSource!=null)
             mRelationAssist.setDataSource(dataSource);
-        ReceiverGroup receiverGroup = getReceiverGroup();
         if(receiverGroup!=null
                 && receiverGroup.getGroupValue().getBoolean(DataInter.Key.KEY_ERROR_SHOW)){
             return;
