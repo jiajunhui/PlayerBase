@@ -20,6 +20,8 @@ import android.animation.Animator;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v4.view.ViewCompat;
 import android.view.MotionEvent;
 import android.view.View;
@@ -73,26 +75,31 @@ public class FloatWindow extends FrameLayout implements IWindow, IStyleSetter{
     }
 
     @Override
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void setRoundRectShape(float radius) {
         mStyleSetter.setRoundRectShape(radius);
     }
 
     @Override
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void setRoundRectShape(Rect rect, float radius) {
         mStyleSetter.setRoundRectShape(rect, radius);
     }
 
     @Override
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void setOvalRectShape() {
         mStyleSetter.setOvalRectShape();
     }
 
     @Override
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void setOvalRectShape(Rect rect) {
         mStyleSetter.setOvalRectShape(rect);
     }
 
     @Override
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void clearShapeStyle() {
         mStyleSetter.clearShapeStyle();
     }

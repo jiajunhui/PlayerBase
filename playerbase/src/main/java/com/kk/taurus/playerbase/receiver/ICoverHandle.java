@@ -27,5 +27,9 @@ public interface ICoverHandle {
     void requestReset(Bundle bundle);
     void requestRetry(Bundle bundle);
     void requestReplay(Bundle bundle);
+    void requestPlayDataSource(Bundle bundle);
+
+    void requestNotifyTimer();
+    void requestStopTimer();
 
 }

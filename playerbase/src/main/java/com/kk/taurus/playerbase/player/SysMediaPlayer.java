@@ -68,6 +68,7 @@ public class SysMediaPlayer extends BaseInternalPlayer {
             if(mMediaPlayer==null){
                 mMediaPlayer = new MediaPlayer();
             }else{
+                stop();
                 reset();
                 resetListener();
             }
@@ -127,7 +128,7 @@ public class SysMediaPlayer extends BaseInternalPlayer {
                 submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_SURFACE_HOLDER_UPDATE, null);
             }
         }catch (Exception e){
-            e.printStackTrace();
+            handleException(e);
         }
     }
 
@@ -139,7 +140,7 @@ public class SysMediaPlayer extends BaseInternalPlayer {
                 submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_SURFACE_UPDATE, null);
             }
         }catch (Exception e){
-            e.printStackTrace();
+            handleException(e);
         }
     }
 
@@ -227,7 +228,7 @@ public class SysMediaPlayer extends BaseInternalPlayer {
                 submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_START, null);
             }
         }catch (Exception e){
-            e.printStackTrace();
+            handleException(e);
         }
         mTargetState = STATE_STARTED;
     }
@@ -251,7 +252,7 @@ public class SysMediaPlayer extends BaseInternalPlayer {
                 submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_PAUSE, null);
             }
         }catch (Exception e){
-            e.printStackTrace();
+            handleException(e);
         }
         mTargetState = STATE_PAUSED;
     }
@@ -265,7 +266,7 @@ public class SysMediaPlayer extends BaseInternalPlayer {
                 submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_RESUME, null);
             }
         }catch (Exception e){
-            e.printStackTrace();
+            handleException(e);
         }
         mTargetState = STATE_STARTED;
     }
@@ -318,6 +319,12 @@ public class SysMediaPlayer extends BaseInternalPlayer {
         }
     }
 
+    private void handleException(Exception e){
+        if(e!=null)
+            e.printStackTrace();
+        reset();
+    }
+
     private void resetListener(){
         if(mMediaPlayer==null)
             return;
@@ -344,7 +351,8 @@ public class SysMediaPlayer extends BaseInternalPlayer {
 
             int seekToPosition = startSeekPos;  // mSeekWhenPrepared may be changed after seekTo() call
             if (seekToPosition != 0) {
-                seekTo(seekToPosition);
+                //seek to start position
+                mMediaPlayer.seekTo(seekToPosition);
                 startSeekPos = 0;
             }
 
@@ -454,15 +462,35 @@ public class SysMediaPlayer extends BaseInternalPlayer {
                     updateStatus(STATE_ERROR);
                     mTargetState = STATE_ERROR;
 
+                    int eventCode = OnErrorEventListener.ERROR_EVENT_COMMON;
+
                     switch (framework_err){
-                        case 100:
-//                            release(true);
+                        case MediaPlayer.MEDIA_ERROR_IO:
+                            eventCode = OnErrorEventListener.ERROR_EVENT_IO;
+                            break;
+                        case MediaPlayer.MEDIA_ERROR_MALFORMED:
+                            eventCode = OnErrorEventListener.ERROR_EVENT_MALFORMED;
+                            break;
+                        case MediaPlayer.MEDIA_ERROR_TIMED_OUT:
+                            eventCode = OnErrorEventListener.ERROR_EVENT_TIMED_OUT;
+                            break;
+                        case MediaPlayer.MEDIA_ERROR_UNKNOWN:
+                            eventCode = OnErrorEventListener.ERROR_EVENT_UNKNOWN;
+                            break;
+                        case MediaPlayer.MEDIA_ERROR_UNSUPPORTED:
+                            eventCode = OnErrorEventListener.ERROR_EVENT_UNSUPPORTED;
+                            break;
+                        case MediaPlayer.MEDIA_ERROR_SERVER_DIED:
+                            eventCode = OnErrorEventListener.ERROR_EVENT_SERVER_DIED;
+                            break;
+                        case MediaPlayer.MEDIA_ERROR_NOT_VALID_FOR_PROGRESSIVE_PLAYBACK:
+                            eventCode = OnErrorEventListener.ERROR_EVENT_NOT_VALID_FOR_PROGRESSIVE_PLAYBACK;
                             break;
                     }
 
                     /* If an error handler has been supplied, use it and finish. */
                     Bundle bundle = BundlePool.obtain();
-                    submitErrorEvent(OnErrorEventListener.ERROR_EVENT_COMMON,bundle);
+                    submitErrorEvent(eventCode,bundle);
                     return true;
                 }
             };
@@ -470,9 +498,7 @@ public class SysMediaPlayer extends BaseInternalPlayer {
     private MediaPlayer.OnBufferingUpdateListener mBufferingUpdateListener =
             new MediaPlayer.OnBufferingUpdateListener() {
                 public void onBufferingUpdate(MediaPlayer mp, int percent) {
-                    Bundle bundle = BundlePool.obtain();
-                    bundle.putInt(EventKey.INT_DATA,percent);
-                    submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_BUFFERING_UPDATE, bundle);
+                    submitBufferingUpdate(percent, null);
                 }
             };
 }

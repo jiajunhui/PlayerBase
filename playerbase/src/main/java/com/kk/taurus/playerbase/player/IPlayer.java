@@ -57,6 +57,10 @@ public interface IPlayer {
     void setOnPlayerEventListener(OnPlayerEventListener onPlayerEventListener);
     void setOnErrorEventListener(OnErrorEventListener onErrorEventListener);
 
+    void setOnBufferingListener(OnBufferingListener onBufferingListener);
+
+    int getBufferPercentage();
+
     boolean isPlaying();
     int getCurrentPosition();
     int getDuration();

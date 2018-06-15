@@ -16,9 +16,7 @@
 
 package com.kk.taurus.playerbase.style;
 
-import android.annotation.TargetApi;
 import android.graphics.Rect;
-import android.os.Build;
 
 /**
  * Created by Taurus on 2017/12/9.
@@ -26,19 +24,14 @@ import android.os.Build;
 
 public interface IStyleSetter {
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     void setRoundRectShape(float radius);
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     void setRoundRectShape(Rect rect, float radius);
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     void setOvalRectShape();
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     void setOvalRectShape(Rect rect);
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     void clearShapeStyle();
 
     void setElevationShadow(float elevation);

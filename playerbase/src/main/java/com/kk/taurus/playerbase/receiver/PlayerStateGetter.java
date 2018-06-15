@@ -20,6 +20,12 @@ public interface PlayerStateGetter {
 
     int getState();
 
+    int getCurrentPosition();
+
+    int getDuration();
+
+    int getBufferPercentage();
+
     boolean isBuffering();
 
 }

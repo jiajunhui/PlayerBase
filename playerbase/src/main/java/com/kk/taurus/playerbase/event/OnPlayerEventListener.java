@@ -85,6 +85,7 @@ public interface OnPlayerEventListener {
     /**
      * when decoder buffering percentage update
      */
+    @Deprecated
     int PLAYER_EVENT_ON_BUFFERING_UPDATE = -99012;
 
     /**
@@ -119,6 +120,7 @@ public interface OnPlayerEventListener {
 
     /**
      * on player timer counter update {@link TimerCounterProxy}
+     * if timer stopped, you could not receive this event code.
      */
     int PLAYER_EVENT_ON_TIMER_UPDATE = -99019;
 

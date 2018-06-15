@@ -31,7 +31,9 @@ import com.kk.taurus.playerbase.extension.NetworkEventProducer;
 import com.kk.taurus.playerbase.player.IPlayer;
 import com.kk.taurus.playerbase.provider.IDataProvider;
 import com.kk.taurus.playerbase.receiver.OnReceiverEventListener;
+import com.kk.taurus.playerbase.receiver.PlayerStateGetter;
 import com.kk.taurus.playerbase.receiver.ReceiverGroup;
+import com.kk.taurus.playerbase.receiver.StateGetter;
 import com.kk.taurus.playerbase.render.IRender;
 import com.kk.taurus.playerbase.render.RenderSurfaceView;
 import com.kk.taurus.playerbase.render.RenderTextureView;
@@ -73,6 +75,8 @@ public final class RelationAssist implements AssistPlay {
     private int mVideoWidth,mVideoHeight;
     private int mVideoSarNum,mVideoSarDen;
 
+    private boolean isBuffering;
+
     private OnPlayerEventListener mOnPlayerEventListener;
     private OnErrorEventListener mOnErrorEventListener;
     private OnReceiverEventListener mOnReceiverEventListener;
@@ -92,6 +96,7 @@ public final class RelationAssist implements AssistPlay {
         if(PlayerConfig.isUseDefaultNetworkEventProducer())
             superContainer.addEventProducer(new NetworkEventProducer(context));
         mSuperContainer = superContainer;
+        mSuperContainer.setStateGetter(mInternalStateGetter);
     }
 
     public SuperContainer getSuperContainer() {
@@ -110,6 +115,43 @@ public final class RelationAssist implements AssistPlay {
         mSuperContainer.setOnReceiverEventListener(null);
     }
 
+    //Internal StateGetter for SuperContainer
+    private StateGetter mInternalStateGetter = new StateGetter() {
+        @Override
+        public PlayerStateGetter getPlayerStateGetter() {
+            return mInternalPlayerStateGetter;
+        }
+    };
+
+    //Internal PlayerStateGetter for StateGetter
+    private PlayerStateGetter mInternalPlayerStateGetter =
+            new PlayerStateGetter() {
+        @Override
+        public int getState() {
+            return mPlayer.getState();
+        }
+
+        @Override
+        public int getCurrentPosition() {
+            return mPlayer.getCurrentPosition();
+        }
+
+        @Override
+        public int getDuration() {
+            return mPlayer.getDuration();
+        }
+
+        @Override
+        public int getBufferPercentage() {
+            return mPlayer.getBufferPercentage();
+        }
+
+        @Override
+        public boolean isBuffering() {
+            return isBuffering;
+        }
+    };
+
     private OnPlayerEventListener mInternalPlayerEventListener =
             new OnPlayerEventListener() {
         @Override
@@ -122,21 +164,38 @@ public final class RelationAssist implements AssistPlay {
     };
 
     private void onInternalHandlePlayerEvent(int eventCode, Bundle bundle) {
-        if(eventCode== OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_SIZE_CHANGE){
-            mVideoWidth = bundle.getInt(EventKey.INT_ARG1);
-            mVideoHeight = bundle.getInt(EventKey.INT_ARG2);
-            mVideoSarNum = bundle.getInt(EventKey.INT_ARG3);
-            mVideoSarDen = bundle.getInt(EventKey.INT_ARG4);
-            if(mRender!=null){
-                mRender.updateVideoSize(mVideoWidth, mVideoHeight);
-                mRender.setVideoSampleAspectRatio(mVideoSarNum, mVideoSarDen);
-            }
-        }else if(eventCode== OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_ROTATION_CHANGED){
-            mVideoRotation = bundle.getInt(EventKey.INT_DATA);
-            if(mRender!=null)
-                mRender.setVideoRotation(mVideoRotation);
-        }else if(eventCode== OnPlayerEventListener.PLAYER_EVENT_ON_PREPARED){
-            bindRenderHolder(mRenderHolder);
+        switch (eventCode){
+            //when get video size , need update render for measure.
+            case OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_SIZE_CHANGE:
+                if(bundle!=null){
+                    mVideoWidth = bundle.getInt(EventKey.INT_ARG1);
+                    mVideoHeight = bundle.getInt(EventKey.INT_ARG2);
+                    mVideoSarNum = bundle.getInt(EventKey.INT_ARG3);
+                    mVideoSarDen = bundle.getInt(EventKey.INT_ARG4);
+                    if(mRender!=null){
+                        mRender.updateVideoSize(mVideoWidth, mVideoHeight);
+                        mRender.setVideoSampleAspectRatio(mVideoSarNum, mVideoSarDen);
+                    }
+                }
+                break;
+            //when get video rotation, need update render rotation.
+            case OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_ROTATION_CHANGED:
+                if(bundle!=null){
+                    mVideoRotation = bundle.getInt(EventKey.INT_DATA);
+                    if(mRender!=null)
+                        mRender.setVideoRotation(mVideoRotation);
+                }
+                break;
+            //when prepared bind surface.
+            case OnPlayerEventListener.PLAYER_EVENT_ON_PREPARED:
+                bindRenderHolder(mRenderHolder);
+                break;
+            case OnPlayerEventListener.PLAYER_EVENT_ON_BUFFERING_START:
+                isBuffering = true;
+                break;
+            case OnPlayerEventListener.PLAYER_EVENT_ON_BUFFERING_END:
+                isBuffering = false;
+                break;
         }
     }
 
@@ -163,6 +222,11 @@ public final class RelationAssist implements AssistPlay {
             new OnReceiverEventListener() {
         @Override
         public void onReceiverEvent(int eventCode, Bundle bundle) {
+            if(eventCode == InterEvent.CODE_REQUEST_NOTIFY_TIMER){
+                mPlayer.setUseTimerProxy(true);
+            }else if(eventCode == InterEvent.CODE_REQUEST_STOP_TIMER){
+                mPlayer.setUseTimerProxy(false);
+            }
             //if setting AssistEventHandler, call back it to handle.
             if(mOnEventAssistHandler !=null)
                 mOnEventAssistHandler.onAssistHandle(RelationAssist.this, eventCode, bundle);

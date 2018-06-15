@@ -28,6 +28,7 @@ import com.kk.taurus.playerbase.log.PLog;
 import com.kk.taurus.playerbase.player.BaseInternalPlayer;
 import com.kk.taurus.playerbase.event.BundlePool;
 import com.kk.taurus.playerbase.event.EventKey;
+import com.kk.taurus.playerbase.player.OnBufferingListener;
 import com.kk.taurus.playerbase.provider.IDataProvider;
 import com.kk.taurus.playerbase.player.IPlayer;
 import com.kk.taurus.playerbase.event.OnErrorEventListener;
@@ -52,6 +53,7 @@ public final class AVPlayer implements IPlayer{
 
     private OnPlayerEventListener mOnPlayerEventListener;
     private OnErrorEventListener mOnErrorEventListener;
+    private OnBufferingListener mOnBufferingListener;
 
     private IDataProvider.OnProviderListener mOnProviderListener;
 
@@ -151,6 +153,7 @@ public final class AVPlayer implements IPlayer{
         if(mInternalPlayer!=null){
             mInternalPlayer.setOnPlayerEventListener(mInternalPlayerEventListener);
             mInternalPlayer.setOnErrorEventListener(mInternalErrorEventListener);
+            mInternalPlayer.setOnBufferingListener(mInternalBufferingListener);
         }
     }
 
@@ -160,6 +163,7 @@ public final class AVPlayer implements IPlayer{
         if(mInternalPlayer!=null){
             mInternalPlayer.setOnPlayerEventListener(null);
             mInternalPlayer.setOnErrorEventListener(null);
+            mInternalPlayer.setOnBufferingListener(null);
         }
     }
 
@@ -169,12 +173,14 @@ public final class AVPlayer implements IPlayer{
         public void onCounter() {
             int curr = getCurrentPosition();
             int duration = getDuration();
+            int bufferPercentage = getBufferPercentage();
             //check valid data.
             if(duration <= 0 || curr < 0)
                 return;
             Bundle bundle = BundlePool.obtain();
             bundle.putInt(EventKey.INT_ARG1, curr);
             bundle.putInt(EventKey.INT_ARG2, duration);
+            bundle.putInt(EventKey.INT_ARG3, bufferPercentage);
             callBackPlayEventListener(
                     OnPlayerEventListener.PLAYER_EVENT_ON_TIMER_UPDATE, bundle);
         }
@@ -198,6 +204,15 @@ public final class AVPlayer implements IPlayer{
         }
     };
 
+    private OnBufferingListener mInternalBufferingListener =
+            new OnBufferingListener() {
+        @Override
+        public void onBufferingUpdate(int bufferPercentage, Bundle extra) {
+            if(mOnBufferingListener!=null)
+                mOnBufferingListener.onBufferingUpdate(bufferPercentage, extra);
+        }
+    };
+
     //must last callback event listener , because bundle will be recycle after callback.
     private void callBackPlayEventListener(int eventCode, Bundle bundle) {
         if(mOnPlayerEventListener!=null)
@@ -218,6 +233,11 @@ public final class AVPlayer implements IPlayer{
     @Override
     public void setOnErrorEventListener(OnErrorEventListener onErrorEventListener) {
         this.mOnErrorEventListener = onErrorEventListener;
+    }
+
+    @Override
+    public void setOnBufferingListener(OnBufferingListener onBufferingListener) {
+        this.mOnBufferingListener = onBufferingListener;
     }
 
     public void setOnProviderListener(IDataProvider.OnProviderListener onProviderListener) {
@@ -424,6 +444,13 @@ public final class AVPlayer implements IPlayer{
     public int getState() {
         if(isPlayerAvailable())
             return mInternalPlayer.getState();
+        return 0;
+    }
+
+    @Override
+    public int getBufferPercentage() {
+        if(isPlayerAvailable())
+            return mInternalPlayer.getBufferPercentage();
         return 0;
     }
 

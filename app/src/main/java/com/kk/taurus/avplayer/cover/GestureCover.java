@@ -21,6 +21,7 @@ import com.kk.taurus.playerbase.event.EventKey;
 import com.kk.taurus.playerbase.event.OnPlayerEventListener;
 import com.kk.taurus.playerbase.receiver.BaseCover;
 import com.kk.taurus.playerbase.receiver.IReceiverGroup;
+import com.kk.taurus.playerbase.receiver.PlayerStateGetter;
 import com.kk.taurus.playerbase.touch.OnTouchGestureListener;
 import com.kk.taurus.playerbase.utils.TimeUtil;
 
@@ -51,8 +52,6 @@ public class GestureCover extends BaseCover implements OnTouchGestureListener {
 
     private int mSeekProgress = -1;
 
-    private int mCurrentPosition;
-    private int mDuration;
     private int mWidth,mHeight;
     private long newPosition;
 
@@ -212,10 +211,6 @@ public class GestureCover extends BaseCover implements OnTouchGestureListener {
     @Override
     public void onPlayerEvent(int eventCode, Bundle bundle) {
         switch (eventCode){
-            case OnPlayerEventListener.PLAYER_EVENT_ON_TIMER_UPDATE:
-                mCurrentPosition = bundle.getInt(EventKey.INT_ARG1);
-                mDuration = bundle.getInt(EventKey.INT_ARG2);
-                break;
             case OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_RENDER_START:
                 setGestureEnable(true);
                 break;
@@ -275,16 +270,26 @@ public class GestureCover extends BaseCover implements OnTouchGestureListener {
         }
     }
 
+    private int getDuration(){
+        PlayerStateGetter playerStateGetter = getPlayerStateGetter();
+        return playerStateGetter==null?0:playerStateGetter.getDuration();
+    }
+
+    private int getCurrentPosition(){
+        PlayerStateGetter playerStateGetter = getPlayerStateGetter();
+        return playerStateGetter==null?0:playerStateGetter.getCurrentPosition();
+    }
+
     private void onHorizontalSlide(float percent){
-        if(mDuration <= 0)
+        if(getDuration() <= 0)
             return;
         mHorizontalSlide = true;
         if(getGroupValue().getBoolean(DataInter.Key.KEY_TIMER_UPDATE_ENABLE)){
             getGroupValue().putBoolean(DataInter.Key.KEY_TIMER_UPDATE_ENABLE, false);
         }
-        long position = mCurrentPosition;
-        long duration = mDuration;
-        long deltaMax = Math.min(mDuration/2, duration - position);
+        long position = getCurrentPosition();
+        long duration = getDuration();
+        long deltaMax = Math.min(getDuration()/2, duration - position);
         long delta = (long) (deltaMax * percent);
         newPosition = delta + position;
         if (newPosition > duration) {

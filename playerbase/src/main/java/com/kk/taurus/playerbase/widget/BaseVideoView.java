@@ -16,7 +16,6 @@
 
 package com.kk.taurus.playerbase.widget;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Rect;
 import android.media.AudioManager;
@@ -24,10 +23,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.kk.taurus.playerbase.assist.InterEvent;
 import com.kk.taurus.playerbase.assist.OnVideoViewEventHandler;
 import com.kk.taurus.playerbase.config.PlayerConfig;
 import com.kk.taurus.playerbase.extension.NetworkEventProducer;
@@ -40,7 +41,9 @@ import com.kk.taurus.playerbase.provider.IDataProvider;
 import com.kk.taurus.playerbase.event.OnErrorEventListener;
 import com.kk.taurus.playerbase.event.OnPlayerEventListener;
 import com.kk.taurus.playerbase.receiver.OnReceiverEventListener;
+import com.kk.taurus.playerbase.receiver.PlayerStateGetter;
 import com.kk.taurus.playerbase.receiver.ReceiverGroup;
+import com.kk.taurus.playerbase.receiver.StateGetter;
 import com.kk.taurus.playerbase.render.AspectRatio;
 import com.kk.taurus.playerbase.render.IRender;
 import com.kk.taurus.playerbase.render.RenderSurfaceView;
@@ -79,8 +82,7 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
     private int mVideoWidth,mVideoHeight;
     private int mVideoSarNum,mVideoSarDen;
 
-    //the stream buffer percent
-    private int mBufferPercentage;
+    private boolean isBuffering;
 
     private OnVideoViewEventHandler mEventAssistHandler;
 
@@ -105,6 +107,7 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
         //init style setter.
         mStyleSetter = new StyleSetter(this);
         mSuperContainer = onCreateSuperContainer(context);
+        mSuperContainer.setStateGetter(mInternalStateGetter);
         mSuperContainer.setOnReceiverEventListener(mInternalReceiverEventListener);
         addView(mSuperContainer,
                 new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
@@ -172,8 +175,6 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
 
     @Override
     public void setDataSource(DataSource dataSource) {
-        //when data source set, buffer percent reset 0.
-        mBufferPercentage = 0;
         //init AudioManager
         requestAudioFocus();
         //Reconfigure the rendering view each time the resource is switched
@@ -223,10 +224,52 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
             new OnReceiverEventListener() {
         @Override
         public void onReceiverEvent(int eventCode, Bundle bundle) {
+            if(eventCode == InterEvent.CODE_REQUEST_NOTIFY_TIMER){
+                mPlayer.setUseTimerProxy(true);
+            }else if(eventCode == InterEvent.CODE_REQUEST_STOP_TIMER){
+                mPlayer.setUseTimerProxy(false);
+            }
             if(mEventAssistHandler!=null)
                 mEventAssistHandler.onAssistHandle(BaseVideoView.this, eventCode, bundle);
             if(mOnReceiverEventListener!=null)
                 mOnReceiverEventListener.onReceiverEvent(eventCode, bundle);
+        }
+    };
+
+    //Internal StateGetter for SuperContainer
+    private StateGetter mInternalStateGetter = new StateGetter() {
+        @Override
+        public PlayerStateGetter getPlayerStateGetter() {
+            return mInternalPlayerStateGetter;
+        }
+    };
+
+    //Internal PlayerStateGetter for StateGetter
+    private PlayerStateGetter mInternalPlayerStateGetter =
+            new PlayerStateGetter() {
+        @Override
+        public int getState() {
+            return mPlayer.getState();
+        }
+
+        @Override
+        public int getCurrentPosition() {
+            return mPlayer.getCurrentPosition();
+        }
+
+        @Override
+        public int getDuration() {
+            return mPlayer.getDuration();
+        }
+
+        @Override
+        public int getBufferPercentage() {
+            return mPlayer.getBufferPercentage();
+        }
+
+        @Override
+        public boolean isBuffering() {
+            return isBuffering;
         }
     };
 
@@ -318,7 +361,7 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
     //min 0, and max 100.
     @Override
     public int getBufferPercentage() {
-        return mBufferPercentage;
+        return mPlayer.getBufferPercentage();
     }
 
     /**
@@ -397,41 +440,46 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
             new OnPlayerEventListener() {
         @Override
         public void onPlayerEvent(int eventCode, Bundle bundle) {
-            //when get video size , need update render for measure.
-            if(eventCode==OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_SIZE_CHANGE
-                    && bundle!=null){
-                mVideoWidth = bundle.getInt(EventKey.INT_ARG1);
-                mVideoHeight = bundle.getInt(EventKey.INT_ARG2);
-                mVideoSarNum = bundle.getInt(EventKey.INT_ARG3);
-                mVideoSarDen = bundle.getInt(EventKey.INT_ARG4);
-                PLog.d(TAG,"onVideoSizeChange : videoWidth = " + mVideoWidth
-                        + ", videoHeight = " + mVideoHeight
-                        + ", videoSarNum = " + mVideoSarNum
-                        + ", videoSarDen = " + mVideoSarDen);
-                if(mRender!=null){
-                    //update video size
-                    mRender.updateVideoSize(mVideoWidth, mVideoHeight);
-                    //update video sarNum,sarDen
-                    mRender.setVideoSampleAspectRatio(mVideoSarNum, mVideoSarDen);
-                }
-            }
-            //when get video rotation, need update render rotation.
-            else if(eventCode==OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_ROTATION_CHANGED
-                    && bundle!=null){
-                //if rotation change need update render.
-                mVideoRotation = bundle.getInt(EventKey.INT_DATA);
-                PLog.d(TAG,"onVideoRotationChange : videoRotation = " + mVideoRotation);
-                if(mRender!=null)
-                    mRender.setVideoRotation(mVideoRotation);
-            }
-            //when prepared bind surface.
-            else if(eventCode==OnPlayerEventListener.PLAYER_EVENT_ON_PREPARED){
-                bindRenderHolder(mRenderHolder);
-            }
-            //when bufferPercentage update
-            else if(eventCode==OnPlayerEventListener.PLAYER_EVENT_ON_BUFFERING_UPDATE){
-                mBufferPercentage = bundle.getInt(EventKey.INT_DATA);
-                PLog.d(TAG,"bufferUpdate : bufferPercentage = " + mBufferPercentage);
+            switch (eventCode){
+                //when get video size , need update render for measure.
+                case OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_SIZE_CHANGE:
+                    if(bundle!=null){
+                        mVideoWidth = bundle.getInt(EventKey.INT_ARG1);
+                        mVideoHeight = bundle.getInt(EventKey.INT_ARG2);
+                        mVideoSarNum = bundle.getInt(EventKey.INT_ARG3);
+                        mVideoSarDen = bundle.getInt(EventKey.INT_ARG4);
+                        PLog.d(TAG,"onVideoSizeChange : videoWidth = " + mVideoWidth
+                                + ", videoHeight = " + mVideoHeight
+                                + ", videoSarNum = " + mVideoSarNum
+                                + ", videoSarDen = " + mVideoSarDen);
+                        if(mRender!=null){
+                            //update video size
+                            mRender.updateVideoSize(mVideoWidth, mVideoHeight);
+                            //update video sarNum,sarDen
+                            mRender.setVideoSampleAspectRatio(mVideoSarNum, mVideoSarDen);
+                        }
+                    }
+                    break;
+                //when get video rotation, need update render rotation.
+                case OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_ROTATION_CHANGED:
+                    if(bundle!=null){
+                        //if rotation change need update render.
+                        mVideoRotation = bundle.getInt(EventKey.INT_DATA);
+                        PLog.d(TAG,"onVideoRotationChange : videoRotation = " + mVideoRotation);
+                        if(mRender!=null)
+                            mRender.setVideoRotation(mVideoRotation);
+                    }
+                    break;
+                //when prepared bind surface.
+                case OnPlayerEventListener.PLAYER_EVENT_ON_PREPARED:
+                    bindRenderHolder(mRenderHolder);
+                    break;
+                case OnPlayerEventListener.PLAYER_EVENT_ON_BUFFERING_START:
+                    isBuffering = true;
+                    break;
+                case OnPlayerEventListener.PLAYER_EVENT_ON_BUFFERING_END:
+                    isBuffering = false;
+                    break;
             }
             if(mOnPlayerEventListener!=null)
                 mOnPlayerEventListener.onPlayerEvent(eventCode, bundle);
@@ -483,31 +531,31 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
     //----------------------------set video view style--------------------------
 
     @Override
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void setRoundRectShape(float radius) {
         mStyleSetter.setRoundRectShape(radius);
     }
 
     @Override
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void setRoundRectShape(Rect rect, float radius) {
         mStyleSetter.setRoundRectShape(rect, radius);
     }
 
     @Override
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void setOvalRectShape() {
         mStyleSetter.setOvalRectShape();
     }
 
     @Override
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void setOvalRectShape(Rect rect) {
         mStyleSetter.setOvalRectShape(rect);
     }
 
     @Override
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void clearShapeStyle() {
         mStyleSetter.clearShapeStyle();
     }

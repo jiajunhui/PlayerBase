@@ -72,6 +72,21 @@ public abstract class BaseCover extends BaseReceiver implements
         notifyReceiverEvent(InterEvent.CODE_REQUEST_REPLAY, bundle);
     }
 
+    @Override
+    public final void requestPlayDataSource(Bundle bundle) {
+        notifyReceiverEvent(InterEvent.CODE_REQUEST_PLAY_DATA_SOURCE, bundle);
+    }
+
+    @Override
+    public final void requestNotifyTimer() {
+        notifyReceiverEvent(InterEvent.CODE_REQUEST_NOTIFY_TIMER, null);
+    }
+
+    @Override
+    public final void requestStopTimer() {
+        notifyReceiverEvent(InterEvent.CODE_REQUEST_STOP_TIMER, null);
+    }
+
     protected <T extends View> T findViewById(int id){
         return mCoverView.findViewById(id);
     }

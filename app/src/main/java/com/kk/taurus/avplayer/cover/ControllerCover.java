@@ -330,8 +330,10 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
         setTopContainerState(state);
         setBottomContainerState(state);
         if(state){
+            requestNotifyTimer();
             sendDelayHiddenMessage();
         }else{
+            requestStopTimer();
             removeDelayHiddenMessage();
         }
     }
@@ -377,12 +379,13 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
     }
 
     @Override
-    public void onTimerUpdate(int curr, int duration) {
+    public void onTimerUpdate(int curr, int duration, int bufferPercentage) {
         if(!mTimerUpdateProgressEnable)
             return;
         if(mTimeFormat==null){
             mTimeFormat = TimeUtil.getFormat(duration);
         }
+        mBufferPercentage = bufferPercentage;
         updateUI(curr, duration);
     }
 
@@ -409,11 +412,6 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
                     mStateIcon.setSelected(true);
                 }else if(status==IPlayer.STATE_STARTED){
                     mStateIcon.setSelected(false);
-                }
-                break;
-            case OnPlayerEventListener.PLAYER_EVENT_ON_BUFFERING_UPDATE:
-                if(bundle!=null){
-                    mBufferPercentage = bundle.getInt(EventKey.INT_DATA);
                 }
                 break;
             case OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_RENDER_START:

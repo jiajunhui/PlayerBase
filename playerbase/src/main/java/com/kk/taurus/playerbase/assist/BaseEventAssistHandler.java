@@ -48,6 +48,9 @@ public abstract class BaseEventAssistHandler<T> implements OnEventAssistHandler<
             case InterEvent.CODE_REQUEST_REPLAY:
                 requestReplay(assist, bundle);
                 break;
+            case InterEvent.CODE_REQUEST_PLAY_DATA_SOURCE:
+                requestPlayDataSource(assist, bundle);
+                break;
         }
     }
 

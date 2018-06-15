@@ -33,7 +33,7 @@ import com.kk.taurus.playerbase.extension.ProducerGroup;
 import com.kk.taurus.playerbase.extension.ProducerEventSender;
 import com.kk.taurus.playerbase.log.PLog;
 import com.kk.taurus.playerbase.receiver.BaseReceiver;
-import com.kk.taurus.playerbase.receiver.StateGetterImpl;
+import com.kk.taurus.playerbase.receiver.StateGetter;
 import com.kk.taurus.playerbase.touch.OnTouchGestureListener;
 import com.kk.taurus.playerbase.receiver.BaseCover;
 import com.kk.taurus.playerbase.receiver.DefaultLevelCoverContainer;
@@ -66,7 +66,7 @@ public class SuperContainer extends FrameLayout implements OnTouchGestureListene
 
     private IProducerGroup mProducerGroup;
 
-    private StateGetterImpl mStateGetter;
+    private StateGetter mStateGetter;
 
     public SuperContainer(@NonNull Context context) {
         super(context);
@@ -81,7 +81,6 @@ public class SuperContainer extends FrameLayout implements OnTouchGestureListene
     }
 
     private void initBaseInfo(Context context) {
-        mStateGetter = new StateGetterImpl();
         mProducerGroup = new ProducerGroup(new ProducerEventSender(mDelegateReceiverEventSender));
     }
 
@@ -135,14 +134,13 @@ public class SuperContainer extends FrameLayout implements OnTouchGestureListene
         mRenderContainer.addView(view,lp);
     }
 
-    public final void dispatchPlayEvent(int eventCode, Bundle bundle){
-        handleStateGetter(eventCode, bundle);
-        if(mEventDispatcher !=null)
-            mEventDispatcher.dispatchPlayEvent(eventCode, bundle);
+    public final void setStateGetter(StateGetter stateGetter){
+        mStateGetter = stateGetter;
     }
 
-    private void handleStateGetter(int eventCode, Bundle bundle) {
-        mStateGetter.proxyPlayerEvent(eventCode, bundle);
+    public final void dispatchPlayEvent(int eventCode, Bundle bundle){
+        if(mEventDispatcher !=null)
+            mEventDispatcher.dispatchPlayEvent(eventCode, bundle);
     }
 
     public final void dispatchErrorEvent(int eventCode, Bundle bundle){

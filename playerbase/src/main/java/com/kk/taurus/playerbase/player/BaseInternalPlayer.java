@@ -37,10 +37,18 @@ public abstract class BaseInternalPlayer implements IPlayer {
 
     private OnPlayerEventListener mOnPlayerEventListener;
     private OnErrorEventListener mOnErrorEventListener;
+    private OnBufferingListener mOnBufferingListener;
+
+    private int mBufferPercentage;
 
     @Override
     public void option(int code, Bundle bundle) {
         //not handle
+    }
+
+    @Override
+    public final void setOnBufferingListener(OnBufferingListener onBufferingListener) {
+        this.mOnBufferingListener = onBufferingListener;
     }
 
     @Override
@@ -63,11 +71,22 @@ public abstract class BaseInternalPlayer implements IPlayer {
             mOnErrorEventListener.onErrorEvent(eventCode, bundle);
     }
 
+    protected final void submitBufferingUpdate(int bufferPercentage, Bundle extra){
+        mBufferPercentage = bufferPercentage;
+        if(mOnBufferingListener!=null)
+            mOnBufferingListener.onBufferingUpdate(bufferPercentage, extra);
+    }
+
     protected final void updateStatus(int status){
         this.mCurrentState = status;
         Bundle bundle = BundlePool.obtain();
         bundle.putInt(EventKey.INT_DATA, status);
         submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_STATUS_CHANGE, bundle);
+    }
+
+    @Override
+    public int getBufferPercentage() {
+        return mBufferPercentage;
     }
 
     @Override

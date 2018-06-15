@@ -40,5 +40,6 @@ public interface OnEventAssistHandler<T> {
     void requestReset(T assist, Bundle bundle);
     void requestRetry(T assist, Bundle bundle);
     void requestReplay(T assist, Bundle bundle);
+    void requestPlayDataSource(T assist, Bundle bundle);
 
 }

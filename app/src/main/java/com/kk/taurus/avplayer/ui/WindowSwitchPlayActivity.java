@@ -192,7 +192,8 @@ public class WindowSwitchPlayActivity extends AppCompatActivity {
             mBtnSwitchPlay.setText(R.string.page_play);
             changeMode(true);
             mFloatWindow.setElevationShadow(20);
-            mFloatWindow.setRoundRectShape(50);
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                mFloatWindow.setRoundRectShape(50);
             mFloatWindow.show();
             mAssist.attachContainer(mWindowVideoContainer);
         }

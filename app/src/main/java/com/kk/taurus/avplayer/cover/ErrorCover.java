@@ -172,6 +172,7 @@ public class ErrorCover extends BaseCover {
     public void onPlayerEvent(int eventCode, Bundle bundle) {
         switch (eventCode){
             case OnPlayerEventListener.PLAYER_EVENT_ON_DATA_SOURCE_SET:
+                mCurrPosition = 0;
                 handleStatusUI(NetworkUtils.getNetworkState(getContext()));
                 break;
             case OnPlayerEventListener.PLAYER_EVENT_ON_TIMER_UPDATE:

@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.media.audiofx.Visualizer;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -160,15 +161,27 @@ public class VideoViewActivity extends AppCompatActivity implements OnPlayerEven
     }
 
     public void onStyleSetRoundRect(View view){
-        mVideoView.setRoundRectShape(PUtil.dip2px(this,25));
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            mVideoView.setRoundRectShape(PUtil.dip2px(this,25));
+        }else{
+            Toast.makeText(this, "not support", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void onStyleSetOvalRect(View view){
-        mVideoView.setOvalRectShape();
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            mVideoView.setOvalRectShape();
+        }else{
+            Toast.makeText(this, "not support", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void onShapeStyleReset(View view){
-        mVideoView.clearShapeStyle();
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            mVideoView.clearShapeStyle();
+        }else{
+            Toast.makeText(this, "not support", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void onAspect16_9(View view){

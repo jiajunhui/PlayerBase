@@ -310,9 +310,7 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
         public void onLoadingChanged(boolean isLoading) {
             int bufferPercentage = mInternalPlayer.getBufferedPercentage();
             if(!isLoading){
-                Bundle bundle = BundlePool.obtain();
-                bundle.putInt(EventKey.INT_DATA, bufferPercentage);
-                submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_BUFFERING_UPDATE,bundle);
+                submitBufferingUpdate(bufferPercentage, null);
             }
             PLog.d(TAG,"onLoadingChanged : "+ isLoading + ", bufferPercentage = " + bufferPercentage);
         }
