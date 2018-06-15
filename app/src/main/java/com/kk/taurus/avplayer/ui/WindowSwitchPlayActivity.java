@@ -217,17 +217,13 @@ public class WindowSwitchPlayActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if(!mFloatWindow.isWindowShow()){
-            mAssist.pause();
-        }
+        mAssist.pause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if(!mFloatWindow.isWindowShow()){
-            mAssist.resume();
-        }
+        mAssist.resume();
     }
 
     @Override

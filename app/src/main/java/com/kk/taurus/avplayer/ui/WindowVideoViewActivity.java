@@ -103,6 +103,18 @@ public class WindowVideoViewActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        mWindowVideoView.pause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mWindowVideoView.resume();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         mWindowVideoView.close();

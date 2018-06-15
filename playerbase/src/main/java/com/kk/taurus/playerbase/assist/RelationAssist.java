@@ -65,7 +65,8 @@ public final class RelationAssist implements AssistPlay {
      */
     private ReceiverGroup mReceiverGroup;
 
-    private int mRenderType;
+    private int mRenderType = IRender.RENDER_TYPE_TEXTURE_VIEW;
+    private boolean mRenderTypeChange;
     private IRender mRender;
     private IRender.IRenderHolder mRenderHolder;
 
@@ -293,7 +294,11 @@ public final class RelationAssist implements AssistPlay {
      * @param renderType
      */
     public void setRenderType(int renderType){
+        mRenderTypeChange = mRenderType!=renderType;
         this.mRenderType = renderType;
+        if(mRenderTypeChange){
+            updateRender();
+        }
     }
 
     @Override
@@ -312,30 +317,38 @@ public final class RelationAssist implements AssistPlay {
      */
     @Override
     public void attachContainer(ViewGroup userContainer) {
-        mPlayer.setSurface(null);
         attachPlayerListener();
         detachSuperContainer();
         if(mReceiverGroup!=null){
             mSuperContainer.setReceiverGroup(mReceiverGroup);
         }
-        releaseRender();
-        switch (mRenderType){
-            case IRender.RENDER_TYPE_SURFACE_VIEW:
-                mRender = new RenderSurfaceView(mContext);
-                break;
-            case IRender.RENDER_TYPE_TEXTURE_VIEW:
-            default:
-                mRender = new RenderTextureView(mContext);
-                ((RenderTextureView)mRender).setTakeOverSurfaceTexture(true);
-                break;
-        }
-        mRender.setRenderCallback(mRenderCallback);
-        updateRenderParams();
-        mSuperContainer.setRenderView(mRender.getRenderView());
+        //update render view.
+        updateRender();
+        //attach SuperContainer
         if(userContainer!=null){
             userContainer.addView(mSuperContainer,
                     new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                             ViewGroup.LayoutParams.MATCH_PARENT));
+        }
+    }
+
+    private void updateRender(){
+        if(mRender==null || mRenderTypeChange){
+            mPlayer.setSurface(null);
+            mRenderTypeChange = false;
+            releaseRender();
+            switch (mRenderType){
+                case IRender.RENDER_TYPE_SURFACE_VIEW:
+                    mRender = new RenderSurfaceView(mContext);
+                    break;
+                case IRender.RENDER_TYPE_TEXTURE_VIEW:
+                default:
+                    mRender = new RenderTextureView(mContext);
+                    ((RenderTextureView)mRender).setTakeOverSurfaceTexture(true);
+                    break;
+            }
+            mRender.setRenderCallback(mRenderCallback);
+            mSuperContainer.setRenderView(mRender.getRenderView());
         }
     }
 
@@ -374,15 +387,6 @@ public final class RelationAssist implements AssistPlay {
     private void bindRenderHolder(IRender.IRenderHolder renderHolder){
         if(renderHolder!=null)
             renderHolder.bindPlayer(mPlayer);
-    }
-
-    private void updateRenderParams(){
-        if(mRender!=null){
-            //if render change ,need update some params
-            mRender.updateVideoSize(mVideoWidth, mVideoHeight);
-            mRender.setVideoSampleAspectRatio(mVideoSarNum, mVideoSarDen);
-            mRender.setVideoRotation(mVideoRotation);
-        }
     }
 
     private void releaseRender(){
