@@ -104,6 +104,17 @@
 
             <TextView
                 android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/colorPrimary"
+                android:gravity="center"
+                android:onClick="shareAnimationVideos"
+                android:text="共享元素转场动画"
+                android:textSize="16sp"
+                android:textColor="#FFFFFF"/>
+
+            <TextView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:gravity="left"

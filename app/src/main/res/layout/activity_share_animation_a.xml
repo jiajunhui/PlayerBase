@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E0E0E0">
+
+    <RelativeLayout
+        android:id="@+id/videoContainer"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="#444444"
+        android:layout_centerVertical="true">
+        <RelativeLayout
+            android:id="@+id/album_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/albumImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"/>
+            <ImageView
+                android:id="@+id/playIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/player_icon_start_play"/>
+        </RelativeLayout>
+        <FrameLayout
+            android:id="@+id/layoutContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="#FFFFFF"
+        android:layout_below="@id/videoContainer"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:padding="8dp"
+        android:textSize="16sp"
+        android:textColor="#000000"
+        android:text="NAME"/>
+
+</RelativeLayout>

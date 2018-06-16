@@ -263,18 +263,11 @@ public class SuperContainer extends FrameLayout implements OnTouchGestureListene
         removeRender();
         //and remove all covers
         removeAllCovers();
-        //last remove all receivers from ReceiverGroup.
-        clearReceiverGroup();
     }
 
     private void removeRender(){
         if(mRenderContainer!=null)
             mRenderContainer.removeAllViews();
-    }
-
-    private void clearReceiverGroup(){
-        if(mReceiverGroup!=null)
-            mReceiverGroup.clearReceivers();
     }
 
     protected void removeAllCovers(){

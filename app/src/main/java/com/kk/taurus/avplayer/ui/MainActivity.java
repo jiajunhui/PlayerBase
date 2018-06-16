@@ -90,6 +90,10 @@ public class MainActivity extends AppCompatActivity implements OnReceiverEventLi
         intentTo(OnlineVideoListActivity.class);
     }
 
+    public void shareAnimationVideos(View v){
+        intentTo(ShareAnimationActivityA.class);
+    }
+
     private void intentTo(Class<? extends Activity> cls){
         Intent intent = new Intent(getApplicationContext(), cls);
         startActivity(intent);
