@@ -72,10 +72,6 @@ public final class RelationAssist implements AssistPlay {
 
     private DataSource mDataSource;
 
-    private int mVideoRotation;
-    private int mVideoWidth,mVideoHeight;
-    private int mVideoSarNum,mVideoSarDen;
-
     private boolean isBuffering;
 
     private OnPlayerEventListener mOnPlayerEventListener;
@@ -169,22 +165,22 @@ public final class RelationAssist implements AssistPlay {
             //when get video size , need update render for measure.
             case OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_SIZE_CHANGE:
                 if(bundle!=null){
-                    mVideoWidth = bundle.getInt(EventKey.INT_ARG1);
-                    mVideoHeight = bundle.getInt(EventKey.INT_ARG2);
-                    mVideoSarNum = bundle.getInt(EventKey.INT_ARG3);
-                    mVideoSarDen = bundle.getInt(EventKey.INT_ARG4);
+                    int videoWidth = bundle.getInt(EventKey.INT_ARG1);
+                    int videoHeight = bundle.getInt(EventKey.INT_ARG2);
+                    int videoSarNum = bundle.getInt(EventKey.INT_ARG3);
+                    int videoSarDen = bundle.getInt(EventKey.INT_ARG4);
                     if(mRender!=null){
-                        mRender.updateVideoSize(mVideoWidth, mVideoHeight);
-                        mRender.setVideoSampleAspectRatio(mVideoSarNum, mVideoSarDen);
+                        mRender.updateVideoSize(videoWidth, videoHeight);
+                        mRender.setVideoSampleAspectRatio(videoSarNum, videoSarDen);
                     }
                 }
                 break;
             //when get video rotation, need update render rotation.
             case OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_ROTATION_CHANGED:
                 if(bundle!=null){
-                    mVideoRotation = bundle.getInt(EventKey.INT_DATA);
+                    int videoRotation = bundle.getInt(EventKey.INT_DATA);
                     if(mRender!=null)
-                        mRender.setVideoRotation(mVideoRotation);
+                        mRender.setVideoRotation(videoRotation);
                 }
                 break;
             //when prepared bind surface.

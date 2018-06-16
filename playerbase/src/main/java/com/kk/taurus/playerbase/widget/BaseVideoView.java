@@ -78,10 +78,6 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
 
     private IRender.IRenderHolder mRenderHolder;
 
-    private int mVideoRotation;
-    private int mVideoWidth,mVideoHeight;
-    private int mVideoSarNum,mVideoSarDen;
-
     private boolean isBuffering;
 
     private OnVideoViewEventHandler mEventAssistHandler;
@@ -177,8 +173,10 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
     public void setDataSource(DataSource dataSource) {
         //init AudioManager
         requestAudioFocus();
-        //Reconfigure the rendering view each time the resource is switched
-        setRenderType(mRenderType);
+        if(mRender==null){
+            //Reconfigure the rendering view each time the resource is switched
+            setRenderType(mRenderType);
+        }
         //set data to player
         mPlayer.setDataSource(dataSource);
     }
@@ -295,6 +293,9 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
 
     @Override
     public void setRenderType(int renderType) {
+        boolean renderChange = mRenderType!=renderType;
+        if(!renderChange && mRender!=null)
+            return;
         releaseRender();
         mRenderType = renderType;
         switch (renderType){
@@ -312,11 +313,6 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
         mPlayer.setDisplay(null);
         mPlayer.setSurface(null);
         mRender.setRenderCallback(mRenderCallback);
-        //update some params
-        mRender.updateVideoSize(mVideoWidth, mVideoHeight);
-        mRender.setVideoSampleAspectRatio(mVideoSarNum, mVideoSarDen);
-        //update video rotation
-        mRender.setVideoRotation(mVideoRotation);
         //add to container
         mSuperContainer.setRenderView(mRender.getRenderView());
     }
@@ -444,19 +440,19 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
                 //when get video size , need update render for measure.
                 case OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_SIZE_CHANGE:
                     if(bundle!=null){
-                        mVideoWidth = bundle.getInt(EventKey.INT_ARG1);
-                        mVideoHeight = bundle.getInt(EventKey.INT_ARG2);
-                        mVideoSarNum = bundle.getInt(EventKey.INT_ARG3);
-                        mVideoSarDen = bundle.getInt(EventKey.INT_ARG4);
-                        PLog.d(TAG,"onVideoSizeChange : videoWidth = " + mVideoWidth
-                                + ", videoHeight = " + mVideoHeight
-                                + ", videoSarNum = " + mVideoSarNum
-                                + ", videoSarDen = " + mVideoSarDen);
+                        int videoWidth = bundle.getInt(EventKey.INT_ARG1);
+                        int videoHeight = bundle.getInt(EventKey.INT_ARG2);
+                        int videoSarNum = bundle.getInt(EventKey.INT_ARG3);
+                        int videoSarDen = bundle.getInt(EventKey.INT_ARG4);
+                        PLog.d(TAG,"onVideoSizeChange : videoWidth = " + videoWidth
+                                + ", videoHeight = " + videoHeight
+                                + ", videoSarNum = " + videoSarNum
+                                + ", videoSarDen = " + videoSarDen);
                         if(mRender!=null){
                             //update video size
-                            mRender.updateVideoSize(mVideoWidth, mVideoHeight);
+                            mRender.updateVideoSize(videoWidth, videoHeight);
                             //update video sarNum,sarDen
-                            mRender.setVideoSampleAspectRatio(mVideoSarNum, mVideoSarDen);
+                            mRender.setVideoSampleAspectRatio(videoSarNum, videoSarDen);
                         }
                     }
                     break;
@@ -464,10 +460,10 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
                 case OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_ROTATION_CHANGED:
                     if(bundle!=null){
                         //if rotation change need update render.
-                        mVideoRotation = bundle.getInt(EventKey.INT_DATA);
-                        PLog.d(TAG,"onVideoRotationChange : videoRotation = " + mVideoRotation);
+                        int videoRotation = bundle.getInt(EventKey.INT_DATA);
+                        PLog.d(TAG,"onVideoRotationChange : videoRotation = " + videoRotation);
                         if(mRender!=null)
-                            mRender.setVideoRotation(mVideoRotation);
+                            mRender.setVideoRotation(videoRotation);
                     }
                     break;
                 //when prepared bind surface.
