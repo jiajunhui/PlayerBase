@@ -66,11 +66,11 @@ public final class ReceiverGroup implements IReceiverGroup{
     @Override
     public void removeReceiver(String key) {
         IReceiver receiver = mReceivers.remove(key);
+        if(mOnReceiverGroupChangeListener!=null && receiver!=null)
+            mOnReceiverGroupChangeListener.onReceiverRemove(key, receiver);
         //call back method onReceiverUnBind().
         if(receiver!=null)
             receiver.onReceiverUnBind();
-        if(mOnReceiverGroupChangeListener!=null && receiver!=null)
-            mOnReceiverGroupChangeListener.onReceiverRemove(key, receiver);
     }
 
     @Override

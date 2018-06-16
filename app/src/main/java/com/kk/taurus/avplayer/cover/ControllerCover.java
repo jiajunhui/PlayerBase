@@ -124,7 +124,8 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
     @Override
     protected void onCoverDetachedToWindow() {
         super.onCoverDetachedToWindow();
-        setControllerState(false);
+        mTopContainer.setVisibility(View.GONE);
+        mBottomContainer.setVisibility(View.GONE);
         removeDelayHiddenMessage();
     }
 
@@ -140,6 +141,7 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
         mHandler.removeCallbacks(mSeekEventRunnable);
 
         unbinder.unbind();
+
     }
 
     @OnClick({
