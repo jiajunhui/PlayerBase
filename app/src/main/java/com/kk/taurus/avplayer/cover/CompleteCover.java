@@ -24,9 +24,11 @@ import android.widget.TextView;
 import com.kk.taurus.avplayer.R;
 import com.kk.taurus.avplayer.play.DataInter;
 import com.kk.taurus.playerbase.event.OnPlayerEventListener;
+import com.kk.taurus.playerbase.player.IPlayer;
 import com.kk.taurus.playerbase.receiver.BaseCover;
 import com.kk.taurus.playerbase.receiver.ICover;
 import com.kk.taurus.playerbase.receiver.IReceiverGroup;
+import com.kk.taurus.playerbase.receiver.PlayerStateGetter;
 
 /**
  * Created by Taurus on 2018/4/20.
@@ -117,6 +119,9 @@ public class CompleteCover extends BaseCover {
     @Override
     public void onPlayerEvent(int eventCode, Bundle bundle) {
         switch (eventCode){
+            case OnPlayerEventListener.PLAYER_EVENT_ON_DATA_SOURCE_SET:
+                setPlayCompleteState(false);
+                break;
             case OnPlayerEventListener.PLAYER_EVENT_ON_PLAY_COMPLETE:
                 setPlayCompleteState(true);
                 break;

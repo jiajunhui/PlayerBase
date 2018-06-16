@@ -68,6 +68,12 @@ public final class RelationAssist implements AssistPlay {
     private int mRenderType = IRender.RENDER_TYPE_TEXTURE_VIEW;
     private boolean mRenderTypeChange;
     private IRender mRender;
+    private int mVideoWidth;
+    private int mVideoHeight;
+    private int mVideoSarNum;
+    private int mVideoSarDen;
+    private int mVideoRotation;
+
     private IRender.IRenderHolder mRenderHolder;
 
     private DataSource mDataSource;
@@ -165,22 +171,22 @@ public final class RelationAssist implements AssistPlay {
             //when get video size , need update render for measure.
             case OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_SIZE_CHANGE:
                 if(bundle!=null){
-                    int videoWidth = bundle.getInt(EventKey.INT_ARG1);
-                    int videoHeight = bundle.getInt(EventKey.INT_ARG2);
-                    int videoSarNum = bundle.getInt(EventKey.INT_ARG3);
-                    int videoSarDen = bundle.getInt(EventKey.INT_ARG4);
+                    mVideoWidth = bundle.getInt(EventKey.INT_ARG1);
+                    mVideoHeight = bundle.getInt(EventKey.INT_ARG2);
+                    mVideoSarNum = bundle.getInt(EventKey.INT_ARG3);
+                    mVideoSarDen = bundle.getInt(EventKey.INT_ARG4);
                     if(mRender!=null){
-                        mRender.updateVideoSize(videoWidth, videoHeight);
-                        mRender.setVideoSampleAspectRatio(videoSarNum, videoSarDen);
+                        mRender.updateVideoSize(mVideoWidth, mVideoHeight);
+                        mRender.setVideoSampleAspectRatio(mVideoSarNum, mVideoSarDen);
                     }
                 }
                 break;
             //when get video rotation, need update render rotation.
             case OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_ROTATION_CHANGED:
                 if(bundle!=null){
-                    int videoRotation = bundle.getInt(EventKey.INT_DATA);
+                    mVideoRotation = bundle.getInt(EventKey.INT_DATA);
                     if(mRender!=null)
-                        mRender.setVideoRotation(videoRotation);
+                        mRender.setVideoRotation(mVideoRotation);
                 }
                 break;
             //when prepared bind surface.
@@ -259,7 +265,12 @@ public final class RelationAssist implements AssistPlay {
 
     @Override
     public boolean switchDecoder(int decoderPlanId) {
-        return mPlayer.switchDecoder(decoderPlanId);
+        boolean switchDecoder = mPlayer.switchDecoder(decoderPlanId);
+        if(switchDecoder){
+            releaseRender();
+            mRender = null;
+        }
+        return switchDecoder;
     }
 
     /**
@@ -330,7 +341,6 @@ public final class RelationAssist implements AssistPlay {
 
     private void updateRender(){
         if(mRender==null || mRenderTypeChange){
-            mPlayer.setSurface(null);
             mRenderTypeChange = false;
             releaseRender();
             switch (mRenderType){
@@ -343,7 +353,14 @@ public final class RelationAssist implements AssistPlay {
                     ((RenderTextureView)mRender).setTakeOverSurfaceTexture(true);
                     break;
             }
+            mRenderHolder = null;
+            mPlayer.setSurface(null);
             mRender.setRenderCallback(mRenderCallback);
+            //update some params for render type change
+            mRender.updateVideoSize(mVideoWidth, mVideoHeight);
+            mRender.setVideoSampleAspectRatio(mVideoSarNum, mVideoSarDen);
+            //update video rotation
+            mRender.setVideoRotation(mVideoRotation);
             mSuperContainer.setRenderView(mRender.getRenderView());
         }
     }
@@ -386,7 +403,6 @@ public final class RelationAssist implements AssistPlay {
     }
 
     private void releaseRender(){
-        mRenderHolder = null;
         if(mRender!=null)
             mRender.release();
     }

@@ -21,6 +21,7 @@ import com.kk.taurus.playerbase.entity.DataSource;
 import com.kk.taurus.playerbase.event.BundlePool;
 import com.kk.taurus.playerbase.event.EventKey;
 import com.kk.taurus.playerbase.event.OnPlayerEventListener;
+import com.kk.taurus.playerbase.log.PLog;
 import com.kk.taurus.playerbase.player.IPlayer;
 import com.kk.taurus.playerbase.player.OnTimerUpdateListener;
 import com.kk.taurus.playerbase.receiver.ICover;
@@ -73,6 +74,7 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
             super.handleMessage(msg);
             switch (msg.what){
                 case MSG_CODE_DELAY_HIDDEN_CONTROLLER:
+                    PLog.d(getTag().toString(), "msg_delay_hidden...");
                     setControllerState(false);
                     break;
             }
@@ -117,6 +119,13 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
 
         boolean screenSwitchEnable = getGroupValue().getBoolean(DataInter.Key.KEY_CONTROLLER_SCREEN_SWITCH_ENABLE, true);
         setScreenSwitchEnable(screenSwitchEnable);
+    }
+
+    @Override
+    protected void onCoverDetachedToWindow() {
+        super.onCoverDetachedToWindow();
+        setControllerState(false);
+        removeDelayHiddenMessage();
     }
 
     @Override
@@ -271,7 +280,7 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
             mTopContainer.clearAnimation();
             cancelTopAnimation();
             mTopAnimator = ObjectAnimator.ofFloat(mTopContainer,
-                            "alpha", state ? 0 : 1, state ? 1 : 0).setDuration(500);
+                            "alpha", state ? 0 : 1, state ? 1 : 0).setDuration(300);
             mTopAnimator.addListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationStart(Animator animation) {
@@ -306,7 +315,7 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
         mBottomContainer.clearAnimation();
         cancelBottomAnimation();
         mBottomAnimator = ObjectAnimator.ofFloat(mBottomContainer,
-                "alpha", state ? 0 : 1, state ? 1 : 0).setDuration(500);
+                "alpha", state ? 0 : 1, state ? 1 : 0).setDuration(300);
         mBottomAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -324,18 +333,23 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
             }
         });
         mBottomAnimator.start();
+        if(state){
+            PLog.d(getTag().toString(), "requestNotifyTimer...");
+            requestNotifyTimer();
+        }else{
+            PLog.d(getTag().toString(), "requestStopTimer...");
+            requestStopTimer();
+        }
     }
 
     private void setControllerState(boolean state){
-        setTopContainerState(state);
-        setBottomContainerState(state);
         if(state){
-            requestNotifyTimer();
             sendDelayHiddenMessage();
         }else{
-            requestStopTimer();
             removeDelayHiddenMessage();
         }
+        setTopContainerState(state);
+        setBottomContainerState(state);
     }
 
     private boolean isControllerShow(){

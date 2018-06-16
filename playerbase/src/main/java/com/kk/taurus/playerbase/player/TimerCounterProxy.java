@@ -22,6 +22,7 @@ import android.os.Looper;
 import android.os.Message;
 
 import com.kk.taurus.playerbase.event.OnPlayerEventListener;
+import com.kk.taurus.playerbase.log.PLog;
 
 /**
  * Created by Taurus on 2018/4/15.
@@ -68,8 +69,10 @@ public class TimerCounterProxy {
         this.useProxy = useProxy;
         if(!useProxy){
             cancel();
+            PLog.e("TimerCounterProxy", "Timer Stopped");
         }else{
             start();
+            PLog.e("TimerCounterProxy", "Timer Started");
         }
     }
 
@@ -83,10 +86,16 @@ public class TimerCounterProxy {
         switch (eventCode){
             case OnPlayerEventListener.PLAYER_EVENT_ON_DATA_SOURCE_SET:
             case OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_RENDER_START:
+            case OnPlayerEventListener.PLAYER_EVENT_ON_BUFFERING_START:
+            case OnPlayerEventListener.PLAYER_EVENT_ON_BUFFERING_END:
+            case OnPlayerEventListener.PLAYER_EVENT_ON_PAUSE:
+            case OnPlayerEventListener.PLAYER_EVENT_ON_RESUME:
+            case OnPlayerEventListener.PLAYER_EVENT_ON_SEEK_COMPLETE:
                 isLegal = true;
                 needStart = true;
                 break;
             case OnPlayerEventListener.PLAYER_EVENT_ON_STOP:
+            case OnPlayerEventListener.PLAYER_EVENT_ON_RESET:
             case OnPlayerEventListener.PLAYER_EVENT_ON_DESTROY:
             case OnPlayerEventListener.PLAYER_EVENT_ON_PLAY_COMPLETE:
                 isLegal = false;

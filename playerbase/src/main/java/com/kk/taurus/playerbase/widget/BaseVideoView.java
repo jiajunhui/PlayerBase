@@ -76,6 +76,12 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
     //render view, such as TextureView or SurfaceView.
     private IRender mRender;
 
+    private int mVideoWidth;
+    private int mVideoHeight;
+    private int mVideoSarNum;
+    private int mVideoSarDen;
+    private int mVideoRotation;
+
     private IRender.IRenderHolder mRenderHolder;
 
     private boolean isBuffering;
@@ -157,7 +163,12 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
      */
     @Override
     public final boolean switchDecoder(int decoderPlanId){
-        return mPlayer.switchDecoder(decoderPlanId);
+        boolean switchDecoder = mPlayer.switchDecoder(decoderPlanId);
+        if(switchDecoder){
+            releaseRender();
+            mRender = null;
+        }
+        return switchDecoder;
     }
 
     /**
@@ -313,6 +324,11 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
         mPlayer.setDisplay(null);
         mPlayer.setSurface(null);
         mRender.setRenderCallback(mRenderCallback);
+        //update some params
+        mRender.updateVideoSize(mVideoWidth, mVideoHeight);
+        mRender.setVideoSampleAspectRatio(mVideoSarNum, mVideoSarDen);
+        //update video rotation
+        mRender.setVideoRotation(mVideoRotation);
         //add to container
         mSuperContainer.setRenderView(mRender.getRenderView());
     }
@@ -440,19 +456,19 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
                 //when get video size , need update render for measure.
                 case OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_SIZE_CHANGE:
                     if(bundle!=null){
-                        int videoWidth = bundle.getInt(EventKey.INT_ARG1);
-                        int videoHeight = bundle.getInt(EventKey.INT_ARG2);
-                        int videoSarNum = bundle.getInt(EventKey.INT_ARG3);
-                        int videoSarDen = bundle.getInt(EventKey.INT_ARG4);
-                        PLog.d(TAG,"onVideoSizeChange : videoWidth = " + videoWidth
-                                + ", videoHeight = " + videoHeight
-                                + ", videoSarNum = " + videoSarNum
-                                + ", videoSarDen = " + videoSarDen);
+                        mVideoWidth = bundle.getInt(EventKey.INT_ARG1);
+                        mVideoHeight = bundle.getInt(EventKey.INT_ARG2);
+                        mVideoSarNum = bundle.getInt(EventKey.INT_ARG3);
+                        mVideoSarDen = bundle.getInt(EventKey.INT_ARG4);
+                        PLog.d(TAG,"onVideoSizeChange : videoWidth = " + mVideoWidth
+                                + ", videoHeight = " + mVideoHeight
+                                + ", videoSarNum = " + mVideoSarNum
+                                + ", videoSarDen = " + mVideoSarDen);
                         if(mRender!=null){
                             //update video size
-                            mRender.updateVideoSize(videoWidth, videoHeight);
+                            mRender.updateVideoSize(mVideoWidth, mVideoHeight);
                             //update video sarNum,sarDen
-                            mRender.setVideoSampleAspectRatio(videoSarNum, videoSarDen);
+                            mRender.setVideoSampleAspectRatio(mVideoSarNum, mVideoSarDen);
                         }
                     }
                     break;
@@ -460,10 +476,10 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
                 case OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_ROTATION_CHANGED:
                     if(bundle!=null){
                         //if rotation change need update render.
-                        int videoRotation = bundle.getInt(EventKey.INT_DATA);
-                        PLog.d(TAG,"onVideoRotationChange : videoRotation = " + videoRotation);
+                        mVideoRotation = bundle.getInt(EventKey.INT_DATA);
+                        PLog.d(TAG,"onVideoRotationChange : videoRotation = " + mVideoRotation);
                         if(mRender!=null)
-                            mRender.setVideoRotation(videoRotation);
+                            mRender.setVideoRotation(mVideoRotation);
                     }
                     break;
                 //when prepared bind surface.

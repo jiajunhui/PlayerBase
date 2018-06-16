@@ -393,6 +393,10 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
 
         @Override
         public void onPlayerError(ExoPlaybackException error) {
+            if(error==null){
+                submitErrorEvent(OnErrorEventListener.ERROR_EVENT_UNKNOWN, null);
+                return;
+            }
             PLog.e(TAG,error.getMessage());
             int type = error.type;
             switch (type){

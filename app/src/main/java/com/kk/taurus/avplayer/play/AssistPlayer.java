@@ -190,6 +190,7 @@ public class AssistPlayer {
                 && state!= IPlayer.STATE_ERROR
                 && state!= IPlayer.STATE_IDLE
                 && state!= IPlayer.STATE_INITIALIZED
+                && state!= IPlayer.STATE_PLAYBACK_COMPLETE
                 && state!= IPlayer.STATE_STOPPED;
     }
 

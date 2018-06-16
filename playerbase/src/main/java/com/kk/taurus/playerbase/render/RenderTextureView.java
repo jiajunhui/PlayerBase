@@ -182,7 +182,8 @@ public class RenderTextureView extends TextureView implements IRender {
         public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
             PLog.d(TAG,"<---onSurfaceTextureAvailable---> : width = " + width + " height = " + height);
             if(mRenderCallback!=null){
-                InternalRenderHolder renderHolder = new InternalRenderHolder(RenderTextureView.this, surface);
+                InternalRenderHolder renderHolder =
+                        new InternalRenderHolder(RenderTextureView.this, surface);
                 renderHolder.setOnAvailable(true);
                 mRenderCallback.onSurfaceCreated(renderHolder, width, height);
             }
