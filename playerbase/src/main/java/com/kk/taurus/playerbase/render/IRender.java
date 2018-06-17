@@ -71,6 +71,8 @@ public interface IRender {
 
     View getRenderView();
 
+    void reset();
+
     void release();
 
     /**

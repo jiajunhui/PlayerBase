@@ -166,7 +166,6 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
         boolean switchDecoder = mPlayer.switchDecoder(decoderPlanId);
         if(switchDecoder){
             releaseRender();
-            mRender = null;
         }
         return switchDecoder;
     }
@@ -184,10 +183,10 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
     public void setDataSource(DataSource dataSource) {
         //init AudioManager
         requestAudioFocus();
-        if(mRender==null){
-            //Reconfigure the rendering view each time the resource is switched
-            setRenderType(mRenderType);
-        }
+        //release render on data change.
+        releaseRender();
+        //Reconfigure the rendering view each time the resource is switched
+        setRenderType(mRenderType);
         //set data to player
         mPlayer.setDataSource(dataSource);
     }
@@ -321,7 +320,6 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
         }
         //clear render holder
         mRenderHolder = null;
-        mPlayer.setDisplay(null);
         mPlayer.setSurface(null);
         mRender.setRenderCallback(mRenderCallback);
         //update some params
@@ -444,8 +442,10 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
      * {@link RenderTextureView#release()}
      */
     private void releaseRender(){
-        if(mRender!=null)
+        if(mRender!=null){
             mRender.release();
+            mRender = null;
+        }
     }
 
     private OnPlayerEventListener mInternalPlayerEventListener =

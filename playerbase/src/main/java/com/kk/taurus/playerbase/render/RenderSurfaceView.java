@@ -103,6 +103,11 @@ public class RenderSurfaceView extends SurfaceView implements IRender {
     }
 
     @Override
+    public void reset() {
+        //not handle some
+    }
+
+    @Override
     public void release() {
 
     }

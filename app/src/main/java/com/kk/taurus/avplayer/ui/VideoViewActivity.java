@@ -64,6 +64,8 @@ public class VideoViewActivity extends AppCompatActivity implements OnPlayerEven
 
     private long mDataSourceId;
 
+    private boolean userPause;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -273,7 +275,8 @@ public class VideoViewActivity extends AppCompatActivity implements OnPlayerEven
     @Override
     protected void onResume() {
         super.onResume();
-        mVideoView.resume();
+        if(!userPause)
+            mVideoView.resume();
     }
 
     @Override
@@ -310,6 +313,9 @@ public class VideoViewActivity extends AppCompatActivity implements OnPlayerEven
         public void onAssistHandle(BaseVideoView assist, int eventCode, Bundle bundle) {
             super.onAssistHandle(assist, eventCode, bundle);
             switch (eventCode){
+                case DataInter.Event.CODE_REQUEST_PAUSE:
+                    userPause = true;
+                    break;
                 case DataInter.Event.EVENT_CODE_REQUEST_BACK:
                     if(isLandscape){
                         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -348,6 +354,9 @@ public class VideoViewActivity extends AppCompatActivity implements OnPlayerEven
                 break;
             case OnPlayerEventListener.PLAYER_EVENT_ON_PLAY_COMPLETE:
 
+                break;
+            case OnPlayerEventListener.PLAYER_EVENT_ON_RESUME:
+                userPause = false;
                 break;
         }
     }

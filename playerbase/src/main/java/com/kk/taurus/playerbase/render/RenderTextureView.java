@@ -125,6 +125,14 @@ public class RenderTextureView extends TextureView implements IRender {
     }
 
     @Override
+    public void reset() {
+        if(mSurfaceTexture!=null && mSurface!=null){
+            mSurfaceTexture.release();
+            mSurfaceTexture = null;
+        }
+    }
+
+    @Override
     public void release() {
         setSurfaceTextureListener(null);
         if(mSurfaceTexture!=null){
@@ -133,7 +141,17 @@ public class RenderTextureView extends TextureView implements IRender {
         }
     }
 
-    public SurfaceTexture getOwnSurfaceTexture(){
+    private  Surface mSurface;
+
+    void setSurface(Surface surface){
+        this.mSurface = surface;
+    }
+
+    Surface getSurface() {
+        return mSurface;
+    }
+
+    SurfaceTexture getOwnSurfaceTexture(){
         return mSurfaceTexture;
     }
 
@@ -142,34 +160,42 @@ public class RenderTextureView extends TextureView implements IRender {
         private Surface mSurfaceRefer;
         private RenderTextureView mTextureView;
 
-        private boolean onAvailable;
-
         public InternalRenderHolder(RenderTextureView textureView, SurfaceTexture surfaceTexture){
             this.mTextureView = textureView;
             mSurfaceRefer = new Surface(surfaceTexture);
         }
 
-        public void setOnAvailable(boolean onAvailable) {
-            this.onAvailable = onAvailable;
-        }
-
         @Override
         public void bindPlayer(IPlayer player) {
             if(player!=null && mSurfaceRefer!=null){
-                if(onAvailable){
-                    PLog.d("RenderTextureView","****bindPlayer****");
-                    player.setSurface(mSurfaceRefer);
-                }else{
-                    SurfaceTexture surfaceTexture = mTextureView.getOwnSurfaceTexture();
-                    //When the user sets the takeover flag and SurfaceTexture is available.
-                    if(mTextureView.isTakeOverSurfaceTexture()
-                            && surfaceTexture!=null
-                            && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
+                SurfaceTexture surfaceTexture = mTextureView.getOwnSurfaceTexture();
+                SurfaceTexture useTexture = mTextureView.getSurfaceTexture();
+                boolean isReleased = false;
+                if(surfaceTexture!=null && Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
+                    isReleased = surfaceTexture.isReleased();
+                }
+                boolean available = surfaceTexture!=null && !isReleased;
+                //When the user sets the takeover flag and SurfaceTexture is available.
+                if(mTextureView.isTakeOverSurfaceTexture()
+                        && available
+                        && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
+                    if(!surfaceTexture.equals(useTexture)){
+                        mTextureView.setSurfaceTexture(surfaceTexture);
                         PLog.d("RenderTextureView","****setSurfaceTexture****");
-                        if(mTextureView.getSurfaceTexture()==null){
-                            mTextureView.setSurfaceTexture(surfaceTexture);
+                    }else{
+                        Surface surface = mTextureView.getSurface();
+                        if(surface!=null){
+                            surface.release();
                         }
+                        Surface newSurface = new Surface(mTextureView.getOwnSurfaceTexture());
+                        player.setSurface(newSurface);
+                        mTextureView.setSurface(newSurface);
+                        PLog.d("RenderTextureView","****bindSurface****");
                     }
+                }else{
+                    player.setSurface(mSurfaceRefer);
+                    mTextureView.setSurface(mSurfaceRefer);
+                    PLog.d("RenderTextureView","****bindSurface****");
                 }
             }
         }
@@ -182,10 +208,8 @@ public class RenderTextureView extends TextureView implements IRender {
         public void onSurfaceTextureAvailable(SurfaceTexture surface, int width, int height) {
             PLog.d(TAG,"<---onSurfaceTextureAvailable---> : width = " + width + " height = " + height);
             if(mRenderCallback!=null){
-                InternalRenderHolder renderHolder =
-                        new InternalRenderHolder(RenderTextureView.this, surface);
-                renderHolder.setOnAvailable(true);
-                mRenderCallback.onSurfaceCreated(renderHolder, width, height);
+                mRenderCallback.onSurfaceCreated(
+                        new InternalRenderHolder(RenderTextureView.this, surface), width, height);
             }
         }
 
@@ -205,9 +229,8 @@ public class RenderTextureView extends TextureView implements IRender {
                 mRenderCallback.onSurfaceDestroy(
                         new InternalRenderHolder(RenderTextureView.this,surface));
             }
-            if(mTakeOverSurfaceTexture){
+            if(mTakeOverSurfaceTexture)
                 mSurfaceTexture = surface;
-            }
             return !mTakeOverSurfaceTexture;
         }
 
