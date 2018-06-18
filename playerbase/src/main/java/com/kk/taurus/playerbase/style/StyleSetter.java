@@ -27,6 +27,7 @@ import android.view.View;
  * Created by Taurus on 2017/12/9.
  *
  * style setter ,include round rect,oval rect and shadow.
+ * The Shape Style settings support only more than LOLLIPOP.
  *
  */
 

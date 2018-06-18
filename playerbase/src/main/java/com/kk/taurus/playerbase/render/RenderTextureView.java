@@ -126,6 +126,9 @@ public class RenderTextureView extends TextureView implements IRender {
 
     @Override
     public void reset() {
+        //when data source set, clear previous video frame.
+        //You must ensure that the callbacks available for rendering views are re executed.
+        //Otherwise, there will be no picture.
         if(mSurfaceTexture!=null && mSurface!=null){
             mSurfaceTexture.release();
             mSurfaceTexture = null;
@@ -171,6 +174,7 @@ public class RenderTextureView extends TextureView implements IRender {
                 SurfaceTexture surfaceTexture = mTextureView.getOwnSurfaceTexture();
                 SurfaceTexture useTexture = mTextureView.getSurfaceTexture();
                 boolean isReleased = false;
+                //check the SurfaceTexture is released is Android O.
                 if(surfaceTexture!=null && Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
                     isReleased = surfaceTexture.isReleased();
                 }
@@ -179,21 +183,27 @@ public class RenderTextureView extends TextureView implements IRender {
                 if(mTextureView.isTakeOverSurfaceTexture()
                         && available
                         && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
+                    //if SurfaceTexture not set or current is null, need set it.
                     if(!surfaceTexture.equals(useTexture)){
                         mTextureView.setSurfaceTexture(surfaceTexture);
                         PLog.d("RenderTextureView","****setSurfaceTexture****");
                     }else{
                         Surface surface = mTextureView.getSurface();
+                        //release current Surface if not null.
                         if(surface!=null){
                             surface.release();
                         }
+                        //create Surface use update SurfaceTexture
                         Surface newSurface = new Surface(mTextureView.getOwnSurfaceTexture());
+                        //set it for player
                         player.setSurface(newSurface);
+                        //record the new Surface
                         mTextureView.setSurface(newSurface);
                         PLog.d("RenderTextureView","****bindSurface****");
                     }
                 }else{
                     player.setSurface(mSurfaceRefer);
+                    //record the Surface
                     mTextureView.setSurface(mSurfaceRefer);
                     PLog.d("RenderTextureView","****bindSurface****");
                 }
