@@ -204,7 +204,11 @@ public class LocalVideoListActivity extends AppCompatActivity
 
     @Override
     public void onPlayerEvent(int eventCode, Bundle bundle) {
-
+        switch (eventCode){
+            case OnPlayerEventListener.PLAYER_EVENT_ON_PLAY_COMPLETE:
+                AssistPlayer.get().stop();
+                break;
+        }
     }
 
     public class MCompartor implements Comparator<VideoItem> {
