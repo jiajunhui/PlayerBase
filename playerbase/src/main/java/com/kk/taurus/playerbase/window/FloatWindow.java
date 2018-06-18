@@ -17,6 +17,7 @@
 package com.kk.taurus.playerbase.window;
 
 import android.animation.Animator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -36,6 +37,7 @@ import com.kk.taurus.playerbase.style.StyleSetter;
  * see also IWindow{@link IWindow}
  *
  */
+@SuppressLint("ViewConstructor")
 public class FloatWindow extends FrameLayout implements IWindow, IStyleSetter{
 
     private IStyleSetter mStyleSetter;
@@ -168,9 +170,11 @@ public class FloatWindow extends FrameLayout implements IWindow, IStyleSetter{
         mWindowHelper.close(items);
     }
 
-    private void resetStyle() {
+    public void resetStyle() {
         setElevationShadow(0);
-        clearShapeStyle();
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
+            clearShapeStyle();
+        }
     }
 
     @Override

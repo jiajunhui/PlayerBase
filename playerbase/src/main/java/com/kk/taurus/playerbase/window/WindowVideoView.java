@@ -18,6 +18,8 @@ package com.kk.taurus.playerbase.window;
 
 import android.animation.Animator;
 import android.content.Context;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.view.MotionEvent;
 
 import com.kk.taurus.playerbase.widget.BaseVideoView;
@@ -111,9 +113,11 @@ public class WindowVideoView extends BaseVideoView implements IWindow {
         mWindowHelper.close(items);
     }
 
-    private void resetStyle() {
+    public void resetStyle() {
         setElevationShadow(0);
-        clearShapeStyle();
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
+            clearShapeStyle();
+        }
     }
 
     @Override

@@ -397,7 +397,7 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
                 submitErrorEvent(OnErrorEventListener.ERROR_EVENT_UNKNOWN, null);
                 return;
             }
-            PLog.e(TAG,error.getMessage());
+            PLog.e(TAG,error.getMessage()==null?"":error.getMessage());
             int type = error.type;
             switch (type){
                 case ExoPlaybackException.TYPE_SOURCE:
