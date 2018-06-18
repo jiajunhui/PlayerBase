@@ -14,4 +14,10 @@
         <item name="windowActionBar">false</item>
     </style>
 
+    <style name="MenuTheme" parent="ThemeOverlay.AppCompat.Light">
+        <item name="actionMenuTextColor">@android:color/white</item>
+        <item name="colorButtonNormal">@android:color/white</item>
+        <item name="colorControlNormal">@android:color/white</item>
+    </style>
+
 </resources>
