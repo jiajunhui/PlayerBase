@@ -102,6 +102,7 @@ public final class EventDispatcher implements IEventDispatcher{
      * dispatch receivers event
      * @param eventCode
      * @param bundle
+     * @param onReceiverFilter
      */
     @Override
     public void dispatchReceiverEvent(final int eventCode, final Bundle bundle, IReceiverGroup.OnReceiverFilter onReceiverFilter) {
@@ -112,6 +113,39 @@ public final class EventDispatcher implements IEventDispatcher{
             }
         });
         recycleBundle(bundle);
+    }
+
+    /**
+     * dispatch producer event
+     * @param eventCode
+     * @param bundle
+     * @param onReceiverFilter
+     */
+    @Override
+    public void dispatchProducerEvent(final int eventCode, final Bundle bundle, IReceiverGroup.OnReceiverFilter onReceiverFilter) {
+        mReceiverGroup.forEach(onReceiverFilter, new IReceiverGroup.OnLoopListener() {
+            @Override
+            public void onEach(IReceiver receiver) {
+                receiver.onProducerEvent(eventCode, bundle);
+            }
+        });
+        recycleBundle(bundle);
+    }
+
+    /**
+     * dispatch producer data
+     * @param key
+     * @param data
+     * @param onReceiverFilter
+     */
+    @Override
+    public void dispatchProducerData(final String key, final Object data, IReceiverGroup.OnReceiverFilter onReceiverFilter) {
+        mReceiverGroup.forEach(onReceiverFilter, new IReceiverGroup.OnLoopListener() {
+            @Override
+            public void onEach(IReceiver receiver) {
+                receiver.onProducerData(key, data);
+            }
+        });
     }
 
     //-----------------------------------dispatch gesture touch event-----------------------------------

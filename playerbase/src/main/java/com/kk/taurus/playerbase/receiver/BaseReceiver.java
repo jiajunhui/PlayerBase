@@ -142,6 +142,16 @@ public abstract class BaseReceiver implements IReceiver, StateGetter {
         return null;
     }
 
+    @Override
+    public void onProducerEvent(int eventCode, Bundle bundle) {
+
+    }
+
+    @Override
+    public void onProducerData(String key, Object data) {
+
+    }
+
     protected final Context getContext(){
         return mContext;
     }

@@ -177,12 +177,12 @@ public class SuperContainer extends FrameLayout implements OnTouchGestureListene
         public void sendEvent(int eventCode, Bundle bundle,
                               IReceiverGroup.OnReceiverFilter receiverFilter) {
             if(mEventDispatcher!=null)
-                mEventDispatcher.dispatchReceiverEvent(eventCode, bundle, receiverFilter);
+                mEventDispatcher.dispatchProducerEvent(eventCode, bundle, receiverFilter);
         }
         @Override
-        public void sendObject(String key, Object value) {
-            if(mReceiverGroup!=null)
-                mReceiverGroup.getGroupValue().putObject(key, value);
+        public void sendObject(String key, Object value, IReceiverGroup.OnReceiverFilter receiverFilter) {
+            if(mEventDispatcher!=null)
+                mEventDispatcher.dispatchProducerData(key, value, receiverFilter);
         }
     };
 

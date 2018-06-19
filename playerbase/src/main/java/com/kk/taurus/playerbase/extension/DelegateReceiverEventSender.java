@@ -29,6 +29,6 @@ public interface DelegateReceiverEventSender {
 
     void sendEvent(int eventCode, Bundle bundle, IReceiverGroup.OnReceiverFilter receiverFilter);
 
-    void sendObject(String key, Object value);
+    void sendObject(String key, Object value, IReceiverGroup.OnReceiverFilter receiverFilter);
 
 }

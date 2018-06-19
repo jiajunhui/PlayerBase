@@ -30,6 +30,10 @@ public interface IEventDispatcher {
     void dispatchErrorEvent(int eventCode, Bundle bundle);
     void dispatchReceiverEvent(int eventCode, Bundle bundle);
     void dispatchReceiverEvent(int eventCode, Bundle bundle, IReceiverGroup.OnReceiverFilter onReceiverFilter);
+    void dispatchProducerEvent(int eventCode, Bundle bundle, IReceiverGroup.OnReceiverFilter onReceiverFilter);
+    void dispatchProducerData(String key, Object data, IReceiverGroup.OnReceiverFilter onReceiverFilter);
+
+
     void dispatchTouchEventOnSingleTabUp(MotionEvent event);
     void dispatchTouchEventOnDoubleTabUp(MotionEvent event);
     void dispatchTouchEventOnDown(MotionEvent event);
