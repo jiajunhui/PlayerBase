@@ -372,14 +372,17 @@ public final class RelationAssist implements AssistPlay {
 
     @Override
     public void play() {
+        play(false);
+    }
+
+    @Override
+    public void play(boolean updateRender) {
         if(mDataSource!=null){
-            //when data source set, clear previous video frame.
-            //You must ensure that the callbacks available for rendering views are re executed.
-            //Otherwise, there will be no picture.
-            //In this scenario, the view container will change constantly,
-            //so the callbacks that are rendered available will be executed.
-            if(mRender!=null)
-                mRender.reset();
+            if(updateRender){
+                releaseRender();
+                mRender = null;
+                updateRender();
+            }
             onInternalSetDataSource(mDataSource);
             onInternalStart(mDataSource.getStartPos());
         }

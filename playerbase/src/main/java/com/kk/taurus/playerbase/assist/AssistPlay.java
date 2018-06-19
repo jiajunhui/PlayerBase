@@ -52,6 +52,7 @@ public interface AssistPlay {
     void setDataSource(DataSource dataSource);
 
     void play();
+    void play(boolean updateRender);
 
     boolean isInPlaybackState();
     boolean isPlaying();

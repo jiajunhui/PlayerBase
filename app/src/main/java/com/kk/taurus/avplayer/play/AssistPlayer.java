@@ -176,7 +176,7 @@ public class AssistPlayer {
             return;
         }
         if(dataSource!=null)
-            mRelationAssist.play();
+            mRelationAssist.play(true);
     }
 
     public void setDataProvider(IDataProvider dataProvider){

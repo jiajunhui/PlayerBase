@@ -125,17 +125,6 @@ public class RenderTextureView extends TextureView implements IRender {
     }
 
     @Override
-    public void reset() {
-        //when data source set, clear previous video frame.
-        //You must ensure that the callbacks available for rendering views are re executed.
-        //Otherwise, there will be no picture.
-        if(mSurfaceTexture!=null && mSurface!=null){
-            mSurfaceTexture.release();
-            mSurfaceTexture = null;
-        }
-    }
-
-    @Override
     public void release() {
         setSurfaceTextureListener(null);
         if(mSurfaceTexture!=null){

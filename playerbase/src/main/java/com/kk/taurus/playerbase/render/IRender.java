@@ -72,11 +72,6 @@ public interface IRender {
     View getRenderView();
 
     /**
-     * reset the render, maybe clear video frames.
-     */
-    void reset();
-
-    /**
      * release render,the render will become unavailable
      */
     void release();
