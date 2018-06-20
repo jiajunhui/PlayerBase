@@ -160,9 +160,9 @@ public final class RelationAssist implements AssistPlay {
         @Override
         public void onPlayerEvent(int eventCode, Bundle bundle) {
             onInternalHandlePlayerEvent(eventCode, bundle);
-            mSuperContainer.dispatchPlayEvent(eventCode, bundle);
             if(mOnPlayerEventListener!=null)
                 mOnPlayerEventListener.onPlayerEvent(eventCode, bundle);
+            mSuperContainer.dispatchPlayEvent(eventCode, bundle);
         }
     };
 
@@ -207,9 +207,9 @@ public final class RelationAssist implements AssistPlay {
         @Override
         public void onErrorEvent(int eventCode, Bundle bundle) {
             onInternalHandleErrorEvent(eventCode, bundle);
-            mSuperContainer.dispatchErrorEvent(eventCode, bundle);
             if(mOnErrorEventListener!=null)
                 mOnErrorEventListener.onErrorEvent(eventCode, bundle);
+            mSuperContainer.dispatchErrorEvent(eventCode, bundle);
         }
     };
 
