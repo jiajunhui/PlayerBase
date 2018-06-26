@@ -131,6 +131,10 @@ public class RenderTextureView extends TextureView implements IRender {
             mSurfaceTexture.release();
             mSurfaceTexture = null;
         }
+        if(mSurface!=null){
+            mSurface.release();
+            mSurface = null;
+        }
     }
 
     private  Surface mSurface;

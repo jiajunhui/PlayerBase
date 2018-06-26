@@ -179,6 +179,14 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
         mPlayer.setDataProvider(dataProvider);
     }
 
+    /**
+     * set a listener for DataProvider handle data source.
+     * @param onProviderListener
+     */
+    public void setOnProviderListener(IDataProvider.OnProviderListener onProviderListener){
+        mPlayer.setOnProviderListener(onProviderListener);
+    }
+
     @Override
     public void setDataSource(DataSource dataSource) {
         //init AudioManager

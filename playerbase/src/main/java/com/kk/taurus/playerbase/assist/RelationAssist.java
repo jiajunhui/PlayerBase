@@ -308,6 +308,10 @@ public final class RelationAssist implements AssistPlay {
         }
     }
 
+    public IRender getRender() {
+        return mRender;
+    }
+
     @Override
     public void setVolume(float left, float right) {
         mPlayer.setVolume(left, right);

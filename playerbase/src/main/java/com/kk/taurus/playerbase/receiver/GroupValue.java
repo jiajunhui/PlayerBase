@@ -17,7 +17,9 @@
 package com.kk.taurus.playerbase.receiver;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -109,7 +111,10 @@ public final class GroupValue implements Cloneable{
     private void callBackValueUpdate(String key, Object value) {
         List<IReceiverGroup.OnGroupValueUpdateListener> mCallbacks = new ArrayList<>();
         //filter callbacks
-        for(IReceiverGroup.OnGroupValueUpdateListener listener : mOnGroupValueUpdateListeners){
+        Iterator<IReceiverGroup.OnGroupValueUpdateListener>
+                iterator = mOnGroupValueUpdateListeners.iterator();
+        while (iterator.hasNext()){
+            IReceiverGroup.OnGroupValueUpdateListener listener = iterator.next();
             if(containsKey(listener.filterKeys(), key)){
                 mCallbacks.add(listener);
             }
@@ -121,11 +126,8 @@ public final class GroupValue implements Cloneable{
     }
 
     private boolean containsKey(String[] keys, String nowKey){
-        if(keys==null || keys.length<=0)
-            return false;
-        for(String k : keys){
-            if(nowKey.equals(k))
-                return true;
+        if(keys!=null && keys.length>0){
+            return Arrays.binarySearch(keys, nowKey) >= 0;
         }
         return false;
     }
