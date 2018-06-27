@@ -24,6 +24,6 @@ public interface PConst {
     int NETWORK_STATE_2G = 2;
     int NETWORK_STATE_3G = 3;
     int NETWORK_STATE_4G = 4;
-    int NETWORK_STATE_MOBILE = 5;
+    int NETWORK_STATE_MOBILE_UNKNOWN = 5;
 
 }

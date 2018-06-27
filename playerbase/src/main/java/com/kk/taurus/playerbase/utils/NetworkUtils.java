@@ -16,6 +16,7 @@
 
 package com.kk.taurus.playerbase.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -25,7 +26,7 @@ import static com.kk.taurus.playerbase.config.PConst.NETWORK_STATE_2G;
 import static com.kk.taurus.playerbase.config.PConst.NETWORK_STATE_3G;
 import static com.kk.taurus.playerbase.config.PConst.NETWORK_STATE_4G;
 import static com.kk.taurus.playerbase.config.PConst.NETWORK_STATE_CONNECTING;
-import static com.kk.taurus.playerbase.config.PConst.NETWORK_STATE_MOBILE;
+import static com.kk.taurus.playerbase.config.PConst.NETWORK_STATE_MOBILE_UNKNOWN;
 import static com.kk.taurus.playerbase.config.PConst.NETWORK_STATE_NONE;
 import static com.kk.taurus.playerbase.config.PConst.NETWORK_STATE_WIFI;
 
@@ -45,6 +46,7 @@ public class NetworkUtils {
         if (null == connManager) {
             return NETWORK_STATE_NONE;
         }
+        @SuppressLint("MissingPermission")
         NetworkInfo networkInfo = connManager.getActiveNetworkInfo();
         if (networkInfo == null) {
             return NETWORK_STATE_NONE;
@@ -58,6 +60,7 @@ public class NetworkUtils {
             }
         }
         // is wifi ?
+        @SuppressLint("MissingPermission")
         NetworkInfo wifiInfo = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
         if (null != wifiInfo) {
             NetworkInfo.State state = wifiInfo.getState();
@@ -110,8 +113,12 @@ public class NetworkUtils {
             case TelephonyManager.NETWORK_TYPE_LTE:
                 return NETWORK_STATE_4G;
             default:
-                return NETWORK_STATE_MOBILE;
+                return NETWORK_STATE_MOBILE_UNKNOWN;
         }
+    }
+
+    public static boolean isMobile(int networkState){
+        return networkState > NETWORK_STATE_WIFI;
     }
 
     /**
@@ -123,6 +130,7 @@ public class NetworkUtils {
     public static boolean isNetConnected(Context context) {
         ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivity != null) {
+            @SuppressLint("MissingPermission")
             NetworkInfo info = connectivity.getActiveNetworkInfo();
             if (info != null && info.isConnected()) {
                 if (info.getState() == NetworkInfo.State.CONNECTED) {
@@ -142,6 +150,7 @@ public class NetworkUtils {
     public static synchronized boolean isWifiConnected(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivityManager != null) {
+            @SuppressLint("MissingPermission")
             NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
             if (networkInfo != null) {
                 int networkInfoType = networkInfo.getType();

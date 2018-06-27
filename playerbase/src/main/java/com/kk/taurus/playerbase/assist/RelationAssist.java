@@ -268,7 +268,6 @@ public final class RelationAssist implements AssistPlay {
         boolean switchDecoder = mPlayer.switchDecoder(decoderPlanId);
         if(switchDecoder){
             releaseRender();
-            mRender = null;
         }
         return switchDecoder;
     }
@@ -384,7 +383,6 @@ public final class RelationAssist implements AssistPlay {
         if(mDataSource!=null){
             if(updateRender){
                 releaseRender();
-                mRender = null;
                 updateRender();
             }
             onInternalSetDataSource(mDataSource);
@@ -417,8 +415,11 @@ public final class RelationAssist implements AssistPlay {
     }
 
     private void releaseRender(){
-        if(mRender!=null)
+        if(mRender!=null){
+            mRender.setRenderCallback(null);
             mRender.release();
+        }
+        mRender = null;
     }
 
     private void detachSuperContainer(){

@@ -27,6 +27,8 @@ import android.view.View;
 import com.kk.taurus.playerbase.log.PLog;
 import com.kk.taurus.playerbase.player.IPlayer;
 
+import java.lang.ref.WeakReference;
+
 /**
  * Created by Taurus on 2017/11/19.
  *
@@ -126,7 +128,6 @@ public class RenderTextureView extends TextureView implements IRender {
 
     @Override
     public void release() {
-        setSurfaceTextureListener(null);
         if(mSurfaceTexture!=null){
             mSurfaceTexture.release();
             mSurfaceTexture = null;
@@ -135,6 +136,7 @@ public class RenderTextureView extends TextureView implements IRender {
             mSurface.release();
             mSurface = null;
         }
+        setSurfaceTextureListener(null);
     }
 
     private  Surface mSurface;
@@ -153,12 +155,12 @@ public class RenderTextureView extends TextureView implements IRender {
 
     private static final class InternalRenderHolder implements IRenderHolder{
 
-        private Surface mSurfaceRefer;
+        private WeakReference<Surface> mSurfaceRefer;
         private RenderTextureView mTextureView;
 
         public InternalRenderHolder(RenderTextureView textureView, SurfaceTexture surfaceTexture){
             this.mTextureView = textureView;
-            mSurfaceRefer = new Surface(surfaceTexture);
+            mSurfaceRefer = new WeakReference<>(new Surface(surfaceTexture));
         }
 
         @Override
@@ -195,10 +197,13 @@ public class RenderTextureView extends TextureView implements IRender {
                         PLog.d("RenderTextureView","****bindSurface****");
                     }
                 }else{
-                    player.setSurface(mSurfaceRefer);
-                    //record the Surface
-                    mTextureView.setSurface(mSurfaceRefer);
-                    PLog.d("RenderTextureView","****bindSurface****");
+                    Surface surface = mSurfaceRefer.get();
+                    if(surface!=null){
+                        player.setSurface(surface);
+                        //record the Surface
+                        mTextureView.setSurface(surface);
+                        PLog.d("RenderTextureView","****bindSurface****");
+                    }
                 }
             }
         }

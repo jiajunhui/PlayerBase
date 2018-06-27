@@ -33,11 +33,13 @@ import java.util.Set;
 public final class GroupValue implements Cloneable{
 
     private HashMap<String,Object> mValueMap;
+    private HashMap<IReceiverGroup.OnGroupValueUpdateListener, String[]> mListenerKeys;
 
     private List<IReceiverGroup.OnGroupValueUpdateListener> mOnGroupValueUpdateListeners;
 
     public GroupValue(){
         mValueMap = new HashMap<>();
+        mListenerKeys = new HashMap<>();
         mOnGroupValueUpdateListeners = new ArrayList<>();
     }
 
@@ -48,6 +50,10 @@ public final class GroupValue implements Cloneable{
         if(mOnGroupValueUpdateListeners.contains(onGroupValueUpdateListener))
             return;
         mOnGroupValueUpdateListeners.add(onGroupValueUpdateListener);
+        //sort it for Arrays.binarySearch();
+        String[] keyArrays = onGroupValueUpdateListener.filterKeys();
+        Arrays.sort(keyArrays);
+        mListenerKeys.put(onGroupValueUpdateListener, keyArrays);
         //when listener add, if user observe keys in current KeySet, call back it.
         checkCurrentKeySet(onGroupValueUpdateListener);
     }
@@ -56,7 +62,7 @@ public final class GroupValue implements Cloneable{
             IReceiverGroup.OnGroupValueUpdateListener onGroupValueUpdateListener) {
         Set<String> keys = mValueMap.keySet();
         for(String key : keys){
-            if(containsKey(onGroupValueUpdateListener.filterKeys(), key)){
+            if(containsKey(mListenerKeys.get(onGroupValueUpdateListener), key)){
                 onGroupValueUpdateListener.onValueUpdate(key, mValueMap.get(key));
             }
         }
@@ -64,6 +70,7 @@ public final class GroupValue implements Cloneable{
 
     public void unregisterOnGroupValueUpdateListener(
             IReceiverGroup.OnGroupValueUpdateListener onGroupValueUpdateListener){
+        mListenerKeys.remove(onGroupValueUpdateListener);
         mOnGroupValueUpdateListeners.remove(onGroupValueUpdateListener);
     }
 
@@ -115,7 +122,7 @@ public final class GroupValue implements Cloneable{
                 iterator = mOnGroupValueUpdateListeners.iterator();
         while (iterator.hasNext()){
             IReceiverGroup.OnGroupValueUpdateListener listener = iterator.next();
-            if(containsKey(listener.filterKeys(), key)){
+            if(containsKey(mListenerKeys.get(listener), key)){
                 mCallbacks.add(listener);
             }
         }
