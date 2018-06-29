@@ -36,6 +36,8 @@ public abstract class BaseReceiver implements IReceiver, StateGetter {
     private IReceiverGroup mHostGroup;
     private StateGetter mStateGetter;
 
+    private String mKey;
+
     /**
      * If you want to use Activity related functions or features,
      * please pass in the context of Activity.
@@ -161,4 +163,12 @@ public abstract class BaseReceiver implements IReceiver, StateGetter {
         return this.getClass().getSimpleName();
     }
 
+    void setKey(String key){
+        this.mKey = key;
+    }
+
+    @Override
+    public String getKey() {
+        return mKey;
+    }
 }

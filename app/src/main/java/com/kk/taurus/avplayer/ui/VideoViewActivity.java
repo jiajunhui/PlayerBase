@@ -269,14 +269,22 @@ public class VideoViewActivity extends AppCompatActivity implements OnPlayerEven
     @Override
     protected void onPause() {
         super.onPause();
-        mVideoView.pause();
+        if(mVideoView.isInPlaybackState()){
+            mVideoView.pause();
+        }else{
+            mVideoView.stop();
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if(!userPause)
-            mVideoView.resume();
+        if(mVideoView.isInPlaybackState()){
+            if(!userPause)
+                mVideoView.resume();
+        }else{
+            mVideoView.rePlay(0);
+        }
     }
 
     @Override

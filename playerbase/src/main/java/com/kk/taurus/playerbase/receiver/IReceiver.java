@@ -101,4 +101,10 @@ public interface IReceiver {
      */
     void onReceiverUnBind();
 
+    /**
+     * get the receiver key, when add receiver the key set it.
+     * @return
+     */
+    String getKey();
+
 }

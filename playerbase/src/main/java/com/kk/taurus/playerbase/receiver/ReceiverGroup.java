@@ -57,6 +57,7 @@ public final class ReceiverGroup implements IReceiverGroup{
         receiver.bindGroup(this);
         //call back method onReceiverBind().
         receiver.onReceiverBind();
+        ((BaseReceiver)receiver).setKey(key);
         mReceivers.put(key, receiver);
         mKeySet = mReceivers.keySet();
         if(mOnReceiverGroupChangeListener!=null)

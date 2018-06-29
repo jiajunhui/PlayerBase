@@ -60,6 +60,15 @@ public abstract class BaseDataProvider implements IDataProvider {
     }
 
     /**
+     * when provider media data error. must invocation.
+     * @param bundle
+     */
+    protected final void onProviderMediaDataError(@NonNull Bundle bundle){
+        if(mOnProviderListener!=null)
+            mOnProviderListener.onProviderError(PROVIDER_CODE_DATA_PROVIDER_ERROR, bundle);
+    }
+
+    /**
      * if occur error, It is strongly recommended to call the method.
      * @param code
      * @param bundle

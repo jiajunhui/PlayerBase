@@ -301,11 +301,15 @@ public final class AVPlayer implements IPlayer{
             if(mOnProviderListener!=null)
                 mOnProviderListener.onProviderError(code, bundle);
             //need recreate a new bundle, because a bundle will be recycle after call back.
-            Bundle errorBundle = new Bundle(bundle);
+            Bundle errorBundle;
+            if(bundle!=null){
+                errorBundle = new Bundle(bundle);
+            }else{
+                errorBundle = new Bundle();
+            }
             errorBundle.putInt(EventKey.INT_DATA,code);
             //call back player event
-            callBackPlayEventListener(
-                    OnPlayerEventListener.PLAYER_EVENT_ON_PROVIDER_DATA_ERROR, bundle);
+            callBackPlayEventListener(code, bundle);
             //call back error event
             callBackErrorEventListener(
                     OnErrorEventListener.ERROR_EVENT_DATA_PROVIDER_ERROR,errorBundle);
