@@ -60,8 +60,11 @@ public class NetworkEventProducer extends BaseEventProducer {
                     if(mState==state)
                         return;
                     mState = state;
-                    getSender().sendInt(InterKey.KEY_NETWORK_STATE, mState);
-                    PLog.d(TAG,"onNetworkChange : " + mState);
+                    ReceiverEventSender sender = getSender();
+                    if(sender!=null){
+                        sender.sendInt(InterKey.KEY_NETWORK_STATE, mState);
+                        PLog.d(TAG,"onNetworkChange : " + mState);
+                    }
                     break;
             }
         }
@@ -72,6 +75,7 @@ public class NetworkEventProducer extends BaseEventProducer {
     }
 
     private void registerNetChangeReceiver(){
+        unregisterNetChangeReceiver();
         if(mAppContext!=null){
             mBroadcastReceiver = new NetChangeBroadcastReceiver(mAppContext, mHandler);
             IntentFilter intentFilter = new IntentFilter();
@@ -105,6 +109,7 @@ public class NetworkEventProducer extends BaseEventProducer {
         if(mBroadcastReceiver !=null)
             mBroadcastReceiver.destroy();
         unregisterNetChangeReceiver();
+        mHandler.removeMessages(MSG_CODE_NETWORK_CHANGE);
     }
 
     public static class NetChangeBroadcastReceiver extends BroadcastReceiver {

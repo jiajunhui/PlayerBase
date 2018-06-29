@@ -51,8 +51,8 @@ public final class ProducerGroup implements IProducerGroup {
     public boolean removeEventProducer(EventProducer eventProducer) {
         boolean remove = mEventProducers.remove(eventProducer);
         if(eventProducer!=null){
-            eventProducer.attachSender(null);
             eventProducer.onRemoved();
+            eventProducer.attachSender(null);
         }
         return remove;
     }
