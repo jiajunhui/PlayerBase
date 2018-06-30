@@ -16,9 +16,9 @@
 
 package com.kk.taurus.playerbase.receiver;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by Taurus on 2018/3/17.
@@ -38,7 +38,7 @@ public final class ReceiverGroup implements IReceiverGroup{
     }
 
     public ReceiverGroup(GroupValue groupValue){
-        mReceivers = new HashMap<>(16);
+        mReceivers = new ConcurrentHashMap<>(16);
         if(groupValue==null){
             mGroupValue = new GroupValue();
         }else{
@@ -53,7 +53,7 @@ public final class ReceiverGroup implements IReceiverGroup{
     }
 
     @Override
-    public synchronized void addReceiver(String key, IReceiver receiver){
+    public void addReceiver(String key, IReceiver receiver){
         receiver.bindGroup(this);
         //call back method onReceiverBind().
         receiver.onReceiverBind();
@@ -65,7 +65,7 @@ public final class ReceiverGroup implements IReceiverGroup{
     }
 
     @Override
-    public synchronized void removeReceiver(String key) {
+    public void removeReceiver(String key) {
         IReceiver receiver = mReceivers.remove(key);
         if(mOnReceiverGroupChangeListener!=null && receiver!=null)
             mOnReceiverGroupChangeListener.onReceiverRemove(key, receiver);
@@ -80,7 +80,7 @@ public final class ReceiverGroup implements IReceiverGroup{
     }
 
     @Override
-    public synchronized void forEach(OnReceiverFilter filter, OnLoopListener onLoopListener) {
+    public void forEach(OnReceiverFilter filter, OnLoopListener onLoopListener) {
         if(mKeySet==null)
             return;
         for (String s : mKeySet) {
@@ -103,7 +103,7 @@ public final class ReceiverGroup implements IReceiverGroup{
     }
 
     @Override
-    public synchronized void clearReceivers(){
+    public void clearReceivers(){
         if(mKeySet==null)
             return;
         for (String key : mKeySet) {

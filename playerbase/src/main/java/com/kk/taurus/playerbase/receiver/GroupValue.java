@@ -18,10 +18,11 @@ package com.kk.taurus.playerbase.receiver;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by Taurus on 2018/4/20.
@@ -38,14 +39,14 @@ public final class GroupValue {
     private List<IReceiverGroup.OnGroupValueUpdateListener> mOnGroupValueUpdateListeners;
 
     public GroupValue(){
-        mValueMap = new HashMap<>();
-        mListenerKeys = new HashMap<>();
-        mOnGroupValueUpdateListeners = new ArrayList<>();
+        mValueMap = new ConcurrentHashMap<>();
+        mListenerKeys = new ConcurrentHashMap<>();
+        mOnGroupValueUpdateListeners = new CopyOnWriteArrayList<>();
     }
 
     //If you want to listen to changes in some data,
     //you can register a listener to implement it.
-    public synchronized void registerOnGroupValueUpdateListener(
+    public void registerOnGroupValueUpdateListener(
             IReceiverGroup.OnGroupValueUpdateListener onGroupValueUpdateListener){
         if(mOnGroupValueUpdateListeners.contains(onGroupValueUpdateListener))
             return;
@@ -58,7 +59,7 @@ public final class GroupValue {
         checkCurrentKeySet(onGroupValueUpdateListener);
     }
 
-    private synchronized void checkCurrentKeySet(
+    private void checkCurrentKeySet(
             IReceiverGroup.OnGroupValueUpdateListener onGroupValueUpdateListener) {
         Set<String> keys = mValueMap.keySet();
         for (String key : keys) {
@@ -68,7 +69,7 @@ public final class GroupValue {
         }
     }
 
-    public synchronized void unregisterOnGroupValueUpdateListener(
+    public void unregisterOnGroupValueUpdateListener(
             IReceiverGroup.OnGroupValueUpdateListener onGroupValueUpdateListener){
         mListenerKeys.remove(onGroupValueUpdateListener);
         mOnGroupValueUpdateListeners.remove(onGroupValueUpdateListener);
@@ -110,12 +111,12 @@ public final class GroupValue {
         put(key, value);
     }
 
-    private synchronized void put(String key, Object value){
+    private void put(String key, Object value){
         mValueMap.put(key, value);
         callBackValueUpdate(key, value);
     }
 
-    private synchronized void callBackValueUpdate(String key, Object value) {
+    private void callBackValueUpdate(String key, Object value) {
         List<IReceiverGroup.OnGroupValueUpdateListener> mCallbacks = new ArrayList<>();
         //filter callbacks
         for (IReceiverGroup.OnGroupValueUpdateListener listener : mOnGroupValueUpdateListeners) {

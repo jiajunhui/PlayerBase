@@ -16,9 +16,9 @@
 
 package com.kk.taurus.playerbase.extension;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  *
@@ -33,11 +33,11 @@ public final class ProducerGroup implements IProducerGroup {
 
     public ProducerGroup(ReceiverEventSender eventSender){
         this.mEventSender = eventSender;
-        mEventProducers = new ArrayList<>();
+        mEventProducers = new CopyOnWriteArrayList<>();
     }
 
     @Override
-    public synchronized void addEventProducer(EventProducer eventProducer) {
+    public void addEventProducer(EventProducer eventProducer) {
         if(eventProducer==null)
             return;
         eventProducer.attachSender(mEventSender);
@@ -48,7 +48,7 @@ public final class ProducerGroup implements IProducerGroup {
     }
 
     @Override
-    public synchronized boolean removeEventProducer(EventProducer eventProducer) {
+    public boolean removeEventProducer(EventProducer eventProducer) {
         boolean remove = mEventProducers.remove(eventProducer);
         if(eventProducer!=null){
             eventProducer.onRemoved();
@@ -58,7 +58,7 @@ public final class ProducerGroup implements IProducerGroup {
     }
 
     @Override
-    public synchronized void destroy() {
+    public void destroy() {
         Iterator<EventProducer> iterator = mEventProducers.iterator();
         while (iterator.hasNext()){
             EventProducer next = iterator.next();
