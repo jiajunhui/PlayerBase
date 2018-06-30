@@ -19,8 +19,8 @@ package com.kk.taurus.playerbase.receiver;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -30,10 +30,10 @@ import java.util.Set;
  *
  */
 
-public final class GroupValue implements Cloneable{
+public final class GroupValue {
 
-    private HashMap<String,Object> mValueMap;
-    private HashMap<IReceiverGroup.OnGroupValueUpdateListener, String[]> mListenerKeys;
+    private Map<String,Object> mValueMap;
+    private Map<IReceiverGroup.OnGroupValueUpdateListener, String[]> mListenerKeys;
 
     private List<IReceiverGroup.OnGroupValueUpdateListener> mOnGroupValueUpdateListeners;
 
@@ -45,7 +45,7 @@ public final class GroupValue implements Cloneable{
 
     //If you want to listen to changes in some data,
     //you can register a listener to implement it.
-    public void registerOnGroupValueUpdateListener(
+    public synchronized void registerOnGroupValueUpdateListener(
             IReceiverGroup.OnGroupValueUpdateListener onGroupValueUpdateListener){
         if(mOnGroupValueUpdateListeners.contains(onGroupValueUpdateListener))
             return;
@@ -58,17 +58,17 @@ public final class GroupValue implements Cloneable{
         checkCurrentKeySet(onGroupValueUpdateListener);
     }
 
-    private void checkCurrentKeySet(
+    private synchronized void checkCurrentKeySet(
             IReceiverGroup.OnGroupValueUpdateListener onGroupValueUpdateListener) {
         Set<String> keys = mValueMap.keySet();
-        for(String key : keys){
-            if(containsKey(mListenerKeys.get(onGroupValueUpdateListener), key)){
+        for (String key : keys) {
+            if (containsKey(mListenerKeys.get(onGroupValueUpdateListener), key)) {
                 onGroupValueUpdateListener.onValueUpdate(key, mValueMap.get(key));
             }
         }
     }
 
-    public void unregisterOnGroupValueUpdateListener(
+    public synchronized void unregisterOnGroupValueUpdateListener(
             IReceiverGroup.OnGroupValueUpdateListener onGroupValueUpdateListener){
         mListenerKeys.remove(onGroupValueUpdateListener);
         mOnGroupValueUpdateListeners.remove(onGroupValueUpdateListener);
@@ -110,19 +110,16 @@ public final class GroupValue implements Cloneable{
         put(key, value);
     }
 
-    private void put(String key, Object value){
+    private synchronized void put(String key, Object value){
         mValueMap.put(key, value);
         callBackValueUpdate(key, value);
     }
 
-    private void callBackValueUpdate(String key, Object value) {
+    private synchronized void callBackValueUpdate(String key, Object value) {
         List<IReceiverGroup.OnGroupValueUpdateListener> mCallbacks = new ArrayList<>();
         //filter callbacks
-        Iterator<IReceiverGroup.OnGroupValueUpdateListener>
-                iterator = mOnGroupValueUpdateListeners.iterator();
-        while (iterator.hasNext()){
-            IReceiverGroup.OnGroupValueUpdateListener listener = iterator.next();
-            if(containsKey(mListenerKeys.get(listener), key)){
+        for (IReceiverGroup.OnGroupValueUpdateListener listener : mOnGroupValueUpdateListeners) {
+            if (containsKey(mListenerKeys.get(listener), key)) {
                 mCallbacks.add(listener);
             }
         }
@@ -211,10 +208,4 @@ public final class GroupValue implements Cloneable{
         return d;
     }
 
-    @Override
-    protected GroupValue clone() throws CloneNotSupportedException {
-        GroupValue groupValue = (GroupValue) super.clone();
-        groupValue.mValueMap = (HashMap<String, Object>) mValueMap.clone();
-        return groupValue;
-    }
 }

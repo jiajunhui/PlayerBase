@@ -37,7 +37,7 @@ public final class ProducerGroup implements IProducerGroup {
     }
 
     @Override
-    public void addEventProducer(EventProducer eventProducer) {
+    public synchronized void addEventProducer(EventProducer eventProducer) {
         if(eventProducer==null)
             return;
         eventProducer.attachSender(mEventSender);
@@ -48,7 +48,7 @@ public final class ProducerGroup implements IProducerGroup {
     }
 
     @Override
-    public boolean removeEventProducer(EventProducer eventProducer) {
+    public synchronized boolean removeEventProducer(EventProducer eventProducer) {
         boolean remove = mEventProducers.remove(eventProducer);
         if(eventProducer!=null){
             eventProducer.onRemoved();
@@ -58,7 +58,7 @@ public final class ProducerGroup implements IProducerGroup {
     }
 
     @Override
-    public void destroy() {
+    public synchronized void destroy() {
         Iterator<EventProducer> iterator = mEventProducers.iterator();
         while (iterator.hasNext()){
             EventProducer next = iterator.next();
