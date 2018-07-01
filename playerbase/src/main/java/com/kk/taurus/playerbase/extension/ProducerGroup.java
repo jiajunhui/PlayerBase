@@ -37,8 +37,6 @@ public final class ProducerGroup implements IProducerGroup {
 
     @Override
     public void addEventProducer(EventProducer eventProducer) {
-        if(eventProducer==null)
-            return;
         eventProducer.attachSender(mEventSender);
         if(!mEventProducers.contains(eventProducer)){
             mEventProducers.add(eventProducer);

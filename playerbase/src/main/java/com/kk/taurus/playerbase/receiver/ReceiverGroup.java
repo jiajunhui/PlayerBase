@@ -54,10 +54,10 @@ public final class ReceiverGroup implements IReceiverGroup{
 
     @Override
     public void addReceiver(String key, IReceiver receiver){
+        ((BaseReceiver)receiver).setKey(key);
         receiver.bindGroup(this);
         //call back method onReceiverBind().
         receiver.onReceiverBind();
-        ((BaseReceiver)receiver).setKey(key);
         mReceivers.put(key, receiver);
         mKeySet = mReceivers.keySet();
         if(mOnReceiverGroupChangeListener!=null)

@@ -92,11 +92,13 @@ public final class AVPlayer implements IPlayer{
                     "init decoder instance failure, please check your configuration" +
                             ", maybe your config classpath not found.");
         DecoderPlan plan = PlayerConfig.getPlan(mDecoderPlanId);
-        PLog.d(TAG,"=============================");
-        PLog.d(TAG,"DecoderPlanInfo : planId      = " + plan.getIdNumber());
-        PLog.d(TAG,"DecoderPlanInfo : classPath   = " + plan.getClassPath());
-        PLog.d(TAG,"DecoderPlanInfo : desc        = " + plan.getDesc());
-        PLog.d(TAG,"=============================");
+        if(plan!=null){
+            PLog.d(TAG,"=============================");
+            PLog.d(TAG,"DecoderPlanInfo : planId      = " + plan.getIdNumber());
+            PLog.d(TAG,"DecoderPlanInfo : classPath   = " + plan.getClassPath());
+            PLog.d(TAG,"DecoderPlanInfo : desc        = " + plan.getDesc());
+            PLog.d(TAG,"=============================");
+        }
     }
 
     /**
@@ -275,13 +277,14 @@ public final class AVPlayer implements IPlayer{
                 //on data provider load data success,need set data to decoder player.
                 case IDataProvider.PROVIDER_CODE_SUCCESS_MEDIA_DATA:
                     if(bundle!=null){
-                        DataSource data =
-                                (DataSource) bundle.getSerializable(EventKey.SERIALIZABLE_DATA);
-                        PLog.d(TAG,"onProviderDataSuccessMediaData : DataSource = " + data);
-                        if(data!=null){
-                            interPlayerSetDataSource(data);
-                            internalPlayerStart(data.getStartPos());
+                        Object obj = bundle.getSerializable(EventKey.SERIALIZABLE_DATA);
+                        if(obj==null || !(obj instanceof DataSource)){
+                            throw new RuntimeException("provider media success SERIALIZABLE_DATA must type of DataSource!");
                         }
+                        DataSource data = (DataSource) obj;
+                        PLog.d(TAG,"onProviderDataSuccessMediaData : DataSource = " + data);
+                        interPlayerSetDataSource(data);
+                        internalPlayerStart(data.getStartPos());
                         //success video data call back.
                         callBackPlayEventListener(
                                 OnPlayerEventListener.PLAYER_EVENT_ON_PROVIDER_DATA_SUCCESS, bundle);
