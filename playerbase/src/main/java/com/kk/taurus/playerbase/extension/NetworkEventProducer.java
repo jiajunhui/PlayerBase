@@ -97,6 +97,7 @@ public class NetworkEventProducer extends BaseEventProducer {
 
     @Override
     public void onAdded() {
+        mState = NetworkUtils.getNetworkState(mAppContext);
         registerNetChangeReceiver();
     }
 

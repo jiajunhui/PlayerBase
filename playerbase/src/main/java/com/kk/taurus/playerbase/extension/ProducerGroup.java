@@ -28,7 +28,7 @@ public final class ProducerGroup implements IProducerGroup {
 
     private ReceiverEventSender mEventSender;
 
-    private List<EventProducer> mEventProducers;
+    private List<BaseEventProducer> mEventProducers;
 
     public ProducerGroup(ReceiverEventSender eventSender){
         this.mEventSender = eventSender;
@@ -36,16 +36,16 @@ public final class ProducerGroup implements IProducerGroup {
     }
 
     @Override
-    public void addEventProducer(EventProducer eventProducer) {
-        eventProducer.attachSender(mEventSender);
+    public void addEventProducer(BaseEventProducer eventProducer) {
         if(!mEventProducers.contains(eventProducer)){
+            eventProducer.attachSender(mEventSender);
             mEventProducers.add(eventProducer);
             eventProducer.onAdded();
         }
     }
 
     @Override
-    public boolean removeEventProducer(EventProducer eventProducer) {
+    public boolean removeEventProducer(BaseEventProducer eventProducer) {
         boolean remove = mEventProducers.remove(eventProducer);
         if(eventProducer!=null){
             eventProducer.onRemoved();
@@ -56,10 +56,10 @@ public final class ProducerGroup implements IProducerGroup {
 
     @Override
     public void destroy() {
-        for(EventProducer eventProducer : mEventProducers){
-            eventProducer.attachSender(null);
+        for(BaseEventProducer eventProducer : mEventProducers){
             eventProducer.onRemoved();
             eventProducer.destroy();
+            eventProducer.attachSender(null);
         }
         mEventProducers.clear();
     }

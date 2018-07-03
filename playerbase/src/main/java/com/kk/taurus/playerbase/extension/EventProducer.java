@@ -27,8 +27,6 @@ package com.kk.taurus.playerbase.extension;
  */
 public interface EventProducer {
 
-    void attachSender(ReceiverEventSender receiverEventSender);
-
     void onAdded();
 
     void onRemoved();

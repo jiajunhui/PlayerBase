@@ -25,9 +25,9 @@ package com.kk.taurus.playerbase.extension;
  */
 public interface IProducerGroup {
 
-    void addEventProducer(EventProducer eventProducer);
+    void addEventProducer(BaseEventProducer eventProducer);
 
-    boolean removeEventProducer(EventProducer eventProducer);
+    boolean removeEventProducer(BaseEventProducer eventProducer);
 
     void destroy();
 
