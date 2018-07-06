@@ -16,6 +16,8 @@
 
 package com.kk.taurus.playerbase.receiver;
 
+import java.util.Comparator;
+
 /**
  * Created by Taurus on 2018/4/14.
  *
@@ -40,6 +42,12 @@ public interface IReceiverGroup {
      * @param key
      */
     void removeReceiver(String key);
+
+    /**
+     * sort group data
+     * @param comparator
+     */
+    void sort(Comparator<IReceiver> comparator);
 
     /**
      * loop all receivers

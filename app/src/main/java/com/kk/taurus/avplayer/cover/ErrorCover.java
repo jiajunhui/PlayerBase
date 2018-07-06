@@ -13,7 +13,6 @@ import com.kk.taurus.playerbase.event.BundlePool;
 import com.kk.taurus.playerbase.event.EventKey;
 import com.kk.taurus.playerbase.event.OnPlayerEventListener;
 import com.kk.taurus.playerbase.receiver.BaseCover;
-import com.kk.taurus.playerbase.receiver.ICover;
 import com.kk.taurus.playerbase.utils.NetworkUtils;
 
 import butterknife.BindView;
@@ -191,6 +190,6 @@ public class ErrorCover extends BaseCover {
 
     @Override
     public int getCoverLevel() {
-        return ICover.COVER_LEVEL_MEDIUM;
+        return levelHighZOrder(0);
     }
 }

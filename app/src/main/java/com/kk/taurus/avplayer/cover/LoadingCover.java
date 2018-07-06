@@ -8,7 +8,6 @@ import com.kk.taurus.avplayer.R;
 import com.kk.taurus.playerbase.event.OnPlayerEventListener;
 import com.kk.taurus.playerbase.player.IPlayer;
 import com.kk.taurus.playerbase.receiver.BaseCover;
-import com.kk.taurus.playerbase.receiver.ICover;
 import com.kk.taurus.playerbase.receiver.PlayerStateGetter;
 
 /**
@@ -80,6 +79,6 @@ public class LoadingCover extends BaseCover {
 
     @Override
     public int getCoverLevel() {
-        return ICover.COVER_LEVEL_LOW;
+        return levelMediumZOrder(1);
     }
 }

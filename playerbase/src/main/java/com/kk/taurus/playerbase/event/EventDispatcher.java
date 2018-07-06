@@ -23,7 +23,6 @@ import com.kk.taurus.playerbase.log.DebugLog;
 import com.kk.taurus.playerbase.player.OnTimerUpdateListener;
 import com.kk.taurus.playerbase.receiver.IReceiver;
 import com.kk.taurus.playerbase.receiver.IReceiverGroup;
-import com.kk.taurus.playerbase.receiver.ReceiverGroup;
 import com.kk.taurus.playerbase.touch.OnTouchGestureListener;
 
 /**
@@ -36,9 +35,9 @@ import com.kk.taurus.playerbase.touch.OnTouchGestureListener;
 
 public final class EventDispatcher implements IEventDispatcher{
 
-    private ReceiverGroup mReceiverGroup;
+    private IReceiverGroup mReceiverGroup;
 
-    public EventDispatcher(ReceiverGroup receiverGroup){
+    public EventDispatcher(IReceiverGroup receiverGroup){
         this.mReceiverGroup = receiverGroup;
     }
 

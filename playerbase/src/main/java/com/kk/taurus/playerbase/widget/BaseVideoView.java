@@ -40,9 +40,9 @@ import com.kk.taurus.playerbase.event.EventKey;
 import com.kk.taurus.playerbase.provider.IDataProvider;
 import com.kk.taurus.playerbase.event.OnErrorEventListener;
 import com.kk.taurus.playerbase.event.OnPlayerEventListener;
+import com.kk.taurus.playerbase.receiver.IReceiverGroup;
 import com.kk.taurus.playerbase.receiver.OnReceiverEventListener;
 import com.kk.taurus.playerbase.receiver.PlayerStateGetter;
-import com.kk.taurus.playerbase.receiver.ReceiverGroup;
 import com.kk.taurus.playerbase.receiver.StateGetter;
 import com.kk.taurus.playerbase.render.AspectRatio;
 import com.kk.taurus.playerbase.render.IRender;
@@ -220,7 +220,7 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
      * example if you set a controller cover ,you need self handle seek event etc.
      * @param receiverGroup
      */
-    public void setReceiverGroup(ReceiverGroup receiverGroup){
+    public void setReceiverGroup(IReceiverGroup receiverGroup){
         mSuperContainer.setReceiverGroup(receiverGroup);
     }
 

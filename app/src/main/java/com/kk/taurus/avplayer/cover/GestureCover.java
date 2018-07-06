@@ -209,6 +209,11 @@ public class GestureCover extends BaseCover implements OnTouchGestureListener {
     }
 
     @Override
+    public int getCoverLevel() {
+        return levelLowZOrder(0);
+    }
+
+    @Override
     public void onPlayerEvent(int eventCode, Bundle bundle) {
         switch (eventCode){
             case OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_RENDER_START:

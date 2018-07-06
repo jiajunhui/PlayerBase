@@ -30,9 +30,9 @@ import com.kk.taurus.playerbase.event.OnPlayerEventListener;
 import com.kk.taurus.playerbase.extension.NetworkEventProducer;
 import com.kk.taurus.playerbase.player.IPlayer;
 import com.kk.taurus.playerbase.provider.IDataProvider;
+import com.kk.taurus.playerbase.receiver.IReceiverGroup;
 import com.kk.taurus.playerbase.receiver.OnReceiverEventListener;
 import com.kk.taurus.playerbase.receiver.PlayerStateGetter;
-import com.kk.taurus.playerbase.receiver.ReceiverGroup;
 import com.kk.taurus.playerbase.receiver.StateGetter;
 import com.kk.taurus.playerbase.render.IRender;
 import com.kk.taurus.playerbase.render.RenderSurfaceView;
@@ -63,7 +63,7 @@ public final class RelationAssist implements AssistPlay {
     /**
      * ReceiverGroup from out setting.
      */
-    private ReceiverGroup mReceiverGroup;
+    private IReceiverGroup mReceiverGroup;
 
     private int mRenderType = IRender.RENDER_TYPE_TEXTURE_VIEW;
     private boolean mRenderTypeChange;
@@ -282,11 +282,11 @@ public final class RelationAssist implements AssistPlay {
     }
 
     @Override
-    public void setReceiverGroup(ReceiverGroup receiverGroup) {
+    public void setReceiverGroup(IReceiverGroup receiverGroup) {
         this.mReceiverGroup = receiverGroup;
     }
 
-    public ReceiverGroup getReceiverGroup() {
+    public IReceiverGroup getReceiverGroup() {
         return mReceiverGroup;
     }
 

@@ -14,8 +14,8 @@ import com.kk.taurus.playerbase.event.OnPlayerEventListener;
 import com.kk.taurus.playerbase.log.PLog;
 import com.kk.taurus.playerbase.player.IPlayer;
 import com.kk.taurus.playerbase.provider.IDataProvider;
+import com.kk.taurus.playerbase.receiver.IReceiverGroup;
 import com.kk.taurus.playerbase.receiver.OnReceiverEventListener;
-import com.kk.taurus.playerbase.receiver.ReceiverGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -145,11 +145,11 @@ public class ShareAnimationPlayer {
         mRelationAssist.setOnReceiverEventListener(mInternalReceiverEventListener);
     }
 
-    public void setReceiverGroup(ReceiverGroup receiverGroup){
+    public void setReceiverGroup(IReceiverGroup receiverGroup){
         mRelationAssist.setReceiverGroup(receiverGroup);
     }
 
-    public ReceiverGroup getReceiverGroup(){
+    public IReceiverGroup getReceiverGroup(){
         return mRelationAssist.getReceiverGroup();
     }
 
@@ -162,7 +162,7 @@ public class ShareAnimationPlayer {
             this.mDataSource = dataSource;
         }
         attachListener();
-        ReceiverGroup receiverGroup = getReceiverGroup();
+        IReceiverGroup receiverGroup = getReceiverGroup();
         if(receiverGroup!=null && dataSource!=null){
             receiverGroup.getGroupValue().putBoolean(DataInter.Key.KEY_COMPLETE_SHOW, false);
         }

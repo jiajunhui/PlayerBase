@@ -14,6 +14,7 @@ import com.kk.taurus.playerbase.event.OnPlayerEventListener;
 import com.kk.taurus.playerbase.log.PLog;
 import com.kk.taurus.playerbase.player.IPlayer;
 import com.kk.taurus.playerbase.provider.IDataProvider;
+import com.kk.taurus.playerbase.receiver.IReceiverGroup;
 import com.kk.taurus.playerbase.receiver.OnReceiverEventListener;
 import com.kk.taurus.playerbase.receiver.ReceiverGroup;
 import com.kk.taurus.playerbase.assist.RelationAssist;
@@ -151,7 +152,7 @@ public class AssistPlayer {
         mRelationAssist.setReceiverGroup(receiverGroup);
     }
 
-    public ReceiverGroup getReceiverGroup(){
+    public IReceiverGroup getReceiverGroup(){
         return mRelationAssist.getReceiverGroup();
     }
 
@@ -164,7 +165,7 @@ public class AssistPlayer {
             this.mDataSource = dataSource;
         }
         attachListener();
-        ReceiverGroup receiverGroup = getReceiverGroup();
+        IReceiverGroup receiverGroup = getReceiverGroup();
         if(receiverGroup!=null && dataSource!=null){
             receiverGroup.getGroupValue().putBoolean(DataInter.Key.KEY_COMPLETE_SHOW, false);
         }

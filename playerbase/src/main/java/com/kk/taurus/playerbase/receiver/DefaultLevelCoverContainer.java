@@ -21,11 +21,15 @@ import android.graphics.Color;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.kk.taurus.playerbase.log.PLog;
+
 /**
  * Created by Taurus on 2017/4/29.
  */
 
 public class DefaultLevelCoverContainer extends BaseLevelCoverContainer {
+
+    private final String TAG = "DefaultLevelCoverContainer";
 
     /**
      * the low level covers container .
@@ -65,16 +69,16 @@ public class DefaultLevelCoverContainer extends BaseLevelCoverContainer {
     @Override
     protected void onAvailableCoverAdd(BaseCover cover) {
         super.onAvailableCoverAdd(cover);
-        switch (cover.getCoverLevel()){
-            case ICover.COVER_LEVEL_LOW:
-                mLevelLowCoverContainer.addView(cover.getView(),getNewMatchLayoutParams());
-                break;
-            case ICover.COVER_LEVEL_MEDIUM:
-                mLevelMediumCoverContainer.addView(cover.getView(),getNewMatchLayoutParams());
-                break;
-            case ICover.COVER_LEVEL_HIGH:
-                mLevelHighCoverContainer.addView(cover.getView(),getNewMatchLayoutParams());
-                break;
+        int level = cover.getCoverLevel();
+        if(level < ICover.COVER_LEVEL_MEDIUM){
+            mLevelLowCoverContainer.addView(cover.getView(),getNewMatchLayoutParams());
+            PLog.d(TAG, "Low Level Cover Add : level = " + level);
+        }else if(level < ICover.COVER_LEVEL_HIGH){
+            mLevelMediumCoverContainer.addView(cover.getView(),getNewMatchLayoutParams());
+            PLog.d(TAG, "Medium Level Cover Add : level = " + level);
+        }else{
+            mLevelHighCoverContainer.addView(cover.getView(),getNewMatchLayoutParams());
+            PLog.d(TAG, "High Level Cover Add : level = " + level);
         }
     }
 

@@ -16,9 +16,11 @@
 
 package com.kk.taurus.playerbase.receiver;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -28,8 +30,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public final class ReceiverGroup implements IReceiverGroup{
 
+    //receiver key value collection
     private Map<String, IReceiver> mReceivers;
-    private Set<String> mKeySet;
+    //receiver array for loop
+    private List<IReceiver> mReceiverArray;
+    //receiver items change listener
     private List<OnReceiverGroupChangeListener> mOnReceiverGroupChangeListeners;
 
     private GroupValue mGroupValue;
@@ -40,6 +45,7 @@ public final class ReceiverGroup implements IReceiverGroup{
 
     public ReceiverGroup(GroupValue groupValue){
         mReceivers = new ConcurrentHashMap<>(16);
+        mReceiverArray = Collections.synchronizedList(new ArrayList<IReceiver>());
         mOnReceiverGroupChangeListeners = new CopyOnWriteArrayList<>();
         if(groupValue==null){
             mGroupValue = new GroupValue();
@@ -80,14 +86,22 @@ public final class ReceiverGroup implements IReceiverGroup{
         //call back method onReceiverBind().
         receiver.onReceiverBind();
         mReceivers.put(key, receiver);
-        mKeySet = mReceivers.keySet();
+        mReceiverArray.add(receiver);
         //call back on receiver add
         callBackOnReceiverAdd(key, receiver);
     }
 
     @Override
     public void removeReceiver(String key) {
+        //remove it from map
         IReceiver receiver = mReceivers.remove(key);
+        //remove it from array
+        mReceiverArray.remove(receiver);
+        //call back some methods
+        onReceiverRemove(key, receiver);
+    }
+
+    private void onReceiverRemove(String key, IReceiver receiver) {
         if(receiver!=null){
             //call back on receiver remove
             callBackOnReceiverRemove(key, receiver);
@@ -97,16 +111,18 @@ public final class ReceiverGroup implements IReceiverGroup{
     }
 
     @Override
+    public void sort(Comparator<IReceiver> comparator) {
+        Collections.sort(mReceiverArray, comparator);
+    }
+
+    @Override
     public void forEach(OnLoopListener onLoopListener) {
         forEach(null, onLoopListener);
     }
 
     @Override
     public void forEach(OnReceiverFilter filter, OnLoopListener onLoopListener) {
-        if(mKeySet==null)
-            return;
-        for (String s : mKeySet) {
-            IReceiver receiver = mReceivers.get(s);
+        for(IReceiver receiver:mReceiverArray){
             if(filter==null || filter.filter(receiver))
                 onLoopListener.onEach(receiver);
         }
@@ -126,11 +142,10 @@ public final class ReceiverGroup implements IReceiverGroup{
 
     @Override
     public void clearReceivers(){
-        if(mKeySet==null)
-            return;
-        for (String key : mKeySet) {
-            removeReceiver(key);
+        for(IReceiver receiver:mReceiverArray){
+            onReceiverRemove(receiver.getKey(), receiver);
         }
+        mReceiverArray.clear();
         mReceivers.clear();
     }
 

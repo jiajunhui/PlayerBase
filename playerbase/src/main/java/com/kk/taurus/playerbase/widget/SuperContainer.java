@@ -33,6 +33,7 @@ import com.kk.taurus.playerbase.extension.ProducerGroup;
 import com.kk.taurus.playerbase.extension.ProducerEventSender;
 import com.kk.taurus.playerbase.log.PLog;
 import com.kk.taurus.playerbase.receiver.BaseReceiver;
+import com.kk.taurus.playerbase.receiver.CoverComparator;
 import com.kk.taurus.playerbase.receiver.StateGetter;
 import com.kk.taurus.playerbase.touch.OnTouchGestureListener;
 import com.kk.taurus.playerbase.receiver.BaseCover;
@@ -186,7 +187,7 @@ public class SuperContainer extends FrameLayout implements OnTouchGestureListene
         }
     };
 
-    public final void setReceiverGroup(ReceiverGroup receiverGroup){
+    public final void setReceiverGroup(IReceiverGroup receiverGroup){
         if(receiverGroup==null
                 || receiverGroup.equals(mReceiverGroup))
             return;
@@ -201,6 +202,9 @@ public class SuperContainer extends FrameLayout implements OnTouchGestureListene
         this.mReceiverGroup = receiverGroup;
         //init event dispatcher.
         mEventDispatcher = new EventDispatcher(receiverGroup);
+
+        //sort it by CoverLevel
+        mReceiverGroup.sort(new CoverComparator());
 
         //loop attach receivers
         mReceiverGroup.forEach(new IReceiverGroup.OnLoopListener() {
@@ -235,9 +239,10 @@ public class SuperContainer extends FrameLayout implements OnTouchGestureListene
         receiver.bindReceiverEventListener(mInternalReceiverEventListener);
         receiver.bindStateGetter(mStateGetter);
         if(receiver instanceof BaseCover){
+            BaseCover cover = (BaseCover) receiver;
             //add cover view to cover strategy container.
-            mCoverStrategy.addCover((BaseCover) receiver);
-            PLog.d(TAG, "on cover attach : " + ((BaseReceiver)receiver).getTag());
+            mCoverStrategy.addCover(cover);
+            PLog.d(TAG, "on cover attach : " + cover.getTag() + " ," + cover.getCoverLevel());
         }
     }
 
@@ -245,9 +250,10 @@ public class SuperContainer extends FrameLayout implements OnTouchGestureListene
     // and remove cover container if it is a cover instance.
     private void detachReceiver(IReceiver receiver){
         if(receiver instanceof BaseCover){
+            BaseCover cover = (BaseCover) receiver;
             //remove cover view to cover strategy container.
-            mCoverStrategy.removeCover((BaseCover) receiver);
-            PLog.w(TAG, "on cover detach : " + ((BaseReceiver)receiver).getTag());
+            mCoverStrategy.removeCover(cover);
+            PLog.w(TAG, "on cover detach : " + cover.getTag() + " ," + cover.getCoverLevel());
         }
         //unbind the ReceiverEventListener for receivers connect.
         receiver.bindReceiverEventListener(null);

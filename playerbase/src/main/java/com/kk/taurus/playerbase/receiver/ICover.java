@@ -16,7 +16,6 @@
 
 package com.kk.taurus.playerbase.receiver;
 
-import android.content.Context;
 import android.view.View;
 
 /**
@@ -25,11 +24,12 @@ import android.view.View;
 
 public interface ICover {
 
-    int COVER_LEVEL_LOW = 0;
-    int COVER_LEVEL_MEDIUM = 1;
-    int COVER_LEVEL_HIGH = 2;
+    int LEVEL_MAX = 1 << 5;
 
-    View onCreateCoverView(Context context);
+    int COVER_LEVEL_LOW     = 0;
+    int COVER_LEVEL_MEDIUM  = 1 << 5;
+    int COVER_LEVEL_HIGH    = 1 << 6;
+
     void setCoverVisibility(int visibility);
     View getView();
     int getCoverLevel();

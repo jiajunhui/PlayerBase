@@ -22,6 +22,7 @@ import com.kk.taurus.playerbase.entity.DataSource;
 import com.kk.taurus.playerbase.event.OnErrorEventListener;
 import com.kk.taurus.playerbase.event.OnPlayerEventListener;
 import com.kk.taurus.playerbase.provider.IDataProvider;
+import com.kk.taurus.playerbase.receiver.IReceiverGroup;
 import com.kk.taurus.playerbase.receiver.OnReceiverEventListener;
 import com.kk.taurus.playerbase.receiver.ReceiverGroup;
 
@@ -45,7 +46,7 @@ public interface AssistPlay {
     void setVolume(float left, float right);
     void setSpeed(float speed);
 
-    void setReceiverGroup(ReceiverGroup receiverGroup);
+    void setReceiverGroup(IReceiverGroup receiverGroup);
 
     void attachContainer(ViewGroup userContainer);
 

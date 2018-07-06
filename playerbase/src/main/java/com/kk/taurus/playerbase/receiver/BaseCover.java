@@ -18,6 +18,7 @@ package com.kk.taurus.playerbase.receiver;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.IntRange;
 import android.view.View;
 
 import com.kk.taurus.playerbase.assist.InterEvent;
@@ -125,11 +126,41 @@ public abstract class BaseCover extends BaseReceiver implements
 
     }
 
-    @Override
-    public abstract View onCreateCoverView(Context context);
+    protected abstract View onCreateCoverView(Context context);
 
     @Override
     public int getCoverLevel() {
         return ICover.COVER_LEVEL_LOW;
+    }
+
+    /**
+     * setting the priority in COVER_LEVEL_LOW.
+     * @param priority range from 0-31
+     * @return
+     */
+    protected final int levelLowZOrder(@IntRange(from = 0, to = 31)int priority){
+        return levelZOrder(ICover.COVER_LEVEL_LOW, priority);
+    }
+
+    /**
+     * setting the priority in COVER_LEVEL_MEDIUM.
+     * @param priority range from 0-31
+     * @return
+     */
+    protected final int levelMediumZOrder(@IntRange(from = 0, to = 31)int priority){
+        return levelZOrder(ICover.COVER_LEVEL_MEDIUM, priority);
+    }
+
+    /**
+     * setting the priority in COVER_LEVEL_HIGH.
+     * @param priority range from 0-31
+     * @return
+     */
+    protected final int levelHighZOrder(@IntRange(from = 0, to = 31)int priority){
+        return levelZOrder(ICover.COVER_LEVEL_HIGH, priority);
+    }
+
+    private int levelZOrder(int level, @IntRange(from = 0, to = 31)int priority){
+        return level + (priority%LEVEL_MAX);
     }
 }

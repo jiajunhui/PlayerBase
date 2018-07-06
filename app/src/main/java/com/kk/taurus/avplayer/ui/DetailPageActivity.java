@@ -15,8 +15,8 @@ import com.kk.taurus.avplayer.play.AssistPlayer;
 import com.kk.taurus.avplayer.play.DataInter;
 import com.kk.taurus.avplayer.utils.OrientationHelper;
 import com.kk.taurus.playerbase.entity.DataSource;
+import com.kk.taurus.playerbase.receiver.IReceiverGroup;
 import com.kk.taurus.playerbase.receiver.OnReceiverEventListener;
-import com.kk.taurus.playerbase.receiver.ReceiverGroup;
 
 /**
  * Created by Taurus on 2018/4/18.
@@ -29,7 +29,7 @@ public class DetailPageActivity extends AppCompatActivity implements OnReceiverE
     private RelativeLayout mLayoutContainer;
 
     private boolean isLandscape;
-    private ReceiverGroup mReceiverGroup;
+    private IReceiverGroup mReceiverGroup;
 
     private OrientationHelper mOrientationHelper;
     private boolean isOnBackPress;

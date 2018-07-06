@@ -24,7 +24,6 @@ import com.kk.taurus.playerbase.event.OnPlayerEventListener;
 import com.kk.taurus.playerbase.log.PLog;
 import com.kk.taurus.playerbase.player.IPlayer;
 import com.kk.taurus.playerbase.player.OnTimerUpdateListener;
-import com.kk.taurus.playerbase.receiver.ICover;
 import com.kk.taurus.playerbase.receiver.IReceiverGroup;
 import com.kk.taurus.playerbase.touch.OnTouchGestureListener;
 import com.kk.taurus.playerbase.receiver.BaseCover;
@@ -468,7 +467,7 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
 
     @Override
     public int getCoverLevel() {
-        return ICover.COVER_LEVEL_LOW;
+        return levelLowZOrder(1);
     }
 
     @Override
