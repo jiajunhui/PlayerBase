@@ -24,7 +24,6 @@ import com.kk.taurus.playerbase.event.OnPlayerEventListener;
 import com.kk.taurus.playerbase.provider.IDataProvider;
 import com.kk.taurus.playerbase.receiver.IReceiverGroup;
 import com.kk.taurus.playerbase.receiver.OnReceiverEventListener;
-import com.kk.taurus.playerbase.receiver.ReceiverGroup;
 
 /**
  *
@@ -60,6 +59,7 @@ public interface AssistPlay {
     int getCurrentPosition();
     int getDuration();
     int getAudioSessionId();
+    int getBufferPercentage();
     int getState();
 
     void rePlay(int msc);

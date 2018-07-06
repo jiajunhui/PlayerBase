@@ -28,6 +28,7 @@ import com.kk.taurus.playerbase.event.EventKey;
 import com.kk.taurus.playerbase.event.OnErrorEventListener;
 import com.kk.taurus.playerbase.event.OnPlayerEventListener;
 import com.kk.taurus.playerbase.extension.NetworkEventProducer;
+import com.kk.taurus.playerbase.log.PLog;
 import com.kk.taurus.playerbase.player.IPlayer;
 import com.kk.taurus.playerbase.provider.IDataProvider;
 import com.kk.taurus.playerbase.receiver.IReceiverGroup;
@@ -50,6 +51,8 @@ import com.kk.taurus.playerbase.widget.SuperContainer;
  *
  */
 public final class RelationAssist implements AssistPlay {
+
+    private final String TAG = "RelationAssist";
 
     private Context mContext;
 
@@ -395,16 +398,20 @@ public final class RelationAssist implements AssistPlay {
         @Override
         public void onSurfaceCreated(IRender.IRenderHolder renderHolder,
                                      int width, int height) {
+            PLog.d(TAG,"onSurfaceCreated : width = " + width + ", height = " + height);
+            //on surface create ,try to attach player.
             mRenderHolder = renderHolder;
             bindRenderHolder(mRenderHolder);
         }
         @Override
         public void onSurfaceChanged(IRender.IRenderHolder renderHolder,
                                      int format, int width, int height) {
-
+            //not handle some...
         }
         @Override
         public void onSurfaceDestroy(IRender.IRenderHolder renderHolder) {
+            PLog.d(TAG,"onSurfaceDestroy...");
+            //on surface destroy detach player
             mRenderHolder = null;
         }
     };
@@ -467,6 +474,25 @@ public final class RelationAssist implements AssistPlay {
         return mPlayer.getAudioSessionId();
     }
 
+    //stream buffer percent
+    //min 0, and max 100.
+    @Override
+    public int getBufferPercentage() {
+        return mPlayer.getBufferPercentage();
+    }
+
+    /**
+     * See also
+     * {@link IPlayer#STATE_END}
+     * {@link IPlayer#STATE_ERROR}
+     * {@link IPlayer#STATE_IDLE}
+     * {@link IPlayer#STATE_INITIALIZED}
+     * {@link IPlayer#STATE_PREPARED}
+     * {@link IPlayer#STATE_STARTED}
+     * {@link IPlayer#STATE_PAUSED}
+     * {@link IPlayer#STATE_STOPPED}
+     * {@link IPlayer#STATE_PLAYBACK_COMPLETE}
+     */
     @Override
     public int getState() {
         return mPlayer.getState();
