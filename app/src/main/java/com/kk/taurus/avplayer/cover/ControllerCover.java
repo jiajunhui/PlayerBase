@@ -467,7 +467,7 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
 
     @Override
     public int getCoverLevel() {
-        return levelLowZOrder(1);
+        return levelLow(1);
     }
 
     @Override

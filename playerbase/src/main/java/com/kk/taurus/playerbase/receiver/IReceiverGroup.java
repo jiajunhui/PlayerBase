@@ -27,7 +27,16 @@ import java.util.Comparator;
 
 public interface IReceiverGroup {
 
+    /**
+     * add a onReceiverGroupChangeListener listen Receiver item change.
+     * @param onReceiverGroupChangeListener
+     */
     void addOnReceiverGroupChangeListener(OnReceiverGroupChangeListener onReceiverGroupChangeListener);
+
+    /**
+     * When you don't need onReceiverGroupChangeListener to remove it
+     * @param onReceiverGroupChangeListener
+     */
     void removeOnReceiverGroupChangeListener(OnReceiverGroupChangeListener onReceiverGroupChangeListener);
 
     /**

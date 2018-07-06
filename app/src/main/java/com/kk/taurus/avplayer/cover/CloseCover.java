@@ -64,6 +64,6 @@ public class CloseCover extends BaseCover {
 
     @Override
     public int getCoverLevel() {
-        return levelMediumZOrder(10);
+        return levelMedium(10);
     }
 }

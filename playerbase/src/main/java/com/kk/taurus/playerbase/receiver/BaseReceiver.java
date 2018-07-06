@@ -139,16 +139,33 @@ public abstract class BaseReceiver implements IReceiver, StateGetter {
         return null;
     }
 
+    /**
+     * private event
+     * @param eventCode
+     * @param bundle
+     *
+     * @return
+     */
     @Override
     public Bundle onPrivateEvent(int eventCode, Bundle bundle) {
         return null;
     }
 
+    /**
+     * producer event from producers send.
+     * @param eventCode
+     * @param bundle
+     */
     @Override
     public void onProducerEvent(int eventCode, Bundle bundle) {
 
     }
 
+    /**
+     * producer data from producers send
+     * @param key
+     * @param data
+     */
     @Override
     public void onProducerData(String key, Object data) {
 
@@ -167,8 +184,12 @@ public abstract class BaseReceiver implements IReceiver, StateGetter {
         this.mKey = key;
     }
 
+    /**
+     * the receiver key you put.
+     * @return
+     */
     @Override
-    public String getKey() {
+    public final String getKey() {
         return mKey;
     }
 }

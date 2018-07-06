@@ -79,6 +79,6 @@ public class LoadingCover extends BaseCover {
 
     @Override
     public int getCoverLevel() {
-        return levelMediumZOrder(1);
+        return levelMedium(1);
     }
 }

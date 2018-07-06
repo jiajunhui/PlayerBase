@@ -143,6 +143,6 @@ public class CompleteCover extends BaseCover {
 
     @Override
     public int getCoverLevel() {
-        return levelMediumZOrder(20);
+        return levelMedium(20);
     }
 }

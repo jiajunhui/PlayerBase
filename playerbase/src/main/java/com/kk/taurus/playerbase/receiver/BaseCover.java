@@ -88,7 +88,7 @@ public abstract class BaseCover extends BaseReceiver implements
         notifyReceiverEvent(InterEvent.CODE_REQUEST_STOP_TIMER, null);
     }
 
-    protected <T extends View> T findViewById(int id){
+    protected final <T extends View> T findViewById(int id){
         return mCoverView.findViewById(id);
     }
 
@@ -98,7 +98,7 @@ public abstract class BaseCover extends BaseReceiver implements
     }
 
     @Override
-    public View getView(){
+    public final View getView(){
         return mCoverView;
     }
 
@@ -135,32 +135,41 @@ public abstract class BaseCover extends BaseReceiver implements
 
     /**
      * setting the priority in COVER_LEVEL_LOW.
+     * The high priority cover will be placed above,
+     * otherwise the lower priority will be placed below.
+     *
      * @param priority range from 0-31
      * @return
      */
-    protected final int levelLowZOrder(@IntRange(from = 0, to = 31)int priority){
-        return levelZOrder(ICover.COVER_LEVEL_LOW, priority);
+    protected final int levelLow(@IntRange(from = 0, to = 31)int priority){
+        return levelPriority(ICover.COVER_LEVEL_LOW, priority);
     }
 
     /**
      * setting the priority in COVER_LEVEL_MEDIUM.
+     * The high priority cover will be placed above,
+     * otherwise the lower priority will be placed below.
+     *
      * @param priority range from 0-31
      * @return
      */
-    protected final int levelMediumZOrder(@IntRange(from = 0, to = 31)int priority){
-        return levelZOrder(ICover.COVER_LEVEL_MEDIUM, priority);
+    protected final int levelMedium(@IntRange(from = 0, to = 31)int priority){
+        return levelPriority(ICover.COVER_LEVEL_MEDIUM, priority);
     }
 
     /**
      * setting the priority in COVER_LEVEL_HIGH.
+     * The high priority cover will be placed above,
+     * otherwise the lower priority will be placed below.
+     *
      * @param priority range from 0-31
      * @return
      */
-    protected final int levelHighZOrder(@IntRange(from = 0, to = 31)int priority){
-        return levelZOrder(ICover.COVER_LEVEL_HIGH, priority);
+    protected final int levelHigh(@IntRange(from = 0, to = 31)int priority){
+        return levelPriority(ICover.COVER_LEVEL_HIGH, priority);
     }
 
-    private int levelZOrder(int level, @IntRange(from = 0, to = 31)int priority){
+    private int levelPriority(int level, int priority){
         return level + (priority%LEVEL_MAX);
     }
 }

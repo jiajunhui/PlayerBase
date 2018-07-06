@@ -210,7 +210,7 @@ public class GestureCover extends BaseCover implements OnTouchGestureListener {
 
     @Override
     public int getCoverLevel() {
-        return levelLowZOrder(0);
+        return levelLow(0);
     }
 
     @Override
