@@ -32,7 +32,6 @@ import com.kk.taurus.playerbase.extension.DelegateReceiverEventSender;
 import com.kk.taurus.playerbase.extension.ProducerGroup;
 import com.kk.taurus.playerbase.extension.ProducerEventSender;
 import com.kk.taurus.playerbase.log.PLog;
-import com.kk.taurus.playerbase.receiver.BaseReceiver;
 import com.kk.taurus.playerbase.receiver.CoverComparator;
 import com.kk.taurus.playerbase.receiver.StateGetter;
 import com.kk.taurus.playerbase.touch.OnTouchGestureListener;
@@ -43,7 +42,6 @@ import com.kk.taurus.playerbase.receiver.IReceiver;
 import com.kk.taurus.playerbase.receiver.IReceiverGroup;
 import com.kk.taurus.playerbase.receiver.OnReceiverEventListener;
 import com.kk.taurus.playerbase.event.EventDispatcher;
-import com.kk.taurus.playerbase.receiver.ReceiverGroup;
 import com.kk.taurus.playerbase.touch.BaseGestureCallbackHandler;
 import com.kk.taurus.playerbase.touch.ContainerTouchHelper;
 
