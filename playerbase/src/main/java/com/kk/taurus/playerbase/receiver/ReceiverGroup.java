@@ -16,9 +16,11 @@
 
 package com.kk.taurus.playerbase.receiver;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by Taurus on 2018/3/17.
@@ -28,8 +30,7 @@ public final class ReceiverGroup implements IReceiverGroup{
 
     private Map<String, IReceiver> mReceivers;
     private Set<String> mKeySet;
-
-    private OnReceiverGroupChangeListener mOnReceiverGroupChangeListener;
+    private List<OnReceiverGroupChangeListener> mOnReceiverGroupChangeListeners;
 
     private GroupValue mGroupValue;
 
@@ -39,6 +40,7 @@ public final class ReceiverGroup implements IReceiverGroup{
 
     public ReceiverGroup(GroupValue groupValue){
         mReceivers = new ConcurrentHashMap<>(16);
+        mOnReceiverGroupChangeListeners = new CopyOnWriteArrayList<>();
         if(groupValue==null){
             mGroupValue = new GroupValue();
         }else{
@@ -47,9 +49,28 @@ public final class ReceiverGroup implements IReceiverGroup{
     }
 
     @Override
-    public void setOnReceiverGroupChangeListener(
+    public void addOnReceiverGroupChangeListener(
             OnReceiverGroupChangeListener onReceiverGroupChangeListener) {
-        this.mOnReceiverGroupChangeListener = onReceiverGroupChangeListener;
+        if(mOnReceiverGroupChangeListeners.contains(onReceiverGroupChangeListener))
+            return;
+        mOnReceiverGroupChangeListeners.add(onReceiverGroupChangeListener);
+    }
+
+    @Override
+    public void removeOnReceiverGroupChangeListener(OnReceiverGroupChangeListener onReceiverGroupChangeListener) {
+        mOnReceiverGroupChangeListeners.remove(onReceiverGroupChangeListener);
+    }
+
+    void callBackOnReceiverAdd(String key, IReceiver receiver){
+        for(OnReceiverGroupChangeListener listener:mOnReceiverGroupChangeListeners){
+            listener.onReceiverAdd(key, receiver);
+        }
+    }
+
+    void callBackOnReceiverRemove(String key, IReceiver receiver){
+        for(OnReceiverGroupChangeListener listener:mOnReceiverGroupChangeListeners){
+            listener.onReceiverRemove(key, receiver);
+        }
     }
 
     @Override
@@ -60,18 +81,19 @@ public final class ReceiverGroup implements IReceiverGroup{
         receiver.onReceiverBind();
         mReceivers.put(key, receiver);
         mKeySet = mReceivers.keySet();
-        if(mOnReceiverGroupChangeListener!=null)
-            mOnReceiverGroupChangeListener.onReceiverAdd(key, receiver);
+        //call back on receiver add
+        callBackOnReceiverAdd(key, receiver);
     }
 
     @Override
     public void removeReceiver(String key) {
         IReceiver receiver = mReceivers.remove(key);
-        if(mOnReceiverGroupChangeListener!=null && receiver!=null)
-            mOnReceiverGroupChangeListener.onReceiverRemove(key, receiver);
-        //call back method onReceiverUnBind().
-        if(receiver!=null)
+        if(receiver!=null){
+            //call back on receiver remove
+            callBackOnReceiverRemove(key, receiver);
+            //call back method onReceiverUnBind().
             receiver.onReceiverUnBind();
+        }
     }
 
     @Override

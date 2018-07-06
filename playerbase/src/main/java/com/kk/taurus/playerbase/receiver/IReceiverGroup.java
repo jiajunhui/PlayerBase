@@ -25,7 +25,8 @@ package com.kk.taurus.playerbase.receiver;
 
 public interface IReceiverGroup {
 
-    void setOnReceiverGroupChangeListener(OnReceiverGroupChangeListener onReceiverGroupChangeListener);
+    void addOnReceiverGroupChangeListener(OnReceiverGroupChangeListener onReceiverGroupChangeListener);
+    void removeOnReceiverGroupChangeListener(OnReceiverGroupChangeListener onReceiverGroupChangeListener);
 
     /**
      * add a receiver, you need put a unique key for this receiver.

@@ -25,7 +25,7 @@ public abstract class BaseEventProducer implements EventProducer {
 
     private ReceiverEventSender mReceiverEventSender;
 
-    public final void attachSender(ReceiverEventSender receiverEventSender){
+    void attachSender(ReceiverEventSender receiverEventSender){
         this.mReceiverEventSender = receiverEventSender;
     }
 

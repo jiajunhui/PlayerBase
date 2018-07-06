@@ -125,7 +125,7 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
      *
      * @return
      */
-    public SuperContainer getSuperContainer(){
+    public final SuperContainer getSuperContainer(){
         return mSuperContainer;
     }
 
@@ -202,13 +202,17 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
     private void requestAudioFocus(){
         PLog.d(TAG,">>requestAudioFocus<<");
         AudioManager am = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
-        am.requestAudioFocus(null, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+        if(am!=null){
+            am.requestAudioFocus(null, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+        }
     }
 
     private void releaseAudioFocus(){
         PLog.d(TAG,"<<releaseAudioFocus>>");
         AudioManager am = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
-        am.abandonAudioFocus(null);
+        if(am!=null){
+            am.abandonAudioFocus(null);
+        }
     }
 
     /**
