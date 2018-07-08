@@ -1,5 +1,6 @@
 package com.kk.taurus.avplayer.ui;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -18,6 +19,7 @@ import com.kk.taurus.avplayer.cover.CloseCover;
 import com.kk.taurus.avplayer.cover.GestureCover;
 import com.kk.taurus.avplayer.play.DataInter;
 import com.kk.taurus.avplayer.play.ReceiverGroupManager;
+import com.kk.taurus.avplayer.utils.WindowPermissionCheck;
 import com.kk.taurus.playerbase.assist.AssistPlay;
 import com.kk.taurus.playerbase.assist.OnAssistPlayEventHandler;
 import com.kk.taurus.playerbase.assist.RelationAssist;
@@ -67,7 +69,7 @@ public class WindowSwitchPlayActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){//8.0+
             type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
         }else {
-            type =  WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+            type =  WindowManager.LayoutParams.TYPE_PHONE;
         }
 
         mWindowVideoContainer = new FrameLayout(this);
@@ -183,8 +185,16 @@ public class WindowSwitchPlayActivity extends AppCompatActivity {
         if(mFloatWindow.isWindowShow()){
             normalPlay();
         }else{
-            windowPlay();
+            if(WindowPermissionCheck.checkPermission(this)){
+                windowPlay();
+            }
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        WindowPermissionCheck.onActivityResult(this, requestCode, resultCode, data, null);
     }
 
     private void windowPlay() {

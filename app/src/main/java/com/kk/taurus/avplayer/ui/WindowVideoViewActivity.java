@@ -1,5 +1,6 @@
 package com.kk.taurus.avplayer.ui;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import com.kk.taurus.avplayer.R;
 import com.kk.taurus.avplayer.cover.CloseCover;
 import com.kk.taurus.avplayer.play.DataInter;
 import com.kk.taurus.avplayer.play.ReceiverGroupManager;
+import com.kk.taurus.avplayer.utils.WindowPermissionCheck;
 import com.kk.taurus.playerbase.assist.OnVideoViewEventHandler;
 import com.kk.taurus.playerbase.entity.DataSource;
 import com.kk.taurus.playerbase.receiver.ReceiverGroup;
@@ -44,7 +46,7 @@ public class WindowVideoViewActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){//8.0+
             type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
         }else {
-            type =  WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+            type =  WindowManager.LayoutParams.TYPE_PHONE;
         }
 
         mWindowVideoView = new WindowVideoView(this,
@@ -73,6 +75,12 @@ public class WindowVideoViewActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        WindowPermissionCheck.onActivityResult(this, requestCode, resultCode, data, null);
+    }
+
     private OnVideoViewEventHandler eventHandler = new OnVideoViewEventHandler(){
         @Override
         public void onAssistHandle(BaseVideoView assist, int eventCode, Bundle bundle) {
@@ -94,11 +102,13 @@ public class WindowVideoViewActivity extends AppCompatActivity {
             mActiveWindow.setText(R.string.open_window_video_view);
             mWindowVideoView.close();
         }else{
-            mActiveWindow.setText(R.string.close_window_video_view);
-            mWindowVideoView.setElevationShadow(20);
-            mWindowVideoView.show();
-            mWindowVideoView.setDataSource(mDataSource);
-            mWindowVideoView.start();
+            if(WindowPermissionCheck.checkPermission(this)){
+                mActiveWindow.setText(R.string.close_window_video_view);
+                mWindowVideoView.setElevationShadow(20);
+                mWindowVideoView.show();
+                mWindowVideoView.setDataSource(mDataSource);
+                mWindowVideoView.start();
+            }
         }
     }
 
