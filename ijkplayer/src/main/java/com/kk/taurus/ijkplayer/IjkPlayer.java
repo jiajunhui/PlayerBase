@@ -355,7 +355,7 @@ public class IjkPlayer extends BaseInternalPlayer {
 
             int seekToPosition = startSeekPos;  // mSeekWhenPrepared may be changed after seekTo() call
             if (seekToPosition != 0) {
-                seekTo(seekToPosition);
+                mMediaPlayer.seekTo(seekToPosition);
                 startSeekPos = 0;
             }
 
