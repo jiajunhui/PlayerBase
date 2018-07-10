@@ -25,7 +25,7 @@ import android.view.WindowManager;
  */
 public class FloatWindowParams {
 
-    private int windowType = WindowManager.LayoutParams.TYPE_TOAST;
+    private int windowType = WindowManager.LayoutParams.TYPE_PHONE;
     private int gravity = Gravity.TOP | Gravity.LEFT;
     private int format = PixelFormat.RGBA_8888;
     private int flag = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;

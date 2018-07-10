@@ -27,6 +27,7 @@ import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.RenderersFactory;
@@ -334,8 +335,14 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
                 switch (playbackState){
                     case Player.STATE_READY:
                         isPreparing = false;
+                        Format format = mInternalPlayer.getVideoFormat();
+                        Bundle bundle = BundlePool.obtain();
+                        if(format!=null){
+                            bundle.putInt(EventKey.INT_ARG1, format.width);
+                            bundle.putInt(EventKey.INT_ARG2, format.height);
+                        }
                         updateStatus(IPlayer.STATE_PREPARED);
-                        submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_PREPARED, null);
+                        submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_PREPARED, bundle);
                         if(mStartPos > 0){
                             mInternalPlayer.seekTo(mStartPos);
                             mStartPos = -1;

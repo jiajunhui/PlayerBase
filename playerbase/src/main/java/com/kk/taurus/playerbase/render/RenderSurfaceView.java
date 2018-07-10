@@ -82,7 +82,14 @@ public class RenderSurfaceView extends SurfaceView implements IRender {
     @Override
     public void updateVideoSize(int videoWidth, int videoHeight) {
         mRenderMeasure.setVideoSize(videoWidth, videoHeight);
+        fixedSize(videoWidth, videoHeight);
         requestLayout();
+    }
+
+    void fixedSize(int videoWidth, int videoHeight){
+        if(videoWidth != 0 && videoHeight != 0){
+            getHolder().setFixedSize(videoWidth, videoHeight);
+        }
     }
 
     @Override
@@ -136,8 +143,6 @@ public class RenderSurfaceView extends SurfaceView implements IRender {
         @Override
         public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
             PLog.d(TAG,"surfaceChanged : width = " + width + " height = " + height);
-            getHolder().setFixedSize(width, height);
-            requestLayout();
             if(mRenderCallback!=null){
                 mRenderCallback.onSurfaceChanged(new InternalRenderHolder(holder),format, width,height);
             }

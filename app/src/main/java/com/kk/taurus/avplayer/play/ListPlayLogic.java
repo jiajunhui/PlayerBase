@@ -76,11 +76,16 @@ public class ListPlayLogic {
     }
 
     public void attachPlay(){
-        VideoListAdapter.VideoItemHolder itemHolder = getItemHolder(mPlayPosition);
-        if(itemHolder!=null){
-            PLog.d("ListPlayLogic","attachPlay...");
-            AssistPlayer.get().play(itemHolder.layoutContainer, null);
-        }
+        mRecycler.post(new Runnable() {
+            @Override
+            public void run() {
+                VideoListAdapter.VideoItemHolder itemHolder = getItemHolder(mPlayPosition);
+                if(itemHolder!=null){
+                    PLog.d("ListPlayLogic","attachPlay...");
+                    AssistPlayer.get().play(itemHolder.layoutContainer, null);
+                }
+            }
+        });
     }
 
     public void playPosition(int position){

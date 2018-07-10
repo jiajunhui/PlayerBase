@@ -341,13 +341,14 @@ public class SysMediaPlayer extends BaseInternalPlayer {
             PLog.d(TAG,"onPrepared...");
             updateStatus(STATE_PREPARED);
 
-            submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_PREPARED,null);
-
-            // Get the capabilities of the player for this stream
-            // REMOVED: Metadata
-
             mVideoWidth = mp.getVideoWidth();
             mVideoHeight = mp.getVideoHeight();
+
+            Bundle bundle = BundlePool.obtain();
+            bundle.putInt(EventKey.INT_ARG1, mVideoWidth);
+            bundle.putInt(EventKey.INT_ARG2, mVideoHeight);
+
+            submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_PREPARED,bundle);
 
             int seekToPosition = startSeekPos;  // mSeekWhenPrepared may be changed after seekTo() call
             if (seekToPosition != 0) {

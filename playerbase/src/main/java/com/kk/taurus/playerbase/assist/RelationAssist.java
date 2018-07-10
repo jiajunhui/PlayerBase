@@ -194,6 +194,11 @@ public final class RelationAssist implements AssistPlay {
                 break;
             //when prepared bind surface.
             case OnPlayerEventListener.PLAYER_EVENT_ON_PREPARED:
+                if(bundle!=null && mRender!=null){
+                    mVideoWidth = bundle.getInt(EventKey.INT_ARG1);
+                    mVideoHeight = bundle.getInt(EventKey.INT_ARG2);
+                    mRender.updateVideoSize(mVideoWidth, mVideoHeight);
+                }
                 bindRenderHolder(mRenderHolder);
                 break;
             case OnPlayerEventListener.PLAYER_EVENT_ON_BUFFERING_START:
