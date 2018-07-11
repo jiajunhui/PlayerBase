@@ -29,9 +29,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
  *
  * This class is a bridge of data sharing between the receivers.
  *
+ * default put data will call back ValueUpdateListeners.
+ *
  */
 
-public final class GroupValue {
+public final class GroupValue implements ValueInter {
 
     private Map<String,Object> mValueMap;
     private Map<IReceiverGroup.OnGroupValueUpdateListener, String[]> mListenerKeys;
@@ -83,37 +85,84 @@ public final class GroupValue {
         mValueMap.clear();
     }
 
+    @Override
     public void putBoolean(String key, boolean value){
         put(key, value);
     }
 
+    @Override
     public void putInt(String key, int value){
         put(key, value);
     }
 
+    @Override
     public void putString(String key, String value){
         put(key, value);
     }
 
+    @Override
     public void putFloat(String key, float value){
         put(key, value);
     }
 
+    @Override
     public void putLong(String key, long value){
         put(key, value);
     }
 
+    @Override
     public void putDouble(String key, double value){
         put(key, value);
     }
 
+    @Override
     public void putObject(String key, Object value){
         put(key, value);
     }
 
+    @Override
+    public void putBoolean(String key, boolean value, boolean notifyUpdate) {
+        put(key, value, notifyUpdate);
+    }
+
+    @Override
+    public void putInt(String key, int value, boolean notifyUpdate) {
+        put(key, value, notifyUpdate);
+    }
+
+    @Override
+    public void putString(String key, String value, boolean notifyUpdate) {
+        put(key, value, notifyUpdate);
+    }
+
+    @Override
+    public void putFloat(String key, float value, boolean notifyUpdate) {
+        put(key, value, notifyUpdate);
+    }
+
+    @Override
+    public void putLong(String key, long value, boolean notifyUpdate) {
+        put(key, value, notifyUpdate);
+    }
+
+    @Override
+    public void putDouble(String key, double value, boolean notifyUpdate) {
+        put(key, value, notifyUpdate);
+    }
+
+    @Override
+    public void putObject(String key, Object value, boolean notifyUpdate) {
+        put(key, value, notifyUpdate);
+    }
+
     private void put(String key, Object value){
+        put(key, value, true);
+    }
+
+    private void put(String key, Object value, boolean notifyUpdate){
         mValueMap.put(key, value);
-        callBackValueUpdate(key, value);
+        if(notifyUpdate)
+            callBackValueUpdate(key, value);
     }
 
     private void callBackValueUpdate(String key, Object value) {
@@ -137,6 +186,7 @@ public final class GroupValue {
         return false;
     }
 
+    @Override
     public <T> T get(String key){
         Object o = mValueMap.get(key);
         try {
@@ -149,10 +199,12 @@ public final class GroupValue {
         return null;
     }
 
+    @Override
     public boolean getBoolean(String key){
         return getBoolean(key, false);
     }
 
+    @Override
     public boolean getBoolean(String key, boolean defaultValue){
         Boolean bool = get(key);
         if(bool==null)
@@ -160,10 +212,12 @@ public final class GroupValue {
         return bool;
     }
 
+    @Override
     public int getInt(String key){
         return getInt(key, 0);
     }
 
+    @Override
     public int getInt(String key, int defaultValue){
         Integer integer = get(key);
         if(integer==null)
@@ -171,15 +225,18 @@ public final class GroupValue {
         return integer;
     }
 
+    @Override
     public String getString(String key){
         String s = get(key);
         return s;
     }
 
+    @Override
     public float getFloat(String key){
         return getFloat(key, 0f);
     }
 
+    @Override
     public float getFloat(String key, float defaultValue){
         Float f = get(key);
         if(f==null)
@@ -187,10 +244,12 @@ public final class GroupValue {
         return f;
     }
 
+    @Override
     public long getLong(String key){
         return getLong(key, 0);
     }
 
+    @Override
     public long getLong(String key, long defaultValue){
         Long l = get(key);
         if(l==null)
@@ -198,10 +257,12 @@ public final class GroupValue {
         return l;
     }
 
+    @Override
     public double getDouble(String key){
         return getDouble(key, 0);
     }
 
+    @Override
     public double getDouble(String key, double defaultValue){
         Double d = get(key);
         if(d==null)
