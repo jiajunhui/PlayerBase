@@ -42,7 +42,7 @@ demo示例集成了播放控制组件**ControllerCover**、加载中组件**Load
 <br>
 <img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/qrcode.png" width="180" height="180">
 
-# QQ交流群
+# QQ交流群（600201778）
 <img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/qrcode_qq_group.jpg" width="270" height="370">
 
 
