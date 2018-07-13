@@ -10,4 +10,6 @@
     <color name="controller_bg_dark">#66000000</color>
     <color name="controller_bg_light">#00000000</color>
 
+    <color name="edit_base_line_color">#77ffffff</color>
+
 </resources>

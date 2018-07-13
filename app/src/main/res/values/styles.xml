@@ -6,6 +6,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="android:textColorSecondary">#ffffff</item>
     </style>
 
     <style name="FullScreenTheme" parent="Theme.AppCompat.NoActionBar">
@@ -14,10 +16,20 @@
         <item name="windowActionBar">false</item>
     </style>
 
-    <style name="MenuTheme" parent="ThemeOverlay.AppCompat.Light">
+    <style name="ToolbarPopupTheme" parent="@style/ThemeOverlay.AppCompat.Dark">
+        <!--<item name="android:colorBackground">#000000</item> 也可以设置背景色以及menu中的其他属性-->
+        <item name="actionOverflowMenuStyle">@style/OverflowMenuStyle</item>
+    </style>
+
+    <style name="OverflowMenuStyle" parent="Widget.AppCompat.Light.PopupMenu.Overflow">
+        <item name="overlapAnchor">false</item>
         <item name="actionMenuTextColor">@android:color/white</item>
         <item name="colorButtonNormal">@android:color/white</item>
-        <item name="colorControlNormal">@android:color/white</item>
+    </style>
+
+    <style name="MyEditText" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@color/edit_base_line_color</item>
+        <item name="colorControlActivated">@color/edit_base_line_color</item>
     </style>
 
 </resources>

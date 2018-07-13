@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        app:theme="@style/MenuTheme"
+        app:popupTheme="@style/ToolbarPopupTheme"
         app:titleTextColor="#FFFFFF"
         app:title="@string/home_title"/>
 

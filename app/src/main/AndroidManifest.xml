@@ -62,6 +62,11 @@
         <activity
             android:name=".ui.ShareAnimationActivityB"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.InputUrlPlayActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/FullScreenTheme"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

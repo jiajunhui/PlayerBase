@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.kk.taurus.playerbase.widget.BaseVideoView
+        android:id="@+id/urlVideoView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000000"
+        />
+
+    <LinearLayout
+        android:id="@+id/inputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:orientation="horizontal">
+        <EditText
+            android:id="@+id/editUrl"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:hint="http://"
+            android:text="http://"
+            android:paddingLeft="16dp"
+            style="@style/MyEditText"
+            android:layout_weight="1"/>
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="match_parent"
+            android:onClick="playUrl"
+            android:scaleType="centerInside"
+            android:src="@mipmap/icon_arrow_right"/>
+    </LinearLayout>
+
+</RelativeLayout>

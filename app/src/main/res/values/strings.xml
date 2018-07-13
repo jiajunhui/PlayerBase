@@ -2,6 +2,8 @@
     <string name="app_name">AVPlayer</string>
     <string name="home_title">PlayerBase</string>
 
+    <string name="decoderSelectTitle">选择解码器</string>
+
     <string name="useIjkPlayer">用IjkPlayer解码</string>
     <string name="useMediaPlayer">用MediaPlayer解码</string>
     <string name="useExoPlayer">用ExoPlayer解码</string>
@@ -11,5 +13,7 @@
 
     <string name="window_play">窗口播放</string>
     <string name="page_play">页面播放</string>
+
+    <string name="input_url_play">输入地址播放</string>
 
 </resources>

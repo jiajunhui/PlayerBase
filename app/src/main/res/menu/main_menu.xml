@@ -3,22 +3,34 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/switchIjkPlayer"
-        android:title="@string/useIjkPlayer"
-        app:showAsAction="collapseActionView"
-        />
+        android:id="@+id/decoderSelect"
+        android:title="@string/decoderSelectTitle"
+        >
+        <menu>
+            <item
+                android:id="@+id/switchIjkPlayer"
+                android:title="@string/useIjkPlayer"
+                app:showAsAction="collapseActionView"
+                />
+
+            <item
+                android:id="@+id/switchMediaPlayer"
+                android:title="@string/useMediaPlayer"
+                app:showAsAction="collapseActionView"
+                />
+
+            <item
+                android:id="@+id/switchExoPlayer"
+                android:title="@string/useExoPlayer"
+                app:showAsAction="collapseActionView"
+                />
+        </menu>
+    </item>
 
     <item
-        android:id="@+id/switchMediaPlayer"
-        android:title="@string/useMediaPlayer"
+        android:id="@+id/inputUrlPlay"
+        android:title="@string/input_url_play"
         app:showAsAction="collapseActionView"
         />
-
-    <item
-        android:id="@+id/switchExoPlayer"
-        android:title="@string/useExoPlayer"
-        app:showAsAction="collapseActionView"
-        />
-
 
 </menu>
