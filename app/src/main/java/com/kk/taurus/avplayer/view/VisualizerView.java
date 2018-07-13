@@ -93,11 +93,13 @@ public class VisualizerView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if (bytes == null) {
+        int width = getWidth();
+        int height = getHeight();
+        if (bytes == null || width <= 0 || height <= 0) {
             return;
         }
         // 使用rect对象记录该组件的宽度和高度
-        rect.set(0, 0, getWidth(), getHeight());
+        rect.set(0, 0, width, height);
         switch (type) {
             // 绘制柱状的波形图（每隔18个抽样点绘制一个矩形）
             case WAVE_TYPE_RECTANGLE:
@@ -137,7 +139,7 @@ public class VisualizerView extends View {
             case WAVE_TYPE_BROKEN_LINE:
                 default:
                 for (int i = 0; i < bytes.length - 1; i++) {
-                    float left = getWidth() * i / (bytes.length - 1);
+                    float left = width * i / (bytes.length - 1);
                     // 根据波形值计算该矩形的高度
                     float top = rect.height() - (byte) (bytes[i + 1] + 128)
                             * rect.height() / 128;
