@@ -310,9 +310,7 @@ public final class RelationAssist implements AssistPlay {
     public void setRenderType(int renderType){
         mRenderTypeChange = mRenderType!=renderType;
         this.mRenderType = renderType;
-        if(mRenderTypeChange){
-            updateRender();
-        }
+        updateRender();
     }
 
     public IRender getRender() {
@@ -335,13 +333,20 @@ public final class RelationAssist implements AssistPlay {
      */
     @Override
     public void attachContainer(ViewGroup userContainer) {
+        attachContainer(userContainer, false);
+    }
+
+    public void attachContainer(ViewGroup userContainer, boolean updateRender){
         attachPlayerListener();
         detachSuperContainer();
         if(mReceiverGroup!=null){
             mSuperContainer.setReceiverGroup(mReceiverGroup);
         }
-        //update render view.
-        updateRender();
+        if(updateRender || isNeedForceUpdateRender()){
+            releaseRender();
+            //update render view.
+            updateRender();
+        }
         //attach SuperContainer
         if(userContainer!=null){
             userContainer.addView(mSuperContainer,
@@ -350,8 +355,12 @@ public final class RelationAssist implements AssistPlay {
         }
     }
 
+    private boolean isNeedForceUpdateRender(){
+        return mRender==null || mRenderTypeChange;
+    }
+
     private void updateRender(){
-        if(mRender==null || mRenderTypeChange){
+        if(isNeedForceUpdateRender()){
             mRenderTypeChange = false;
             releaseRender();
             switch (mRenderType){
@@ -388,11 +397,11 @@ public final class RelationAssist implements AssistPlay {
 
     @Override
     public void play(boolean updateRender) {
+        if(updateRender){
+            releaseRender();
+            updateRender();
+        }
         if(mDataSource!=null){
-            if(updateRender){
-                releaseRender();
-                updateRender();
-            }
             onInternalSetDataSource(mDataSource);
             onInternalStart(mDataSource.getStartPos());
         }
