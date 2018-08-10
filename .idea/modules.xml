@@ -2,11 +2,16 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/AVPlayer.iml" filepath="$PROJECT_DIR$/AVPlayer.iml" />
+      <module fileurl="file://D:\StudioProjects\PlayerBase\AVPlayer.iml" filepath="D:\StudioProjects\PlayerBase\AVPlayer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/PlayerBase.iml" filepath="$PROJECT_DIR$/.idea/PlayerBase.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://D:\StudioProjects\PlayerBase\app\app.iml" filepath="D:\StudioProjects\PlayerBase\app\app.iml" />
       <module fileurl="file://$PROJECT_DIR$/exoplayer/exoplayer.iml" filepath="$PROJECT_DIR$/exoplayer/exoplayer.iml" />
+      <module fileurl="file://D:\StudioProjects\PlayerBase\exoplayer\exoplayer.iml" filepath="D:\StudioProjects\PlayerBase\exoplayer\exoplayer.iml" />
       <module fileurl="file://$PROJECT_DIR$/ijkplayer/ijkplayer.iml" filepath="$PROJECT_DIR$/ijkplayer/ijkplayer.iml" />
+      <module fileurl="file://D:\StudioProjects\PlayerBase\ijkplayer\ijkplayer.iml" filepath="D:\StudioProjects\PlayerBase\ijkplayer\ijkplayer.iml" />
       <module fileurl="file://$PROJECT_DIR$/playerbase/playerbase.iml" filepath="$PROJECT_DIR$/playerbase/playerbase.iml" />
+      <module fileurl="file://D:\StudioProjects\PlayerBase\playerbase\playerbase.iml" filepath="D:\StudioProjects\PlayerBase\playerbase\playerbase.iml" />
     </modules>
   </component>
 </project>

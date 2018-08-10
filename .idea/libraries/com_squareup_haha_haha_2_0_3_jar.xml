@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="com.squareup.haha:haha:2.0.3@jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.haha/haha/2.0.3/640a438d2d415c056ca6a673ac26b183b044e160/haha-2.0.3.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.haha/haha/2.0.3/e0672395ac43377f2510b14839342a24fdf35c18/haha-2.0.3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
