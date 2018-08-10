@@ -297,8 +297,9 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
     };
 
     private Player.EventListener mEventListener = new Player.EventListener() {
+
         @Override
-        public void onTimelineChanged(Timeline timeline, Object manifest) {
+        public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
             PLog.d(TAG,"onTimelineChanged...");
         }
 
@@ -399,6 +400,11 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
         }
 
         @Override
+        public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
+
+        }
+
+        @Override
         public void onPlayerError(ExoPlaybackException error) {
             if(error==null){
                 submitErrorEvent(OnErrorEventListener.ERROR_EVENT_UNKNOWN, null);
@@ -420,7 +426,12 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
         }
 
         @Override
-        public void onPositionDiscontinuity() {
+        public void onPositionDiscontinuity(int reason) {
+
+        }
+
+        @Override
+        public void onSeekProcessed() {
 
         }
 
