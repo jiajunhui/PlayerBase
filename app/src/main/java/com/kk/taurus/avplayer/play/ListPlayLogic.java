@@ -88,14 +88,19 @@ public class ListPlayLogic {
         });
     }
 
-    public void playPosition(int position){
+    public void playPosition(final int position){
         VideoBean item = getItem(position);
-        DataSource dataSource = new DataSource(item.getPath());
+        final DataSource dataSource = new DataSource(item.getPath());
         dataSource.setTitle(item.getDisplayName());
-        VideoListAdapter.VideoItemHolder holder = getItemHolder(position);
+        final VideoListAdapter.VideoItemHolder holder = getItemHolder(position);
         if(holder!=null){
-            PLog.d("ListPlayLogic","playPosition : position = " + position);
-            AssistPlayer.get().play(holder.layoutContainer, dataSource);
+            mRecycler.post(new Runnable() {
+                @Override
+                public void run() {
+                    PLog.d("ListPlayLogic","playPosition : position = " + position);
+                    AssistPlayer.get().play(holder.layoutContainer, dataSource);
+                }
+            });
         }
     }
 
