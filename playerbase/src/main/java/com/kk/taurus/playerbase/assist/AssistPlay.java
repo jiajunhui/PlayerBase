@@ -24,6 +24,7 @@ import com.kk.taurus.playerbase.event.OnPlayerEventListener;
 import com.kk.taurus.playerbase.provider.IDataProvider;
 import com.kk.taurus.playerbase.receiver.IReceiverGroup;
 import com.kk.taurus.playerbase.receiver.OnReceiverEventListener;
+import com.kk.taurus.playerbase.render.AspectRatio;
 
 /**
  *
@@ -41,6 +42,9 @@ public interface AssistPlay {
     void setOnProviderListener(IDataProvider.OnProviderListener onProviderListener);
     void setDataProvider(IDataProvider dataProvider);
     boolean switchDecoder(int decoderPlanId);
+
+    void setRenderType(int renderType);
+    void setAspectRatio(AspectRatio aspectRatio);
 
     void setVolume(float left, float right);
     void setSpeed(float speed);

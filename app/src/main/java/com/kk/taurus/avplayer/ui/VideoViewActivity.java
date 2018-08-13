@@ -198,6 +198,10 @@ public class VideoViewActivity extends AppCompatActivity implements OnPlayerEven
         mVideoView.setAspectRatio(AspectRatio.AspectRatio_FILL_PARENT);
     }
 
+    public void onAspectMatch(View view){
+        mVideoView.setAspectRatio(AspectRatio.AspectRatio_MATCH_PARENT);
+    }
+
     public void onAspectFit(View view){
         mVideoView.setAspectRatio(AspectRatio.AspectRatio_FIT_PARENT);
     }
@@ -260,7 +264,7 @@ public class VideoViewActivity extends AppCompatActivity implements OnPlayerEven
             layoutParams.setMargins(0, 0, 0, 0);
         }else{
             layoutParams.width = PUtil.getScreenW(this) - (margin*2);
-            layoutParams.height = layoutParams.width * 9/16;
+            layoutParams.height = layoutParams.width * 3/4;
             layoutParams.setMargins(margin, margin, margin, margin);
         }
         mVideoView.setLayoutParams(layoutParams);

@@ -19,6 +19,7 @@ import com.kk.taurus.avplayer.play.DataInter;
 import com.kk.taurus.playerbase.assist.OnVideoViewEventHandler;
 import com.kk.taurus.playerbase.entity.DataSource;
 import com.kk.taurus.playerbase.receiver.ReceiverGroup;
+import com.kk.taurus.playerbase.render.AspectRatio;
 import com.kk.taurus.playerbase.widget.BaseVideoView;
 
 public class InputUrlPlayActivity extends AppCompatActivity {
@@ -34,6 +35,7 @@ public class InputUrlPlayActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input_url_play);
         mVideoView = findViewById(R.id.urlVideoView);
+        mVideoView.setAspectRatio(AspectRatio.AspectRatio_FILL_PARENT);
         mInputLayout = findViewById(R.id.inputLayout);
         mInputUrl = findViewById(R.id.editUrl);
 

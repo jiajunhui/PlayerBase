@@ -193,7 +193,7 @@ public final class RenderMeasure {
     }
 
     public void setAspectRatio(AspectRatio aspectRatio){
-        this.mCurrAspectRatio = aspectRatio;
+        this.mCurrAspectRatio = aspectRatio==null?AspectRatio.AspectRatio_FIT_PARENT:aspectRatio;
     }
 
     public int getMeasureWidth() {

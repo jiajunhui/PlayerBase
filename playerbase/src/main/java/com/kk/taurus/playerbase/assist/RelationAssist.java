@@ -35,6 +35,7 @@ import com.kk.taurus.playerbase.receiver.IReceiverGroup;
 import com.kk.taurus.playerbase.receiver.OnReceiverEventListener;
 import com.kk.taurus.playerbase.receiver.PlayerStateGetter;
 import com.kk.taurus.playerbase.receiver.StateGetter;
+import com.kk.taurus.playerbase.render.AspectRatio;
 import com.kk.taurus.playerbase.render.IRender;
 import com.kk.taurus.playerbase.render.RenderSurfaceView;
 import com.kk.taurus.playerbase.render.RenderTextureView;
@@ -71,6 +72,7 @@ public final class RelationAssist implements AssistPlay {
     private int mRenderType = IRender.RENDER_TYPE_TEXTURE_VIEW;
     private boolean mRenderTypeChange;
     private IRender mRender;
+    private AspectRatio mAspectRatio = AspectRatio.AspectRatio_FIT_PARENT;
     private int mVideoWidth;
     private int mVideoHeight;
     private int mVideoSarNum;
@@ -307,10 +309,18 @@ public final class RelationAssist implements AssistPlay {
      *
      * @param renderType
      */
+    @Override
     public void setRenderType(int renderType){
         mRenderTypeChange = mRenderType!=renderType;
         this.mRenderType = renderType;
         updateRender();
+    }
+
+    @Override
+    public void setAspectRatio(AspectRatio aspectRatio) {
+        this.mAspectRatio = aspectRatio;
+        if(mRender!=null)
+            mRender.updateAspectRatio(aspectRatio);
     }
 
     public IRender getRender() {
@@ -375,6 +385,7 @@ public final class RelationAssist implements AssistPlay {
             }
             mRenderHolder = null;
             mPlayer.setSurface(null);
+            mRender.updateAspectRatio(mAspectRatio);
             mRender.setRenderCallback(mRenderCallback);
             //update some params for render type change
             mRender.updateVideoSize(mVideoWidth, mVideoHeight);

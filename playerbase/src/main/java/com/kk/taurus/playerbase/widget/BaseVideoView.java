@@ -75,6 +75,7 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
 
     //render view, such as TextureView or SurfaceView.
     private IRender mRender;
+    private AspectRatio mAspectRatio = AspectRatio.AspectRatio_FIT_PARENT;
 
     private int mVideoWidth;
     private int mVideoHeight;
@@ -299,6 +300,7 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
 
     @Override
     public void setAspectRatio(AspectRatio aspectRatio) {
+        this.mAspectRatio = aspectRatio;
         if(mRender!=null)
             mRender.updateAspectRatio(aspectRatio);
     }
@@ -333,6 +335,7 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
         //clear render holder
         mRenderHolder = null;
         mPlayer.setSurface(null);
+        mRender.updateAspectRatio(mAspectRatio);
         mRender.setRenderCallback(mRenderCallback);
         //update some params
         mRender.updateVideoSize(mVideoWidth, mVideoHeight);
