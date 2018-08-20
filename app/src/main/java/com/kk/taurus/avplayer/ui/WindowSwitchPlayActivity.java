@@ -227,13 +227,21 @@ public class WindowSwitchPlayActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        mAssist.pause();
+        if(mAssist.isInPlaybackState()){
+            mAssist.pause();
+        }else{
+            mAssist.stop();
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mAssist.resume();
+        if(mAssist.isInPlaybackState()){
+            mAssist.resume();
+        }else{
+            mAssist.rePlay(0);
+        }
     }
 
     @Override

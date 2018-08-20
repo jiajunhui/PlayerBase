@@ -1,5 +1,6 @@
 package com.kk.taurus.avplayer.cover;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 import com.kk.taurus.avplayer.App;
 import com.kk.taurus.avplayer.R;
 import com.kk.taurus.avplayer.play.DataInter;
+import com.kk.taurus.avplayer.utils.PUtil;
 import com.kk.taurus.playerbase.config.PConst;
 import com.kk.taurus.playerbase.event.BundlePool;
 import com.kk.taurus.playerbase.event.EventKey;
@@ -103,7 +105,7 @@ public class ErrorCover extends BaseCover {
         super.onProducerData(key, data);
         if(DataInter.Key.KEY_NETWORK_STATE.equals(key)){
             int networkState = (int) data;
-            if(networkState== PConst.NETWORK_STATE_WIFI && mErrorShow){
+            if(networkState== PConst.NETWORK_STATE_WIFI && mErrorShow && PUtil.isTopActivity((Activity) getContext())){
                 Bundle bundle = BundlePool.obtain();
                 bundle.putInt(EventKey.INT_DATA, mCurrPosition);
                 requestRetry(bundle);
