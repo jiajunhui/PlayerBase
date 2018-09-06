@@ -86,6 +86,8 @@ public class DataSource implements Serializable {
      */
     private int startPos;
 
+    private boolean isLive;
+
     public DataSource() {
     }
 
@@ -176,5 +178,13 @@ public class DataSource implements Serializable {
 
     public void setStartPos(int startPos) {
         this.startPos = startPos;
+    }
+
+    public boolean isLive() {
+        return isLive;
+    }
+
+    public void setLive(boolean isLive) {
+        this.isLive = isLive;
     }
 }

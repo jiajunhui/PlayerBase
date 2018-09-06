@@ -153,12 +153,31 @@ public class SysMediaPlayer extends BaseInternalPlayer {
 
     @Override
     public void setSpeed(float speed) {
-        if(available() && Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
-            PlaybackParams playbackParams = mMediaPlayer.getPlaybackParams();
-            playbackParams.setSpeed(speed);
-            mMediaPlayer.setPlaybackParams(playbackParams);
-        }else{
-            PLog.e(TAG,"not support play speed setting.");
+        try {
+            if(available() && Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
+                PlaybackParams playbackParams = mMediaPlayer.getPlaybackParams();
+                playbackParams.setSpeed(speed);
+                /**
+                 * Sets playback rate using {@link PlaybackParams}. The object sets its internal
+                 * PlaybackParams to the input, except that the object remembers previous speed
+                 * when input speed is zero. This allows the object to resume at previous speed
+                 * when start() is called. Calling it before the object is prepared does not change
+                 * the object state. After the object is prepared, calling it with zero speed is
+                 * equivalent to calling pause(). After the object is prepared, calling it with
+                 * non-zero speed is equivalent to calling start().
+                 */
+                mMediaPlayer.setPlaybackParams(playbackParams);
+                if(speed <= 0){
+                    pause();
+                }else if(speed > 0 && getState()==STATE_PAUSED){
+                    resume();
+                }
+            }else{
+                PLog.e(TAG,"not support play speed setting.");
+            }
+        }catch (Exception e){
+            PLog.e(TAG,"IllegalStateException， if the internal player engine has not been initialized " +
+                    "or has been released.");
         }
     }
 

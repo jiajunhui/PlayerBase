@@ -28,5 +28,7 @@ public enum  AspectRatio implements Serializable {
     AspectRatio_MATCH_PARENT,
     AspectRatio_FILL_PARENT,
     AspectRatio_FIT_PARENT,
-    AspectRatio_ORIGIN
+    AspectRatio_ORIGIN,
+    AspectRatio_FILL_WIDTH,
+    AspectRatio_FILL_HEIGHT
 }

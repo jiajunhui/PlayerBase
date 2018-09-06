@@ -61,6 +61,8 @@ public final class AVPlayer implements IPlayer{
 
     private int mDecoderPlanId;
 
+    private float mVolumeLeft = -1,mVolumeRight = -1;
+
     public AVPlayer(){
         //default load config plan id.
         this(PlayerConfig.getDefaultPlanId());
@@ -111,7 +113,7 @@ public final class AVPlayer implements IPlayer{
      *
      * @param decoderPlanId the planId is your configuration ids or default id.
      * @return Whether or not to switch to success.
- *             if return false, maybe your incoming planId is the same as the current planId
+     *         if return false, maybe your incoming planId is the same as the current planId
      *         or your incoming planId is illegal param.
      *         return true is switch decoder success.
      *
@@ -177,7 +179,7 @@ public final class AVPlayer implements IPlayer{
             int duration = getDuration();
             int bufferPercentage = getBufferPercentage();
             //check valid data.
-            if(duration <= 0 || curr < 0)
+            if(duration <= 0 && !isLive())
                 return;
             Bundle bundle = BundlePool.obtain();
             bundle.putInt(EventKey.INT_ARG1, curr);
@@ -192,6 +194,12 @@ public final class AVPlayer implements IPlayer{
             new OnPlayerEventListener() {
         @Override
         public void onPlayerEvent(int eventCode, Bundle bundle) {
+            if(eventCode==OnPlayerEventListener.PLAYER_EVENT_ON_PREPARED){
+                //when prepared set volume value
+                if(mVolumeLeft > 0 || mVolumeRight > 0){
+                    mInternalPlayer.setVolume(mVolumeLeft, mVolumeRight);
+                }
+            }
             mTimerCounterProxy.proxyPlayEvent(eventCode, bundle);
             callBackPlayEventListener(eventCode, bundle);
         }
@@ -330,6 +338,10 @@ public final class AVPlayer implements IPlayer{
 
     }
 
+    boolean isLive(){
+        return mDataSource!=null && mDataSource.isLive();
+    }
+
     private void interPlayerSetDataSource(DataSource dataSource){
         if(isPlayerAvailable())
             mInternalPlayer.setDataSource(dataSource);
@@ -395,6 +407,8 @@ public final class AVPlayer implements IPlayer{
 
     @Override
     public void setVolume(float left, float right) {
+        mVolumeLeft = left;
+        mVolumeRight = right;
         if(isPlayerAvailable())
             mInternalPlayer.setVolume(left, right);
     }
@@ -501,6 +515,8 @@ public final class AVPlayer implements IPlayer{
             mDataProvider.destroy();
         if(isPlayerAvailable())
             mInternalPlayer.destroy();
+        if(mTimerCounterProxy!=null)
+            mTimerCounterProxy.cancel();
         resetListener();
     }
 }

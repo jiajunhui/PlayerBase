@@ -33,13 +33,6 @@ public class TimerCounterProxy {
     private final int MSG_CODE_COUNTER = 1;
     private int counterInterval;
 
-    //indicator is start message.
-    private boolean start;
-
-    //indicator is in legal state,
-    // eg. maybe in error state.
-    private boolean isLegal;
-
     //proxy state, default use it.
     private boolean useProxy = true;
 
@@ -51,7 +44,7 @@ public class TimerCounterProxy {
             super.handleMessage(msg);
             switch (msg.what){
                 case MSG_CODE_COUNTER:
-                    if(!useProxy || !start || !isLegal)
+                    if(!useProxy)
                         return;
                     if(onCounterUpdateListener!=null)
                         onCounterUpdateListener.onCounter();
@@ -81,8 +74,6 @@ public class TimerCounterProxy {
     }
 
     public void proxyPlayEvent(int eventCode, Bundle bundle){
-        boolean needStart = false;
-        boolean needCancel = false;
         switch (eventCode){
             case OnPlayerEventListener.PLAYER_EVENT_ON_DATA_SOURCE_SET:
             case OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_RENDER_START:
@@ -91,36 +82,24 @@ public class TimerCounterProxy {
             case OnPlayerEventListener.PLAYER_EVENT_ON_PAUSE:
             case OnPlayerEventListener.PLAYER_EVENT_ON_RESUME:
             case OnPlayerEventListener.PLAYER_EVENT_ON_SEEK_COMPLETE:
-                isLegal = true;
-                needStart = true;
+                if(!useProxy)
+                    return;
+                start();
                 break;
             case OnPlayerEventListener.PLAYER_EVENT_ON_STOP:
             case OnPlayerEventListener.PLAYER_EVENT_ON_RESET:
             case OnPlayerEventListener.PLAYER_EVENT_ON_DESTROY:
             case OnPlayerEventListener.PLAYER_EVENT_ON_PLAY_COMPLETE:
-                isLegal = false;
-                needCancel = true;
+                cancel();
                 break;
         }
-
-        if(!useProxy)
-            return;
-        if(needStart){
-            start();
-        }
-        if(needCancel){
-            cancel();
-        }
-
     }
 
     public void proxyErrorEvent(int eventCode, Bundle bundle){
-        isLegal = false;
         cancel();
     }
 
     public void start(){
-        start = true;
         removeMessage();
         mHandler.sendEmptyMessage(MSG_CODE_COUNTER);
     }
@@ -131,7 +110,6 @@ public class TimerCounterProxy {
     }
 
     public void cancel(){
-        start = false;
         removeMessage();
     }
 

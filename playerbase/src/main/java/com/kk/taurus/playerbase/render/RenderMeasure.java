@@ -79,6 +79,10 @@ public final class RenderMeasure {
                     case AspectRatio_FIT_PARENT:
                     case AspectRatio_FILL_PARENT:
                     case AspectRatio_ORIGIN:
+                    //------2018/09/06 add------
+                    case AspectRatio_FILL_WIDTH:
+                    case AspectRatio_FILL_HEIGHT:
+                    //------2018/09/06 add------
                     default:
                         displayAspectRatio = (float) mVideoWidth / (float) mVideoHeight;
                         if (mVideoSarNum > 0 && mVideoSarDen > 0)
@@ -112,6 +116,16 @@ public final class RenderMeasure {
                             height = (int) (width / displayAspectRatio);
                         }
                         break;
+                    //------2018/09/06 add------
+                    case AspectRatio_FILL_WIDTH:
+                        width = widthSpecSize;
+                        height = widthSpecSize * mVideoHeight / mVideoWidth;
+                        break;
+                    case AspectRatio_FILL_HEIGHT:
+                        height = heightSpecSize;
+                        width = heightSpecSize * mVideoWidth / mVideoHeight;
+                        break;
+                    //------2018/09/06 add------
                     case AspectRatio_ORIGIN:
                     default:
                         if (shouldBeWider) {
