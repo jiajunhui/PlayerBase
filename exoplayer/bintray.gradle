@@ -1,46 +1,8 @@
-apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
 // 这个version是区分library版本的，因此当我们需要更新library时记得修改这个version
-version = "332_088_001"
-
-
-android {
-    compileSdkVersion 26
-
-    defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-
-    lintOptions{
-        abortOnError false
-    }
-
-}
-
-dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-    implementation 'tv.danmaku.ijk.media:ijkplayer-java:0.8.8'
-    api 'com.kk.taurus.playerbase:playerbase:3.3.2'
-}
+version = "332_r251_001"
 
 def siteUrl = 'https://github.com/jiajunhui/PlayerBase'      // 项目的主页
 def gitUrl = 'https://github.com/jiajunhui/PlayerBase.git'   // Git仓库的url
@@ -52,8 +14,8 @@ install {
             project {
                 packaging 'aar'
                 // Add your description here
-                description 'Packaging ijkplayer by PlayerBase'
-                name 'ijkplayer'  //项目描述
+                description 'Packaging exoplayer by PlayerBase'
+                name 'exoplayer'  //项目描述
                 url siteUrl
                 // Set your license
                 licenses {
@@ -64,7 +26,7 @@ install {
                 }
                 developers {
                     developer { // 开发者信息
-                        id 'ijkplayer'
+                        id 'exoplayer'
                         name 'junhui jia'
                         email 'jiajunhuiplay@gmail.com'
                     }
@@ -104,7 +66,7 @@ bintray {
     configurations = ['archives']
     pkg {
         repo = "Tools"  //发布到Bintray的那个仓库里，默认账户有四个库，我们这里上传到maven库
-        name = "ijkplayer"  //发布到Bintray上的项目名字
+        name = "exoplayer"  //发布到Bintray上的项目名字
         websiteUrl = siteUrl
         vcsUrl = gitUrl
         licenses = ["Apache-2.0"]

@@ -15,11 +15,10 @@
  */
 
 apply plugin: 'com.android.library'
+apply from: 'bintray.gradle'
 
 android {
     compileSdkVersion 27
-
-
 
     defaultConfig {
         minSdkVersion 16
@@ -38,6 +37,10 @@ android {
         }
     }
 
+    lintOptions{
+        abortOnError false
+    }
+
 }
 
 dependencies {
@@ -46,7 +49,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    api project(':playerbase')
 
     implementation 'com.google.android.exoplayer:exoplayer:r2.5.1'
+    api 'com.kk.taurus.playerbase:playerbase:3.3.2'
 }

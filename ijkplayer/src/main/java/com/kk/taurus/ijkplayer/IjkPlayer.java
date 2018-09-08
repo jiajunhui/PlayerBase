@@ -49,7 +49,7 @@ public class IjkPlayer extends BaseInternalPlayer {
         mMediaPlayer = createPlayer();
     }
 
-    private IjkMediaPlayer createPlayer(){
+    protected IjkMediaPlayer createPlayer(){
         IjkMediaPlayer ijkMediaPlayer = new IjkMediaPlayer();
 //        ijkMediaPlayer.native_setLogLevel(IjkMediaPlayer.IJK_LOG_DEBUG);
 
