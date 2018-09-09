@@ -33,7 +33,7 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 public class IjkPlayer extends BaseInternalPlayer {
     private final String TAG = "IjkPlayer";
 
-    private static final int PLAN_ID_IJKPLAYER = 1;
+    public static final int PLAN_ID = 100;
 
     private IjkMediaPlayer mMediaPlayer;
 
@@ -43,10 +43,10 @@ public class IjkPlayer extends BaseInternalPlayer {
 
     public static void init(Application application){
         PlayerConfig.addDecoderPlan(new DecoderPlan(
-                PLAN_ID_IJKPLAYER,
+                PLAN_ID,
                 IjkPlayer.class.getName(),
                 "ijkplayer"));
-        PlayerConfig.setDefaultPlanId(PLAN_ID_IJKPLAYER);
+        PlayerConfig.setDefaultPlanId(PLAN_ID);
         PlayerLibrary.init(application);
     }
 

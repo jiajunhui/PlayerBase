@@ -66,7 +66,7 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
 
     private final String TAG = "ExoMediaPlayer";
 
-    private static final int PLAN_ID_EXOPLAYER = 2;
+    public static final int PLAN_ID = 200;
 
     private final Context mAppContext;
     private SimpleExoPlayer mInternalPlayer;
@@ -83,10 +83,10 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
 
     public static void init(Application application){
         PlayerConfig.addDecoderPlan(new DecoderPlan(
-                PLAN_ID_EXOPLAYER,
+                PLAN_ID,
                 ExoMediaPlayer.class.getName(),
                 "exoplayer"));
-        PlayerConfig.setDefaultPlanId(PLAN_ID_EXOPLAYER);
+        PlayerConfig.setDefaultPlanId(PLAN_ID);
         PlayerLibrary.init(application);
     }
 

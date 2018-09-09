@@ -80,7 +80,26 @@ demo示例集成了播放控制组件**ControllerCover**、加载中组件**Load
 
 ```gradle
 dependencies {
-  compile 'com.kk.taurus.playerbase:playerbase:3.3.2'
+  //---------如果仅使用MediaPlayer解码，使用以下依赖。----------
+  //该依赖仅包含MediaPlayer解码
+  implementation 'com.kk.taurus.playerbase:playerbase:3.3.2'
+  
+  
+  //---------如果使用ExoPlayer解码，使用以下依赖。---------
+  //该依赖包含exoplayer解码和MediaPlayer解码
+  implementation 'cn.jiajunhui:exoplayer:332_r251_001'
+
+  
+  //---------如果使用ijkPlayer解码，使用以下依赖。---------
+  //该依赖包含ijkplayer解码和MediaPlayer解码
+  implementation 'cn.jiajunhui:ijkplayer:332_088_001'
+  implementation 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.8'
+  # Other ABIs: optional
+  implementation 'tv.danmaku.ijk.media:ijkplayer-armv5:0.8.8'
+  implementation 'tv.danmaku.ijk.media:ijkplayer-arm64:0.8.8'
+  implementation 'tv.danmaku.ijk.media:ijkplayer-x86:0.8.8'
+  implementation 'tv.danmaku.ijk.media:ijkplayer-x86_64:0.8.8'
+  
 }
 ```
 
@@ -107,6 +126,15 @@ public class App extends Application {
         PlayerConfig.setUseDefaultNetworkEventProducer(true);
         //初始化库
         PlayerLibrary.init(this);
+        
+        //-------------------------------------------
+        
+        //如果添加了'cn.jiajunhui:exoplayer:xxxx'该依赖
+        ExoMediaPlayer.init(this);
+        
+        //如果添加了'cn.jiajunhui:ijkplayer:xxxx'该依赖
+        IjkPlayer.init(this);
+        
     }
     
 }
