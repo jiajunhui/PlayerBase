@@ -1,5 +1,6 @@
 package com.kk.taurus.ijkplayer;
 
+import android.app.Application;
 import android.content.Context;
 import android.media.AudioManager;
 import android.net.Uri;
@@ -8,7 +9,10 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 
 import com.kk.taurus.playerbase.config.AppContextAttach;
+import com.kk.taurus.playerbase.config.PlayerConfig;
+import com.kk.taurus.playerbase.config.PlayerLibrary;
 import com.kk.taurus.playerbase.entity.DataSource;
+import com.kk.taurus.playerbase.entity.DecoderPlan;
 import com.kk.taurus.playerbase.event.BundlePool;
 import com.kk.taurus.playerbase.event.EventKey;
 import com.kk.taurus.playerbase.event.OnErrorEventListener;
@@ -29,24 +33,31 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 public class IjkPlayer extends BaseInternalPlayer {
     private final String TAG = "IjkPlayer";
 
+    private static final int PLAN_ID_IJKPLAYER = 1;
+
     private IjkMediaPlayer mMediaPlayer;
 
     private int mTargetState;
 
     private int startSeekPos;
 
+    public static void init(Application application){
+        PlayerConfig.addDecoderPlan(new DecoderPlan(
+                PLAN_ID_IJKPLAYER,
+                IjkPlayer.class.getName(),
+                "ijkplayer"));
+        PlayerConfig.setDefaultPlanId(PLAN_ID_IJKPLAYER);
+        PlayerLibrary.init(application);
+    }
+
     public IjkPlayer() {
-        init();
+        // init player
+        mMediaPlayer = createPlayer();
     }
 
     static {
         IjkMediaPlayer.loadLibrariesOnce(null);
         IjkMediaPlayer.native_profileBegin("libijkplayer.so");
-    }
-
-    private void init() {
-        // init player
-        mMediaPlayer = createPlayer();
     }
 
     protected IjkMediaPlayer createPlayer(){
