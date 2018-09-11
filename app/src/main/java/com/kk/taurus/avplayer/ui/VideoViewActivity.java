@@ -138,8 +138,11 @@ public class VideoViewActivity extends AppCompatActivity implements OnPlayerEven
         mVideoView.setReceiverGroup(mReceiverGroup);
 
         //设置数据提供者 MonitorDataProvider
+        //非必须，可以不用这个。详见github项目wiki
         MonitorDataProvider dataProvider = new MonitorDataProvider();
         mVideoView.setDataProvider(dataProvider);
+
+        //设置数据
         mVideoView.setDataSource(generatorDataSource(mDataSourceId));
         mVideoView.start();
 
