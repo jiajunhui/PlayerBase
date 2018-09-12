@@ -47,20 +47,17 @@ public class ListPlayLogic {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                if(newState==RecyclerView.SCROLL_STATE_IDLE){
-                    int itemVisibleRectHeight = getItemVisibleRectHeight(mPlayPosition);
-                    if(itemVisibleRectHeight <= 0){
-                        PLog.d("ListPlayLogic","onScrollStateChanged stop");
-                        AssistPlayer.get().stop();
-                        mAdapter.notifyItemChanged(mPlayPosition);
-                        mPlayPosition = -1;
-                    }
-                }
             }
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-
+                int itemVisibleRectHeight = getItemVisibleRectHeight(mPlayPosition);
+                if(itemVisibleRectHeight <= 0){
+                    PLog.d("ListPlayLogic","onScrollStateChanged stop");
+                    AssistPlayer.get().stop();
+                    mAdapter.notifyItemChanged(mPlayPosition);
+                    mPlayPosition = -1;
+                }
             }
         });
     }
