@@ -31,6 +31,8 @@ public class VideoListFragment extends Fragment implements ListAdapter.OnListLis
 
     private int mFragIndex;
 
+    private boolean hasInit;
+
     public static VideoListFragment create(int fragIndex){
         VideoListFragment fragment = new VideoListFragment();
         Bundle bundle = new Bundle();
@@ -58,6 +60,7 @@ public class VideoListFragment extends Fragment implements ListAdapter.OnListLis
         mListAdapter = new ListAdapter(getContext(), mRecycler, DataUtils.getVideoList(mFragIndex*3, 3));
         mListAdapter.setOnListListener(this);
         mRecycler.setAdapter(mListAdapter);
+        hasInit = true;
     }
 
     @Override
@@ -77,6 +80,16 @@ public class VideoListFragment extends Fragment implements ListAdapter.OnListLis
                     }
                 }
             });
+        }
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if(hasInit){
+            if(!getUserVisibleHint()){
+                mListAdapter.reset();
+            }
         }
     }
 
