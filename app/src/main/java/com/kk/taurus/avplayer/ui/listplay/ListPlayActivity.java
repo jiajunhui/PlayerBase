@@ -23,6 +23,7 @@ import com.kk.taurus.playerbase.entity.DataSource;
 
 import com.kk.taurus.avplayer.adapter.ListAdapter;
 import com.kk.taurus.avplayer.base.ISPayer;
+import com.kk.taurus.playerbase.player.IPlayer;
 
 public class ListPlayActivity extends AppCompatActivity implements ListAdapter.OnListListener {
 
@@ -129,6 +130,9 @@ public class ListPlayActivity extends AppCompatActivity implements ListAdapter.O
     @Override
     protected void onPause() {
         super.onPause();
+        int state = ListPlayer.get().getState();
+        if(state == IPlayer.STATE_PLAYBACK_COMPLETE)
+            return;
         if(!toDetail){
             ListPlayer.get().pause();
         }

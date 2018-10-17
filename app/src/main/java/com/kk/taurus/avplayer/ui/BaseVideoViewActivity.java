@@ -25,6 +25,7 @@ import com.kk.taurus.playerbase.assist.OnVideoViewEventHandler;
 import com.kk.taurus.playerbase.config.PlayerConfig;
 import com.kk.taurus.playerbase.entity.DataSource;
 import com.kk.taurus.playerbase.event.OnPlayerEventListener;
+import com.kk.taurus.playerbase.player.IPlayer;
 import com.kk.taurus.playerbase.receiver.IReceiver;
 import com.kk.taurus.playerbase.receiver.ReceiverGroup;
 import com.kk.taurus.playerbase.render.AspectRatio;
@@ -250,6 +251,9 @@ public class BaseVideoViewActivity extends AppCompatActivity implements
     @Override
     protected void onPause() {
         super.onPause();
+        int state = mVideoView.getState();
+        if(state == IPlayer.STATE_PLAYBACK_COMPLETE)
+            return;
         if(mVideoView.isInPlaybackState()){
             mVideoView.pause();
         }else{
@@ -260,6 +264,9 @@ public class BaseVideoViewActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
+        int state = mVideoView.getState();
+        if(state == IPlayer.STATE_PLAYBACK_COMPLETE)
+            return;
         if(mVideoView.isInPlaybackState()){
             if(!userPause)
                 mVideoView.resume();

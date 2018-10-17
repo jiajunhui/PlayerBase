@@ -23,6 +23,7 @@ import java.util.List;
 
 import com.kk.taurus.avplayer.base.ISPayer;
 import com.kk.taurus.avplayer.utils.OrientationSensor;
+import com.kk.taurus.playerbase.player.IPlayer;
 
 public class MultiListActivity extends AppCompatActivity {
 
@@ -121,6 +122,9 @@ public class MultiListActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        int state = ListPlayer.get().getState();
+        if(state == IPlayer.STATE_PLAYBACK_COMPLETE)
+            return;
         if(!toDetail){
             ListPlayer.get().pause();
         }

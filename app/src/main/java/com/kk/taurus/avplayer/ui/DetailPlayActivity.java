@@ -19,6 +19,7 @@ import com.kk.taurus.avplayer.utils.OrientationSensor;
 import com.kk.taurus.playerbase.entity.DataSource;
 
 import com.kk.taurus.avplayer.base.ISPayer;
+import com.kk.taurus.playerbase.player.IPlayer;
 
 public class DetailPlayActivity extends AppCompatActivity implements OnHandleListener {
 
@@ -108,6 +109,9 @@ public class DetailPlayActivity extends AppCompatActivity implements OnHandleLis
     @Override
     protected void onResume() {
         super.onResume();
+        int state = ListPlayer.get().getState();
+        if(state == IPlayer.STATE_PLAYBACK_COMPLETE)
+            return;
         if(ListPlayer.get().isInPlaybackState()){
             ListPlayer.get().resume();
         }
@@ -116,7 +120,11 @@ public class DetailPlayActivity extends AppCompatActivity implements OnHandleLis
     @Override
     protected void onPause() {
         super.onPause();
-        ListPlayer.get().pause();
+        int state = ListPlayer.get().getState();
+        if(state == IPlayer.STATE_PLAYBACK_COMPLETE)
+            return;
+        if(ListPlayer.get().isInPlaybackState())
+            ListPlayer.get().pause();
     }
 
     @Override

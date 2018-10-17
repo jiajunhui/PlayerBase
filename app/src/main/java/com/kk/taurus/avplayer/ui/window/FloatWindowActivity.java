@@ -24,6 +24,7 @@ import com.kk.taurus.playerbase.assist.AssistPlay;
 import com.kk.taurus.playerbase.assist.OnAssistPlayEventHandler;
 import com.kk.taurus.playerbase.assist.RelationAssist;
 import com.kk.taurus.playerbase.entity.DataSource;
+import com.kk.taurus.playerbase.player.IPlayer;
 import com.kk.taurus.playerbase.receiver.ReceiverGroup;
 import com.kk.taurus.playerbase.window.FloatWindow;
 import com.kk.taurus.playerbase.window.FloatWindowParams;
@@ -227,6 +228,9 @@ public class FloatWindowActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        int state = mAssist.getState();
+        if(state == IPlayer.STATE_PLAYBACK_COMPLETE)
+            return;
         if(mAssist.isInPlaybackState()){
             mAssist.pause();
         }else{
@@ -237,6 +241,9 @@ public class FloatWindowActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        int state = mAssist.getState();
+        if(state == IPlayer.STATE_PLAYBACK_COMPLETE)
+            return;
         if(mAssist.isInPlaybackState()){
             mAssist.resume();
         }else{

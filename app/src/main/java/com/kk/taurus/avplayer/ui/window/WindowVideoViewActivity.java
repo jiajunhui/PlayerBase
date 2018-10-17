@@ -17,6 +17,7 @@ import com.kk.taurus.avplayer.play.ReceiverGroupManager;
 import com.kk.taurus.avplayer.utils.WindowPermissionCheck;
 import com.kk.taurus.playerbase.assist.OnVideoViewEventHandler;
 import com.kk.taurus.playerbase.entity.DataSource;
+import com.kk.taurus.playerbase.player.IPlayer;
 import com.kk.taurus.playerbase.receiver.ReceiverGroup;
 import com.kk.taurus.playerbase.widget.BaseVideoView;
 import com.kk.taurus.playerbase.window.FloatWindowParams;
@@ -115,13 +116,22 @@ public class WindowVideoViewActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        int state = mWindowVideoView.getState();
+        if(state == IPlayer.STATE_PLAYBACK_COMPLETE)
+            return;
         mWindowVideoView.pause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mWindowVideoView.resume();
+        int state = mWindowVideoView.getState();
+        if(state == IPlayer.STATE_PLAYBACK_COMPLETE)
+            return;
+        if(mWindowVideoView.isInPlaybackState())
+            mWindowVideoView.resume();
+        else
+            mWindowVideoView.rePlay(0);
     }
 
     @Override
