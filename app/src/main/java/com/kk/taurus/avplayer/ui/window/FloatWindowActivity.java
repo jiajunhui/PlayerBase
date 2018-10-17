@@ -1,4 +1,4 @@
-package com.kk.taurus.avplayer.ui;
+package com.kk.taurus.avplayer.ui.window;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -28,7 +28,7 @@ import com.kk.taurus.playerbase.receiver.ReceiverGroup;
 import com.kk.taurus.playerbase.window.FloatWindow;
 import com.kk.taurus.playerbase.window.FloatWindowParams;
 
-public class WindowSwitchPlayActivity extends AppCompatActivity {
+public class FloatWindowActivity extends AppCompatActivity {
 
     private int mVideoContainerH;
     private FrameLayout mVideoContainer;
@@ -74,12 +74,12 @@ public class WindowSwitchPlayActivity extends AppCompatActivity {
 
         mWindowVideoContainer = new FrameLayout(this);
         mFloatWindow = new FloatWindow(this, mWindowVideoContainer,
-                                        new FloatWindowParams()
-                                                .setWindowType(type)
-                                                .setX(100)
-                                                .setY(400)
-                                                .setWidth(width)
-                                                .setHeight(width*9/16));
+                new FloatWindowParams()
+                        .setWindowType(type)
+                        .setX(100)
+                        .setY(400)
+                        .setWidth(width)
+                        .setHeight(width*9/16));
         mFloatWindow.setBackgroundColor(Color.BLACK);
 
         mAssist = new RelationAssist(this);

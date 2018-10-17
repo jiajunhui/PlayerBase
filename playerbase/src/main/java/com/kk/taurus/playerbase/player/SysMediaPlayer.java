@@ -265,7 +265,14 @@ public class SysMediaPlayer extends BaseInternalPlayer {
     @Override
     public void pause() {
         try{
-            if(available()){
+            int state = getState();
+            if(available()
+                    && state!=STATE_END
+                    && state!=STATE_ERROR
+                    && state!=STATE_IDLE
+                    && state!=STATE_INITIALIZED
+                    && state!=STATE_PAUSED
+                    && state!=STATE_STOPPED){
                 mMediaPlayer.pause();
                 updateStatus(STATE_PAUSED);
                 submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_PAUSE, null);

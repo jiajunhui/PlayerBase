@@ -29,34 +29,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.MainActivity"
-            android:label="@string/home_title"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".ui.LocalVideoListActivity"
-            android:theme="@style/FullScreenTheme"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".ui.OnlineVideoListActivity"
-            android:theme="@style/FullScreenTheme"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".ui.VideoViewActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".ui.DetailPageActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".ui.WindowVideoViewActivity" />
-        <activity
-            android:name=".ui.WindowSwitchPlayActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name=".ui.ShareAnimationActivityA"
             android:screenOrientation="portrait"/>
         <activity
@@ -66,6 +38,33 @@
             android:name=".ui.InputUrlPlayActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/FullScreenTheme"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.listplay.MultiListActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".HomeActivity" />
+
+        <activity
+            android:name=".ui.BaseVideoViewActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.window.WindowVideoViewActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.window.FloatWindowActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.listplay.ListPlayActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.DetailPlayActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"/>
     </application>
 

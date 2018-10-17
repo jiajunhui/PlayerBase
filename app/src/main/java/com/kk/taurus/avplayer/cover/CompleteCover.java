@@ -25,7 +25,6 @@ import com.kk.taurus.avplayer.R;
 import com.kk.taurus.avplayer.play.DataInter;
 import com.kk.taurus.playerbase.event.OnPlayerEventListener;
 import com.kk.taurus.playerbase.receiver.BaseCover;
-import com.kk.taurus.playerbase.receiver.IReceiverGroup;
 
 /**
  * Created by Taurus on 2018/4/20.
@@ -34,7 +33,6 @@ import com.kk.taurus.playerbase.receiver.IReceiverGroup;
 public class CompleteCover extends BaseCover {
 
     private TextView mReplay;
-    private TextView mNext;
 
     public CompleteCover(Context context) {
         super(context);
@@ -44,14 +42,9 @@ public class CompleteCover extends BaseCover {
     public void onReceiverBind() {
         super.onReceiverBind();
         mReplay = findViewById(R.id.tv_replay);
-        mNext = findViewById(R.id.tv_next);
 
         mReplay.setOnClickListener(mOnClickListener);
-        mNext.setOnClickListener(mOnClickListener);
 
-        setNextState(false);
-
-        getGroupValue().registerOnGroupValueUpdateListener(mOnGroupValueUpdateListener);
     }
 
     @Override
@@ -71,23 +64,7 @@ public class CompleteCover extends BaseCover {
     @Override
     public void onReceiverUnBind() {
         super.onReceiverUnBind();
-        getGroupValue().unregisterOnGroupValueUpdateListener(mOnGroupValueUpdateListener);
     }
-
-    private IReceiverGroup.OnGroupValueUpdateListener mOnGroupValueUpdateListener =
-            new IReceiverGroup.OnGroupValueUpdateListener() {
-        @Override
-        public String[] filterKeys() {
-            return new String[]{DataInter.Key.KEY_IS_HAS_NEXT};
-        }
-
-        @Override
-        public void onValueUpdate(String key, Object value) {
-            if(key.equals(DataInter.Key.KEY_IS_HAS_NEXT)){
-                setNextState((Boolean) value);
-            }
-        }
-    };
 
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
@@ -96,17 +73,10 @@ public class CompleteCover extends BaseCover {
                 case R.id.tv_replay:
                     requestReplay(null);
                     break;
-                case R.id.tv_next:
-                    notifyReceiverEvent(DataInter.Event.EVENT_CODE_REQUEST_NEXT, null);
-                    break;
             }
             setPlayCompleteState(false);
         }
     };
-
-    private void setNextState(boolean state){
-        mNext.setVisibility(state?View.VISIBLE:View.GONE);
-    }
 
     private void setPlayCompleteState(boolean state){
         setCoverVisibility(state?View.VISIBLE:View.GONE);

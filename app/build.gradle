@@ -20,6 +20,7 @@ android {
     lintOptions{
         abortOnError false
     }
+
 }
 
 dependencies {
@@ -40,4 +41,5 @@ dependencies {
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
     implementation project(':exoplayer')
     implementation project(':ijkplayer')
+    implementation 'com.android.support:design:27.1.1'
 }

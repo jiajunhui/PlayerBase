@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.kk.taurus.avplayer.R;
 
+import com.kk.taurus.avplayer.HomeActivity;
 import kr.co.namee.permissiongen.PermissionFail;
 import kr.co.namee.permissiongen.PermissionGen;
 import kr.co.namee.permissiongen.PermissionSuccess;
@@ -58,7 +59,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void intentToMainPage() {
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
         startActivity(intent);
         finish();
     }

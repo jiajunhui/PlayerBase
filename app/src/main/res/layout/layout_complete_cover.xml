@@ -18,24 +18,11 @@
             android:paddingRight="16dp"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
-            android:background="@drawable/shape_replay"
+            android:background="@drawable/shape_next"
             android:textSize="16sp"
             android:textColor="#FFFFFF"
             android:text="重播"/>
 
-        <TextView
-            android:id="@+id/tv_next"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:background="@drawable/shape_next"
-            android:textSize="16sp"
-            android:textColor="#FFFFFF"
-            android:text="下一个"/>
     </LinearLayout>
 
 </RelativeLayout>

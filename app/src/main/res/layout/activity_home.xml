@@ -40,7 +40,7 @@
                 android:gravity="center"
                 android:onClick="useBaseVideoView"
                 android:textAllCaps="false"
-                android:text="BaseVideoView和DataProvider的使用"
+                android:text="BaseVideoView的使用"
                 android:textSize="16sp"
                 android:textColor="@color/buttonTextColor"/>
 
@@ -62,9 +62,9 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:onClick="useWindowSwitchPlay"
+                android:onClick="useFloatWindow"
                 android:textAllCaps="false"
-                android:text="Window的无缝切播"
+                android:text="FloatWindow的无缝切播"
                 android:textSize="16sp"
                 android:textColor="@color/buttonTextColor"/>
 
@@ -85,21 +85,9 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:onClick="useAVPlayerLocalVideos"
+                android:onClick="singleListPlay"
                 android:textAllCaps="false"
-                android:text="本地视频列表"
-                android:textSize="16sp"
-                android:textColor="@color/buttonTextColor"/>
-
-            <Button
-                android:id="@+id/tv_online_video"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:onClick="useAVPlayerOnlineVideos"
-                android:textAllCaps="false"
-                android:text="在线视频列表"
+                android:text="单列表播放"
                 android:textSize="16sp"
                 android:textColor="@color/buttonTextColor"/>
 

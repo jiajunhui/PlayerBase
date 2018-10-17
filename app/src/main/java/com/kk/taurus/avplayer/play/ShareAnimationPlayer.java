@@ -183,7 +183,7 @@ public class ShareAnimationPlayer {
 
     public boolean isInPlaybackState(){
         int state = getState();
-        PLog.d("AssistPlayer","isInPlaybackState : state = " + state);
+        PLog.d("ShareAnimationPlayer","isInPlaybackState : state = " + state);
         return state!= IPlayer.STATE_END
                 && state!= IPlayer.STATE_ERROR
                 && state!= IPlayer.STATE_IDLE

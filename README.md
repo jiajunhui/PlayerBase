@@ -82,17 +82,17 @@ demo示例集成了播放控制组件**ControllerCover**、加载中组件**Load
 dependencies {
   //---------如果仅使用MediaPlayer解码，使用以下依赖。----------
   //该依赖仅包含MediaPlayer解码
-  implementation 'com.kk.taurus.playerbase:playerbase:3.3.2'
+  implementation 'com.kk.taurus.playerbase:playerbase:3.3.2.1'
   
   
   //---------如果使用ExoPlayer解码，使用以下依赖。---------
   //该依赖包含exoplayer解码和MediaPlayer解码
-  implementation 'cn.jiajunhui:exoplayer:332_r251_001'
+  implementation 'cn.jiajunhui:exoplayer:3321_r251_002'
 
   
   //---------如果使用ijkPlayer解码，使用以下依赖。---------
   //该依赖包含ijkplayer解码和MediaPlayer解码
-  implementation 'cn.jiajunhui:ijkplayer:332_088_001'
+  implementation 'cn.jiajunhui:ijkplayer:3321_088_002'
   //ijk官方的解码库依赖，较少格式版本且不支持HTTPS。
   implementation 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.8'
   # Other ABIs: optional

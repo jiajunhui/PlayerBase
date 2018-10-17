@@ -1,99 +1,92 @@
-package com.kk.taurus.avplayer.play;
+package com.kk.taurus.avplayer.base;
 
-import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.ViewGroup;
 
-import com.kk.taurus.avplayer.App;
-import com.kk.taurus.playerbase.assist.AssistPlay;
-import com.kk.taurus.playerbase.assist.OnAssistPlayEventHandler;
+import com.kk.taurus.playerbase.assist.RelationAssist;
 import com.kk.taurus.playerbase.entity.DataSource;
 import com.kk.taurus.playerbase.event.OnErrorEventListener;
 import com.kk.taurus.playerbase.event.OnPlayerEventListener;
 import com.kk.taurus.playerbase.log.PLog;
 import com.kk.taurus.playerbase.player.IPlayer;
 import com.kk.taurus.playerbase.provider.IDataProvider;
+import com.kk.taurus.playerbase.receiver.GroupValue;
+import com.kk.taurus.playerbase.receiver.IReceiver;
 import com.kk.taurus.playerbase.receiver.IReceiverGroup;
 import com.kk.taurus.playerbase.receiver.OnReceiverEventListener;
-import com.kk.taurus.playerbase.receiver.ReceiverGroup;
-import com.kk.taurus.playerbase.assist.RelationAssist;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AssistPlayer {
+/**
+ * Created by JiaJunHui on 2018/6/19.
+ */
+public abstract class BSPlayer implements ISPayer {
 
     private RelationAssist mRelationAssist;
 
-    private static AssistPlayer i;
-
-    private Context mAppContext;
-
-    private DataSource mDataSource;
-
-    private AssistPlayer(){
-        mAppContext = App.get().getApplicationContext();
-        mRelationAssist = new RelationAssist(mAppContext);
-        mRelationAssist.setEventAssistHandler(mInternalEventAssistHandler);
-        mRelationAssist.getSuperContainer().setBackgroundColor(Color.BLACK);
+    protected BSPlayer(){
+        mRelationAssist = onCreateRelationAssist();
         mOnPlayerEventListeners = new ArrayList<>();
         mOnErrorEventListeners = new ArrayList<>();
         mOnReceiverEventListeners = new ArrayList<>();
+        onInit();
     }
 
-    public static AssistPlayer get(){
-        if(null==i){
-            synchronized (AssistPlayer.class){
-                if(null==i){
-                    i = new AssistPlayer();
-                }
-            }
-        }
-        return i;
-    }
+    protected abstract RelationAssist onCreateRelationAssist();
+
+    protected abstract void onInit();
 
     private List<OnPlayerEventListener> mOnPlayerEventListeners;
     private List<OnErrorEventListener> mOnErrorEventListeners;
     private List<OnReceiverEventListener> mOnReceiverEventListeners;
 
+    @Override
     public void addOnPlayerEventListener(OnPlayerEventListener onPlayerEventListener) {
         if(mOnPlayerEventListeners.contains(onPlayerEventListener))
             return;
         mOnPlayerEventListeners.add(onPlayerEventListener);
     }
 
+    @Override
     public boolean removePlayerEventListener(OnPlayerEventListener onPlayerEventListener){
         return mOnPlayerEventListeners.remove(onPlayerEventListener);
     }
 
+    @Override
     public void addOnErrorEventListener(OnErrorEventListener onErrorEventListener) {
         if(mOnErrorEventListeners.contains(onErrorEventListener))
             return;
         mOnErrorEventListeners.add(onErrorEventListener);
     }
 
+    @Override
     public boolean removeErrorEventListener(OnErrorEventListener onErrorEventListener){
         return mOnErrorEventListeners.remove(onErrorEventListener);
     }
 
+    @Override
     public void addOnReceiverEventListener(OnReceiverEventListener onReceiverEventListener){
         if(mOnReceiverEventListeners.contains(onReceiverEventListener))
             return;
         mOnReceiverEventListeners.add(onReceiverEventListener);
     }
 
+    @Override
     public boolean removeReceiverEventListener(OnReceiverEventListener onReceiverEventListener){
         return mOnReceiverEventListeners.remove(onReceiverEventListener);
     }
 
     private OnPlayerEventListener mInternalPlayerEventListener =
             new OnPlayerEventListener() {
-        @Override
-        public void onPlayerEvent(int eventCode, Bundle bundle) {
-            callBackPlayerEventListeners(eventCode, bundle);
-        }
-    };
+                @Override
+                public void onPlayerEvent(int eventCode, Bundle bundle) {
+                    onCallBackPlayerEvent(eventCode, bundle);
+                    callBackPlayerEventListeners(eventCode, bundle);
+                }
+            };
+
+    protected abstract void onCallBackPlayerEvent(int eventCode, Bundle bundle);
 
     private void callBackPlayerEventListeners(int eventCode, Bundle bundle) {
         for(OnPlayerEventListener listener:mOnPlayerEventListeners){
@@ -103,11 +96,14 @@ public class AssistPlayer {
 
     private OnErrorEventListener mInternalErrorEventListener =
             new OnErrorEventListener() {
-        @Override
-        public void onErrorEvent(int eventCode, Bundle bundle) {
-            callBackErrorEventListeners(eventCode, bundle);
-        }
-    };
+                @Override
+                public void onErrorEvent(int eventCode, Bundle bundle) {
+                    onCallBackErrorEvent(eventCode, bundle);
+                    callBackErrorEventListeners(eventCode, bundle);
+                }
+            };
+
+    protected abstract void onCallBackErrorEvent(int eventCode, Bundle bundle);
 
     private void callBackErrorEventListeners(int eventCode, Bundle bundle) {
         for(OnErrorEventListener listener:mOnErrorEventListeners){
@@ -117,24 +113,14 @@ public class AssistPlayer {
 
     private OnReceiverEventListener mInternalReceiverEventListener =
             new OnReceiverEventListener() {
-        @Override
-        public void onReceiverEvent(int eventCode, Bundle bundle) {
-            callBackReceiverEventListeners(eventCode, bundle);
-        }
-    };
+                @Override
+                public void onReceiverEvent(int eventCode, Bundle bundle) {
+                    onCallBackReceiverEvent(eventCode, bundle);
+                    callBackReceiverEventListeners(eventCode, bundle);
+                }
+            };
 
-    private OnAssistPlayEventHandler mInternalEventAssistHandler =
-            new OnAssistPlayEventHandler(){
-        @Override
-        public void onAssistHandle(AssistPlay assistPlay, int eventCode, Bundle bundle) {
-            super.onAssistHandle(assistPlay, eventCode, bundle);
-            switch (eventCode){
-                case DataInter.Event.EVENT_CODE_ERROR_SHOW:
-                    reset();
-                    break;
-            }
-        }
-    };
+    protected abstract void onCallBackReceiverEvent(int eventCode, Bundle bundle);
 
     private void callBackReceiverEventListeners(int eventCode, Bundle bundle) {
         for(OnReceiverEventListener listener:mOnReceiverEventListeners){
@@ -148,45 +134,90 @@ public class AssistPlayer {
         mRelationAssist.setOnReceiverEventListener(mInternalReceiverEventListener);
     }
 
-    public void setReceiverGroup(ReceiverGroup receiverGroup){
+    @Override
+    public GroupValue getGroupValue(){
+        IReceiverGroup receiverGroup = getReceiverGroup();
+        return receiverGroup==null?null:receiverGroup.getGroupValue();
+    }
+
+    @Override
+    public void updateGroupValue(String key, Object value){
+        GroupValue groupValue = getGroupValue();
+        if(groupValue!=null){
+            groupValue.putObject(key, value);
+        }
+    }
+
+    @Override
+    public void registerOnGroupValueUpdateListener(IReceiverGroup.OnGroupValueUpdateListener onGroupValueUpdateListener){
+        GroupValue groupValue = getGroupValue();
+        if(groupValue!=null){
+            groupValue.registerOnGroupValueUpdateListener(onGroupValueUpdateListener);
+        }
+    }
+
+    @Override
+    public void unregisterOnGroupValueUpdateListener(IReceiverGroup.OnGroupValueUpdateListener onGroupValueUpdateListener){
+        GroupValue groupValue = getGroupValue();
+        if(groupValue!=null){
+            groupValue.unregisterOnGroupValueUpdateListener(onGroupValueUpdateListener);
+        }
+    }
+
+    @Override
+    public void setReceiverGroup(IReceiverGroup receiverGroup){
         mRelationAssist.setReceiverGroup(receiverGroup);
     }
 
+    @Override
     public IReceiverGroup getReceiverGroup(){
         return mRelationAssist.getReceiverGroup();
     }
 
-    public DataSource getDataSource() {
-        return mDataSource;
-    }
-
-    public void play(ViewGroup userContainer, DataSource dataSource){
-        if(dataSource!=null){
-            this.mDataSource = dataSource;
-        }
-        attachListener();
+    @Override
+    public final void removeReceiver(String receiverKey) {
         IReceiverGroup receiverGroup = getReceiverGroup();
-        if(receiverGroup!=null && dataSource!=null){
-            receiverGroup.getGroupValue().putBoolean(DataInter.Key.KEY_COMPLETE_SHOW, false);
-        }
-        mRelationAssist.attachContainer(userContainer, false);
-        if(dataSource!=null)
-            mRelationAssist.setDataSource(dataSource);
-        if(receiverGroup!=null
-                && receiverGroup.getGroupValue().getBoolean(DataInter.Key.KEY_ERROR_SHOW)){
-            return;
-        }
-        if(dataSource!=null)
-            mRelationAssist.play(true);
+        if(receiverGroup!=null)
+            receiverGroup.removeReceiver(receiverKey);
     }
 
+    @Override
+    public final void addReceiver(String key, IReceiver receiver) {
+        IReceiverGroup receiverGroup = getReceiverGroup();
+        if(receiverGroup!=null)
+            receiverGroup.addReceiver(key, receiver);
+    }
+
+    @Override
+    public void attachContainer(ViewGroup userContainer){
+        mRelationAssist.attachContainer(userContainer, true);
+    }
+
+    @Override
+    public void play(DataSource dataSource){
+        play(dataSource, false);
+    }
+
+    @Override
+    public void play(DataSource dataSource, boolean updateRender){
+        onSetDataSource(dataSource);
+        attachListener();
+        stop();
+        mRelationAssist.setDataSource(dataSource);
+        mRelationAssist.play(updateRender);
+    }
+
+    protected abstract void onSetDataSource(DataSource dataSource);
+
+    @Override
     public void setDataProvider(IDataProvider dataProvider){
         mRelationAssist.setDataProvider(dataProvider);
     }
 
+    @Override
     public boolean isInPlaybackState(){
         int state = getState();
-        PLog.d("AssistPlayer","isInPlaybackState : state = " + state);
+        PLog.d("BSPlayer","isInPlaybackState : state = " + state);
         return state!= IPlayer.STATE_END
                 && state!= IPlayer.STATE_ERROR
                 && state!= IPlayer.STATE_IDLE
@@ -195,35 +226,56 @@ public class AssistPlayer {
                 && state!= IPlayer.STATE_STOPPED;
     }
 
+    @Override
     public boolean isPlaying() {
         return mRelationAssist.isPlaying();
     }
 
+    @Override
+    public int getCurrentPosition(){
+        return mRelationAssist.getCurrentPosition();
+    }
+
+    @Override
     public int getState() {
         return mRelationAssist.getState();
     }
 
+    @Override
     public void pause() {
         mRelationAssist.pause();
     }
 
+    @Override
     public void resume() {
         mRelationAssist.resume();
     }
 
+    @Override
     public void stop() {
         mRelationAssist.stop();
     }
 
+    @Override
     public void reset() {
         mRelationAssist.reset();
     }
 
+    @Override
+    public void rePlay(int position) {
+        mRelationAssist.rePlay(position);
+    }
+
+    @Override
     public void destroy() {
         mOnPlayerEventListeners.clear();
         mOnErrorEventListeners.clear();
         mOnReceiverEventListeners.clear();
+        IReceiverGroup receiverGroup = getReceiverGroup();
+        if(receiverGroup!=null){
+            receiverGroup.clearReceivers();
+        }
         mRelationAssist.destroy();
-        i = null;
     }
+
 }

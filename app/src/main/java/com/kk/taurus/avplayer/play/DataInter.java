@@ -11,7 +11,6 @@ public interface DataInter {
         int EVENT_CODE_REQUEST_CLOSE = -101;
 
         int EVENT_CODE_REQUEST_TOGGLE_SCREEN = -104;
-        int EVENT_CODE_REQUEST_NEXT = -106;
 
         int EVENT_CODE_ERROR_SHOW = -111;
 
@@ -25,7 +24,6 @@ public interface DataInter {
 
         String KEY_ERROR_SHOW = "error_show";
 
-        String KEY_IS_HAS_NEXT = "is_has_next";
         String KEY_COMPLETE_SHOW = "complete_show";
         String KEY_CONTROLLER_TOP_ENABLE = "controller_top_enable";
         String KEY_CONTROLLER_SCREEN_SWITCH_ENABLE = "screen_switch_enable";

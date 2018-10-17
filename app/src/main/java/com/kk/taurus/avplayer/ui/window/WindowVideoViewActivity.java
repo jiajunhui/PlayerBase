@@ -1,4 +1,4 @@
-package com.kk.taurus.avplayer.ui;
+package com.kk.taurus.avplayer.ui.window;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -131,3 +131,4 @@ public class WindowVideoViewActivity extends AppCompatActivity {
         mWindowVideoView.stopPlayback();
     }
 }
+

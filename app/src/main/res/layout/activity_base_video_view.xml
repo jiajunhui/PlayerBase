@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/setting_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/baseVideoView"/>
+
+    <com.kk.taurus.playerbase.widget.BaseVideoView
+        android:id="@+id/baseVideoView"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:background="#000000"/>
+
+</RelativeLayout>

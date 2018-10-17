@@ -1,37 +1,42 @@
-package com.kk.taurus.avplayer.ui;
+package com.kk.taurus.avplayer;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.kk.taurus.avplayer.App;
-import com.kk.taurus.avplayer.R;
+import com.kk.taurus.avplayer.ui.InputUrlPlayActivity;
+import com.kk.taurus.avplayer.ui.listplay.MultiListActivity;
+import com.kk.taurus.avplayer.ui.ShareAnimationActivityA;
 import com.kk.taurus.playerbase.config.PlayerConfig;
 import com.kk.taurus.playerbase.entity.DecoderPlan;
-import com.kk.taurus.playerbase.receiver.OnReceiverEventListener;
 
-public class MainActivity extends AppCompatActivity implements OnReceiverEventListener {
+import com.kk.taurus.avplayer.ui.listplay.ListPlayActivity;
+import com.kk.taurus.avplayer.ui.BaseVideoViewActivity;
+import com.kk.taurus.avplayer.ui.window.FloatWindowActivity;
+import com.kk.taurus.avplayer.ui.window.WindowVideoViewActivity;
+
+public class HomeActivity extends AppCompatActivity {
 
     private TextView mInfo;
     private Toolbar mToolBar;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_home);
         mToolBar = findViewById(R.id.id_toolbar);
         mInfo = findViewById(R.id.tv_info);
 
         setSupportActionBar(mToolBar);
 
         updateDecoderInfo();
-
     }
 
     @Override
@@ -73,27 +78,27 @@ public class MainActivity extends AppCompatActivity implements OnReceiverEventLi
         mInfo.setText("当前解码方案为:" + defaultPlan.getDesc());
     }
 
-    public void useBaseVideoView(View v){
-        intentTo(VideoViewActivity.class);
+    public void useBaseVideoView(View view){
+        intentTo(BaseVideoViewActivity.class);
     }
 
-    public void useWindowSwitchPlay(View v){
-        intentTo(WindowSwitchPlayActivity.class);
-    }
-
-    public void useWindowVideoView(View v){
+    public void useWindowVideoView(View view){
         intentTo(WindowVideoViewActivity.class);
     }
 
-    public void useAVPlayerLocalVideos(View v){
-        intentTo(LocalVideoListActivity.class);
+    public void useFloatWindow(View view){
+        intentTo(FloatWindowActivity.class);
     }
 
-    public void useAVPlayerOnlineVideos(View v){
-        intentTo(OnlineVideoListActivity.class);
+    public void singleListPlay(View view){
+        intentTo(ListPlayActivity.class);
     }
 
-    public void shareAnimationVideos(View v){
+    public void multiListPlay(View view){
+        intentTo(MultiListActivity.class);
+    }
+
+    public void shareAnimationVideos(View view){
         intentTo(ShareAnimationActivityA.class);
     }
 
@@ -101,18 +106,4 @@ public class MainActivity extends AppCompatActivity implements OnReceiverEventLi
         Intent intent = new Intent(getApplicationContext(), cls);
         startActivity(intent);
     }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-    }
-
-    @Override
-    public void onReceiverEvent(int eventCode, Bundle bundle) {
-        switch (eventCode){
-
-        }
-    }
-
 }

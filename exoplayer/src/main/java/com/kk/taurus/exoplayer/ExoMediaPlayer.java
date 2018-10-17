@@ -237,13 +237,20 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
 
     @Override
     public void pause() {
-        if(isInPlaybackState())
+        int state = getState();
+        if(isInPlaybackState()
+                && state!=STATE_END
+                && state!=STATE_ERROR
+                && state!=STATE_IDLE
+                && state!=STATE_INITIALIZED
+                && state!=STATE_PAUSED
+                && state!=STATE_STOPPED)
             mInternalPlayer.setPlayWhenReady(false);
     }
 
     @Override
     public void resume() {
-        if(isInPlaybackState())
+        if(isInPlaybackState() && getState() == STATE_PAUSED)
             mInternalPlayer.setPlayWhenReady(true);
     }
 

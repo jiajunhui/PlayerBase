@@ -115,7 +115,7 @@ public class ErrorCover extends BaseCover {
     }
 
     private void handleStatusUI(int networkState) {
-        if(!getGroupValue().getBoolean(DataInter.Key.KEY_NETWORK_RESOURCE))
+        if(!getGroupValue().getBoolean(DataInter.Key.KEY_NETWORK_RESOURCE, true))
             return;
         if(networkState < 0){
             mStatus = STATUS_NETWORK_ERROR;

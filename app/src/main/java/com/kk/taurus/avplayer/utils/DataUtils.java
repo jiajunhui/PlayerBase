@@ -55,6 +55,17 @@ public class DataUtils {
         return videoList;
     }
 
+    public static List<VideoBean> getVideoList(int index, int offset) {
+        List<VideoBean> videoList = getVideoList();
+        int size = videoList.size();
+        if(index < 0 || index > size-1)
+            return new ArrayList<>();
+        if(index + offset > size-1){
+            offset = size - index;
+        }
+        return videoList.subList(index, index + offset);
+    }
+
     public static List<VideoBean> getVideoList() {
         List<VideoBean> videoList = new ArrayList<>();
         videoList.add(new VideoBean(
