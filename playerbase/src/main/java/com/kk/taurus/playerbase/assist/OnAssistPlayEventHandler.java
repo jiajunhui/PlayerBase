@@ -42,7 +42,7 @@ public class OnAssistPlayEventHandler extends BaseEventAssistHandler<AssistPlay>
         if(assistPlay.isInPlaybackState()){
             assistPlay.resume();
         }else{
-            assistPlay.rePlay(0);
+            requestRetry(assistPlay, bundle);
         }
     }
 

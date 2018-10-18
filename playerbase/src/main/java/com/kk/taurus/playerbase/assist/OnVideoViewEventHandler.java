@@ -43,7 +43,7 @@ public class OnVideoViewEventHandler extends BaseEventAssistHandler<BaseVideoVie
         if(isInPlaybackState(videoView)){
             videoView.resume();
         }else{
-            videoView.rePlay(0);
+            requestRetry(videoView, bundle);
         }
     }
 

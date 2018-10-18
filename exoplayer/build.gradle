@@ -35,6 +35,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     api 'com.google.android.exoplayer:exoplayer:r2.5.1'
-    api 'com.kk.taurus.playerbase:playerbase:3.3.2.1'
+    api 'com.kk.taurus.playerbase:playerbase:3.3.2.2'
 //    api project(':playerbase')
 }
