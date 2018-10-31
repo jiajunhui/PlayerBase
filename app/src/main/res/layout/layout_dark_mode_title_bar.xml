@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp">
+
+    <ImageView
+        android:id="@+id/iv_back_darkMode"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:scaleType="centerInside"
+        android:layout_centerVertical="true"
+        android:padding="10dp"
+        android:src="@mipmap/icon_back_white"/>
+
+    <TextView
+        android:id="@+id/tv_title_darkMode"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_centerInParent="true"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textSize="18sp"
+        android:textColor="#FFFFFF"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:gravity="center"
+        android:text=""
+        />
+
+</RelativeLayout>

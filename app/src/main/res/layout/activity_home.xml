@@ -80,6 +80,18 @@
                 android:textColor="#000000"/>
 
             <Button
+                android:id="@+id/tv_pager_play"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:onClick="viewPagerPlay"
+                android:textAllCaps="false"
+                android:text="ViewPager中播放"
+                android:textSize="16sp"
+                android:textColor="@color/buttonTextColor"/>
+
+            <Button
                 android:id="@+id/tv_local_video"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"

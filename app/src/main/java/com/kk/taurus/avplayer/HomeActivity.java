@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.kk.taurus.avplayer.ui.InputUrlPlayActivity;
+import com.kk.taurus.avplayer.ui.ViewPagerPlayActivity;
 import com.kk.taurus.avplayer.ui.listplay.MultiListActivity;
 import com.kk.taurus.avplayer.ui.ShareAnimationActivityA;
 import com.kk.taurus.playerbase.config.PlayerConfig;
@@ -88,6 +89,10 @@ public class HomeActivity extends AppCompatActivity {
 
     public void useFloatWindow(View view){
         intentTo(FloatWindowActivity.class);
+    }
+
+    public void viewPagerPlay(View view){
+        intentTo(ViewPagerPlayActivity.class);
     }
 
     public void singleListPlay(View view){
