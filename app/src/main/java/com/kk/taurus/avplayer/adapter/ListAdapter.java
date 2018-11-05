@@ -16,19 +16,20 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.kk.taurus.avplayer.R;
 import com.kk.taurus.avplayer.bean.VideoBean;
+import com.kk.taurus.avplayer.play.ListPlayer;
 import com.kk.taurus.avplayer.utils.ImageDisplayEngine;
 import com.kk.taurus.avplayer.utils.PUtil;
 import com.kk.taurus.playerbase.log.PLog;
 
 import java.util.List;
 
-import com.kk.taurus.avplayer.play.ListPlayer;
-
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.VideoItemHolder> {
 
     private final String TAG = "ListAdapter";
 
     private Context mContext;
+
+
     private List<VideoBean> mItems;
 
     private RecyclerView mRecycler;
