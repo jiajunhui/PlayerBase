@@ -60,6 +60,8 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
     ImageView mSwitchScreen;
     @BindView(R.id.cover_player_controller_seek_bar)
     SeekBar mSeekBar;
+    @BindView(R.id.cover_bottom_seek_bar)
+    SeekBar mBottomSeekBar;
 
     private int mBufferPercentage;
 
@@ -264,6 +266,10 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
         mSwitchScreen.setVisibility(screenSwitchEnable?View.VISIBLE:View.GONE);
     }
 
+    private void setBottomSeekBarState(boolean state){
+        mBottomSeekBar.setVisibility(state?View.VISIBLE:View.GONE);
+    }
+
     private void setGestureEnable(boolean gestureEnable) {
         this.mGestureEnable = gestureEnable;
     }
@@ -341,6 +347,7 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
             PLog.d(getTag().toString(), "requestStopTimer...");
             requestStopTimer();
         }
+        setBottomSeekBarState(!state);
     }
 
     private void setControllerState(boolean state){
@@ -393,6 +400,13 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
         mSeekBar.setSecondaryProgress(secondProgress);
     }
 
+    private void setBottomSeekProgress(int curr, int duration){
+        mBottomSeekBar.setMax(duration);
+        mBottomSeekBar.setProgress(curr);
+        float secondProgress = mBufferPercentage * 1.0f/100 * duration;
+        mBottomSeekBar.setSecondaryProgress((int) secondProgress);
+    }
+
     @Override
     public void onTimerUpdate(int curr, int duration, int bufferPercentage) {
         if(!mTimerUpdateProgressEnable)
@@ -406,6 +420,7 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
 
     private void updateUI(int curr, int duration) {
         setSeekProgress(curr, duration);
+        setBottomSeekProgress(curr, duration);
         setCurrTime(curr);
         setTotalTime(duration);
     }
@@ -417,6 +432,7 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
                 mBufferPercentage = 0;
                 mTimeFormat = null;
                 updateUI(0, 0);
+                setBottomSeekBarState(true);
                 DataSource data = (DataSource) bundle.getSerializable(EventKey.SERIALIZABLE_DATA);
                 getGroupValue().putObject(DataInter.Key.KEY_DATA_SOURCE, data);
                 setTitle(data);

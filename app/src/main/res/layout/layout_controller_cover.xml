@@ -92,4 +92,18 @@
             android:src="@mipmap/icon_full_screen"/>
     </LinearLayout>
 
+    <SeekBar
+        android:id="@+id/cover_bottom_seek_bar"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_alignParentBottom="true"
+        android:focusable="false"
+        android:maxHeight="4dp"
+        android:minHeight="4dp"
+        android:paddingEnd="0dp"
+        android:paddingStart="0dp"
+        android:progressDrawable="@drawable/style_video_player_video_bottom_seekbar"
+        android:thumb="@null"
+        android:visibility="gone" />
+
 </RelativeLayout>
