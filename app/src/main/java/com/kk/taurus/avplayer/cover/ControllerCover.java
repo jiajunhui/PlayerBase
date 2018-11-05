@@ -77,6 +77,7 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
                 case MSG_CODE_DELAY_HIDDEN_CONTROLLER:
                     PLog.d(getTag().toString(), "msg_delay_hidden...");
                     setControllerState(false);
+                    setCoverBottomProgressState(true);
                     break;
             }
         }
