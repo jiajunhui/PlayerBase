@@ -60,6 +60,8 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
     ImageView mSwitchScreen;
     @BindView(R.id.cover_player_controller_seek_bar)
     SeekBar mSeekBar;
+    @BindView(R.id.cover_bottom_seek_bar)
+    SeekBar mBottomSeekBar;
 
     private int mBufferPercentage;
 
@@ -353,6 +355,14 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
         setBottomContainerState(state);
     }
 
+    private void setCoverBottomProgressState(boolean state) {
+        if (state) {
+            mBottomSeekBar.setVisibility(View.VISIBLE);
+        } else {
+            mBottomSeekBar.setVisibility(View.GONE);
+        }
+    }
+
     private boolean isControllerShow(){
         return mBottomContainer.getVisibility()==View.VISIBLE;
     }
@@ -360,8 +370,10 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
     private void toggleController(){
         if(isControllerShow()){
             setControllerState(false);
+            setCoverBottomProgressState(true);
         }else{
             setControllerState(true);
+            setCoverBottomProgressState(false);
         }
     }
 
@@ -385,12 +397,17 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
     private void setSeekProgress(int curr, int duration){
         mSeekBar.setMax(duration);
         mSeekBar.setProgress(curr);
+
+        mBottomSeekBar.setMax(duration);
+        mBottomSeekBar.setProgress(curr);
+
         float secondProgress = mBufferPercentage * 1.0f/100 * duration;
         setSecondProgress((int) secondProgress);
     }
 
     private void setSecondProgress(int secondProgress){
         mSeekBar.setSecondaryProgress(secondProgress);
+        mBottomSeekBar.setSecondaryProgress(secondProgress);
     }
 
     @Override
@@ -416,6 +433,7 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
             case OnPlayerEventListener.PLAYER_EVENT_ON_DATA_SOURCE_SET:
                 mBufferPercentage = 0;
                 mTimeFormat = null;
+                setCoverBottomProgressState(true);
                 updateUI(0, 0);
                 DataSource data = (DataSource) bundle.getSerializable(EventKey.SERIALIZABLE_DATA);
                 getGroupValue().putObject(DataInter.Key.KEY_DATA_SOURCE, data);

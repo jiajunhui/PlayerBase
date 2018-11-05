@@ -16,11 +16,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
-    lintOptions{
+    lintOptions {
         abortOnError false
     }
-
+    buildToolsVersion '27.0.3'
 }
 
 dependencies {
