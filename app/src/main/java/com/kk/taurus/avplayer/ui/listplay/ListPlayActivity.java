@@ -90,7 +90,7 @@ public class ListPlayActivity extends AppCompatActivity implements ListAdapter.O
                 public void run() {
                     ListAdapter.VideoItemHolder currentHolder = mAdapter.getCurrentHolder();
                     if(currentHolder!=null){
-                        ListPlayer.get().attachContainer(currentHolder.layoutContainer);
+                        ListPlayer.get().attachContainer(currentHolder.layoutContainer, false);
                         ListPlayer.get().setReceiverConfigState(
                                 ListPlayActivity.this, ISPayer.RECEIVER_GROUP_CONFIG_LIST_STATE);
                     }

@@ -76,7 +76,7 @@ public class VideoListFragment extends Fragment implements ListAdapter.OnListLis
                     ListAdapter.VideoItemHolder currentHolder = mListAdapter.getCurrentHolder();
                     if(currentHolder!=null){
                         ListPlayer.get().setReceiverConfigState(getActivity(), ISPayer.RECEIVER_GROUP_CONFIG_LIST_STATE);
-                        ListPlayer.get().attachContainer(currentHolder.layoutContainer);
+                        ListPlayer.get().attachContainer(currentHolder.layoutContainer, false);
                     }
                 }
             });
