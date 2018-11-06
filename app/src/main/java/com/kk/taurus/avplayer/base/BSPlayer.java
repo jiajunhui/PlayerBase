@@ -190,7 +190,11 @@ public abstract class BSPlayer implements ISPayer {
 
     @Override
     public void attachContainer(ViewGroup userContainer){
-        mRelationAssist.attachContainer(userContainer, true);
+        attachContainer(userContainer, true);
+    }
+
+    public void attachContainer(ViewGroup userContainer, boolean updateRender){
+        mRelationAssist.attachContainer(userContainer, updateRender);
     }
 
     @Override

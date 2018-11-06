@@ -165,9 +165,10 @@ public class MultiListActivity extends AppCompatActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         isLandScape = newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE;
+        mFullScreenContainer.setBackgroundColor(isLandScape?Color.BLACK:Color.TRANSPARENT);
         if(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE){
             ListPlayer.get().setReceiverConfigState(this, ISPayer.RECEIVER_GROUP_CONFIG_FULL_SCREEN_STATE);
-            ListPlayer.get().attachContainer(mFullScreenContainer);
+            ListPlayer.get().attachContainer(mFullScreenContainer, false);
         }
         ListPlayer.get().updateGroupValue(DataInter.Key.KEY_CONTROLLER_TOP_ENABLE, isLandScape);
         ListPlayer.get().updateGroupValue(DataInter.Key.KEY_IS_LANDSCAPE, isLandScape);

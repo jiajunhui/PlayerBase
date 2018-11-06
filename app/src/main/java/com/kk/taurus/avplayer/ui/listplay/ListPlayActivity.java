@@ -81,7 +81,7 @@ public class ListPlayActivity extends AppCompatActivity implements ListAdapter.O
         isLandScape = newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE;
         if(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE){
             mPlayerContainer.setBackgroundColor(Color.BLACK);
-            ListPlayer.get().attachContainer(mPlayerContainer);
+            ListPlayer.get().attachContainer(mPlayerContainer, false);
             ListPlayer.get().setReceiverConfigState(this, ISPayer.RECEIVER_GROUP_CONFIG_FULL_SCREEN_STATE);
         }else{
             mPlayerContainer.setBackgroundColor(Color.TRANSPARENT);
