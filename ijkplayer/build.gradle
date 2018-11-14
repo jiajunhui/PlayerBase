@@ -19,6 +19,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        compileOptions{
+            sourceCompatibility JavaVersion.VERSION_1_8
+            targetCompatibility JavaVersion.VERSION_1_8
+        }
     }
 
     lintOptions{
@@ -35,6 +39,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
     api 'tv.danmaku.ijk.media:ijkplayer-java:0.8.8'
-    api 'com.kk.taurus.playerbase:playerbase:3.3.2.2'
+    api 'com.kk.taurus.playerbase:playerbase:3.3.3'
 //    api project(':playerbase')
 }

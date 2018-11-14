@@ -16,6 +16,7 @@
 
 package com.kk.taurus.playerbase.entity;
 
+import android.content.ContentResolver;
 import android.content.res.AssetFileDescriptor;
 import android.net.Uri;
 
@@ -79,6 +80,9 @@ public class DataSource implements Serializable {
 
     //AssetFileDescriptor data source, you can use it to play files in assets dir.
     private AssetFileDescriptor assetFileDescriptor;
+
+    //when play android raw resource, set this.
+    private int rawId = -1;
 
     /**
      * If you want to start play at a specified time,
@@ -187,4 +191,17 @@ public class DataSource implements Serializable {
     public void setLive(boolean isLive) {
         this.isLive = isLive;
     }
+
+    public int getRawId() {
+        return rawId;
+    }
+
+    public void setRawId(int rawId) {
+        this.rawId = rawId;
+    }
+
+    public static Uri buildRawPath(String packageName, int rawId){
+        return Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + packageName + "/" + rawId);
+    }
+
 }

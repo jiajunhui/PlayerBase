@@ -33,7 +33,6 @@ import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.RenderersFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.extractor.ExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
@@ -46,8 +45,10 @@ import com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource
 import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
+import com.google.android.exoplayer2.upstream.DataSpec;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.upstream.RawResourceDataSource;
 import com.google.android.exoplayer2.util.Util;
 import com.kk.taurus.playerbase.config.AppContextAttach;
 import com.kk.taurus.playerbase.config.PlayerConfig;
@@ -109,6 +110,7 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
         mInternalPlayer.setVideoListener(mVideoListener);
         String data = dataSource.getData();
         Uri uri = dataSource.getUri();
+        int rawId = dataSource.getRawId();
 
         Uri videoUri = null;
 
@@ -116,6 +118,15 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
             videoUri = Uri.parse(data);
         }else if(uri!=null){
             videoUri = uri;
+        }else if(rawId > 0){
+            try {
+                DataSpec dataSpec = new DataSpec(RawResourceDataSource.buildRawResourceUri(dataSource.getRawId()));
+                RawResourceDataSource rawResourceDataSource = new RawResourceDataSource(mAppContext);
+                rawResourceDataSource.open(dataSpec);
+                videoUri = rawResourceDataSource.getUri();
+            } catch (RawResourceDataSource.RawResourceDataSourceException e) {
+                e.printStackTrace();
+            }
         }
 
         if(videoUri==null){
@@ -319,10 +330,6 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
     };
 
     private Player.EventListener mEventListener = new Player.EventListener() {
-        @Override
-        public void onTimelineChanged(Timeline timeline, Object manifest) {
-            PLog.d(TAG,"onTimelineChanged...");
-        }
 
         @Override
         public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
@@ -439,11 +446,6 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
                     submitErrorEvent(OnErrorEventListener.ERROR_EVENT_UNKNOWN, null);
                     break;
             }
-        }
-
-        @Override
-        public void onPositionDiscontinuity() {
-
         }
 
         @Override

@@ -87,10 +87,11 @@ public class SysMediaPlayer extends BaseInternalPlayer {
             HashMap<String, String> headers = dataSource.getExtra();
             FileDescriptor fileDescriptor = dataSource.getFileDescriptor();
             AssetFileDescriptor assetFileDescriptor = dataSource.getAssetFileDescriptor();
+            int rawId = dataSource.getRawId();
+            Context applicationContext = AppContextAttach.getApplicationContext();
             if(data!=null){
                 mMediaPlayer.setDataSource(data);
             }else if(uri!=null){
-                Context applicationContext = AppContextAttach.getApplicationContext();
                 if(headers==null)
                     mMediaPlayer.setDataSource(applicationContext, uri);
                 else
@@ -100,6 +101,9 @@ public class SysMediaPlayer extends BaseInternalPlayer {
             }else if(assetFileDescriptor!=null
                     && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
                 mMediaPlayer.setDataSource(assetFileDescriptor);
+            }else if(rawId > 0){
+                Uri rawUri = DataSource.buildRawPath(applicationContext.getPackageName(), rawId);
+                mMediaPlayer.setDataSource(applicationContext, rawUri);
             }
 
             mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
