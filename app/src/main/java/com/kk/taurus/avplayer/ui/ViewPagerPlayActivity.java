@@ -124,6 +124,10 @@ public class ViewPagerPlayActivity extends AppCompatActivity {
             @Override
             public void onResult(VideoResult result) {
                 List<VideoItem> items = result.getItems();
+                if(items==null||items.size()<=0){
+                    Toast.makeText(ViewPagerPlayActivity.this, "无本地视频", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Collections.sort(items, new MCompartor());
                 mItems.addAll(DataUtils.transList(items));
                 PlayPagerAdapter pagerAdapter = new PlayPagerAdapter(ViewPagerPlayActivity.this, mItems);
