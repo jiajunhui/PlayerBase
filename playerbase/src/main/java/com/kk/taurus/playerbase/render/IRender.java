@@ -77,6 +77,12 @@ public interface IRender {
     void release();
 
     /**
+     * render is released ?
+     * @return
+     */
+    boolean isReleased();
+
+    /**
      * IRenderHolder is responsible for associate the decoder with rendering views.
      *
      * see also

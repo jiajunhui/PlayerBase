@@ -340,13 +340,6 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
             }
         });
         mBottomAnimator.start();
-        if(state){
-            PLog.d(getTag().toString(), "requestNotifyTimer...");
-            requestNotifyTimer();
-        }else{
-            PLog.d(getTag().toString(), "requestStopTimer...");
-            requestStopTimer();
-        }
         setBottomSeekBarState(!state);
     }
 

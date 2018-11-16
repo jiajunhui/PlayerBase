@@ -318,7 +318,7 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
     @Override
     public void setRenderType(int renderType) {
         boolean renderChange = mRenderType!=renderType;
-        if(!renderChange && mRender!=null)
+        if(!renderChange && mRender!=null && !mRender.isReleased())
             return;
         releaseRender();
         mRenderType = renderType;

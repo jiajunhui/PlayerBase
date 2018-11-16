@@ -366,7 +366,7 @@ public final class RelationAssist implements AssistPlay {
     }
 
     private boolean isNeedForceUpdateRender(){
-        return mRender==null || mRenderTypeChange;
+        return mRender==null || mRender.isReleased() || mRenderTypeChange;
     }
 
     private void updateRender(){

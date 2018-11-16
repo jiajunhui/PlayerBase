@@ -48,6 +48,8 @@ public class RenderTextureView extends TextureView implements IRender {
 
     private boolean mTakeOverSurfaceTexture;
 
+    private boolean isReleased;
+
     public RenderTextureView(Context context) {
         this(context, null);
     }
@@ -124,6 +126,13 @@ public class RenderTextureView extends TextureView implements IRender {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         PLog.d(TAG,"onTextureViewDetachedFromWindow");
+        //fixed bug on before android 4.4
+        //modify 2018/11/16
+        //java.lang.RuntimeException: Error during detachFromGLContext (see logcat for details)
+        //   at android.graphics.SurfaceTexture.detachFromGLContext(SurfaceTexture.java:215)
+        if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT){
+            release();
+        }
     }
 
     @Override
@@ -137,6 +146,12 @@ public class RenderTextureView extends TextureView implements IRender {
             mSurface = null;
         }
         setSurfaceTextureListener(null);
+        isReleased = true;
+    }
+
+    @Override
+    public boolean isReleased() {
+        return isReleased;
     }
 
     private  Surface mSurface;
@@ -247,6 +262,14 @@ public class RenderTextureView extends TextureView implements IRender {
             }
             if(mTakeOverSurfaceTexture)
                 mSurfaceTexture = surface;
+            //fixed bug on before android 4.4
+            //modify 2018/11/16
+            //java.lang.RuntimeException: Error during detachFromGLContext (see logcat for details)
+            //   at android.graphics.SurfaceTexture.detachFromGLContext(SurfaceTexture.java:215)
+            //all return false.
+            if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT){
+                return false;
+            }
             return !mTakeOverSurfaceTexture;
         }
 

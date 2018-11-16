@@ -37,6 +37,7 @@ public class RenderSurfaceView extends SurfaceView implements IRender {
 
     private IRenderCallback mRenderCallback;
     private RenderMeasure mRenderMeasure;
+    private boolean isReleased;
 
     public RenderSurfaceView(Context context) {
         this(context, null);
@@ -111,7 +112,12 @@ public class RenderSurfaceView extends SurfaceView implements IRender {
 
     @Override
     public void release() {
+        isReleased = true;
+    }
 
+    @Override
+    public boolean isReleased() {
+        return isReleased;
     }
 
     private static final class InternalRenderHolder implements IRenderHolder{
