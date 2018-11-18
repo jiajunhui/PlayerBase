@@ -17,10 +17,12 @@
 package com.kk.taurus.playerbase.entity;
 
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.net.Uri;
+import android.text.TextUtils;
 
-import java.io.FileDescriptor;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
 
@@ -75,11 +77,13 @@ public class DataSource implements Serializable {
      */
     private HashMap<String, String> extra;
 
-    //a FileDescriptor data source, maybe you need.
-    private FileDescriptor fileDescriptor;
+    //delete 2018/11/17
+//    private FileDescriptor fileDescriptor;
+//
+//    private AssetFileDescriptor assetFileDescriptor;
 
-    //AssetFileDescriptor data source, you can use it to play files in assets dir.
-    private AssetFileDescriptor assetFileDescriptor;
+    //eg. a video folder in assets, the path name is video/xxx.mp4
+    private String assetsPath;
 
     //when play android raw resource, set this.
     private int rawId = -1;
@@ -160,20 +164,12 @@ public class DataSource implements Serializable {
         this.extra = extra;
     }
 
-    public FileDescriptor getFileDescriptor() {
-        return fileDescriptor;
+    public String getAssetsPath() {
+        return assetsPath;
     }
 
-    public void setFileDescriptor(FileDescriptor fileDescriptor) {
-        this.fileDescriptor = fileDescriptor;
-    }
-
-    public AssetFileDescriptor getAssetFileDescriptor() {
-        return assetFileDescriptor;
-    }
-
-    public void setAssetFileDescriptor(AssetFileDescriptor assetFileDescriptor) {
-        this.assetFileDescriptor = assetFileDescriptor;
+    public void setAssetsPath(String assetsPath) {
+        this.assetsPath = assetsPath;
     }
 
     public int getStartPos() {
@@ -202,6 +198,21 @@ public class DataSource implements Serializable {
 
     public static Uri buildRawPath(String packageName, int rawId){
         return Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + packageName + "/" + rawId);
+    }
+
+    public static Uri buildAssetsUri(String assetsPath){
+        return Uri.parse("file:///android_asset/" + assetsPath);
+    }
+
+    public static AssetFileDescriptor getAssetsFileDescriptor(Context context, String assetsPath){
+        try {
+            if(TextUtils.isEmpty(assetsPath))
+                return null;
+            return context.getAssets().openFd(assetsPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

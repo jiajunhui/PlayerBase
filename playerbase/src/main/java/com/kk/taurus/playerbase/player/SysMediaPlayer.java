@@ -24,6 +24,7 @@ import android.media.PlaybackParams;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 
@@ -35,7 +36,6 @@ import com.kk.taurus.playerbase.event.EventKey;
 import com.kk.taurus.playerbase.event.OnErrorEventListener;
 import com.kk.taurus.playerbase.event.OnPlayerEventListener;
 
-import java.io.FileDescriptor;
 import java.util.HashMap;
 
 /**
@@ -82,13 +82,12 @@ public class SysMediaPlayer extends BaseInternalPlayer {
             mMediaPlayer.setOnBufferingUpdateListener(mBufferingUpdateListener);
             updateStatus(STATE_INITIALIZED);
 
+            Context applicationContext = AppContextAttach.getApplicationContext();
             String data = dataSource.getData();
             Uri uri = dataSource.getUri();
+            String assetsPath = dataSource.getAssetsPath();
             HashMap<String, String> headers = dataSource.getExtra();
-            FileDescriptor fileDescriptor = dataSource.getFileDescriptor();
-            AssetFileDescriptor assetFileDescriptor = dataSource.getAssetFileDescriptor();
             int rawId = dataSource.getRawId();
-            Context applicationContext = AppContextAttach.getApplicationContext();
             if(data!=null){
                 mMediaPlayer.setDataSource(data);
             }else if(uri!=null){
@@ -96,11 +95,18 @@ public class SysMediaPlayer extends BaseInternalPlayer {
                     mMediaPlayer.setDataSource(applicationContext, uri);
                 else
                     mMediaPlayer.setDataSource(applicationContext, uri, headers);
-            }else if(fileDescriptor!=null){
-                mMediaPlayer.setDataSource(fileDescriptor);
-            }else if(assetFileDescriptor!=null
-                    && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
-                mMediaPlayer.setDataSource(assetFileDescriptor);
+            }else if(!TextUtils.isEmpty(assetsPath)){
+                //assets play. use FileDescriptor play
+                AssetFileDescriptor fileDescriptor = DataSource.getAssetsFileDescriptor(
+                        applicationContext, dataSource.getAssetsPath());
+                if(fileDescriptor!=null){
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+                        mMediaPlayer.setDataSource(fileDescriptor);
+                    }else{
+                        mMediaPlayer.setDataSource(fileDescriptor.getFileDescriptor(),
+                                fileDescriptor.getStartOffset(), fileDescriptor.getLength());
+                    }
+                }
             }else if(rawId > 0){
                 Uri rawUri = DataSource.buildRawPath(applicationContext.getPackageName(), rawId);
                 mMediaPlayer.setDataSource(applicationContext, rawUri);

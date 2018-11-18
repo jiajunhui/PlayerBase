@@ -7,6 +7,8 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 
@@ -22,7 +24,6 @@ import com.kk.taurus.playerbase.event.OnPlayerEventListener;
 import com.kk.taurus.playerbase.log.PLog;
 import com.kk.taurus.playerbase.player.BaseInternalPlayer;
 
-import java.io.FileDescriptor;
 import java.util.HashMap;
 
 import tv.danmaku.ijk.media.player.IMediaPlayer;
@@ -112,20 +113,19 @@ public class IjkPlayer extends BaseInternalPlayer {
             mMediaPlayer.setOnBufferingUpdateListener(mBufferingUpdateListener);
             updateStatus(STATE_INITIALIZED);
 
+            Context applicationContext = AppContextAttach.getApplicationContext();
             String data = dataSource.getData();
             Uri uri = dataSource.getUri();
+            String assetsPath = dataSource.getAssetsPath();
             HashMap<String, String> headers = dataSource.getExtra();
-            FileDescriptor fileDescriptor = dataSource.getFileDescriptor();
             int rawId = dataSource.getRawId();
-            Context applicationContext = AppContextAttach.getApplicationContext();
             if(data!=null){
                 if(headers==null)
                     mMediaPlayer.setDataSource(data);
                 else
                     mMediaPlayer.setDataSource(data, headers);
             }else if(uri!=null){
-                if(uri.getScheme().equals(ContentResolver.SCHEME_ANDROID_RESOURCE)
-                        && Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH){
+                if(uri.getScheme().equals(ContentResolver.SCHEME_ANDROID_RESOURCE)){
                     mMediaPlayer.setDataSource(RawDataSourceProvider.create(applicationContext, uri));
                 }else{
                     if(headers==null)
@@ -133,8 +133,8 @@ public class IjkPlayer extends BaseInternalPlayer {
                     else
                         mMediaPlayer.setDataSource(applicationContext, uri, headers);
                 }
-            }else if(fileDescriptor!=null){
-                mMediaPlayer.setDataSource(fileDescriptor);
+            }else if(!TextUtils.isEmpty(assetsPath)){
+                Log.e(TAG,"ijkplayer not support assets play, you can use raw play.");
             }else if(rawId > 0
                     && Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH){
                 Uri rawUri = DataSource.buildRawPath(applicationContext.getPackageName(), rawId);

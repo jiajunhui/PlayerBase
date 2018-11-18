@@ -33,18 +33,15 @@ import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.RenderersFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.google.android.exoplayer2.extractor.ExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.source.dash.DashMediaSource;
-import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
-import com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource;
 import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
+import com.google.android.exoplayer2.upstream.AssetDataSource;
 import com.google.android.exoplayer2.upstream.DataSpec;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
@@ -110,6 +107,7 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
         mInternalPlayer.setVideoListener(mVideoListener);
         String data = dataSource.getData();
         Uri uri = dataSource.getUri();
+        String assetsPath = dataSource.getAssetsPath();
         int rawId = dataSource.getRawId();
 
         Uri videoUri = null;
@@ -118,6 +116,15 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
             videoUri = Uri.parse(data);
         }else if(uri!=null){
             videoUri = uri;
+        }else if(!TextUtils.isEmpty(assetsPath)){
+            try {
+                DataSpec dataSpec = new DataSpec(DataSource.buildAssetsUri(assetsPath));
+                AssetDataSource assetDataSource = new AssetDataSource(mAppContext);
+                assetDataSource.open(dataSpec);
+                videoUri = assetDataSource.getUri();
+            } catch (AssetDataSource.AssetDataSourceException e) {
+                e.printStackTrace();
+            }
         }else if(rawId > 0){
             try {
                 DataSpec dataSpec = new DataSpec(RawResourceDataSource.buildRawResourceUri(dataSource.getRawId()));
@@ -154,20 +161,15 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
                         Util.getUserAgent(mAppContext, mAppContext.getPackageName()), mBandwidthMeter);
         switch (contentType) {
             case C.TYPE_DASH:
-                DefaultDashChunkSource.Factory factory = new DefaultDashChunkSource.Factory(dataSourceFactory);
-                return new DashMediaSource(uri, dataSourceFactory, factory, null, null);
+                return new DashMediaSource.Factory(dataSourceFactory).createMediaSource(uri);
             case C.TYPE_SS:
-                DefaultSsChunkSource.Factory ssFactory = new DefaultSsChunkSource.Factory(dataSourceFactory);
-                return new SsMediaSource(uri, dataSourceFactory, ssFactory, null, null);
+                return new SsMediaSource.Factory(dataSourceFactory).createMediaSource(uri);
             case C.TYPE_HLS:
-                return new HlsMediaSource(uri, dataSourceFactory, null, null);
-
+                return new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(uri);
             case C.TYPE_OTHER:
             default:
                 // This is the MediaSource representing the media to be played.
-                ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
-                return new ExtractorMediaSource(uri,
-                        dataSourceFactory, extractorsFactory, null, null);
+                return new ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(uri);
         }
     }
 
