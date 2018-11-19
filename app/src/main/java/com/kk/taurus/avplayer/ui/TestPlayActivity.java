@@ -20,8 +20,8 @@ public class TestPlayActivity extends AppCompatActivity {
         mVideoView = findViewById(R.id.testVideoView);
 
         DataSource dataSource = new DataSource();
-//        dataSource.setRawId(R.raw.big_buck_bunny);
-        dataSource.setAssetsPath("video/big_buck_bunny.mp4");
+        dataSource.setRawId(R.raw.big_buck_bunny);
+//        dataSource.setAssetsPath("video/big_buck_bunny.mp4");
         mVideoView.setDataSource(dataSource);
         mVideoView.start();
     }

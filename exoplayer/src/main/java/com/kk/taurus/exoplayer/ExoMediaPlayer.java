@@ -104,7 +104,7 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
 
     @Override
     public void setDataSource(DataSource dataSource) {
-        mInternalPlayer.setVideoListener(mVideoListener);
+        mInternalPlayer.addVideoListener(mVideoListener);
         String data = dataSource.getData();
         Uri uri = dataSource.getUri();
         String assetsPath = dataSource.getAssetsPath();
@@ -297,7 +297,7 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
         isBuffering = false;
         updateStatus(IPlayer.STATE_END);
         mInternalPlayer.removeListener(mEventListener);
-        mInternalPlayer.clearVideoListener(mVideoListener);
+        mInternalPlayer.removeVideoListener(mVideoListener);
         mInternalPlayer.release();
     }
 

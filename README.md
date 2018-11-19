@@ -2,7 +2,8 @@
 <br><br><br>
 **博文地址** ：[Android播放器基础封装库PlayerBase](https://juejin.im/post/5b0d4e6bf265da090f7376d2)
 
-**项目wiki持续更新中……**
+## 有问题先看介绍和wiki文档[wiki文档](https://github.com/jiajunhui/PlayerBase/wiki)
+
 # 介绍
 **请注意！** **请注意！** **请注意！** **PlayerBase**区别于大部分播放器封装库。
 
@@ -82,17 +83,17 @@ demo示例集成了播放控制组件**ControllerCover**、加载中组件**Load
 dependencies {
   //---------如果仅使用MediaPlayer解码，使用以下依赖。----------
   //该依赖仅包含MediaPlayer解码
-  implementation 'com.kk.taurus.playerbase:playerbase:3.3.3.1'
+  implementation 'com.kk.taurus.playerbase:playerbase:3.3.3.2'
   
   
   //---------如果使用ExoPlayer解码，使用以下依赖。---------
   //该依赖包含exoplayer解码和MediaPlayer解码
-  implementation 'cn.jiajunhui:exoplayer:3331_291_003'
+  implementation 'cn.jiajunhui:exoplayer:3332_291_004'
 
   
   //---------如果使用ijkPlayer解码，使用以下依赖。---------
   //该依赖包含ijkplayer解码和MediaPlayer解码
-  implementation 'cn.jiajunhui:ijkplayer:3331_088_003'
+  implementation 'cn.jiajunhui:ijkplayer:3332_088_004'
   //ijk官方的解码库依赖，较少格式版本且不支持HTTPS。
   implementation 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.8'
   # Other ABIs: optional
@@ -101,6 +102,18 @@ dependencies {
   implementation 'tv.danmaku.ijk.media:ijkplayer-x86:0.8.8'
   implementation 'tv.danmaku.ijk.media:ijkplayer-x86_64:0.8.8'
   
+}
+```
+
+如果您添加依赖exoplayer的库，需要在gradle中增加如下配置。
+```gradle
+buildTypes {
+
+    //...
+    
+    compileOptions{
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 ```
 
