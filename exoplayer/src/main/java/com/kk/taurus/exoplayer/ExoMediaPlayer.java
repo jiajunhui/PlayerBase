@@ -47,6 +47,7 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.RawResourceDataSource;
 import com.google.android.exoplayer2.util.Util;
+import com.google.android.exoplayer2.video.VideoListener;
 import com.kk.taurus.playerbase.config.AppContextAttach;
 import com.kk.taurus.playerbase.config.PlayerConfig;
 import com.kk.taurus.playerbase.config.PlayerLibrary;
@@ -93,7 +94,7 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
         RenderersFactory renderersFactory = new DefaultRenderersFactory(mAppContext);
         DefaultTrackSelector trackSelector =
                 new DefaultTrackSelector();
-        mInternalPlayer = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector);
+        mInternalPlayer = ExoPlayerFactory.newSimpleInstance(mAppContext, renderersFactory, trackSelector);
 
         // Measures bandwidth during playback. Can be null if not required.
         mBandwidthMeter = new DefaultBandwidthMeter();
@@ -309,7 +310,7 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
                 && state!=STATE_STOPPED;
     }
 
-    private SimpleExoPlayer.VideoListener mVideoListener = new SimpleExoPlayer.VideoListener() {
+    private VideoListener mVideoListener = new VideoListener() {
         @Override
         public void onVideoSizeChanged(int width, int height,
                                        int unappliedRotationDegrees, float pixelWidthHeightRatio) {

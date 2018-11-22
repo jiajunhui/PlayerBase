@@ -22,6 +22,9 @@ import com.kk.taurus.avplayer.bean.VideoBean;
 import com.kk.taurus.avplayer.utils.DataUtils;
 import com.kk.taurus.playerbase.assist.RelationAssist;
 import com.kk.taurus.playerbase.entity.DataSource;
+import com.kk.taurus.playerbase.event.EventKey;
+import com.kk.taurus.playerbase.event.OnPlayerEventListener;
+import com.kk.taurus.playerbase.log.PLog;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -60,6 +63,18 @@ public class ViewPagerPlayActivity extends AppCompatActivity {
         });
 
         mRelationAssist = new RelationAssist(this);
+        mRelationAssist.setOnPlayerEventListener(new OnPlayerEventListener() {
+            @Override
+            public void onPlayerEvent(int eventCode, Bundle bundle) {
+                switch (eventCode){
+                    case OnPlayerEventListener.PLAYER_EVENT_ON_TIMER_UPDATE:
+                        if(bundle!=null){
+                            PLog.d("timerUpdate","curr = " + bundle.getInt(EventKey.INT_ARG1) + ",duration = " + bundle.getInt(EventKey.INT_ARG2));
+                        }
+                        break;
+                }
+            }
+        });
         mRelationAssist.getSuperContainer().setBackgroundColor(Color.BLACK);
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {

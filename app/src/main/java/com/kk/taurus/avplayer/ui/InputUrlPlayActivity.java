@@ -35,7 +35,7 @@ public class InputUrlPlayActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input_url_play);
         mVideoView = findViewById(R.id.urlVideoView);
-        mVideoView.setAspectRatio(AspectRatio.AspectRatio_FILL_PARENT);
+        mVideoView.setAspectRatio(AspectRatio.AspectRatio_FIT_PARENT);
         mInputLayout = findViewById(R.id.inputLayout);
         mInputUrl = findViewById(R.id.editUrl);
 
