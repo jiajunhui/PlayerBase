@@ -45,6 +45,7 @@ import com.google.android.exoplayer2.upstream.AssetDataSource;
 import com.google.android.exoplayer2.upstream.DataSpec;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.RawResourceDataSource;
 import com.google.android.exoplayer2.util.Util;
 import com.google.android.exoplayer2.video.VideoListener;
@@ -60,6 +61,8 @@ import com.kk.taurus.playerbase.event.OnPlayerEventListener;
 import com.kk.taurus.playerbase.log.PLog;
 import com.kk.taurus.playerbase.player.BaseInternalPlayer;
 import com.kk.taurus.playerbase.player.IPlayer;
+
+import java.util.HashMap;
 
 public class ExoMediaPlayer extends BaseInternalPlayer {
 
@@ -144,9 +147,24 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
             return;
         }
 
+        //create DefaultDataSourceFactory
+        com.google.android.exoplayer2.upstream.DataSource.Factory dataSourceFactory =
+                new DefaultDataSourceFactory(mAppContext,
+                        Util.getUserAgent(mAppContext, mAppContext.getPackageName()), mBandwidthMeter);
+
+        //if scheme is http or https and DataSource contain extra data, use DefaultHttpDataSourceFactory.
+        String scheme = videoUri.getScheme();
+        HashMap<String, String> extra = dataSource.getExtra();
+        if(extra!=null && extra.size()>0 &&
+                ("http".equalsIgnoreCase(scheme)||"https".equalsIgnoreCase(scheme))){
+            dataSourceFactory = new DefaultHttpDataSourceFactory(
+                    Util.getUserAgent(mAppContext, mAppContext.getPackageName()));
+            ((DefaultHttpDataSourceFactory)dataSourceFactory).getDefaultRequestProperties().set(extra);
+        }
+
         // Prepare the player with the source.
         isPreparing = true;
-        mInternalPlayer.prepare(getMediaSource(videoUri));
+        mInternalPlayer.prepare(getMediaSource(videoUri, dataSourceFactory));
         mInternalPlayer.setPlayWhenReady(false);
 
         Bundle sourceBundle = BundlePool.obtain();
@@ -155,11 +173,8 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
 
     }
 
-    private MediaSource getMediaSource(Uri uri){
+    private MediaSource getMediaSource(Uri uri, com.google.android.exoplayer2.upstream.DataSource.Factory dataSourceFactory){
         int contentType = Util.inferContentType(uri);
-        DefaultDataSourceFactory dataSourceFactory =
-                new DefaultDataSourceFactory(mAppContext,
-                        Util.getUserAgent(mAppContext, mAppContext.getPackageName()), mBandwidthMeter);
         switch (contentType) {
             case C.TYPE_DASH:
                 return new DashMediaSource.Factory(dataSourceFactory).createMediaSource(uri);
