@@ -141,6 +141,7 @@ public class ListPlayActivity extends AppCompatActivity implements ListAdapter.O
     @Override
     protected void onStart() {
         super.onStart();
+        ListPlayer.get().attachActivity(this);
         mOrientationSensor.enable();
     }
 

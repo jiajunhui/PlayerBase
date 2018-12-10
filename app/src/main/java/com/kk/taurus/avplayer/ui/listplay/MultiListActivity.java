@@ -133,6 +133,7 @@ public class MultiListActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        ListPlayer.get().attachActivity(this);
         mOrientationSensor.enable();
     }
 

@@ -14,6 +14,7 @@ import com.kk.taurus.avplayer.R;
 import com.kk.taurus.avplayer.cover.CloseCover;
 import com.kk.taurus.avplayer.play.DataInter;
 import com.kk.taurus.avplayer.play.ReceiverGroupManager;
+import com.kk.taurus.avplayer.utils.PUtil;
 import com.kk.taurus.avplayer.utils.WindowPermissionCheck;
 import com.kk.taurus.playerbase.assist.OnVideoViewEventHandler;
 import com.kk.taurus.playerbase.entity.DataSource;
@@ -94,6 +95,12 @@ public class WindowVideoViewActivity extends AppCompatActivity {
                     mWindowVideoView.close();
                     mActiveWindow.setText(R.string.open_window_video_view);
                     break;
+            }
+        }
+        @Override
+        public void requestRetry(BaseVideoView assist, Bundle bundle) {
+            if(PUtil.isTopActivity(WindowVideoViewActivity.this)){
+                super.requestRetry(assist, bundle);
             }
         }
     };

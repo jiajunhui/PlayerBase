@@ -118,6 +118,13 @@ public class BaseVideoViewActivity extends AppCompatActivity implements
                     break;
             }
         }
+
+        @Override
+        public void requestRetry(BaseVideoView videoView, Bundle bundle) {
+            if(PUtil.isTopActivity(BaseVideoViewActivity.this)){
+                super.requestRetry(videoView, bundle);
+            }
+        }
     };
 
     private void replay(){

@@ -105,7 +105,7 @@ public class ErrorCover extends BaseCover {
         super.onProducerData(key, data);
         if(DataInter.Key.KEY_NETWORK_STATE.equals(key)){
             int networkState = (int) data;
-            if(networkState== PConst.NETWORK_STATE_WIFI && mErrorShow && PUtil.isTopActivity((Activity) getContext())){
+            if(networkState== PConst.NETWORK_STATE_WIFI && mErrorShow){
                 Bundle bundle = BundlePool.obtain();
                 bundle.putInt(EventKey.INT_DATA, mCurrPosition);
                 requestRetry(bundle);

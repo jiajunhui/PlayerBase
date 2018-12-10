@@ -19,6 +19,7 @@ import com.kk.taurus.avplayer.cover.CloseCover;
 import com.kk.taurus.avplayer.cover.GestureCover;
 import com.kk.taurus.avplayer.play.DataInter;
 import com.kk.taurus.avplayer.play.ReceiverGroupManager;
+import com.kk.taurus.avplayer.utils.PUtil;
 import com.kk.taurus.avplayer.utils.WindowPermissionCheck;
 import com.kk.taurus.playerbase.assist.AssistPlay;
 import com.kk.taurus.playerbase.assist.OnAssistPlayEventHandler;
@@ -139,6 +140,12 @@ public class FloatWindowActivity extends AppCompatActivity {
                 case DataInter.Event.EVENT_CODE_REQUEST_CLOSE:
                     normalPlay();
                     break;
+            }
+        }
+        @Override
+        public void requestRetry(AssistPlay assist, Bundle bundle) {
+            if(PUtil.isTopActivity(FloatWindowActivity.this)){
+                super.requestRetry(assist, bundle);
             }
         }
     };

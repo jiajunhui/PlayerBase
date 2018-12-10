@@ -16,6 +16,7 @@ import com.kk.taurus.avplayer.cover.ControllerCover;
 import com.kk.taurus.avplayer.cover.ErrorCover;
 import com.kk.taurus.avplayer.cover.LoadingCover;
 import com.kk.taurus.avplayer.play.DataInter;
+import com.kk.taurus.avplayer.utils.PUtil;
 import com.kk.taurus.playerbase.assist.OnVideoViewEventHandler;
 import com.kk.taurus.playerbase.entity.DataSource;
 import com.kk.taurus.playerbase.receiver.ReceiverGroup;
@@ -71,6 +72,12 @@ public class InputUrlPlayActivity extends AppCompatActivity {
                 case DataInter.Event.EVENT_CODE_ERROR_SHOW:
                     mVideoView.stop();
                     break;
+            }
+        }
+        @Override
+        public void requestRetry(BaseVideoView videoView, Bundle bundle) {
+            if(PUtil.isTopActivity(InputUrlPlayActivity.this)){
+                super.requestRetry(videoView, bundle);
             }
         }
     };

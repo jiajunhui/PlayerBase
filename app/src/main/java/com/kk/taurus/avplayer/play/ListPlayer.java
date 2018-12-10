@@ -1,16 +1,21 @@
 package com.kk.taurus.avplayer.play;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
 import com.kk.taurus.avplayer.App;
 import com.kk.taurus.avplayer.cover.GestureCover;
+import com.kk.taurus.avplayer.utils.PUtil;
+import com.kk.taurus.playerbase.assist.AssistPlay;
 import com.kk.taurus.playerbase.assist.OnAssistPlayEventHandler;
 import com.kk.taurus.playerbase.assist.RelationAssist;
 import com.kk.taurus.playerbase.entity.DataSource;
 import com.kk.taurus.playerbase.receiver.IReceiverGroup;
 
 import com.kk.taurus.avplayer.base.BSPlayer;
+
+import java.lang.ref.WeakReference;
 
 public class ListPlayer extends BSPlayer {
 
@@ -22,11 +27,26 @@ public class ListPlayer extends BSPlayer {
 
     private OnHandleListener onHandleListener;
 
+    private WeakReference<Activity> mActivityRefer;
+
     @Override
     protected RelationAssist onCreateRelationAssist() {
         RelationAssist assist = new RelationAssist(App.get().getApplicationContext());
-        assist.setEventAssistHandler(new OnAssistPlayEventHandler());
+        assist.setEventAssistHandler(new OnAssistPlayEventHandler(){
+            @Override
+            public void requestRetry(AssistPlay assistPlay, Bundle bundle) {
+                if(PUtil.isTopActivity(mActivityRefer!=null?mActivityRefer.get():null)){
+                    super.requestRetry(assistPlay, bundle);
+                }
+            }
+        });
         return assist;
+    }
+
+    public void attachActivity(Activity activity){
+        if(mActivityRefer!=null)
+            mActivityRefer.clear();
+        mActivityRefer = new WeakReference<>(activity);
     }
 
     @Override
