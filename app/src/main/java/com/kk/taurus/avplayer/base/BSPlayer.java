@@ -206,7 +206,6 @@ public abstract class BSPlayer implements ISPayer {
     public void play(DataSource dataSource, boolean updateRender){
         onSetDataSource(dataSource);
         attachListener();
-        stop();
         mRelationAssist.setDataSource(dataSource);
         mRelationAssist.play(updateRender);
     }

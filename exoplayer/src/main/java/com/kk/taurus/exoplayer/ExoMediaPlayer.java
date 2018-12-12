@@ -35,6 +35,8 @@ import com.google.android.exoplayer2.RenderersFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.MergingMediaSource;
+import com.google.android.exoplayer2.source.SingleSampleMediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.source.dash.DashMediaSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
@@ -54,6 +56,7 @@ import com.kk.taurus.playerbase.config.PlayerConfig;
 import com.kk.taurus.playerbase.config.PlayerLibrary;
 import com.kk.taurus.playerbase.entity.DataSource;
 import com.kk.taurus.playerbase.entity.DecoderPlan;
+import com.kk.taurus.playerbase.entity.TimedTextSource;
 import com.kk.taurus.playerbase.event.BundlePool;
 import com.kk.taurus.playerbase.event.EventKey;
 import com.kk.taurus.playerbase.event.OnErrorEventListener;
@@ -108,6 +111,7 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
 
     @Override
     public void setDataSource(DataSource dataSource) {
+        updateStatus(STATE_INITIALIZED);
         mInternalPlayer.addVideoListener(mVideoListener);
         String data = dataSource.getData();
         Uri uri = dataSource.getUri();
@@ -164,7 +168,22 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
 
         // Prepare the player with the source.
         isPreparing = true;
-        mInternalPlayer.prepare(getMediaSource(videoUri, dataSourceFactory));
+
+        //create MediaSource
+        MediaSource mediaSource = getMediaSource(videoUri, dataSourceFactory);
+
+        //handle timed text source
+        TimedTextSource timedTextSource = dataSource.getTimedTextSource();
+        if(timedTextSource!=null){
+            Format format = Format.createTextSampleFormat(null, timedTextSource.getMimeType(), Format.NO_VALUE, null);
+            MediaSource timedTextMediaSource = new SingleSampleMediaSource.Factory(new DefaultDataSourceFactory(mAppContext,
+                    Util.getUserAgent(mAppContext, mAppContext.getPackageName())))
+                    .createMediaSource(Uri.parse(timedTextSource.getPath()), format, C.TIME_UNSET);
+            //merge MediaSource and timedTextMediaSource.
+            mediaSource = new MergingMediaSource(mediaSource, timedTextMediaSource);
+        }
+
+        mInternalPlayer.prepare(mediaSource);
         mInternalPlayer.setPlayWhenReady(false);
 
         Bundle sourceBundle = BundlePool.obtain();

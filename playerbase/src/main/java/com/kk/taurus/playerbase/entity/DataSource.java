@@ -77,6 +77,11 @@ public class DataSource implements Serializable {
      */
     private HashMap<String, String> extra;
 
+    /**
+     * timed text source for video
+     */
+    private TimedTextSource timedTextSource;
+
     //delete 2018/11/17
 //    private FileDescriptor fileDescriptor;
 //
@@ -162,6 +167,14 @@ public class DataSource implements Serializable {
 
     public void setExtra(HashMap<String, String> extra) {
         this.extra = extra;
+    }
+
+    public TimedTextSource getTimedTextSource() {
+        return timedTextSource;
+    }
+
+    public void setTimedTextSource(TimedTextSource timedTextSource) {
+        this.timedTextSource = timedTextSource;
     }
 
     public String getAssetsPath() {

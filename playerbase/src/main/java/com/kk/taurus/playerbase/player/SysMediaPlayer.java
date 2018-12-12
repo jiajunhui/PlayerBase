@@ -29,6 +29,7 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 
 import com.kk.taurus.playerbase.config.AppContextAttach;
+import com.kk.taurus.playerbase.entity.TimedTextSource;
 import com.kk.taurus.playerbase.log.PLog;
 import com.kk.taurus.playerbase.entity.DataSource;
 import com.kk.taurus.playerbase.event.BundlePool;
@@ -53,6 +54,8 @@ public class SysMediaPlayer extends BaseInternalPlayer {
     private int mTargetState;
 
     private long mBandWidth;
+
+    private DataSource mDataSource;
 
     public SysMediaPlayer() {
         init();
@@ -82,6 +85,7 @@ public class SysMediaPlayer extends BaseInternalPlayer {
             mMediaPlayer.setOnBufferingUpdateListener(mBufferingUpdateListener);
             updateStatus(STATE_INITIALIZED);
 
+            this.mDataSource = dataSource;
             Context applicationContext = AppContextAttach.getApplicationContext();
             String data = dataSource.getData();
             Uri uri = dataSource.getUri();
@@ -404,8 +408,35 @@ public class SysMediaPlayer extends BaseInternalPlayer {
                     || mTargetState == STATE_IDLE){
                 reset();
             }
+            attachTimedTextSource();
         }
     };
+
+    private void attachTimedTextSource() {
+        TimedTextSource timedTextSource = mDataSource.getTimedTextSource();
+        if(timedTextSource==null)
+            return;
+        try{
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN){
+                mMediaPlayer.addTimedTextSource(timedTextSource.getPath(), timedTextSource.getMimeType());
+                MediaPlayer.TrackInfo[] trackInfos = mMediaPlayer.getTrackInfo();
+                if (trackInfos != null && trackInfos.length > 0){
+                    for (int i = 0; i < trackInfos.length; i++){
+                        final MediaPlayer.TrackInfo info = trackInfos[i];
+                        if (info.getTrackType() == MediaPlayer.TrackInfo.MEDIA_TRACK_TYPE_TIMEDTEXT){
+                            mMediaPlayer.selectTrack(i);
+                            break;
+                        }
+                    }
+                }
+            }else{
+                PLog.e(TAG,"not support setting timed text source !");
+            }
+        }catch (Exception e){
+            PLog.e(TAG,"addTimedTextSource error !");
+            e.printStackTrace();
+        }
+    }
 
     private int mVideoWidth;
     private int mVideoHeight;

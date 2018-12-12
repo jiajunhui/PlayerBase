@@ -113,6 +113,10 @@ public class IjkPlayer extends BaseInternalPlayer {
             mMediaPlayer.setOnBufferingUpdateListener(mBufferingUpdateListener);
             updateStatus(STATE_INITIALIZED);
 
+            if(dataSource.getTimedTextSource()!=null){
+                PLog.e(TAG,"ijkplayer not support timed text !");
+            }
+
             Context applicationContext = AppContextAttach.getApplicationContext();
             String data = dataSource.getData();
             Uri uri = dataSource.getUri();

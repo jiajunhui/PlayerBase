@@ -414,7 +414,7 @@ public final class RelationAssist implements AssistPlay {
         }
         if(mDataSource!=null){
             onInternalSetDataSource(mDataSource);
-            onInternalStart(mDataSource.getStartPos());
+            onInternalStart();
         }
     }
 
@@ -467,6 +467,10 @@ public final class RelationAssist implements AssistPlay {
 
     private void onInternalStart(int msc){
         mPlayer.start(msc);
+    }
+
+    private void onInternalStart(){
+        mPlayer.start();
     }
 
     @Override

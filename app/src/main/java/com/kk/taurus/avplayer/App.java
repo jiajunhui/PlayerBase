@@ -9,6 +9,7 @@ import com.kk.taurus.playerbase.config.PlayerConfig;
 import com.kk.taurus.playerbase.config.PlayerLibrary;
 import com.kk.taurus.playerbase.entity.DecoderPlan;
 import com.kk.taurus.playerbase.log.PLog;
+import com.kk.taurus.playerbase.record.PlayRecordManager;
 import com.squareup.leakcanary.LeakCanary;
 import com.xapp.jjh.logtools.config.XLogConfig;
 import com.xapp.jjh.logtools.logger.LogLevel;
@@ -73,6 +74,10 @@ public class App extends Application {
 
         //use default NetworkEventProducer.
         PlayerConfig.setUseDefaultNetworkEventProducer(true);
+
+        PlayerConfig.memoryRecord(true);
+
+        PlayRecordManager.setRecordConfig(new PlayRecordManager.RecordConfig.Builder().setMaxRecordCount(100).build());
 
         PlayerLibrary.init(this);
     }
