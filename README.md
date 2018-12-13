@@ -34,6 +34,7 @@ demo示例集成了播放控制组件**ControllerCover**、加载中组件**Load
 * **支持动态调整渲染视图类型**<br>
 * **支持VideoView切角处理，边缘阴影效果**<br>
 * **提供自定义数据提供者**<br>
+* **支持内存播放记录**<br>
 * **统一的事件下发机制**<br>
 * **扩展事件的添加**<br>
 * **等功能……**<br>
@@ -83,18 +84,18 @@ demo示例集成了播放控制组件**ControllerCover**、加载中组件**Load
 dependencies {
   //---------如果仅使用MediaPlayer解码，使用以下依赖。----------
   //该依赖仅包含MediaPlayer解码
-  implementation 'com.kk.taurus.playerbase:playerbase:3.3.3.2'
+  implementation 'com.kk.taurus.playerbase:playerbase:3.3.4'
   
   
   //---------如果使用ExoPlayer解码，使用以下依赖。---------
   //该依赖包含exoplayer解码和MediaPlayer解码
   //注意exoplayer的最小支持SDK版本为16
-  implementation 'cn.jiajunhui:exoplayer:3332_291_006'
+  implementation 'cn.jiajunhui:exoplayer:334_291_007'
 
   
   //---------如果使用ijkPlayer解码，使用以下依赖。---------
   //该依赖包含ijkplayer解码和MediaPlayer解码
-  implementation 'cn.jiajunhui:ijkplayer:3332_088_004'
+  implementation 'cn.jiajunhui:ijkplayer:334_088_005'
   //ijk官方的解码库依赖，较少格式版本且不支持HTTPS。
   implementation 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.8'
   # Other ABIs: optional
