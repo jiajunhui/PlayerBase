@@ -18,7 +18,7 @@ public class RecordInvoker {
 
     public int saveRecord(DataSource dataSource, int record) {
         if(mCallBack!=null){
-            return mCallBack.onSaveRecord(dataSource);
+            return mCallBack.onSaveRecord(dataSource, record);
         }
         return mRecordCache.putRecord(getKey(dataSource), record);
     }

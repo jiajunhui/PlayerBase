@@ -10,7 +10,7 @@ import com.kk.taurus.playerbase.entity.DataSource;
  */
 public interface OnRecordCallBack {
 
-    int onSaveRecord(DataSource dataSource);
+    int onSaveRecord(DataSource dataSource, int record);
 
     int onGetRecord(DataSource dataSource);
 
