@@ -151,6 +151,17 @@ public class App extends Application {
         //如果添加了'cn.jiajunhui:ijkplayer:xxxx'该依赖
         IjkPlayer.init(this);
         
+        
+        //播放记录的配置
+        //开启播放记录
+        PlayerConfig.playRecord(true);
+        PlayRecordManager.setRecordConfig(
+                        new PlayRecordManager.RecordConfig.Builder()
+                                .setMaxRecordCount(100)
+                                //.setRecordKeyProvider()
+                                //.setOnRecordCallBack()
+                                .build());
+        
     }
     
 }
