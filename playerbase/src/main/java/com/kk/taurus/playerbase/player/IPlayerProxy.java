@@ -13,8 +13,14 @@ public interface IPlayerProxy {
 
     void onIntentStop();
 
+    void onIntentReset();
+
+    void onIntentDestroy();
+
     void onPlayerEvent(int eventCode, Bundle bundle);
 
     void onErrorEvent(int eventCode, Bundle bundle);
+
+    int getRecord(DataSource dataSource);
 
 }

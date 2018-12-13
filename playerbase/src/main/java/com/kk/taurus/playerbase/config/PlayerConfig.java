@@ -44,7 +44,7 @@ public class PlayerConfig {
     //default state false.
     private static boolean useDefaultNetworkEventProducer = false;
 
-    private static boolean memoryRecordState = false;
+    private static boolean playRecordState = false;
 
     static {
         mPlans = new SparseArrayCompat<>(2);
@@ -103,12 +103,12 @@ public class PlayerConfig {
         return useDefaultNetworkEventProducer;
     }
 
-    public static void memoryRecord(boolean open){
-        memoryRecordState = open;
+    public static void playRecord(boolean open){
+        playRecordState = open;
     }
 
-    public static boolean isMemoryRecord(){
-        return memoryRecordState;
+    public static boolean isPlayRecordOpen(){
+        return playRecordState;
     }
 
 }

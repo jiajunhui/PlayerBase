@@ -14,7 +14,7 @@ public class RecordProxyPlayer implements IPlayerProxy {
 
     private PlayValueGetter mPlayValueGetter;
 
-    private String mKey;
+    private DataSource mDataSource;
 
     public RecordProxyPlayer(PlayValueGetter valueGetter){
         this.mPlayValueGetter = valueGetter;
@@ -24,11 +24,21 @@ public class RecordProxyPlayer implements IPlayerProxy {
     public void onDataSourceReady(DataSource dataSource) {
         //right now change DataSource, record it.
         record();
-        mKey = getKey(dataSource);
+        mDataSource = dataSource;
     }
 
     @Override
     public void onIntentStop() {
+        record();
+    }
+
+    @Override
+    public void onIntentReset() {
+        record();
+    }
+
+    @Override
+    public void onIntentDestroy() {
         record();
     }
 
@@ -41,14 +51,14 @@ public class RecordProxyPlayer implements IPlayerProxy {
                 break;
             case OnPlayerEventListener.PLAYER_EVENT_ON_PLAY_COMPLETE:
                 //on play complete, reset play record.
-                PlayRecord.get().record(mKey, 0);
+                PlayRecord.get().reset(mDataSource);
                 break;
         }
     }
 
     private void record(){
         if(isInPlaybackState()){
-            PlayRecord.get().record(mKey, getCurrentPosition());
+            PlayRecord.get().record(mDataSource, getCurrentPosition());
         }
     }
 
@@ -72,12 +82,9 @@ public class RecordProxyPlayer implements IPlayerProxy {
 
     }
 
-    private String getKey(DataSource dataSource){
-        return PlayRecordManager.getRecordKeyProvider().generatorKey(dataSource);
-    }
-
+    @Override
     public int getRecord(DataSource dataSource){
-        return PlayRecord.get().getRecord(getKey(dataSource));
+        return PlayRecord.get().getRecord(dataSource);
     }
 
 }

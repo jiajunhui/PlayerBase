@@ -75,9 +75,11 @@ public class App extends Application {
         //use default NetworkEventProducer.
         PlayerConfig.setUseDefaultNetworkEventProducer(true);
 
-        PlayerConfig.memoryRecord(true);
+        PlayerConfig.playRecord(true);
 
-        PlayRecordManager.setRecordConfig(new PlayRecordManager.RecordConfig.Builder().setMaxRecordCount(100).build());
+        PlayRecordManager.setRecordConfig(
+                new PlayRecordManager.RecordConfig.Builder()
+                        .setMaxRecordCount(100).build());
 
         PlayerLibrary.init(this);
     }

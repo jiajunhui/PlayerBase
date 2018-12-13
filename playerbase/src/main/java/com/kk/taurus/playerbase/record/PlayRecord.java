@@ -1,5 +1,6 @@
 package com.kk.taurus.playerbase.record;
 
+import com.kk.taurus.playerbase.entity.DataSource;
 import com.kk.taurus.playerbase.log.PLog;
 
 /**
@@ -10,10 +11,10 @@ class PlayRecord {
     private final String TAG = "PlayRecord";
     private static PlayRecord i;
 
-    private RecordCache mRecordCache;
+    private RecordInvoker mRecordInvoker;
 
     private PlayRecord(){
-        mRecordCache = new RecordCache(PlayRecordManager.MaxRecordCount);
+        mRecordInvoker = new RecordInvoker(PlayRecordManager.getConfig());
     }
 
     public static PlayRecord get(){
@@ -27,29 +28,36 @@ class PlayRecord {
         return i;
     }
 
-    public int record(String key, int record){
-        if(key==null)
+    public int record(DataSource data, int record){
+        if(data==null)
             return -1;
-        PLog.d(TAG,"<<Save>> : record = " + record + " ,key = " + key);
-        return mRecordCache.putRecord(key, record);
+        int saveRecord = mRecordInvoker.saveRecord(data, record);
+        PLog.d(TAG,"<<Save>> : record = " + record);
+        return saveRecord;
     }
 
-    public int removeRecord(String key){
-        if(key==null)
+    public int reset(DataSource data){
+        if(data==null)
             return -1;
-        return mRecordCache.removeRecord(key);
+        return mRecordInvoker.resetRecord(data);
     }
 
-    public int getRecord(String key){
-        if(key==null)
+    public int removeRecord(DataSource data){
+        if(data==null)
             return -1;
-        int record = mRecordCache.getRecord(key);
-        PLog.d(TAG,"<<Get>> : record = " + record + ", key = " + key);
+        return mRecordInvoker.removeRecord(data);
+    }
+
+    public int getRecord(DataSource data){
+        if(data==null)
+            return 0;
+        int record = mRecordInvoker.getRecord(data);
+        PLog.d(TAG,"<<Get>> : record = " + record);
         return record;
     }
 
     public void clearRecord(){
-        mRecordCache.clearRecord();
+        mRecordInvoker.clearRecord();
     }
 
     public void destroy(){

@@ -28,6 +28,7 @@ import com.kk.taurus.playerbase.log.PLog;
 import com.kk.taurus.playerbase.player.BaseInternalPlayer;
 import com.kk.taurus.playerbase.event.BundlePool;
 import com.kk.taurus.playerbase.event.EventKey;
+import com.kk.taurus.playerbase.player.IPlayerProxy;
 import com.kk.taurus.playerbase.player.OnBufferingListener;
 import com.kk.taurus.playerbase.provider.IDataProvider;
 import com.kk.taurus.playerbase.player.IPlayer;
@@ -65,7 +66,7 @@ public final class AVPlayer implements IPlayer{
 
     private float mVolumeLeft = -1,mVolumeRight = -1;
 
-    private RecordProxyPlayer mRecordProxyPlayer;
+    private IPlayerProxy mRecordProxyPlayer;
 
     public AVPlayer(){
         //default load config plan id.
@@ -85,7 +86,7 @@ public final class AVPlayer implements IPlayer{
     }
 
     private void handleRecordProxy() {
-        if(PlayerConfig.isMemoryRecord()){
+        if(PlayerConfig.isPlayRecordOpen()){
             mRecordProxyPlayer = new RecordProxyPlayer(new PlayValueGetter() {
                 @Override
                 public int getCurrentPosition() {
@@ -231,7 +232,7 @@ public final class AVPlayer implements IPlayer{
                 }
             }
             mTimerCounterProxy.proxyPlayEvent(eventCode, bundle);
-            if(isMemoryRecordOpen())
+            if(isPlayRecordOpen())
                 mRecordProxyPlayer.onPlayerEvent(eventCode, bundle);
             callBackPlayEventListener(eventCode, bundle);
         }
@@ -242,7 +243,7 @@ public final class AVPlayer implements IPlayer{
         @Override
         public void onErrorEvent(int eventCode, Bundle bundle) {
             mTimerCounterProxy.proxyErrorEvent(eventCode, bundle);
-            if(isMemoryRecordOpen())
+            if(isPlayRecordOpen())
                 mRecordProxyPlayer.onErrorEvent(eventCode, bundle);
             callBackErrorEventListener(eventCode, bundle);
         }
@@ -378,7 +379,7 @@ public final class AVPlayer implements IPlayer{
 
     private void interPlayerSetDataSource(DataSource dataSource){
         if(isPlayerAvailable()){
-            if(isMemoryRecordOpen())
+            if(isPlayRecordOpen())
                 mRecordProxyPlayer.onDataSourceReady(dataSource);
             mInternalPlayer.setDataSource(dataSource);
         }
@@ -396,13 +397,13 @@ public final class AVPlayer implements IPlayer{
     }
 
     int getRecord(DataSource dataSource){
-        if(isMemoryRecordOpen() && dataSource!=null)
+        if(isPlayRecordOpen() && dataSource!=null)
             return mRecordProxyPlayer.getRecord(dataSource);
         return mDataSource!=null?mDataSource.getStartPos():0;
     }
 
-    boolean isMemoryRecordOpen(){
-        return PlayerConfig.isMemoryRecord() && mRecordProxyPlayer!=null;
+    boolean isPlayRecordOpen(){
+        return PlayerConfig.isPlayRecordOpen() && mRecordProxyPlayer!=null;
     }
 
     /**
@@ -545,7 +546,7 @@ public final class AVPlayer implements IPlayer{
 
     @Override
     public void stop() {
-        if(isMemoryRecordOpen())
+        if(isPlayRecordOpen())
             mRecordProxyPlayer.onIntentStop();
         if(useProvider())
             mDataProvider.cancel();
@@ -555,6 +556,8 @@ public final class AVPlayer implements IPlayer{
 
     @Override
     public void reset() {
+        if(isPlayRecordOpen())
+            mRecordProxyPlayer.onIntentReset();
         if(useProvider())
             mDataProvider.cancel();
         if(isPlayerAvailable())
@@ -563,6 +566,8 @@ public final class AVPlayer implements IPlayer{
 
     @Override
     public void destroy() {
+        if(isPlayRecordOpen())
+            mRecordProxyPlayer.onIntentDestroy();
         if(useProvider())
             mDataProvider.destroy();
         if(isPlayerAvailable())

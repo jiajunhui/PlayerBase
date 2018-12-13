@@ -409,6 +409,12 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
                         }
                         updateStatus(IPlayer.STATE_PREPARED);
                         submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_PREPARED, bundle);
+
+                        if(playWhenReady){
+                            updateStatus(STATE_STARTED);
+                            submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_START, null);
+                        }
+
                         if(mStartPos > 0){
                             mInternalPlayer.seekTo(mStartPos);
                             mStartPos = -1;

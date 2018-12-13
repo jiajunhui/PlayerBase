@@ -12,45 +12,74 @@ public class PlayRecordManager {
 
     private static final int DEFAULT_MAX_RECORD_COUNT = 200;
 
-    static int MaxRecordCount = DEFAULT_MAX_RECORD_COUNT;
-
     private static RecordKeyProvider recordKeyProvider;
 
+    private static RecordConfig config;
+
     public static void setRecordConfig(RecordConfig recordConfig){
-        if(recordConfig==null)
-            recordConfig = new RecordConfig.Builder()
-                    .setMaxRecordCount(DEFAULT_MAX_RECORD_COUNT)
-                    .setRecordKeyProvider(new DefaultRecordKeyProvider()).build();
-        MaxRecordCount = recordConfig.getMaxRecordCount();
-        recordKeyProvider = recordConfig.getRecordKeyProvider();
+        config = recordConfig;
+        checkDefaultConfig();
+        recordKeyProvider = config.getRecordKeyProvider();
     }
 
-    public static RecordKeyProvider getRecordKeyProvider(){
+    private static void checkDefaultConfig(){
+        if(config==null)
+            config = new RecordConfig.Builder()
+                    .setMaxRecordCount(DEFAULT_MAX_RECORD_COUNT)
+                    .setRecordKeyProvider(new DefaultRecordKeyProvider()).build();
+    }
+
+    static RecordConfig getConfig(){
+        checkDefaultConfig();
+        return config;
+    }
+
+    static RecordKeyProvider getRecordKeyProvider(){
         if(recordKeyProvider==null)
             return new DefaultRecordKeyProvider();
         return recordKeyProvider;
     }
 
-    public static int removeRecord(DataSource dataSource){
-        return PlayRecord.get().removeRecord(getRecordKeyProvider().generatorKey(dataSource));
+    public static String getKey(DataSource dataSource){
+        return getRecordKeyProvider().generatorKey(dataSource);
     }
 
+    /**
+     * remove record by DataSource.
+     * @param dataSource
+     * @return
+     */
+    public static int removeRecord(DataSource dataSource){
+        return PlayRecord.get().removeRecord(dataSource);
+    }
+
+    /**
+     * clear record memory cache.
+     */
     public static void clearRecord(){
         PlayRecord.get().clearRecord();
     }
 
+    /**
+     * clear and destroy memory cache.
+     */
     public static void destroyCache(){
         PlayRecord.get().destroy();
     }
 
+    /**
+     * record config, setting max cache count and key provider.
+     */
     public static class RecordConfig{
 
         private int maxRecordCount;
         private RecordKeyProvider recordKeyProvider;
+        private OnRecordCallBack onRecordCallBack;
 
-        RecordConfig(int maxRecordCount, RecordKeyProvider recordKeyProvider) {
+        RecordConfig(int maxRecordCount, RecordKeyProvider recordKeyProvider, OnRecordCallBack onRecordCallBack) {
             this.maxRecordCount = maxRecordCount;
             this.recordKeyProvider = recordKeyProvider;
+            this.onRecordCallBack = onRecordCallBack;
         }
 
         public int getMaxRecordCount() {
@@ -61,10 +90,15 @@ public class PlayRecordManager {
             return recordKeyProvider;
         }
 
+        public OnRecordCallBack getOnRecordCallBack() {
+            return onRecordCallBack;
+        }
+
         public static class Builder{
 
             private int maxRecordCount;
             private RecordKeyProvider recordKeyProvider;
+            private OnRecordCallBack onRecordCallBack;
 
             public int getMaxRecordCount() {
                 return maxRecordCount;
@@ -84,8 +118,17 @@ public class PlayRecordManager {
                 return this;
             }
 
+            public OnRecordCallBack getOnRecordCallBack() {
+                return onRecordCallBack;
+            }
+
+            public Builder setOnRecordCallBack(OnRecordCallBack onRecordCallBack) {
+                this.onRecordCallBack = onRecordCallBack;
+                return this;
+            }
+
             public RecordConfig build(){
-                return new RecordConfig(maxRecordCount, recordKeyProvider);
+                return new RecordConfig(maxRecordCount, recordKeyProvider, onRecordCallBack);
             }
 
         }
