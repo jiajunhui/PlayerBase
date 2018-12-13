@@ -175,7 +175,7 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
         //handle timed text source
         TimedTextSource timedTextSource = dataSource.getTimedTextSource();
         if(timedTextSource!=null){
-            Format format = Format.createTextSampleFormat(null, timedTextSource.getMimeType(), Format.NO_VALUE, null);
+            Format format = Format.createTextSampleFormat(null, timedTextSource.getMimeType(), timedTextSource.getFlag(), null);
             MediaSource timedTextMediaSource = new SingleSampleMediaSource.Factory(new DefaultDataSourceFactory(mAppContext,
                     Util.getUserAgent(mAppContext, mAppContext.getPackageName())))
                     .createMediaSource(Uri.parse(timedTextSource.getPath()), format, C.TIME_UNSET);

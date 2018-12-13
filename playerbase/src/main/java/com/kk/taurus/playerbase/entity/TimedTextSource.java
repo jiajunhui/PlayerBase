@@ -9,6 +9,7 @@ public class TimedTextSource implements Serializable {
 
     private String path;
     private String mimeType;
+    private int flag;
 
     public TimedTextSource(String path) {
         this.path = path;
@@ -17,6 +18,12 @@ public class TimedTextSource implements Serializable {
     public TimedTextSource(String path, String mimeType) {
         this.path = path;
         this.mimeType = mimeType;
+    }
+
+    public TimedTextSource(String path, String mimeType, int flag) {
+        this.path = path;
+        this.mimeType = mimeType;
+        this.flag = flag;
     }
 
     public String getPath() {
@@ -33,5 +40,13 @@ public class TimedTextSource implements Serializable {
 
     public void setMimeType(String mimeType) {
         this.mimeType = mimeType;
+    }
+
+    public int getFlag() {
+        return flag;
+    }
+
+    public void setFlag(int flag) {
+        this.flag = flag;
     }
 }
