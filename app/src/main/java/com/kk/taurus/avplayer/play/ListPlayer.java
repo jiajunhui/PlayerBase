@@ -44,9 +44,13 @@ public class ListPlayer extends BSPlayer {
     }
 
     public void attachActivity(Activity activity){
+        clearActivityRefer();
+        mActivityRefer = new WeakReference<>(activity);
+    }
+
+    private void clearActivityRefer() {
         if(mActivityRefer!=null)
             mActivityRefer.clear();
-        mActivityRefer = new WeakReference<>(activity);
     }
 
     @Override
@@ -128,6 +132,7 @@ public class ListPlayer extends BSPlayer {
     @Override
     public void destroy() {
         super.destroy();
+        clearActivityRefer();
         i = null;
         onHandleListener = null;
     }

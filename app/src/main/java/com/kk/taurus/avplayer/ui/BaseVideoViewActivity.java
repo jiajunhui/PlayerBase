@@ -75,7 +75,9 @@ public class BaseVideoViewActivity extends AppCompatActivity implements
 
     private void initPlay(){
         if(!hasStart){
-            mVideoView.setDataSource(new DataSource(DataUtils.VIDEO_URL_01));
+            DataSource dataSource = new DataSource(DataUtils.VIDEO_URL_08);
+            dataSource.setTitle("音乐和艺术如何改变世界");
+            mVideoView.setDataSource(dataSource);
             mVideoView.start();
             hasStart = true;
         }

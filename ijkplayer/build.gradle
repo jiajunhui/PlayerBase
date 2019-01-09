@@ -2,11 +2,11 @@ apply plugin: 'com.android.library'
 //apply from: 'bintray.gradle'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 28
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 26
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
     }
@@ -29,9 +29,8 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:26.1.0'
 
     api 'tv.danmaku.ijk.media:ijkplayer-java:0.8.8'
-    api 'com.kk.taurus.playerbase:playerbase:3.3.4'
+    api 'com.kk.taurus.playerbase:playerbase:3.3.4.1'
 //    api project(':playerbase')
 }

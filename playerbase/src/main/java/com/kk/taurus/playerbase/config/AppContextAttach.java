@@ -16,7 +16,6 @@
 
 package com.kk.taurus.playerbase.config;
 
-import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
@@ -27,8 +26,8 @@ public class AppContextAttach {
 
     private static Context mAppContext;
 
-    public static void attach(Application application){
-        mAppContext = application.getApplicationContext();
+    static void attach(Context context){
+        mAppContext = context.getApplicationContext();
     }
 
     public static Context getApplicationContext(){

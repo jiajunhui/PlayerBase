@@ -1,6 +1,5 @@
 package com.kk.taurus.ijkplayer;
 
-import android.app.Application;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.media.AudioManager;
@@ -44,13 +43,13 @@ public class IjkPlayer extends BaseInternalPlayer {
 
     private int startSeekPos;
 
-    public static void init(Application application){
+    public static void init(Context context){
         PlayerConfig.addDecoderPlan(new DecoderPlan(
                 PLAN_ID,
                 IjkPlayer.class.getName(),
                 "ijkplayer"));
         PlayerConfig.setDefaultPlanId(PLAN_ID);
-        PlayerLibrary.init(application);
+        PlayerLibrary.init(context);
     }
 
     public IjkPlayer() {

@@ -17,7 +17,6 @@
 package com.kk.taurus.playerbase.utils;
 
 import android.content.Context;
-import android.content.res.Resources;
 
 public class PUtils {
 
@@ -29,7 +28,7 @@ public class PUtils {
         return height;
     }
 
-    public static int getStatusBarHeightMethod1(Context context){
+    private static int getStatusBarHeightMethod1(Context context){
         int statusBarHeight = -1;
         //获取status_bar_height资源的ID
         int resourceId = context.getResources()
@@ -41,25 +40,8 @@ public class PUtils {
         return statusBarHeight;
     }
 
-    public static int getStatusBarHeightMethod2(Context context){
-        int statusBarHeight = -1;
-        try {
-            Class<?> clazz = Class.forName("com.android.internal.R$dimen");
-            Object object = clazz.newInstance();
-            int height = Integer.parseInt(clazz.getField("status_bar_height")
-                    .get(object).toString());
-            statusBarHeight = context.getResources().getDimensionPixelSize(height);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return statusBarHeight;
-    }
-
-    public static int getNavigationBarHeight(Context context) {
-        Resources resources = context.getResources();
-        int resourceId = resources.getIdentifier("navigation_bar_height","dimen", "android");
-        int height = resources.getDimensionPixelSize(resourceId);
-        return height;
+    private static int getStatusBarHeightMethod2(Context context){
+        return (int) Math.ceil(20 * context.getResources().getDisplayMetrics().density);
     }
 
 }

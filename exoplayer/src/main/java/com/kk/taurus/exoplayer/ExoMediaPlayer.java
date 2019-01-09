@@ -16,7 +16,6 @@
 
 package com.kk.taurus.exoplayer;
 
-import android.app.Application;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -86,13 +85,13 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
 
     private final DefaultBandwidthMeter mBandwidthMeter;
 
-    public static void init(Application application){
+    public static void init(Context context){
         PlayerConfig.addDecoderPlan(new DecoderPlan(
                 PLAN_ID,
                 ExoMediaPlayer.class.getName(),
                 "exoplayer"));
         PlayerConfig.setDefaultPlanId(PLAN_ID);
-        PlayerLibrary.init(application);
+        PlayerLibrary.init(context);
     }
 
     public ExoMediaPlayer(){

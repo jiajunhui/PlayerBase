@@ -2,11 +2,11 @@ apply plugin: 'com.android.library'
 //apply from: 'bintray.gradle'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
     }
@@ -29,9 +29,8 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:27.1.1'
 
-    api 'com.google.android.exoplayer:exoplayer:2.9.1'
-    api 'com.kk.taurus.playerbase:playerbase:3.3.4'
+    api "com.google.android.exoplayer:exoplayer:2.9.1"
+    api 'com.kk.taurus.playerbase:playerbase:3.3.4.1'
 //    api project(':playerbase')
 }

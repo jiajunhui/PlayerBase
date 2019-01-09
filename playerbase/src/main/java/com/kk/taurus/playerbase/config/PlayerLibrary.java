@@ -16,12 +16,12 @@
 
 package com.kk.taurus.playerbase.config;
 
-import android.app.Application;
+import android.content.Context;
 
 public class PlayerLibrary {
 
-    public static void init(Application application){
-        AppContextAttach.attach(application);
+    public static void init(Context context){
+        AppContextAttach.attach(context);
     }
 
 }
