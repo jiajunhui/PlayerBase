@@ -212,26 +212,37 @@ public final class AVPlayer implements IPlayer{
             //check valid data.
             if(duration <= 0 && !isLive())
                 return;
-            Bundle bundle = BundlePool.obtain();
-            bundle.putInt(EventKey.INT_ARG1, curr);
-            bundle.putInt(EventKey.INT_ARG2, duration);
-            bundle.putInt(EventKey.INT_ARG3, bufferPercentage);
-            callBackPlayEventListener(
-                    OnPlayerEventListener.PLAYER_EVENT_ON_TIMER_UPDATE, bundle);
+            onTimerUpdateEvent(curr, duration, bufferPercentage);
         }
     };
+
+    private void onTimerUpdateEvent(int curr, int duration, int bufferPercentage) {
+        Bundle bundle = BundlePool.obtain();
+        bundle.putInt(EventKey.INT_ARG1, curr);
+        bundle.putInt(EventKey.INT_ARG2, duration);
+        bundle.putInt(EventKey.INT_ARG3, bufferPercentage);
+        callBackPlayEventListener(
+                OnPlayerEventListener.PLAYER_EVENT_ON_TIMER_UPDATE, bundle);
+    }
 
     private OnPlayerEventListener mInternalPlayerEventListener =
             new OnPlayerEventListener() {
         @Override
         public void onPlayerEvent(int eventCode, Bundle bundle) {
+            mTimerCounterProxy.proxyPlayEvent(eventCode, bundle);
             if(eventCode==OnPlayerEventListener.PLAYER_EVENT_ON_PREPARED){
                 //when prepared set volume value
                 if(mVolumeLeft > 0 || mVolumeRight > 0){
                     mInternalPlayer.setVolume(mVolumeLeft, mVolumeRight);
                 }
+            }else if(eventCode==OnPlayerEventListener.PLAYER_EVENT_ON_PLAY_COMPLETE){
+                int duration = getDuration();
+                int bufferPercentage = getBufferPercentage();
+                //check valid data.
+                if(duration <= 0 && !isLive())
+                    return;
+                onTimerUpdateEvent(duration, duration, bufferPercentage);
             }
-            mTimerCounterProxy.proxyPlayEvent(eventCode, bundle);
             if(isPlayRecordOpen())
                 mRecordProxyPlayer.onPlayerEvent(eventCode, bundle);
             callBackPlayEventListener(eventCode, bundle);

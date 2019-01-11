@@ -18,6 +18,7 @@ package com.kk.taurus.playerbase.log;
 
 import android.os.Bundle;
 
+import com.kk.taurus.playerbase.event.EventKey;
 import com.kk.taurus.playerbase.event.OnErrorEventListener;
 import com.kk.taurus.playerbase.event.OnPlayerEventListener;
 
@@ -90,7 +91,10 @@ public class DebugLog {
                 value = "PLAYER_EVENT_ON_PREPARED";
                 break;
             case OnPlayerEventListener.PLAYER_EVENT_ON_TIMER_UPDATE:
-                value = "PLAYER_EVENT_ON_TIMER_UPDATE";
+                value = "PLAYER_EVENT_ON_TIMER_UPDATE"
+                        + (bundle!=null?(", curr = " + String.valueOf(bundle.getInt(EventKey.INT_ARG1))
+                        + ",duration = " + String.valueOf(bundle.getInt(EventKey.INT_ARG2))
+                        + ",bufferPercentage = " + String.valueOf(bundle.getInt(EventKey.INT_ARG3))):"");
                 break;
             case OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_ROTATION_CHANGED:
                 value = "PLAYER_EVENT_ON_VIDEO_ROTATION_CHANGED";
