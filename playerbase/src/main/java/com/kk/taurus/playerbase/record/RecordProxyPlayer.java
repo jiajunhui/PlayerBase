@@ -57,7 +57,7 @@ public class RecordProxyPlayer implements IPlayerProxy {
     }
 
     private void record(){
-        if(isInPlaybackState()){
+        if(isInPlaybackState() && getState()!=IPlayer.STATE_PLAYBACK_COMPLETE){
             PlayRecord.get().record(mDataSource, getCurrentPosition());
         }
     }
@@ -68,8 +68,12 @@ public class RecordProxyPlayer implements IPlayerProxy {
         return 0;
     }
 
+    private int getState(){
+        return mPlayValueGetter!=null?mPlayValueGetter.getState():IPlayer.STATE_IDLE;
+    }
+
     private boolean isInPlaybackState() {
-        int state = mPlayValueGetter!=null?mPlayValueGetter.getState():IPlayer.STATE_IDLE;
+        int state = getState();
         return state!= IPlayer.STATE_END
                 && state!= IPlayer.STATE_ERROR
                 && state!= IPlayer.STATE_IDLE
