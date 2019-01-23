@@ -404,7 +404,7 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
     public void onTimerUpdate(int curr, int duration, int bufferPercentage) {
         if(!mTimerUpdateProgressEnable)
             return;
-        if(mTimeFormat==null){
+        if(mTimeFormat==null || duration != mSeekBar.getMax()){
             mTimeFormat = TimeUtil.getFormat(duration);
         }
         mBufferPercentage = bufferPercentage;
