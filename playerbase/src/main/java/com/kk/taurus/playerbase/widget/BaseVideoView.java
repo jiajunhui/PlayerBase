@@ -315,19 +315,28 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
         mPlayer.setSpeed(speed);
     }
 
+    /**
+     * if you want to clear frame and recreate render, call this method.
+     */
+    public void updateRender(){
+        releaseRender();
+        setRenderType(mRenderType);
+    }
+
     @Override
     public void setRenderType(int renderType) {
         boolean renderChange = mRenderType!=renderType;
         if(!renderChange && mRender!=null && !mRender.isReleased())
             return;
         releaseRender();
-        mRenderType = renderType;
         switch (renderType){
             case IRender.RENDER_TYPE_SURFACE_VIEW:
+                mRenderType = IRender.RENDER_TYPE_SURFACE_VIEW;
                 mRender = new RenderSurfaceView(getContext());
                 break;
             default:
             case IRender.RENDER_TYPE_TEXTURE_VIEW:
+                mRenderType = IRender.RENDER_TYPE_TEXTURE_VIEW;
                 mRender = new RenderTextureView(getContext());
                 ((RenderTextureView)mRender).setTakeOverSurfaceTexture(true);
                 break;

@@ -27,8 +27,13 @@ public class SettingItem {
     public static final int CODE_SPEED_2 = 501;
     public static final int CODE_SPEED_1 = 502;
 
-    public static final int CODE_CONTROLLER_REMOVE = 600;
-    public static final int CODE_CONTROLLER_RESET = 601;
+    public static final int CODE_VOLUME_SILENT = 600;
+    public static final int CODE_VOLUME_RESET = 601;
+
+    public static final int CODE_CONTROLLER_REMOVE = 700;
+    public static final int CODE_CONTROLLER_RESET = 701;
+
+    public static final int CODE_TEST_UPDATE_RENDER = 801;
 
     private String itemText;
     private int code;
@@ -79,8 +84,13 @@ public class SettingItem {
         items.add(new SettingItem("2倍速播放",CODE_SPEED_2));
         items.add(new SettingItem("1倍速播放",CODE_SPEED_1));
 
+        items.add(new SettingItem("静音",CODE_VOLUME_SILENT));
+        items.add(new SettingItem("恢复声音",CODE_VOLUME_RESET));
+
         items.add(new SettingItem("移除Controller组件",CODE_CONTROLLER_REMOVE));
         items.add(new SettingItem("恢复Controller组件",CODE_CONTROLLER_RESET));
+
+        items.add(new SettingItem("刷新Render",CODE_TEST_UPDATE_RENDER));
 
         return items;
     }

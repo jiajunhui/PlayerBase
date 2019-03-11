@@ -71,6 +71,8 @@ public class BaseVideoViewActivity extends AppCompatActivity implements
         mVideoView.setReceiverGroup(mReceiverGroup);
         mVideoView.setEventHandler(onVideoViewEventHandler);
         mVideoView.setOnPlayerEventListener(this);
+
+        mVideoView.setVolume(0f, 0f);
     }
 
     private void initPlay(){
@@ -207,6 +209,12 @@ public class BaseVideoViewActivity extends AppCompatActivity implements
             case SettingItem.CODE_SPEED_1:
                 mVideoView.setSpeed(1f);
                 break;
+            case SettingItem.CODE_VOLUME_SILENT:
+                mVideoView.setVolume(0f, 0f);
+                break;
+            case SettingItem.CODE_VOLUME_RESET:
+                mVideoView.setVolume(1f, 1f);
+                break;
             case SettingItem.CODE_CONTROLLER_REMOVE:
                 mReceiverGroup.removeReceiver(DataInter.ReceiverKey.KEY_CONTROLLER_COVER);
                 Toast.makeText(this, "已移除", Toast.LENGTH_SHORT).show();
@@ -217,6 +225,9 @@ public class BaseVideoViewActivity extends AppCompatActivity implements
                     mReceiverGroup.addReceiver(DataInter.ReceiverKey.KEY_CONTROLLER_COVER, new ControllerCover(this));
                     Toast.makeText(this, "已添加", Toast.LENGTH_SHORT).show();
                 }
+                break;
+            case SettingItem.CODE_TEST_UPDATE_RENDER:
+                mVideoView.updateRender();
                 break;
         }
     }

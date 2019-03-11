@@ -232,7 +232,7 @@ public final class AVPlayer implements IPlayer{
             mTimerCounterProxy.proxyPlayEvent(eventCode, bundle);
             if(eventCode==OnPlayerEventListener.PLAYER_EVENT_ON_PREPARED){
                 //when prepared set volume value
-                if(mVolumeLeft > 0 || mVolumeRight > 0){
+                if(mVolumeLeft >= 0 || mVolumeRight >= 0){
                     mInternalPlayer.setVolume(mVolumeLeft, mVolumeRight);
                 }
             }else if(eventCode==OnPlayerEventListener.PLAYER_EVENT_ON_PLAY_COMPLETE){

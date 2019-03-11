@@ -66,8 +66,12 @@ public class IjkPlayer extends BaseInternalPlayer {
         IjkMediaPlayer ijkMediaPlayer = new IjkMediaPlayer();
 //        ijkMediaPlayer.native_setLogLevel(IjkMediaPlayer.IJK_LOG_DEBUG);
 
+        //设置清除dns cache
+        //IjkMediaPlayer.OPT_CATEGORY_FORMAT, "dns_cache_clear", 1
+
         //open mediacodec
         ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 1);
+        ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec-hevc", 1);
 
         //accurate seek
         ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "enable-accurate-seek", 1);
