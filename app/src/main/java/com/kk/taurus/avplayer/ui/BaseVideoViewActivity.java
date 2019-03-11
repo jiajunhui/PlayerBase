@@ -72,7 +72,7 @@ public class BaseVideoViewActivity extends AppCompatActivity implements
         mVideoView.setEventHandler(onVideoViewEventHandler);
         mVideoView.setOnPlayerEventListener(this);
 
-        mVideoView.setVolume(0f, 0f);
+//        mVideoView.setVolume(0f, 0f);
     }
 
     private void initPlay(){
