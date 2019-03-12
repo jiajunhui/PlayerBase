@@ -187,7 +187,6 @@ public class App extends Application {
 
 ```java
 mVideoView = findViewById(R.id.videoView);
-mDataSource = new DataSource("monitor_id");
 mVideoView.setOnPlayerEventListener(this);
 mVideoView.setOnReceiverEventListener(this);
 
@@ -201,9 +200,8 @@ mVideoView.setReceiverGroup(receiverGroup);
 //设置一个事件处理器
 mVideoView.setEventHandler(new OnVideoViewEventHandler());
 
-//设置数据提供者 MonitorDataProvider
-mVideoView.setDataProvider(new MonitorDataProvider());
-mVideoView.setDataSource(mDataSource);
+//设置DataSource
+mVideoView.setDataSource(new DataSource("url...."));
 mVideoView.start();
 ```
 
