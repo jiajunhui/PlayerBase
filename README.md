@@ -476,7 +476,6 @@ PlayerBase是基于事件分发来完成各组件间协作的问题，定义了�
 ![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/frame_structure03.png)
 ![image](https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/frame_structure04.png)
 
-
 # 交流
 联系方式：junhui_jia@163.com
 QQ群：600201778
