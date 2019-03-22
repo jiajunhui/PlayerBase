@@ -25,7 +25,7 @@ public class DefaultRecordKeyProvider implements RecordKeyProvider {
         }else if(rawId > 0){
             return String.valueOf(rawId);
         }
-        return null;
+        return dataSource.toString();
     }
 
 }

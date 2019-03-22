@@ -13,12 +13,14 @@ import android.widget.Button;
 import com.kk.taurus.avplayer.R;
 import com.kk.taurus.avplayer.cover.CloseCover;
 import com.kk.taurus.avplayer.play.DataInter;
+import com.kk.taurus.avplayer.play.DemoDataProvider;
 import com.kk.taurus.avplayer.play.ReceiverGroupManager;
 import com.kk.taurus.avplayer.utils.PUtil;
 import com.kk.taurus.avplayer.utils.WindowPermissionCheck;
 import com.kk.taurus.playerbase.assist.OnVideoViewEventHandler;
 import com.kk.taurus.playerbase.entity.DataSource;
 import com.kk.taurus.playerbase.player.IPlayer;
+import com.kk.taurus.playerbase.provider.IDataProvider;
 import com.kk.taurus.playerbase.receiver.ReceiverGroup;
 import com.kk.taurus.playerbase.widget.BaseVideoView;
 import com.kk.taurus.playerbase.window.FloatWindowParams;
@@ -31,6 +33,8 @@ public class WindowVideoViewActivity extends AppCompatActivity {
     WindowVideoView mWindowVideoView;
 
     DataSource mDataSource;
+
+    IDataProvider mDataProvider;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,8 +76,9 @@ public class WindowVideoViewActivity extends AppCompatActivity {
         mWindowVideoView.setReceiverGroup(receiverGroup);
 
         mDataSource = new DataSource();
-        mDataSource.setData("https://mov.bn.netease.com/open-movie/nos/mp4/2018/01/12/SD70VQJ74_sd.mp4");
-        mDataSource.setTitle("不想从被子里出来");
+        mDataSource.setId(1234567);
+        mWindowVideoView.setDataProvider(mDataProvider = new DemoDataProvider());
+        mWindowVideoView.setDataSource(mDataSource);
 
     }
 
@@ -137,8 +142,6 @@ public class WindowVideoViewActivity extends AppCompatActivity {
             return;
         if(mWindowVideoView.isInPlaybackState())
             mWindowVideoView.resume();
-        else
-            mWindowVideoView.rePlay(0);
     }
 
     @Override
@@ -146,6 +149,7 @@ public class WindowVideoViewActivity extends AppCompatActivity {
         super.onDestroy();
         mWindowVideoView.close();
         mWindowVideoView.stopPlayback();
+        mDataProvider.destroy();
     }
 }
 

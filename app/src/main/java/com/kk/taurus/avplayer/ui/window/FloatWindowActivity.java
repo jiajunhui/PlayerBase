@@ -166,11 +166,21 @@ public class FloatWindowActivity extends AppCompatActivity {
         mReceiverGroup.getGroupValue().putBoolean(DataInter.Key.KEY_IS_LANDSCAPE, isLandScape);
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        enterFullScreen();
+    }
+
     private void enterFullScreen(){
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        if(mWhoIntentFullScreen==WINDOW_INTENT_FULL_SCREEN){
-            normalPlay();
+        if(PUtil.isTopActivity(this)){
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            if(mWhoIntentFullScreen==WINDOW_INTENT_FULL_SCREEN){
+                normalPlay();
+            }
+        }else{
+            startActivity(new Intent(getApplicationContext(), FloatWindowActivity.class));
         }
     }
 

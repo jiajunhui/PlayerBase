@@ -44,7 +44,9 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"/>
 
-        <activity android:name=".HomeActivity" />
+        <activity
+            android:name=".HomeActivity"
+            android:screenOrientation="portrait"/>
 
         <activity
             android:name=".ui.BaseVideoViewActivity"
@@ -56,6 +58,7 @@
             android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.window.FloatWindowActivity"
+            android:launchMode="singleTask"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"/>
         <activity

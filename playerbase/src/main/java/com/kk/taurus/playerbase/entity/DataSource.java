@@ -228,4 +228,21 @@ public class DataSource implements Serializable {
         return null;
     }
 
+    @Override
+    public String toString() {
+        return "DataSource{" +
+                "tag='" + tag + '\'' +
+                ", sid='" + sid + '\'' +
+                ", data='" + data + '\'' +
+                ", title='" + title + '\'' +
+                ", id=" + id +
+                ", uri=" + uri +
+                ", extra=" + extra +
+                ", timedTextSource=" + timedTextSource +
+                ", assetsPath='" + assetsPath + '\'' +
+                ", rawId=" + rawId +
+                ", startPos=" + startPos +
+                ", isLive=" + isLive +
+                '}';
+    }
 }

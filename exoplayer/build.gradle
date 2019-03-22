@@ -31,6 +31,6 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
     api "com.google.android.exoplayer:exoplayer:2.9.1"
-    api 'com.kk.taurus.playerbase:playerbase:3.3.4.4'
+    api 'com.kk.taurus.playerbase:playerbase:3.3.5'
 //    api project(':playerbase')
 }
