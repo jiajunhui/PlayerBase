@@ -41,8 +41,6 @@ demo示例集成了播放控制组件**ControllerCover**、加载中组件**Load
 
 # Demo下载
 [Demo下载](http://fir.im/lmhz)
-<br>
-<img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/qrcode.png" width="180" height="180">
 
 # QQ交流群（600201778）
 <img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/qrcode_qq_group.jpg" width="270" height="370">
@@ -90,7 +88,7 @@ dependencies {
   //---------如果使用ExoPlayer解码，使用以下依赖。---------
   //该依赖包含exoplayer解码和MediaPlayer解码
   //注意exoplayer的最小支持SDK版本为16
-  implementation 'cn.jiajunhui:exoplayer:335_291_008'
+  implementation 'cn.jiajunhui:exoplayer:335_291_009'
 
   
   //---------如果使用ijkPlayer解码，使用以下依赖。---------
