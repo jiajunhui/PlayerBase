@@ -30,6 +30,12 @@ public interface OnTouchGestureListener {
     void onSingleTapUp(MotionEvent event);
 
     /**
+     * on gesture long press
+     * @param event
+     */
+    void onLongPress(MotionEvent event);
+
+    /**
      * on gesture double tap
      * @param event
      */

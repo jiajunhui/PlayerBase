@@ -46,6 +46,7 @@ import com.google.android.exoplayer2.upstream.AssetDataSource;
 import com.google.android.exoplayer2.upstream.DataSpec;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.RawResourceDataSource;
 import com.google.android.exoplayer2.util.Util;
@@ -161,7 +162,10 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
         if(extra!=null && extra.size()>0 &&
                 ("http".equalsIgnoreCase(scheme)||"https".equalsIgnoreCase(scheme))){
             dataSourceFactory = new DefaultHttpDataSourceFactory(
-                    Util.getUserAgent(mAppContext, mAppContext.getPackageName()));
+                    Util.getUserAgent(mAppContext, mAppContext.getPackageName()),
+                    DefaultHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS,
+                    DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS,
+                    true);
             ((DefaultHttpDataSourceFactory)dataSourceFactory).getDefaultRequestProperties().set(extra);
         }
 

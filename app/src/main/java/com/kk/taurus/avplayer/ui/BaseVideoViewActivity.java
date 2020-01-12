@@ -189,19 +189,22 @@ public class BaseVideoViewActivity extends AppCompatActivity implements
                 mVideoView.setAspectRatio(AspectRatio.AspectRatio_ORIGIN);
                 break;
             case SettingItem.CODE_PLAYER_MEDIA_PLAYER:
-                if(mVideoView.switchDecoder(PlayerConfig.DEFAULT_PLAN_ID)){
-                    replay();
-                }
+                replay();
+//                if(mVideoView.switchDecoder(PlayerConfig.DEFAULT_PLAN_ID)){
+//                    replay();
+//                }
                 break;
             case SettingItem.CODE_PLAYER_IJK_PLAYER:
-                if(mVideoView.switchDecoder(App.PLAN_ID_IJK)){
-                    replay();
-                }
+                replay();
+//                if(mVideoView.switchDecoder(App.PLAN_ID_IJK)){
+//                    replay();
+//                }
                 break;
             case SettingItem.CODE_PLAYER_EXO_PLAYER:
-                if(mVideoView.switchDecoder(App.PLAN_ID_EXO)){
-                    replay();
-                }
+                replay();
+//                if(mVideoView.switchDecoder(App.PLAN_ID_EXO)){
+//                    replay();
+//                }
                 break;
             case SettingItem.CODE_SPEED_0_5:
                 mVideoView.setSpeed(0.5f);

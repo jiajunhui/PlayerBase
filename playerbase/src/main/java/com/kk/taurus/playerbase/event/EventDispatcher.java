@@ -160,6 +160,16 @@ public final class EventDispatcher implements IEventDispatcher{
     }
 
     @Override
+    public void dispatchTouchEventOnLongPress(final MotionEvent event) {
+        filterImplOnTouchEventListener(new IReceiverGroup.OnLoopListener() {
+            @Override
+            public void onEach(IReceiver receiver) {
+                ((OnTouchGestureListener)receiver).onLongPress(event);
+            }
+        });
+    }
+
+    @Override
     public void dispatchTouchEventOnDoubleTabUp(final MotionEvent event) {
         filterImplOnTouchEventListener(new IReceiverGroup.OnLoopListener() {
             @Override

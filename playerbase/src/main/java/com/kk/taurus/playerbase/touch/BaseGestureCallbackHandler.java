@@ -54,6 +54,12 @@ public class BaseGestureCallbackHandler extends GestureDetector.SimpleOnGestureL
     }
 
     @Override
+    public void onLongPress(MotionEvent e) {
+        super.onLongPress(e);
+        
+    }
+
+    @Override
     public boolean onDoubleTap(MotionEvent e) {
         if(mOnTouchGestureListener !=null){
             mOnTouchGestureListener.onDoubleTap(e);

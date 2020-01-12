@@ -327,14 +327,18 @@ public class SysMediaPlayer extends BaseInternalPlayer {
 
     @Override
     public void stop() {
-        if(available() &&
-                (getState()== STATE_PREPARED
-                        || getState()== STATE_STARTED
-                        || getState()== STATE_PAUSED
-                        || getState()== STATE_PLAYBACK_COMPLETE)){
-            mMediaPlayer.stop();
-            updateStatus(STATE_STOPPED);
-            submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_STOP, null);
+        try {
+            if(available() &&
+                    (getState()== STATE_PREPARED
+                            || getState()== STATE_STARTED
+                            || getState()== STATE_PAUSED
+                            || getState()== STATE_PLAYBACK_COMPLETE)){
+                mMediaPlayer.stop();
+                updateStatus(STATE_STOPPED);
+                submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_STOP, null);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
         mTargetState = STATE_STOPPED;
     }

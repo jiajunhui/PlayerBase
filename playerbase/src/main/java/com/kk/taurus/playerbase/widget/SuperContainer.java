@@ -302,6 +302,12 @@ public class SuperContainer extends FrameLayout implements OnTouchGestureListene
     }
 
     @Override
+    public void onLongPress(MotionEvent event) {
+        if(mEventDispatcher!=null)
+            mEventDispatcher.dispatchTouchEventOnLongPress(event);
+    }
+
+    @Override
     public void onDoubleTap(MotionEvent event) {
         if(mEventDispatcher!=null)
             mEventDispatcher.dispatchTouchEventOnDoubleTabUp(event);

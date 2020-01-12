@@ -17,6 +17,11 @@ public class VideoBean implements Serializable {
         this.path = path;
     }
 
+    public VideoBean(String displayName, String path) {
+        this.displayName = displayName;
+        this.path = path;
+    }
+
     public String getDisplayName() {
         return displayName;
     }

@@ -3,7 +3,6 @@ package com.kk.taurus.avplayer.adapter;
 import android.content.Context;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -12,8 +11,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.kk.taurus.avplayer.R;
 import com.kk.taurus.avplayer.bean.VideoBean;
 import com.kk.taurus.avplayer.utils.ImageDisplayEngine;
@@ -103,19 +100,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.VideoItemHolde
         ViewCompat.setElevation(holder.card, PUtil.dip2px(mContext, 3));
         updateWH(holder);
         final VideoBean item = getItem(position);
-        if(TextUtils.isEmpty(item.getCover())){
-            Glide.with(mContext)
-                    .setDefaultRequestOptions(
-                            new RequestOptions()
-                                    .frame(1500*1000)
-                                    .centerCrop()
-                                    .error(R.mipmap.ic_launcher)
-                                    .placeholder(R.mipmap.ic_launcher))
-                    .load(item.getPath())
-                    .into(holder.albumImage);
-        }else{
-            ImageDisplayEngine.display(mContext, holder.albumImage, item.getCover(), R.mipmap.ic_launcher);
-        }
+        ImageDisplayEngine.display(mContext, holder.albumImage, item.getPath(), R.mipmap.ic_launcher);
         holder.title.setText(item.getDisplayName());
         holder.layoutContainer.removeAllViews();
         holder.playIcon.setVisibility(mPlayPosition==position?View.GONE:View.VISIBLE);

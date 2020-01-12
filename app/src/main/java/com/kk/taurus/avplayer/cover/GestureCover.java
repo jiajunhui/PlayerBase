@@ -246,6 +246,11 @@ public class GestureCover extends BaseCover implements OnTouchGestureListener {
     }
 
     @Override
+    public void onLongPress(MotionEvent event) {
+
+    }
+
+    @Override
     public void onDoubleTap(MotionEvent event) {
 
     }
