@@ -88,7 +88,7 @@ dependencies {
   //---------如果使用ExoPlayer解码，使用以下依赖。---------
   //该依赖包含exoplayer解码和MediaPlayer解码
   //注意exoplayer的最小支持SDK版本为16
-  implementation 'cn.jiajunhui:exoplayer:336_291_010'
+  implementation 'cn.jiajunhui:exoplayer:336_2111_011'
 
   
   //---------如果使用ijkPlayer解码，使用以下依赖。---------

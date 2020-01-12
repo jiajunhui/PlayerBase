@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.kk.taurus.avplayer.App;
 import com.kk.taurus.avplayer.R;
 import com.kk.taurus.avplayer.cover.ControllerCover;
 import com.kk.taurus.avplayer.play.DataInter;
@@ -21,6 +22,7 @@ import com.kk.taurus.avplayer.utils.DataUtils;
 import com.kk.taurus.avplayer.utils.PUtil;
 import com.kk.taurus.playerbase.assist.InterEvent;
 import com.kk.taurus.playerbase.assist.OnVideoViewEventHandler;
+import com.kk.taurus.playerbase.config.PlayerConfig;
 import com.kk.taurus.playerbase.entity.DataSource;
 import com.kk.taurus.playerbase.event.OnPlayerEventListener;
 import com.kk.taurus.playerbase.player.IPlayer;
@@ -187,22 +189,19 @@ public class BaseVideoViewActivity extends AppCompatActivity implements
                 mVideoView.setAspectRatio(AspectRatio.AspectRatio_ORIGIN);
                 break;
             case SettingItem.CODE_PLAYER_MEDIA_PLAYER:
-                replay();
-//                if(mVideoView.switchDecoder(PlayerConfig.DEFAULT_PLAN_ID)){
-//                    replay();
-//                }
+                if(mVideoView.switchDecoder(PlayerConfig.DEFAULT_PLAN_ID)){
+                    replay();
+                }
                 break;
             case SettingItem.CODE_PLAYER_IJK_PLAYER:
-                replay();
-//                if(mVideoView.switchDecoder(App.PLAN_ID_IJK)){
-//                    replay();
-//                }
+                if(mVideoView.switchDecoder(App.PLAN_ID_IJK)){
+                    replay();
+                }
                 break;
             case SettingItem.CODE_PLAYER_EXO_PLAYER:
-                replay();
-//                if(mVideoView.switchDecoder(App.PLAN_ID_EXO)){
-//                    replay();
-//                }
+                if(mVideoView.switchDecoder(App.PLAN_ID_EXO)){
+                    replay();
+                }
                 break;
             case SettingItem.CODE_SPEED_0_5:
                 mVideoView.setSpeed(0.5f);
