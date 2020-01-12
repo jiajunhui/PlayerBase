@@ -18,7 +18,7 @@ package com.kk.taurus.playerbase.receiver;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.IntRange;
+import androidx.annotation.IntRange;
 import android.view.View;
 
 import com.kk.taurus.playerbase.assist.InterEvent;

@@ -17,8 +17,8 @@
 package com.kk.taurus.playerbase.receiver;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * Created by Taurus on 2018/3/17.

@@ -16,7 +16,7 @@
 
 package com.kk.taurus.playerbase.config;
 
-import android.support.v4.util.SparseArrayCompat;
+import androidx.collection.SparseArrayCompat;
 
 import com.kk.taurus.playerbase.entity.DecoderPlan;
 import com.kk.taurus.playerbase.player.SysMediaPlayer;

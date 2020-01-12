@@ -19,8 +19,8 @@ package com.kk.taurus.playerbase.style;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.support.v4.view.ViewCompat;
+import androidx.annotation.RequiresApi;
+import androidx.core.view.ViewCompat;
 import android.view.View;
 
 /**
