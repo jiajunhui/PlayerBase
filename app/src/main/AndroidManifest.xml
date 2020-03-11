@@ -75,6 +75,7 @@
         <activity
             android:name=".ui.TestPlayActivity"
             android:exported="true"/>
+        <activity android:name=".ui.MultiPlayActivity" />
     </application>
 
 </manifest>

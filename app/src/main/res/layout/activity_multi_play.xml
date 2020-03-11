@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:orientation="horizontal">
+        <com.kk.taurus.playerbase.widget.BaseVideoView
+            android:id="@+id/videoView01"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#000000"/>
+        <com.kk.taurus.playerbase.widget.BaseVideoView
+            android:id="@+id/videoView02"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginLeft="2dp"
+            android:background="#000000"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="2dp"
+        android:orientation="horizontal">
+        <com.kk.taurus.playerbase.widget.BaseVideoView
+            android:id="@+id/videoView03"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#000000"/>
+        <com.kk.taurus.playerbase.widget.BaseVideoView
+            android:id="@+id/videoView04"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginLeft="2dp"
+            android:background="#000000"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="2dp"
+        android:orientation="horizontal">
+        <com.kk.taurus.playerbase.widget.BaseVideoView
+            android:id="@+id/videoView05"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#000000"/>
+        <com.kk.taurus.playerbase.widget.BaseVideoView
+            android:id="@+id/videoView06"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginLeft="2dp"
+            android:background="#000000"/>
+    </LinearLayout>
+
+</LinearLayout>
