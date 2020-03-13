@@ -56,6 +56,9 @@
 # 这个过滤器是谷歌推荐的算法，一般不做更改
 -optimizations !code/simplification/cast,!field/*,!class/merging/*
 
+# 忽略警告
+-ignorewarnings
+
 
 #############################################
 #

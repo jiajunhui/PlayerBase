@@ -145,18 +145,18 @@ public class GestureCover extends BaseCover implements OnTouchGestureListener {
     protected void onCoverAttachedToWindow() {
         super.onCoverAttachedToWindow();
         getGroupValue().registerOnGroupValueUpdateListener(mOnGroupValueUpdateListener);
-        getView().getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                notifyWH();
-                getView().getViewTreeObserver().removeOnGlobalLayoutListener(this);
-            }
-        });
+        notifyWH();
     }
 
     private void notifyWH() {
-        mWidth = getView().getWidth();
-        mHeight = getView().getHeight();
+        getView().getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                mWidth = getView().getWidth();
+                mHeight = getView().getHeight();
+                getView().getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
     }
 
     @Override
