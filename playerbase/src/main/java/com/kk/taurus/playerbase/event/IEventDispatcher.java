@@ -17,6 +17,7 @@
 package com.kk.taurus.playerbase.event;
 
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 import com.kk.taurus.playerbase.receiver.IReceiverGroup;
@@ -40,4 +41,7 @@ public interface IEventDispatcher {
     void dispatchTouchEventOnDown(MotionEvent event);
     void dispatchTouchEventOnScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY);
     void dispatchTouchEventOnEndGesture();
+
+    void dispatchKeyDownEvent(int keyCode, KeyEvent event);
+    void dispatchKeyUpEvent(int keyCode, KeyEvent event);
 }

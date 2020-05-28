@@ -17,12 +17,14 @@
 package com.kk.taurus.playerbase.event;
 
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 import com.kk.taurus.playerbase.log.DebugLog;
 import com.kk.taurus.playerbase.player.OnTimerUpdateListener;
 import com.kk.taurus.playerbase.receiver.IReceiver;
 import com.kk.taurus.playerbase.receiver.IReceiverGroup;
+import com.kk.taurus.playerbase.touch.OnKeyEventListener;
 import com.kk.taurus.playerbase.touch.OnTouchGestureListener;
 
 /**
@@ -210,11 +212,45 @@ public final class EventDispatcher implements IEventDispatcher{
         });
     }
 
+    @Override
+    public void dispatchKeyDownEvent(final int keyCode, final KeyEvent event) {
+        filterImplOnKeyEventListener(new IReceiverGroup.OnLoopListener() {
+            @Override
+            public void onEach(IReceiver receiver) {
+                ((OnKeyEventListener) receiver).onKeyDownInCover(keyCode, event);
+            }
+        });
+    }
+
+    @Override
+    public void dispatchKeyUpEvent(final int keyCode, final KeyEvent event) {
+        filterImplOnKeyEventListener(new IReceiverGroup.OnLoopListener() {
+            @Override
+            public void onEach(IReceiver receiver) {
+                ((OnKeyEventListener) receiver).onKeyUpInCover(keyCode, event);
+            }
+        });
+    }
+
     private void filterImplOnTouchEventListener(final IReceiverGroup.OnLoopListener onLoopListener){
         mReceiverGroup.forEach(new IReceiverGroup.OnReceiverFilter() {
             @Override
             public boolean filter(IReceiver receiver) {
                 return receiver instanceof OnTouchGestureListener;
+            }
+        }, new IReceiverGroup.OnLoopListener() {
+            @Override
+            public void onEach(IReceiver receiver) {
+                onLoopListener.onEach(receiver);
+            }
+        });
+    }
+
+    private void filterImplOnKeyEventListener(final IReceiverGroup.OnLoopListener onLoopListener){
+        mReceiverGroup.forEach(new IReceiverGroup.OnReceiverFilter() {
+            @Override
+            public boolean filter(IReceiver receiver) {
+                return receiver instanceof OnKeyEventListener;
             }
         }, new IReceiverGroup.OnLoopListener() {
             @Override

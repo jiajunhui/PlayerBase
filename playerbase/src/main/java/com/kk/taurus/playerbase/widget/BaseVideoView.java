@@ -610,4 +610,14 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
     public void setElevationShadow(int backgroundColor, float elevation) {
         mStyleSetter.setElevationShadow(backgroundColor, elevation);
     }
+
+    @Override
+    public void setFocusable(boolean focusable) {
+        mSuperContainer.setFocusable(focusable);
+    }
+
+    @Override
+    public boolean requestFocus(int direction, Rect previouslyFocusedRect) {
+        return mSuperContainer.requestFocus(direction, previouslyFocusedRect);
+    }
 }

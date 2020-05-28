@@ -76,6 +76,8 @@
             android:name=".ui.TestPlayActivity"
             android:exported="true"/>
         <activity android:name=".ui.MultiPlayActivity" />
+        <activity android:name=".ui.TvBaseVideoViewActivity"
+            android:screenOrientation="landscape"/>
     </application>
 
 </manifest>
