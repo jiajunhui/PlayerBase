@@ -2,6 +2,7 @@ package com.kk.taurus.avplayer.ui;
 
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +23,7 @@ public class TvBaseVideoViewActivity extends AppCompatActivity {
     private ReceiverGroup mReceiverGroup;
 
     private boolean hasStart;
+    private boolean videoViewKeyEnable = true;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +53,9 @@ public class TvBaseVideoViewActivity extends AppCompatActivity {
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getKeyCode() == KeyEvent.KEYCODE_MENU && event.getAction() == KeyEvent.ACTION_DOWN) {
-            mVideoView.getSuperContainer().setKeyEventEnable(false);
+            videoViewKeyEnable = !videoViewKeyEnable;
+            mVideoView.getSuperContainer().setKeyEventEnable(videoViewKeyEnable);
+            Toast.makeText(this, videoViewKeyEnable ? "播放器可以分发" : "播放器移除分发", Toast.LENGTH_SHORT).show();
         }
         return super.dispatchKeyEvent(event);
     }
