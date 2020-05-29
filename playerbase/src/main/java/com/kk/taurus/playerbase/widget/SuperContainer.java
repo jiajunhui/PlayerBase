@@ -208,7 +208,7 @@ public class SuperContainer extends FrameLayout implements OnTouchGestureListene
         mReceiverGroup.forEach(new IReceiverGroup.OnLoopListener() {
             @Override
             public void onEach(IReceiver receiver) {
-                attachReceiver(receiver);
+                attachReceiver(receiver, false);
             }
         });
         //add a receiver group change listener, dynamic attach a receiver
@@ -222,7 +222,7 @@ public class SuperContainer extends FrameLayout implements OnTouchGestureListene
             new IReceiverGroup.OnReceiverGroupChangeListener() {
         @Override
         public void onReceiverAdd(String key, IReceiver receiver) {
-            attachReceiver(receiver);
+            attachReceiver(receiver, true);
         }
         @Override
         public void onReceiverRemove(String key, IReceiver receiver) {
@@ -232,14 +232,14 @@ public class SuperContainer extends FrameLayout implements OnTouchGestureListene
 
     //attach receiver, bind receiver event listener
     // and add cover container if it is a cover instance.
-    private void attachReceiver(IReceiver receiver){
+    private void attachReceiver(IReceiver receiver, boolean insert){
         //bind the ReceiverEventListener for receivers connect.
         receiver.bindReceiverEventListener(mInternalReceiverEventListener);
         receiver.bindStateGetter(mStateGetter);
         if(receiver instanceof BaseCover){
             BaseCover cover = (BaseCover) receiver;
             //add cover view to cover strategy container.
-            mCoverStrategy.addCover(cover);
+            mCoverStrategy.addCover(cover, insert);
             PLog.d(TAG, "on cover attach : " + cover.getTag() + " ," + cover.getCoverLevel());
         }
     }

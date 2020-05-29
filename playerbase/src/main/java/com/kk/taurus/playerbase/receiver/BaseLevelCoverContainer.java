@@ -43,7 +43,7 @@ public abstract class BaseLevelCoverContainer extends AbsCoverContainer {
     }
 
     @Override
-    protected void onAvailableCoverAdd(BaseCover cover) {
+    protected void onAvailableCoverAdd(BaseCover cover, boolean insert) {
         PLog.d(TAG,"on available cover add : now count = " + getCoverCount());
     }
 

@@ -189,7 +189,7 @@ public class ErrorCover extends BaseCover {
     }
 
     @Override
-    public int getCoverLevel() {
-        return levelHigh(0);
+    public int getCoverLayer() {
+        return COVER_LEVEL_HIGH;
     }
 }

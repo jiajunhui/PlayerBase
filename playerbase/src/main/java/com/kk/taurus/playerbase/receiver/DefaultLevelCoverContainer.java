@@ -67,19 +67,40 @@ public class DefaultLevelCoverContainer extends BaseLevelCoverContainer {
     }
 
     @Override
-    protected void onAvailableCoverAdd(BaseCover cover) {
-        super.onAvailableCoverAdd(cover);
-        int level = cover.getCoverLevel();
-        if(level < ICover.COVER_LEVEL_MEDIUM){
-            mLevelLowCoverContainer.addView(cover.getView(),getNewMatchLayoutParams());
-            PLog.d(TAG, "Low Level Cover Add : level = " + level);
-        }else if(level < ICover.COVER_LEVEL_HIGH){
-            mLevelMediumCoverContainer.addView(cover.getView(),getNewMatchLayoutParams());
-            PLog.d(TAG, "Medium Level Cover Add : level = " + level);
-        }else{
-            mLevelHighCoverContainer.addView(cover.getView(),getNewMatchLayoutParams());
-            PLog.d(TAG, "High Level Cover Add : level = " + level);
+    protected void onAvailableCoverAdd(BaseCover cover, boolean insert) {
+        super.onAvailableCoverAdd(cover, insert);
+        int mode = cover.getCoverLayer();
+        ViewGroup viewGroup;
+        switch (mode) {
+            default:
+            case ICover.COVER_LEVEL_LOW:
+                viewGroup = mLevelLowCoverContainer;
+                break;
+            case ICover.COVER_LEVEL_MEDIUM:
+                viewGroup = mLevelLowCoverContainer;
+                break;
+            case ICover.COVER_LEVEL_HIGH:
+                viewGroup = mLevelHighCoverContainer;
+                break;
         }
+        addView(viewGroup, cover, insert);
+    }
+
+    private void addView(ViewGroup parent, BaseCover cover, boolean insert) {
+        int priority = cover.getCoverPriority();
+        int childCount = parent.getChildCount();
+        int insetPosition = -1;
+        if (insert) {
+            for (int i = 0; i < childCount; i++) {
+                int viewPriority = (int) parent.getChildAt(i).getTag();
+                if (priority < viewPriority) {
+                    insetPosition = i;
+                    break;
+                }
+            }
+            PLog.d(TAG, "insert position " + insetPosition);
+        }
+        parent.addView(cover.getView(), insetPosition);
     }
 
     @Override

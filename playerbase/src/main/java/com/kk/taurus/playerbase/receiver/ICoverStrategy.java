@@ -24,7 +24,7 @@ import android.view.ViewGroup;
 
 public interface ICoverStrategy {
 
-    void addCover(BaseCover cover);
+    void addCover(BaseCover cover, boolean insert);
     void removeCover(BaseCover cover);
     void removeAllCovers();
     boolean isContainsCover(BaseCover cover);

@@ -112,7 +112,12 @@ public class CompleteCover extends BaseCover {
     }
 
     @Override
-    public int getCoverLevel() {
-        return levelMedium(20);
+    public int getCoverLayer() {
+        return COVER_LEVEL_MEDIUM;
+    }
+
+    @Override
+    public int getCoverPriority() {
+        return 20;
     }
 }

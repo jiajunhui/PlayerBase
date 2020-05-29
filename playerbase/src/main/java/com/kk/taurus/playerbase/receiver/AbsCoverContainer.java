@@ -40,17 +40,17 @@ public abstract class AbsCoverContainer implements ICoverStrategy {
     }
 
     @Override
-    public void addCover(BaseCover cover) {
+    public void addCover(BaseCover cover, boolean insert) {
         onCoverAdd(cover);
         if(isAvailableCover(cover)){
             mCovers.add(cover);
-            onAvailableCoverAdd(cover);
+            onAvailableCoverAdd(cover, insert);
         }
     }
 
     protected abstract void onCoverAdd(BaseCover cover);
 
-    protected abstract void onAvailableCoverAdd(BaseCover cover);
+    protected abstract void onAvailableCoverAdd(BaseCover cover, boolean insert);
 
     @Override
     public void removeCover(BaseCover cover) {

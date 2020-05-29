@@ -18,25 +18,33 @@ package com.kk.taurus.playerbase.receiver;
 
 import android.view.View;
 
+import androidx.annotation.IntDef;
+import androidx.annotation.IntRange;
+
 /**
  * Created by Taurus on 2017/3/24.
  */
 
 public interface ICover {
 
-    //the max cover priority value per level container.
-    int LEVEL_MAX = 1 << 5;
+    int MODE_SHIFT = 6;
+    int MODE_MASK = 0x3 << MODE_SHIFT;
 
     //level low container start value.
-    int COVER_LEVEL_LOW     = 0;
+    int COVER_LEVEL_LOW     = 0 << MODE_SHIFT;
 
     //level medium container start value.
-    int COVER_LEVEL_MEDIUM  = 1 << 5;
+    int COVER_LEVEL_MEDIUM  = 1 << MODE_SHIFT;
 
     //level high container start value.
-    int COVER_LEVEL_HIGH    = 1 << 6;
+    int COVER_LEVEL_HIGH    = 2 << MODE_SHIFT;
+
+    @IntDef({COVER_LEVEL_LOW, COVER_LEVEL_MEDIUM, COVER_LEVEL_HIGH})
+    public @interface CoverLevelSpec {}
 
     void setCoverVisibility(int visibility);
     View getView();
     int getCoverLevel();
+    @CoverLevelSpec int getCoverLayer();
+    @IntRange(from = 0, to = 63) int getCoverPriority();
 }

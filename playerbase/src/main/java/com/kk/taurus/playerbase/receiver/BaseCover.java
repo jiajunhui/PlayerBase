@@ -18,7 +18,6 @@ package com.kk.taurus.playerbase.receiver;
 
 import android.content.Context;
 import android.os.Bundle;
-import androidx.annotation.IntRange;
 import android.view.View;
 
 import com.kk.taurus.playerbase.assist.InterEvent;
@@ -35,6 +34,7 @@ public abstract class BaseCover extends BaseReceiver implements
     public BaseCover(Context context) {
         super(context);
         mCoverView = onCreateCoverView(context);
+        mCoverView.setTag(getCoverPriority());
         mCoverView.addOnAttachStateChangeListener(this);
     }
 
@@ -129,47 +129,27 @@ public abstract class BaseCover extends BaseReceiver implements
     protected abstract View onCreateCoverView(Context context);
 
     @Override
-    public int getCoverLevel() {
+    public final int getCoverLevel() {
+        return makeLevelSpec(getCoverLayer(), getCoverPriority());
+    }
+
+    /**
+     * MODE_MASK  -->  11000000
+     * ~MODE_MASK  -->  00111111
+     * level & MODE_MASK  -->  01000000 & 11000000 = 01000000  这个操作是取高两位信息
+     * priority & ~MODE_MASK  -->  00000011 & 00111111  取低两位信息
+     * (level & MODE_MASK) | (priority & ~MODE_MASK)  高低两位结合
+     */
+    private int makeLevelSpec(int mode, int priority){
+        return (mode & MODE_MASK) | (priority & ~MODE_MASK);
+    }
+
+    public @CoverLevelSpec int getCoverLayer(){
         return ICover.COVER_LEVEL_LOW;
     }
 
-    /**
-     * setting the priority in COVER_LEVEL_LOW.
-     * The high priority cover will be placed above,
-     * otherwise the lower priority will be placed below.
-     *
-     * @param priority range from 0-31
-     * @return
-     */
-    protected final int levelLow(@IntRange(from = 0, to = 31)int priority){
-        return levelPriority(ICover.COVER_LEVEL_LOW, priority);
-    }
-
-    /**
-     * setting the priority in COVER_LEVEL_MEDIUM.
-     * The high priority cover will be placed above,
-     * otherwise the lower priority will be placed below.
-     *
-     * @param priority range from 0-31
-     * @return
-     */
-    protected final int levelMedium(@IntRange(from = 0, to = 31)int priority){
-        return levelPriority(ICover.COVER_LEVEL_MEDIUM, priority);
-    }
-
-    /**
-     * setting the priority in COVER_LEVEL_HIGH.
-     * The high priority cover will be placed above,
-     * otherwise the lower priority will be placed below.
-     *
-     * @param priority range from 0-31
-     * @return
-     */
-    protected final int levelHigh(@IntRange(from = 0, to = 31)int priority){
-        return levelPriority(ICover.COVER_LEVEL_HIGH, priority);
-    }
-
-    private int levelPriority(int level, int priority){
-        return level + (priority%LEVEL_MAX);
+    @Override
+    public int getCoverPriority() {
+        return 0;
     }
 }
