@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
         android:id="@+id/cover_player_controller_top_container"
         android:layout_width="match_parent"
         android:layout_height="36dp"
         android:visibility="gone"
+        tools:visibility="visible"
         android:gravity="center_vertical"
         android:background="@drawable/shape_controller_top_gradient"
         android:orientation="horizontal">
@@ -42,6 +44,7 @@
         android:layout_width="match_parent"
         android:layout_height="36dp"
         android:visibility="gone"
+        tools:visibility="visible"
         android:layout_alignParentBottom="true"
         android:background="@drawable/shape_controller_bottom_gradient"
         android:gravity="center_vertical"
@@ -104,6 +107,7 @@
         android:paddingStart="0dp"
         android:progressDrawable="@drawable/style_video_player_video_bottom_seekbar"
         android:thumb="@null"
+        tools:visibility="visible"
         android:visibility="gone" />
 
 </RelativeLayout>

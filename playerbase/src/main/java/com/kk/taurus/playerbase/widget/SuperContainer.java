@@ -20,6 +20,7 @@ import android.content.Context;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,8 @@ import com.kk.taurus.playerbase.extension.ProducerEventSender;
 import com.kk.taurus.playerbase.log.PLog;
 import com.kk.taurus.playerbase.receiver.CoverComparator;
 import com.kk.taurus.playerbase.receiver.StateGetter;
+import com.kk.taurus.playerbase.touch.ContainerKeyEventHelper;
+import com.kk.taurus.playerbase.touch.OnKeyEventListener;
 import com.kk.taurus.playerbase.touch.OnTouchGestureListener;
 import com.kk.taurus.playerbase.receiver.BaseCover;
 import com.kk.taurus.playerbase.receiver.DefaultLevelCoverContainer;
@@ -50,7 +53,7 @@ import com.kk.taurus.playerbase.touch.ContainerTouchHelper;
  * Created by Taurus on 2018/3/17.
  */
 
-public class SuperContainer extends FrameLayout implements OnTouchGestureListener {
+public class SuperContainer extends FrameLayout implements OnTouchGestureListener, OnKeyEventListener {
 
     final String TAG = "SuperContainer";
 
@@ -62,6 +65,7 @@ public class SuperContainer extends FrameLayout implements OnTouchGestureListene
 
     private OnReceiverEventListener mOnReceiverEventListener;
     private ContainerTouchHelper mTouchHelper;
+    private ContainerKeyEventHelper mKeyHelper;
 
     private IProducerGroup mProducerGroup;
 
@@ -86,11 +90,22 @@ public class SuperContainer extends FrameLayout implements OnTouchGestureListene
     protected void initGesture(Context context){
         mTouchHelper = new ContainerTouchHelper(context,getGestureCallBackHandler());
         setGestureEnable(true);
+        mKeyHelper = new ContainerKeyEventHelper(this);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         return mTouchHelper.onTouch(event);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        return mKeyHelper.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        return mKeyHelper.onKeyUp(keyCode, event);
     }
 
     protected BaseGestureCallbackHandler getGestureCallBackHandler(){
@@ -103,6 +118,10 @@ public class SuperContainer extends FrameLayout implements OnTouchGestureListene
 
     public void setGestureScrollEnable(boolean enable) {
         mTouchHelper.setGestureScrollEnable(enable);
+    }
+
+    public void setKeyEventEnable(boolean enable){
+        mKeyHelper.setKeyEventEnable(enable);
     }
 
     private void initReceiverContainer(Context context) {
@@ -329,5 +348,17 @@ public class SuperContainer extends FrameLayout implements OnTouchGestureListene
     public void onEndGesture() {
         if(mEventDispatcher!=null)
             mEventDispatcher.dispatchTouchEventOnEndGesture();
+    }
+
+    @Override
+    public void onKeyDownInCover(int keyCode, KeyEvent event) {
+        if(mEventDispatcher!=null)
+            mEventDispatcher.dispatchKeyDownEvent(keyCode,event);
+    }
+
+    @Override
+    public void onKeyUpInCover(int keyCode, KeyEvent event) {
+        if(mEventDispatcher!=null)
+            mEventDispatcher.dispatchKeyUpEvent(keyCode,event);
     }
 }

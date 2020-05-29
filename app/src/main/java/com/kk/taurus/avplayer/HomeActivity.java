@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.kk.taurus.avplayer.ui.InputUrlPlayActivity;
 import com.kk.taurus.avplayer.ui.MultiPlayActivity;
+import com.kk.taurus.avplayer.ui.TvBaseVideoViewActivity;
 import com.kk.taurus.avplayer.ui.ViewPagerPlayActivity;
 import com.kk.taurus.avplayer.ui.listplay.MultiListActivity;
 import com.kk.taurus.avplayer.ui.ShareAnimationActivityA;
@@ -94,6 +95,10 @@ public class HomeActivity extends AppCompatActivity {
 
     public void multiVideoPlay(View view){
         intentTo(MultiPlayActivity.class);
+    }
+
+    public void tvPlayUserBaseVideoView(View view){
+        intentTo(TvBaseVideoViewActivity.class);
     }
 
     public void viewPagerPlay(View view){
