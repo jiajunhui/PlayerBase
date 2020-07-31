@@ -40,7 +40,7 @@ demo示例集成了播放控制组件**ControllerCover**、加载中组件**Load
 * **等功能……**<br>
 
 # Demo下载
-[Demo下载](http://d.alphaqr.com/lmhz)
+[Demo下载](http://d.firim.info/lmhz)
 
 # QQ交流群（600201778）
 <img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/qrcode_qq_group.jpg" width="270" height="370">
