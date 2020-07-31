@@ -73,7 +73,7 @@
             android:name=".ui.ViewPagerPlayActivity"
             android:screenOrientation="portrait"/>
         <activity
-            android:name=".ui.TestPlayActivity"
+            android:name=".ui.MusicPlayActivity"
             android:exported="true"/>
         <activity android:name=".ui.MultiPlayActivity" />
     </application>

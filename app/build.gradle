@@ -9,6 +9,13 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        ndk {
+            //目前手机主流cpu架构是armeabi-v7a，所以通常情况下只考虑armeabi-v7a(除非特殊情况，比如TBS只有armeabi so库)
+            // https://zhuanlan.zhihu.com/p/26833002
+            // 1,如果同时保留 armeabi 和 armeabi-v7a 两个文件夹，则必须保证这两个文件夹中 .so 数量一致
+            // 2,如果只存在armeabi-v7a，则对只提供 armeabi 版本的第三方 .so，原样复制一份到 armeabi-v7a 文件夹
+            abiFilters 'armeabi-v7a'
+        }
     }
     buildTypes {
         release {

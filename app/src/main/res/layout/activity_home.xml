@@ -80,6 +80,18 @@
                 android:textSize="16sp"
                 android:textColor="@color/buttonTextColor"/>
 
+            <Button
+                android:id="@+id/tv_music_play"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:onClick="musicPlay"
+                android:textAllCaps="false"
+                android:text="音乐播放"
+                android:textSize="16sp"
+                android:textColor="@color/buttonTextColor"/>
+
             <TextView
                 android:id="@+id/tv_avPlayer"
                 android:layout_width="match_parent"

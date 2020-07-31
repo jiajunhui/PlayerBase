@@ -1,12 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#000000"
+    android:padding="16dp">
 
-    <com.kk.taurus.playerbase.widget.BaseVideoView
-        android:id="@+id/testVideoView"
+    <EditText
+        android:id="@+id/music_url_et"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#000000"/>
+        android:layout_height="40dp"
+        android:background="#AAAAAA"
+        android:singleLine="true"
+        android:padding="5dp"
+        android:hint="url"
+        android:text="http://music.163.com/song/media/outer/url?id=562598065.mp3"/>
 
-</RelativeLayout>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorPrimary"
+        android:onClick="startPlay"
+        android:textSize="16sp"
+        android:textColor="#FFFFFF"
+        android:text="PLAY"/>
+
+    <com.kk.taurus.avplayer.view.VisualizerView
+        android:id="@+id/visualizerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginBottom="100dp"
+        android:layout_weight="1"/>
+
+</LinearLayout>
