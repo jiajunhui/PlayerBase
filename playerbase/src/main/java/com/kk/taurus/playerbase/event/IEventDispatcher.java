@@ -34,7 +34,7 @@ public interface IEventDispatcher {
     void dispatchProducerData(String key, Object data, IReceiverGroup.OnReceiverFilter onReceiverFilter);
 
 
-    void dispatchTouchEventOnSingleTabUp(MotionEvent event);
+    void dispatchTouchEventOnSingleTapConfirmed(MotionEvent event);
     void dispatchTouchEventOnLongPress(MotionEvent event);
     void dispatchTouchEventOnDoubleTabUp(MotionEvent event);
     void dispatchTouchEventOnDown(MotionEvent event);

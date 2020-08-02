@@ -150,11 +150,11 @@ public final class EventDispatcher implements IEventDispatcher{
     //-----------------------------------dispatch gesture touch event-----------------------------------
 
     @Override
-    public void dispatchTouchEventOnSingleTabUp(final MotionEvent event) {
+    public void dispatchTouchEventOnSingleTapConfirmed(final MotionEvent event) {
         filterImplOnTouchEventListener(new IReceiverGroup.OnLoopListener() {
             @Override
             public void onEach(IReceiver receiver) {
-                ((OnTouchGestureListener)receiver).onSingleTapUp(event);
+                ((OnTouchGestureListener)receiver).onSingleTapConfirmed(event);
             }
         });
     }

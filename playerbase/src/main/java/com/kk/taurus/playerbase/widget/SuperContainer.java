@@ -296,9 +296,9 @@ public class SuperContainer extends FrameLayout implements OnTouchGestureListene
     //----------------------------------dispatch gesture touch event---------------------------------
 
     @Override
-    public void onSingleTapUp(MotionEvent event) {
-        if(mEventDispatcher!=null)
-            mEventDispatcher.dispatchTouchEventOnSingleTabUp(event);
+    public void onSingleTapConfirmed(MotionEvent event) {
+        if(mEventDispatcher != null)
+            mEventDispatcher.dispatchTouchEventOnSingleTapConfirmed(event);
     }
 
     @Override
