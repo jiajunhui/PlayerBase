@@ -34,6 +34,7 @@ import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.MergingMediaSource;
+import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.source.SingleSampleMediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.source.dash.DashMediaSource;
@@ -210,7 +211,7 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
             case C.TYPE_OTHER:
             default:
                 // This is the MediaSource representing the media to be played.
-                return new ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(uri);
+                return new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(uri);
         }
     }
 
@@ -482,17 +483,23 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
                 submitErrorEvent(OnErrorEventListener.ERROR_EVENT_UNKNOWN, null);
                 return;
             }
-            PLog.e(TAG,error.getMessage()==null?"":error.getMessage());
+            String errorMessage = error.getMessage()==null?"":error.getMessage();
+            Throwable cause = error.getCause();
+            String causeMessage = cause!=null?cause.getMessage():"";
+            PLog.e(TAG,errorMessage + ", causeMessage = " + causeMessage);
+            Bundle bundle = BundlePool.obtain();
+            bundle.putString("errorMessage", errorMessage);
+            bundle.putString("causeMessage", causeMessage);
             int type = error.type;
             switch (type){
                 case ExoPlaybackException.TYPE_SOURCE:
-                    submitErrorEvent(OnErrorEventListener.ERROR_EVENT_IO, null);
+                    submitErrorEvent(OnErrorEventListener.ERROR_EVENT_IO, bundle);
                     break;
                 case ExoPlaybackException.TYPE_RENDERER:
-                    submitErrorEvent(OnErrorEventListener.ERROR_EVENT_COMMON, null);
+                    submitErrorEvent(OnErrorEventListener.ERROR_EVENT_COMMON, bundle);
                     break;
                 case ExoPlaybackException.TYPE_UNEXPECTED:
-                    submitErrorEvent(OnErrorEventListener.ERROR_EVENT_UNKNOWN, null);
+                    submitErrorEvent(OnErrorEventListener.ERROR_EVENT_UNKNOWN, bundle);
                     break;
             }
         }

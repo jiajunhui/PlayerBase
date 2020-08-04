@@ -24,6 +24,7 @@ import com.kk.taurus.playerbase.log.PLog;
 import com.kk.taurus.playerbase.player.BaseInternalPlayer;
 
 import java.util.HashMap;
+import java.util.Set;
 
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
@@ -60,6 +61,24 @@ public class IjkPlayer extends BaseInternalPlayer {
     static {
         IjkMediaPlayer.loadLibrariesOnce(null);
         IjkMediaPlayer.native_profileBegin("libijkplayer.so");
+    }
+
+    /**
+     * ijkplayer的配置项设置
+     * ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_PLAYER, "mediacodec", 1);
+     *
+     * @param code      对应setOption方法的第一个参数
+     * @param bundle    对应第二个和第三个参数，key为配置项的名称，比如mediacodec，value为对应的配置值(long类型)
+     */
+    @Override
+    public void option(int code, Bundle bundle) {
+        super.option(code, bundle);
+        if(bundle!=null){
+            Set<String> keySet = bundle.keySet();
+            for(String key : keySet){
+                mMediaPlayer.setOption(code, key, bundle.getLong(key));
+            }
+        }
     }
 
     protected IjkMediaPlayer createPlayer(){

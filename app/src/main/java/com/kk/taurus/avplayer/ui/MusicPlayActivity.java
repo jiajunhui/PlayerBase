@@ -19,6 +19,9 @@ import com.kk.taurus.playerbase.entity.DataSource;
 import com.kk.taurus.playerbase.event.OnErrorEventListener;
 import com.kk.taurus.playerbase.event.OnPlayerEventListener;
 
+/**
+ * 音乐播放示例
+ */
 public class MusicPlayActivity extends AppCompatActivity implements OnPlayerEventListener {
 
     private AVPlayer mPlayer;
@@ -57,16 +60,12 @@ public class MusicPlayActivity extends AppCompatActivity implements OnPlayerEven
         });
 
         initMusicWave();
+        updateVisualizer();
     }
 
     @Override
     public void onPlayerEvent(int eventCode, Bundle bundle) {
-        switch (eventCode){
-            case OnPlayerEventListener.PLAYER_EVENT_ON_PREPARED:
-                releaseVisualizer();
-                updateVisualizer();
-                break;
-        }
+
     }
 
     private void initMusicWave() {
