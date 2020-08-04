@@ -41,7 +41,7 @@ project.ext {
             appcompatVersion = '1.1.0',
 
             playerbaseIjkVersion = '337_088_008',
-            playerbaseExoVersion = '337_2117_012',
+            playerbaseExoVersion = '337_2117_013',
             playerbaseVersion = '3.3.7'
     ]
 

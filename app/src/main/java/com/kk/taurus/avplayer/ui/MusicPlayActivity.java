@@ -18,6 +18,7 @@ import com.kk.taurus.playerbase.AVPlayer;
 import com.kk.taurus.playerbase.entity.DataSource;
 import com.kk.taurus.playerbase.event.OnErrorEventListener;
 import com.kk.taurus.playerbase.event.OnPlayerEventListener;
+import com.kk.taurus.playerbase.log.PLog;
 
 /**
  * 音乐播放示例
@@ -65,7 +66,16 @@ public class MusicPlayActivity extends AppCompatActivity implements OnPlayerEven
 
     @Override
     public void onPlayerEvent(int eventCode, Bundle bundle) {
-
+        PLog.d("MusicPlayActivity", eventCode + "");
+        switch (eventCode){
+            case OnPlayerEventListener.PLAYER_EVENT_ON_START:
+                PLog.d("MusicPlayActivity", "showLoading...");
+                break;
+            case OnPlayerEventListener.PLAYER_EVENT_ON_AUDIO_RENDER_START:
+            case OnPlayerEventListener.PLAYER_EVENT_ON_BUFFERING_END:
+                PLog.d("MusicPlayActivity", "hiddenLoading...");
+                break;
+        }
     }
 
     private void initMusicWave() {

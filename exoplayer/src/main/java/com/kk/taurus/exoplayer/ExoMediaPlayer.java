@@ -31,7 +31,6 @@ import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.RenderersFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.MergingMediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
@@ -419,7 +418,7 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
 
                         if(playWhenReady){
                             updateStatus(STATE_STARTED);
-                            submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_START, null);
+                            submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_AUDIO_RENDER_START, null);
                         }
 
                         if(mStartPos > 0){
