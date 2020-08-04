@@ -26,6 +26,26 @@
         android:textColor="#FFFFFF"
         android:text="PLAY"/>
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorPrimary"
+        android:onClick="volumeIncrease"
+        android:textSize="16sp"
+        android:textColor="#FFFFFF"
+        android:text="音量加"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorPrimary"
+        android:onClick="volumeReduce"
+        android:textSize="16sp"
+        android:textColor="#FFFFFF"
+        android:text="音量减"/>
+
     <com.kk.taurus.avplayer.view.VisualizerView
         android:id="@+id/visualizerView"
         android:layout_width="match_parent"

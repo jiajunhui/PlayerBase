@@ -13,6 +13,7 @@ import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.kk.taurus.avplayer.R;
 import com.kk.taurus.avplayer.play.DataInter;
@@ -241,13 +242,13 @@ public class GestureCover extends BaseCover implements OnTouchGestureListener {
     }
 
     @Override
-    public void onSingleTapUp(MotionEvent event) {
+    public void onSingleTapConfirmed(MotionEvent event) {
 
     }
 
     @Override
     public void onLongPress(MotionEvent event) {
-
+        Toast.makeText(getContext(), "onLongPress", Toast.LENGTH_SHORT).show();
     }
 
     @Override

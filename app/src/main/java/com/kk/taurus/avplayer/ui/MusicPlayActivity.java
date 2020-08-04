@@ -16,6 +16,7 @@ import com.kk.taurus.avplayer.R;
 import com.kk.taurus.avplayer.view.VisualizerView;
 import com.kk.taurus.playerbase.AVPlayer;
 import com.kk.taurus.playerbase.entity.DataSource;
+import com.kk.taurus.playerbase.event.OnErrorEventListener;
 import com.kk.taurus.playerbase.event.OnPlayerEventListener;
 
 public class MusicPlayActivity extends AppCompatActivity implements OnPlayerEventListener {
@@ -33,6 +34,9 @@ public class MusicPlayActivity extends AppCompatActivity implements OnPlayerEven
 
     private int typeIndex;
 
+    private float mVolumeLeft = 0.5f;
+    private float mVolumeRight = 0.5f;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +47,14 @@ public class MusicPlayActivity extends AppCompatActivity implements OnPlayerEven
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         mPlayer = new AVPlayer();
+        mPlayer.setVolume(mVolumeLeft, mVolumeRight);
         mPlayer.setOnPlayerEventListener(this);
+        mPlayer.setOnErrorEventListener(new OnErrorEventListener() {
+            @Override
+            public void onErrorEvent(int eventCode, Bundle bundle) {
+                Toast.makeText(MusicPlayActivity.this, "error:" + (bundle!=null?bundle.toString():""), Toast.LENGTH_SHORT).show();
+            }
+        });
 
         initMusicWave();
     }
@@ -106,6 +117,22 @@ public class MusicPlayActivity extends AppCompatActivity implements OnPlayerEven
         mPlayer.reset();
         mPlayer.setDataSource(dataSource);
         mPlayer.start();
+    }
+
+    public void volumeIncrease(View view){
+        mVolumeLeft += 0.1f;
+        mVolumeRight += 0.1f;
+        mVolumeLeft = Math.min(mVolumeLeft, 1f);
+        mVolumeRight = Math.min(mVolumeRight, 1f);
+        mPlayer.setVolume(mVolumeLeft, mVolumeRight);
+    }
+
+    public void volumeReduce(View view){
+        mVolumeLeft -= 0.1f;
+        mVolumeRight -= 0.1f;
+        mVolumeLeft = Math.max(mVolumeLeft, 0f);
+        mVolumeRight = Math.max(mVolumeRight, 0f);
+        mPlayer.setVolume(mVolumeLeft, mVolumeRight);
     }
 
     @Override

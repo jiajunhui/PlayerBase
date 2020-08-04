@@ -29,6 +29,8 @@ public class SettingItem {
 
     public static final int CODE_VOLUME_SILENT = 600;
     public static final int CODE_VOLUME_RESET = 601;
+    public static final int CODE_VOLUME_INCREASE = 602;
+    public static final int CODE_VOLUME_REDUCE = 603;
 
     public static final int CODE_CONTROLLER_REMOVE = 700;
     public static final int CODE_CONTROLLER_RESET = 701;
@@ -86,6 +88,9 @@ public class SettingItem {
 
         items.add(new SettingItem("静音",CODE_VOLUME_SILENT));
         items.add(new SettingItem("恢复声音",CODE_VOLUME_RESET));
+
+        items.add(new SettingItem("音量加",CODE_VOLUME_INCREASE));
+        items.add(new SettingItem("音量减",CODE_VOLUME_REDUCE));
 
         items.add(new SettingItem("移除Controller组件",CODE_CONTROLLER_REMOVE));
         items.add(new SettingItem("恢复Controller组件",CODE_CONTROLLER_RESET));

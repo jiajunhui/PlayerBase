@@ -480,7 +480,7 @@ public class ControllerCover extends BaseCover implements OnTimerUpdateListener,
     }
 
     @Override
-    public void onSingleTapUp(MotionEvent event) {
+    public void onSingleTapConfirmed(MotionEvent event) {
         if(!mGestureEnable)
             return;
         toggleController();

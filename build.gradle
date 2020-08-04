@@ -31,3 +31,15 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+project.ext {
+
+    lib = [
+            //module versions
+            ijksdkVersion = '0.8.8',
+            exoplayersdkVersion = '2.11.7',
+            appcompatVersion = '1.1.0',
+            playerbaseVersion = '3.3.6'
+    ]
+
+}

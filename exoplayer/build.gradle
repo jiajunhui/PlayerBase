@@ -30,10 +30,10 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    api 'com.google.android.exoplayer:exoplayer-core:2.11.1'
-    api 'com.google.android.exoplayer:exoplayer-dash:2.11.1'
-    api 'com.google.android.exoplayer:exoplayer-hls:2.11.1'
-    api 'com.google.android.exoplayer:exoplayer-smoothstreaming:2.11.1'
-    api 'com.kk.taurus.playerbase:playerbase:3.3.6'
-//    api project(':playerbase')
+    api "com.google.android.exoplayer:exoplayer-core:$exoplayersdkVersion"
+    api "com.google.android.exoplayer:exoplayer-dash:$exoplayersdkVersion"
+    api "com.google.android.exoplayer:exoplayer-hls:$exoplayersdkVersion"
+    api "com.google.android.exoplayer:exoplayer-smoothstreaming:$exoplayersdkVersion"
+//    api "com.kk.taurus.playerbase:playerbase:$playerbaseVersion"
+    api project(':playerbase')
 }

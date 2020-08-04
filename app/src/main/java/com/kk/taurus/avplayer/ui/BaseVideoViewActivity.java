@@ -50,6 +50,9 @@ public class BaseVideoViewActivity extends AppCompatActivity implements
     private RecyclerView mRecycler;
     private SettingAdapter mAdapter;
 
+    private float mVolumeLeft = 0.5f;
+    private float mVolumeRight = 0.5f;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +76,7 @@ public class BaseVideoViewActivity extends AppCompatActivity implements
         mVideoView.setEventHandler(onVideoViewEventHandler);
         mVideoView.setOnPlayerEventListener(this);
 
-//        mVideoView.setVolume(0f, 0f);
+        mVideoView.setVolume(mVolumeLeft, mVolumeRight);
     }
 
     private void initPlay(){
@@ -217,6 +220,20 @@ public class BaseVideoViewActivity extends AppCompatActivity implements
                 break;
             case SettingItem.CODE_VOLUME_RESET:
                 mVideoView.setVolume(1f, 1f);
+                break;
+            case SettingItem.CODE_VOLUME_INCREASE:
+                mVolumeLeft += 0.1f;
+                mVolumeRight += 0.1f;
+                mVolumeLeft = Math.min(mVolumeLeft, 1f);
+                mVolumeRight = Math.min(mVolumeRight, 1f);
+                mVideoView.setVolume(mVolumeLeft, mVolumeRight);
+                break;
+            case SettingItem.CODE_VOLUME_REDUCE:
+                mVolumeLeft -= 0.1f;
+                mVolumeRight -= 0.1f;
+                mVolumeLeft = Math.max(mVolumeLeft, 0f);
+                mVolumeRight = Math.max(mVolumeRight, 0f);
+                mVideoView.setVolume(mVolumeLeft, mVolumeRight);
                 break;
             case SettingItem.CODE_CONTROLLER_REMOVE:
                 mReceiverGroup.removeReceiver(DataInter.ReceiverKey.KEY_CONTROLLER_COVER);
