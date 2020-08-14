@@ -14,7 +14,7 @@
         android:singleLine="true"
         android:padding="5dp"
         android:hint="url"
-        android:text="http://music.163.com/song/media/outer/url?id=562598065.mp3"/>
+        android:text="http://mp3.9ku.com/hot/2014/07-16/642431.mp3"/>
 
     <Button
         android:layout_width="match_parent"
@@ -45,6 +45,19 @@
         android:textSize="16sp"
         android:textColor="#FFFFFF"
         android:text="音量减"/>
+
+    <SeekBar
+        android:id="@+id/music_seek_bar"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="10dp"
+        android:focusable="false"
+        android:maxHeight="4dp"
+        android:minHeight="4dp"
+        android:paddingEnd="0dp"
+        android:paddingStart="0dp"
+        android:progressDrawable="@drawable/style_video_player_video_bottom_seekbar"
+        android:thumb="@null" />
 
     <com.kk.taurus.avplayer.view.VisualizerView
         android:id="@+id/visualizerView"

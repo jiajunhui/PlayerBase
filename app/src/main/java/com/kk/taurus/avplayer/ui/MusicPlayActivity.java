@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.SeekBar;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -16,6 +17,7 @@ import com.kk.taurus.avplayer.R;
 import com.kk.taurus.avplayer.view.VisualizerView;
 import com.kk.taurus.playerbase.AVPlayer;
 import com.kk.taurus.playerbase.entity.DataSource;
+import com.kk.taurus.playerbase.event.EventKey;
 import com.kk.taurus.playerbase.event.OnErrorEventListener;
 import com.kk.taurus.playerbase.event.OnPlayerEventListener;
 import com.kk.taurus.playerbase.log.PLog;
@@ -30,6 +32,8 @@ public class MusicPlayActivity extends AppCompatActivity implements OnPlayerEven
 
     private Visualizer mVisualizer;
     private VisualizerView mMusicWave;
+
+    private SeekBar mSeekBar;
 
     private byte[] waveType = new byte[]{
             VisualizerView.WAVE_TYPE_BROKEN_LINE,
@@ -47,6 +51,9 @@ public class MusicPlayActivity extends AppCompatActivity implements OnPlayerEven
         setContentView(R.layout.activity_test_play);
         mEtUrl = findViewById(R.id.music_url_et);
         mMusicWave = findViewById(R.id.visualizerView);
+        mSeekBar = findViewById(R.id.music_seek_bar);
+
+        mSeekBar.setOnSeekBarChangeListener(mOnSeekBarChangeListener);
 
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
@@ -64,16 +71,42 @@ public class MusicPlayActivity extends AppCompatActivity implements OnPlayerEven
         updateVisualizer();
     }
 
+    private SeekBar.OnSeekBarChangeListener mOnSeekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+            mPlayer.seekTo(seekBar.getProgress());
+        }
+    };
+
     @Override
     public void onPlayerEvent(int eventCode, Bundle bundle) {
         PLog.d("MusicPlayActivity", eventCode + "");
         switch (eventCode){
+            case OnPlayerEventListener.PLAYER_EVENT_ON_PREPARED:
+                mSeekBar.setMax(mPlayer.getDuration());
+                break;
             case OnPlayerEventListener.PLAYER_EVENT_ON_START:
                 PLog.d("MusicPlayActivity", "showLoading...");
                 break;
             case OnPlayerEventListener.PLAYER_EVENT_ON_AUDIO_RENDER_START:
             case OnPlayerEventListener.PLAYER_EVENT_ON_BUFFERING_END:
                 PLog.d("MusicPlayActivity", "hiddenLoading...");
+                break;
+            case OnPlayerEventListener.PLAYER_EVENT_ON_TIMER_UPDATE:
+                if(bundle!=null){
+                    mSeekBar.setMax(bundle.getInt(EventKey.INT_ARG2));
+                    mSeekBar.setProgress(bundle.getInt(EventKey.INT_ARG1));
+                }
                 break;
         }
     }
