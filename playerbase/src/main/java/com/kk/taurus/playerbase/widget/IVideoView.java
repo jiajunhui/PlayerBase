@@ -34,6 +34,7 @@ public interface IVideoView {
 
     void setVolume(float left, float right);
     void setSpeed(float speed);
+    void setLooping(boolean looping);
 
     IRender getRender();
 

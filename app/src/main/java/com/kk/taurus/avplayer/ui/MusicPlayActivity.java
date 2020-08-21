@@ -6,12 +6,14 @@ import android.media.audiofx.Visualizer;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 
 import com.kk.taurus.avplayer.R;
 import com.kk.taurus.avplayer.view.VisualizerView;
@@ -35,6 +37,8 @@ public class MusicPlayActivity extends AppCompatActivity implements OnPlayerEven
 
     private SeekBar mSeekBar;
 
+    private SwitchCompat mSwitchCompat;
+
     private byte[] waveType = new byte[]{
             VisualizerView.WAVE_TYPE_BROKEN_LINE,
             VisualizerView.WAVE_TYPE_RECTANGLE,
@@ -52,12 +56,14 @@ public class MusicPlayActivity extends AppCompatActivity implements OnPlayerEven
         mEtUrl = findViewById(R.id.music_url_et);
         mMusicWave = findViewById(R.id.visualizerView);
         mSeekBar = findViewById(R.id.music_seek_bar);
+        mSwitchCompat = findViewById(R.id.music_play_switch_compat);
 
         mSeekBar.setOnSeekBarChangeListener(mOnSeekBarChangeListener);
 
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         mPlayer = new AVPlayer();
+        mPlayer.setLooping(mSwitchCompat.isChecked());
         mPlayer.setVolume(mVolumeLeft, mVolumeRight);
         mPlayer.setOnPlayerEventListener(this);
         mPlayer.setOnErrorEventListener(new OnErrorEventListener() {
@@ -69,6 +75,13 @@ public class MusicPlayActivity extends AppCompatActivity implements OnPlayerEven
 
         initMusicWave();
         updateVisualizer();
+
+        mSwitchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mPlayer.setLooping(isChecked);
+            }
+        });
     }
 
     private SeekBar.OnSeekBarChangeListener mOnSeekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {

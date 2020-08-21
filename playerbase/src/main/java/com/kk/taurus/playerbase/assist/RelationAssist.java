@@ -337,6 +337,11 @@ public final class RelationAssist implements AssistPlay {
         mPlayer.setSpeed(speed);
     }
 
+    @Override
+    public void setLooping(boolean looping) {
+        mPlayer.setLooping(looping);
+    }
+
     /**
      * Associate the playback view to the specified container
      * @param userContainer

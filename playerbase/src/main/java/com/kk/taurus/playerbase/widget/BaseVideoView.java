@@ -315,6 +315,11 @@ public class BaseVideoView extends FrameLayout implements IVideoView, IStyleSett
         mPlayer.setSpeed(speed);
     }
 
+    @Override
+    public void setLooping(boolean looping) {
+        mPlayer.setLooping(looping);
+    }
+
     /**
      * if you want to clear frame and recreate render, call this method.
      */

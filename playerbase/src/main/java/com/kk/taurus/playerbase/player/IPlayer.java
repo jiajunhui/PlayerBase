@@ -53,6 +53,7 @@ public interface IPlayer {
     void setSurface(Surface surface);
     void setVolume(float left, float right);
     void setSpeed(float speed);
+    void setLooping(boolean looping);
 
     void setOnPlayerEventListener(OnPlayerEventListener onPlayerEventListener);
     void setOnErrorEventListener(OnErrorEventListener onErrorEventListener);

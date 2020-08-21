@@ -20,7 +20,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:hint="http://"
-            android:text="http://cctvalih5ca.v.myalicdn.com/live/cctv1_2/index.m3u8"
+            android:text="rtmp://202.69.69.180:443/webcast/bshdlive-mobile"
             android:paddingLeft="16dp"
             style="@style/MyEditText"
             android:layout_weight="1"/>

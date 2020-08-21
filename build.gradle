@@ -40,9 +40,9 @@ project.ext {
             exoplayersdkVersion = '2.11.7',
             appcompatVersion = '1.1.0',
 
-            playerbaseIjkVersion = '337_088_008',
-            playerbaseExoVersion = '337_2117_013',
-            playerbaseVersion = '3.3.7'
+            playerbaseIjkVersion = '338_088_009',
+            playerbaseExoVersion = '338_2117_014',
+            playerbaseVersion = '3.3.8'
     ]
 
 }

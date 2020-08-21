@@ -48,6 +48,7 @@ public interface AssistPlay {
 
     void setVolume(float left, float right);
     void setSpeed(float speed);
+    void setLooping(boolean looping);
 
     void setReceiverGroup(IReceiverGroup receiverGroup);
 

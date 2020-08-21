@@ -41,9 +41,20 @@ public abstract class BaseInternalPlayer implements IPlayer {
 
     private int mBufferPercentage;
 
+    private boolean mLooping;
+
+    public boolean isLooping() {
+        return mLooping;
+    }
+
     @Override
     public void option(int code, Bundle bundle) {
         //not handle
+    }
+
+    @Override
+    public void setLooping(boolean looping) {
+        this.mLooping = looping;
     }
 
     @Override

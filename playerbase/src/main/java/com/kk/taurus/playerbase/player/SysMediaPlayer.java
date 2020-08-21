@@ -120,6 +120,9 @@ public class SysMediaPlayer extends BaseInternalPlayer {
             mMediaPlayer.setScreenOnWhilePlaying(true);
             mMediaPlayer.prepareAsync();
 
+            //set looping indicator for MediaPlayer
+            mMediaPlayer.setLooping(isLooping());
+
             Bundle bundle = BundlePool.obtain();
             bundle.putSerializable(EventKey.SERIALIZABLE_DATA,dataSource);
             submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_DATA_SOURCE_SET,bundle);
@@ -193,6 +196,12 @@ public class SysMediaPlayer extends BaseInternalPlayer {
             PLog.e(TAG,"IllegalStateException， if the internal player engine has not been initialized " +
                     "or has been released.");
         }
+    }
+
+    @Override
+    public void setLooping(boolean looping) {
+        super.setLooping(looping);
+        mMediaPlayer.setLooping(looping);
     }
 
     @Override
@@ -395,7 +404,7 @@ public class SysMediaPlayer extends BaseInternalPlayer {
             submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_PREPARED,bundle);
 
             int seekToPosition = startSeekPos;  // mSeekWhenPrepared may be changed after seekTo() call
-            if (seekToPosition != 0) {
+            if (seekToPosition > 0 && mp.getDuration() > 0) {
                 //seek to start position
                 mMediaPlayer.seekTo(seekToPosition);
                 startSeekPos = 0;
@@ -462,6 +471,9 @@ public class SysMediaPlayer extends BaseInternalPlayer {
                     updateStatus(STATE_PLAYBACK_COMPLETE);
                     mTargetState = STATE_PLAYBACK_COMPLETE;
                     submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_PLAY_COMPLETE,null);
+                    if(!isLooping()){
+                        stop();
+                    }
                 }
             };
 

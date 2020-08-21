@@ -238,6 +238,11 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
     }
 
     @Override
+    public void setLooping(boolean looping) {
+        mInternalPlayer.setRepeatMode(looping?Player.REPEAT_MODE_ALL:Player.REPEAT_MODE_OFF);
+    }
+
+    @Override
     public boolean isPlaying() {
         if (mInternalPlayer == null)
             return false;
@@ -421,7 +426,7 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
                             submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_AUDIO_RENDER_START, null);
                         }
 
-                        if(mStartPos > 0){
+                        if(mStartPos > 0 && mInternalPlayer.getDuration() > 0){
                             mInternalPlayer.seekTo(mStartPos);
                             mStartPos = -1;
                         }

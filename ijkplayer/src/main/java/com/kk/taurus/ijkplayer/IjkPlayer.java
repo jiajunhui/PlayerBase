@@ -171,6 +171,9 @@ public class IjkPlayer extends BaseInternalPlayer {
             mMediaPlayer.setScreenOnWhilePlaying(true);
             mMediaPlayer.prepareAsync();
 
+            //set looping indicator for IjkMediaPlayer
+            mMediaPlayer.setLooping(isLooping());
+
             Bundle bundle = BundlePool.obtain();
             bundle.putSerializable(EventKey.SERIALIZABLE_DATA,dataSource);
             submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_DATA_SOURCE_SET,bundle);
@@ -378,6 +381,12 @@ public class IjkPlayer extends BaseInternalPlayer {
     }
 
     @Override
+    public void setLooping(boolean looping) {
+        super.setLooping(looping);
+        mMediaPlayer.setLooping(looping);
+    }
+
+    @Override
     public int getAudioSessionId() {
         if(available()){
             return mMediaPlayer.getAudioSessionId();
@@ -411,7 +420,7 @@ public class IjkPlayer extends BaseInternalPlayer {
             submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_PREPARED,bundle);
 
             int seekToPosition = startSeekPos;  // mSeekWhenPrepared may be changed after seekTo() call
-            if (seekToPosition != 0) {
+            if (seekToPosition > 0 && mp.getDuration() > 0) {
                 mMediaPlayer.seekTo(seekToPosition);
                 startSeekPos = 0;
             }
@@ -452,6 +461,9 @@ public class IjkPlayer extends BaseInternalPlayer {
                     updateStatus(STATE_PLAYBACK_COMPLETE);
                     mTargetState = STATE_PLAYBACK_COMPLETE;
                     submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_PLAY_COMPLETE,null);
+                    if(!isLooping()){
+                        stop();
+                    }
                 }
             };
 

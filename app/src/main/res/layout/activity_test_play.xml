@@ -2,8 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="#000000"
+    android:background="#99000000"
     android:padding="16dp">
 
     <EditText
@@ -26,30 +27,50 @@
         android:textColor="#FFFFFF"
         android:text="PLAY"/>
 
-    <Button
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:background="@color/colorPrimary"
-        android:onClick="volumeIncrease"
-        android:textSize="16sp"
-        android:textColor="#FFFFFF"
-        android:text="音量加"/>
+        android:orientation="horizontal">
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="40dp"
+            android:background="@color/colorPrimary"
+            android:onClick="volumeIncrease"
+            android:textSize="16sp"
+            android:textColor="#FFFFFF"
+            android:text="音量加"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:background="@color/colorPrimary"
+            android:onClick="volumeReduce"
+            android:textSize="16sp"
+            android:textColor="#FFFFFF"
+            android:text="音量减"/>
+    </LinearLayout>
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/colorPrimary"
-        android:onClick="volumeReduce"
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/music_play_switch_compat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:textSize="16sp"
         android:textColor="#FFFFFF"
-        android:text="音量减"/>
+        android:text="单曲循环"
+        app:switchPadding="10dp"
+        app:showText="true"
+        android:textOn="开"
+        android:textOff="关"
+        android:checked="true"
+        android:layout_marginTop="10dp" />
 
     <SeekBar
         android:id="@+id/music_seek_bar"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="4dp"
         android:layout_marginTop="10dp"
         android:focusable="false"
         android:maxHeight="4dp"

@@ -482,6 +482,12 @@ public final class AVPlayer implements IPlayer{
     }
 
     @Override
+    public void setLooping(boolean looping) {
+        if(isPlayerAvailable())
+            mInternalPlayer.setLooping(looping);
+    }
+
+    @Override
     public boolean isPlaying() {
         if(isPlayerAvailable())
             return mInternalPlayer.isPlaying();
