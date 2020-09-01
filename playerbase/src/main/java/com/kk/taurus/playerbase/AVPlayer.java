@@ -24,6 +24,7 @@ import com.kk.taurus.playerbase.config.PlayerConfig;
 import com.kk.taurus.playerbase.config.PlayerLoader;
 import com.kk.taurus.playerbase.entity.DataSource;
 import com.kk.taurus.playerbase.entity.DecoderPlan;
+import com.kk.taurus.playerbase.log.DebugLog;
 import com.kk.taurus.playerbase.log.PLog;
 import com.kk.taurus.playerbase.player.BaseInternalPlayer;
 import com.kk.taurus.playerbase.event.BundlePool;
@@ -229,6 +230,7 @@ public final class AVPlayer implements IPlayer{
             new OnPlayerEventListener() {
         @Override
         public void onPlayerEvent(int eventCode, Bundle bundle) {
+            DebugLog.onPlayEventLog(eventCode, bundle);
             mTimerCounterProxy.proxyPlayEvent(eventCode, bundle);
             if(eventCode==OnPlayerEventListener.PLAYER_EVENT_ON_PREPARED){
                 //when prepared set volume value
@@ -253,6 +255,7 @@ public final class AVPlayer implements IPlayer{
             new OnErrorEventListener() {
         @Override
         public void onErrorEvent(int eventCode, Bundle bundle) {
+            DebugLog.onErrorEventLog(eventCode, bundle);
             mTimerCounterProxy.proxyErrorEvent(eventCode, bundle);
             if(isPlayRecordOpen())
                 mRecordProxyPlayer.onErrorEvent(eventCode, bundle);

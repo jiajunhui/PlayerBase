@@ -19,11 +19,11 @@ package com.kk.taurus.playerbase.event;
 import android.os.Bundle;
 import android.view.MotionEvent;
 
-import com.kk.taurus.playerbase.log.DebugLog;
 import com.kk.taurus.playerbase.player.OnTimerUpdateListener;
 import com.kk.taurus.playerbase.receiver.IReceiver;
 import com.kk.taurus.playerbase.receiver.IReceiverGroup;
 import com.kk.taurus.playerbase.touch.OnTouchGestureListener;
+import com.kk.taurus.playerbase.touch.TouchEventIndicator;
 
 /**
  * Created by Taurus on 2018/4/14.
@@ -48,7 +48,6 @@ public final class EventDispatcher implements IEventDispatcher{
      */
     @Override
     public void dispatchPlayEvent(final int eventCode, final Bundle bundle){
-        DebugLog.onPlayEventLog(eventCode, bundle);
         switch (eventCode){
             case OnPlayerEventListener.PLAYER_EVENT_ON_TIMER_UPDATE:
                 mReceiverGroup.forEach(new IReceiverGroup.OnLoopListener() {
@@ -82,7 +81,6 @@ public final class EventDispatcher implements IEventDispatcher{
      */
     @Override
     public void dispatchErrorEvent(final int eventCode, final Bundle bundle){
-        DebugLog.onErrorEventLog(eventCode, bundle);
         mReceiverGroup.forEach(new IReceiverGroup.OnLoopListener() {
             @Override
             public void onEach(IReceiver receiver) {
@@ -214,7 +212,10 @@ public final class EventDispatcher implements IEventDispatcher{
         mReceiverGroup.forEach(new IReceiverGroup.OnReceiverFilter() {
             @Override
             public boolean filter(IReceiver receiver) {
-                return receiver instanceof OnTouchGestureListener;
+                boolean gestureReceiver = receiver instanceof OnTouchGestureListener;
+                boolean disallowReceiveGesture = receiver instanceof TouchEventIndicator
+                        && ((TouchEventIndicator) receiver).disallowReceiveTouchEvent();
+                return gestureReceiver && !disallowReceiveGesture;
             }
         }, new IReceiverGroup.OnLoopListener() {
             @Override

@@ -330,6 +330,7 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
         isBuffering = false;
         updateStatus(IPlayer.STATE_STOPPED);
         mInternalPlayer.stop();
+        submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_STOP, null);
     }
 
     @Override
@@ -345,6 +346,7 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
         mInternalPlayer.removeListener(mEventListener);
         mInternalPlayer.removeVideoListener(mVideoListener);
         mInternalPlayer.release();
+        submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_DESTROY, null);
     }
 
     private boolean isInPlaybackState(){
@@ -400,8 +402,13 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
 
             if(!isPreparing){
                 if(playWhenReady){
-                    updateStatus(IPlayer.STATE_STARTED);
-                    submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_RESUME, null);
+                    if(getState()==STATE_PREPARED){
+                        updateStatus(IPlayer.STATE_STARTED);
+                        submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_AUDIO_RENDER_START, null);
+                    }else{
+                        updateStatus(IPlayer.STATE_STARTED);
+                        submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_RESUME, null);
+                    }
                 }else{
                     updateStatus(IPlayer.STATE_PAUSED);
                     submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_PAUSE, null);

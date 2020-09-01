@@ -24,13 +24,14 @@ import com.kk.taurus.playerbase.receiver.BaseCover;
 import com.kk.taurus.playerbase.receiver.IReceiverGroup;
 import com.kk.taurus.playerbase.receiver.PlayerStateGetter;
 import com.kk.taurus.playerbase.touch.OnTouchGestureListener;
+import com.kk.taurus.playerbase.touch.TouchEventIndicator;
 import com.kk.taurus.playerbase.utils.TimeUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class GestureCover extends BaseCover implements OnTouchGestureListener {
+public class GestureCover extends BaseCover implements OnTouchGestureListener, TouchEventIndicator {
 
     @BindView(R.id.cover_player_gesture_operation_volume_box)
     View mVolumeBox;
@@ -413,4 +414,10 @@ public class GestureCover extends BaseCover implements OnTouchGestureListener {
         }
         mHorizontalSlide = false;
     }
+
+    @Override
+    public boolean disallowReceiveTouchEvent() {
+        return getGroupValue().getBoolean(DataInter.Key.KEY_ERROR_SHOW, false);
+    }
+
 }
