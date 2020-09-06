@@ -16,6 +16,10 @@
 
 package com.kk.taurus.playerbase.extension;
 
+import androidx.annotation.NonNull;
+
+import com.kk.taurus.playerbase.receiver.StateGetter;
+
 /**
  *
  * Created by Taurus on 2018/5/27.
@@ -28,6 +32,10 @@ public interface IProducerGroup {
     void addEventProducer(BaseEventProducer eventProducer);
 
     boolean removeEventProducer(BaseEventProducer eventProducer);
+
+    void bindStateGetter(StateGetter stateGetter);
+
+    @NonNull EventCallback getEventCallback();
 
     void destroy();
 

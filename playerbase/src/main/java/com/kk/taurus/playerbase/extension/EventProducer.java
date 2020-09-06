@@ -16,6 +16,10 @@
 
 package com.kk.taurus.playerbase.extension;
 
+import androidx.annotation.Nullable;
+
+import com.kk.taurus.playerbase.receiver.PlayerStateGetter;
+
 /**
  *
  * Created by Taurus on 2018/5/27.
@@ -31,7 +35,9 @@ public interface EventProducer {
 
     void onRemoved();
 
-    ReceiverEventSender getSender();
+    PlayerStateGetter getPlayerStateGetter();
+
+    @Nullable ReceiverEventSender getSender();
 
     void destroy();
 

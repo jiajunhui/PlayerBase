@@ -41,10 +41,17 @@ public interface DataInter {
         String KEY_COMPLETE_COVER = "complete_cover";
         String KEY_ERROR_COVER = "error_cover";
         String KEY_CLOSE_COVER = "close_cover";
+        String KEY_DANMU_COVER = "danmu_cover";
     }
 
     interface PrivateEvent{
         int EVENT_CODE_UPDATE_SEEK = -201;
+    }
+
+    interface ProducerEvent{
+
+        int ADD_DANMU_DATA = -301;
+
     }
 
 }

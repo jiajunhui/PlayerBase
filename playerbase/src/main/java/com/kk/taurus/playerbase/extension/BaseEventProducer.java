@@ -16,6 +16,11 @@
 
 package com.kk.taurus.playerbase.extension;
 
+import androidx.annotation.Nullable;
+
+import com.kk.taurus.playerbase.receiver.PlayerStateGetter;
+import com.kk.taurus.playerbase.receiver.StateGetter;
+
 /**
  *
  * Created by Taurus on 2018/5/27.
@@ -24,14 +29,31 @@ package com.kk.taurus.playerbase.extension;
 public abstract class BaseEventProducer implements EventProducer {
 
     private ReceiverEventSender mReceiverEventSender;
+    private StateGetter mStateGetter;
 
     void attachSender(ReceiverEventSender receiverEventSender){
         this.mReceiverEventSender = receiverEventSender;
     }
 
+    void attachStateGetter(StateGetter stateGetter){
+        this.mStateGetter = stateGetter;
+    }
+
     @Override
-    public ReceiverEventSender getSender() {
+    public final PlayerStateGetter getPlayerStateGetter() {
+        if(mStateGetter!=null)
+            return mStateGetter.getPlayerStateGetter();
+        return null;
+    }
+
+    @Override
+    public final ReceiverEventSender getSender() {
         return mReceiverEventSender;
+    }
+
+    @Nullable
+    protected EventCallback getEventCallback() {
+        return null;
     }
 
 }

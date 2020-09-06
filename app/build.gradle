@@ -52,4 +52,8 @@ dependencies {
     implementation project(':exoplayer')
     implementation project(':ijkplayer')
     implementation 'com.google.android.material:material:1.0.0'
+
+    implementation 'com.github.ctiao:DanmakuFlameMaster:0.9.25'
+    implementation 'com.github.ctiao:ndkbitmap-armv7a:0.9.21'
+
 }

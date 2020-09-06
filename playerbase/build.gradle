@@ -27,6 +27,13 @@ android {
 
 }
 
+buildscript {
+    repositories {
+        mavenCentral()
+        google()
+    }
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 

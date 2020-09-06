@@ -135,16 +135,19 @@ public class SuperContainer extends FrameLayout implements OnTouchGestureListene
 
     public final void setStateGetter(StateGetter stateGetter){
         mStateGetter = stateGetter;
+        mProducerGroup.bindStateGetter(stateGetter);
     }
 
     public final void dispatchPlayEvent(int eventCode, Bundle bundle){
         if(mEventDispatcher !=null)
             mEventDispatcher.dispatchPlayEvent(eventCode, bundle);
+        mProducerGroup.getEventCallback().onPlayerEvent(eventCode, bundle);
     }
 
     public final void dispatchErrorEvent(int eventCode, Bundle bundle){
         if(mEventDispatcher !=null)
             mEventDispatcher.dispatchErrorEvent(eventCode, bundle);
+        mProducerGroup.getEventCallback().onErrorEvent(eventCode, bundle);
     }
 
     public void setOnReceiverEventListener(OnReceiverEventListener onReceiverEventListener) {
@@ -267,6 +270,7 @@ public class SuperContainer extends FrameLayout implements OnTouchGestureListene
                 mOnReceiverEventListener.onReceiverEvent(eventCode, bundle);
             if(mEventDispatcher !=null)
                 mEventDispatcher.dispatchReceiverEvent(eventCode, bundle);
+            mProducerGroup.getEventCallback().onReceiverEvent(eventCode, bundle);
         }
     };
 
