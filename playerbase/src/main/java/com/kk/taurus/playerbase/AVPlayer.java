@@ -230,7 +230,6 @@ public final class AVPlayer implements IPlayer{
             new OnPlayerEventListener() {
         @Override
         public void onPlayerEvent(int eventCode, Bundle bundle) {
-            DebugLog.onPlayEventLog(eventCode, bundle);
             mTimerCounterProxy.proxyPlayEvent(eventCode, bundle);
             if(eventCode==OnPlayerEventListener.PLAYER_EVENT_ON_PREPARED){
                 //when prepared set volume value
@@ -255,7 +254,6 @@ public final class AVPlayer implements IPlayer{
             new OnErrorEventListener() {
         @Override
         public void onErrorEvent(int eventCode, Bundle bundle) {
-            DebugLog.onErrorEventLog(eventCode, bundle);
             mTimerCounterProxy.proxyErrorEvent(eventCode, bundle);
             if(isPlayRecordOpen())
                 mRecordProxyPlayer.onErrorEvent(eventCode, bundle);
@@ -274,12 +272,14 @@ public final class AVPlayer implements IPlayer{
 
     //must last callback event listener , because bundle will be recycle after callback.
     private void callBackPlayEventListener(int eventCode, Bundle bundle) {
+        DebugLog.onPlayEventLog(eventCode, bundle);
         if(mOnPlayerEventListener!=null)
             mOnPlayerEventListener.onPlayerEvent(eventCode, bundle);
     }
 
     //must last callback event listener , because bundle will be recycle after callback.
     private void callBackErrorEventListener(int eventCode, Bundle bundle){
+        DebugLog.onErrorEventLog(eventCode, bundle);
         if(mOnErrorEventListener!=null)
             mOnErrorEventListener.onErrorEvent(eventCode, bundle);
     }

@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 
@@ -40,9 +41,11 @@ public class IjkPlayer extends BaseInternalPlayer {
 
     private IjkMediaPlayer mMediaPlayer;
 
-    private int mTargetState;
+    private int mTargetState = Integer.MAX_VALUE;
 
     private int startSeekPos;
+
+    private SparseArray<Bundle> mOptionArrays;
 
     public static void init(Context context){
         PlayerConfig.addDecoderPlan(new DecoderPlan(
@@ -55,7 +58,8 @@ public class IjkPlayer extends BaseInternalPlayer {
 
     public IjkPlayer() {
         // init player
-        mMediaPlayer = createPlayer();
+        mMediaPlayer = new IjkMediaPlayer();
+        mOptionArrays = new SparseArray<>();
     }
 
     static {
@@ -74,17 +78,21 @@ public class IjkPlayer extends BaseInternalPlayer {
     public void option(int code, Bundle bundle) {
         super.option(code, bundle);
         if(bundle!=null){
-            Set<String> keySet = bundle.keySet();
-            for(String key : keySet){
-                mMediaPlayer.setOption(code, key, bundle.getLong(key));
-            }
+            fillOption(code, bundle);
+            mOptionArrays.put(code, bundle);
         }
     }
 
-    protected IjkMediaPlayer createPlayer(){
-        IjkMediaPlayer ijkMediaPlayer = new IjkMediaPlayer();
-//        ijkMediaPlayer.native_setLogLevel(IjkMediaPlayer.IJK_LOG_DEBUG);
+    private void fillOption(int code, Bundle bundle) {
+        Set<String> keySet = bundle.keySet();
+        for(String key : keySet){
+            mMediaPlayer.setOption(code, key, bundle.getLong(key));
+        }
+    }
 
+    private void setOptions(IjkMediaPlayer ijkMediaPlayer) {
+        if(ijkMediaPlayer==null)
+            return;
         //设置清除dns cache
         //IjkMediaPlayer.OPT_CATEGORY_FORMAT, "dns_cache_clear", 1
 
@@ -106,7 +114,10 @@ public class IjkPlayer extends BaseInternalPlayer {
         ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_FORMAT, "http-detect-range-support", 0);
 
         ijkMediaPlayer.setOption(IjkMediaPlayer.OPT_CATEGORY_CODEC, "skip_loop_filter", 48);
-        return ijkMediaPlayer;
+        int size = mOptionArrays.size();
+        for(int i=0;i<size;i++){
+            fillOption(mOptionArrays.keyAt(i), mOptionArrays.valueAt(i));
+        }
     }
 
     @Override
@@ -125,6 +136,8 @@ public class IjkPlayer extends BaseInternalPlayer {
                 reset();
                 resetListener();
             }
+            mTargetState = Integer.MAX_VALUE;
+            setOptions(mMediaPlayer);
             // REMOVED: mAudioSession
             mMediaPlayer.setOnPreparedListener(mPreparedListener);
             mMediaPlayer.setOnVideoSizeChangedListener(mSizeChangedListener);
@@ -205,11 +218,16 @@ public class IjkPlayer extends BaseInternalPlayer {
 
     @Override
     public void start(int msc){
-        if(msc > 0){
-            startSeekPos = msc;
-        }
-        if(available()){
+        if(getState()==STATE_PREPARED && msc > 0){
             start();
+            mMediaPlayer.seekTo(msc);
+        }else{
+            if(msc > 0){
+                startSeekPos = msc;
+            }
+            if(available()){
+                start();
+            }
         }
     }
 

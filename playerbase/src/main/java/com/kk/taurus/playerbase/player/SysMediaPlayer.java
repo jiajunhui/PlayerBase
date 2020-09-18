@@ -51,7 +51,7 @@ public class SysMediaPlayer extends BaseInternalPlayer {
 
     private MediaPlayer mMediaPlayer;
 
-    private int mTargetState;
+    private int mTargetState = Integer.MAX_VALUE;
 
     private long mBandWidth;
 
@@ -75,6 +75,7 @@ public class SysMediaPlayer extends BaseInternalPlayer {
                 reset();
                 resetListener();
             }
+            mTargetState = Integer.MAX_VALUE;
             // REMOVED: mAudioSession
             mMediaPlayer.setOnPreparedListener(mPreparedListener);
             mMediaPlayer.setOnVideoSizeChangedListener(mSizeChangedListener);
@@ -277,11 +278,16 @@ public class SysMediaPlayer extends BaseInternalPlayer {
 
     @Override
     public void start(int msc) {
-        if(available()){
-            if(msc > 0){
-                startSeekPos = msc;
-            }
+        if(getState()==STATE_PREPARED && msc > 0){
             start();
+            mMediaPlayer.seekTo(msc);
+        }else{
+            if(available()){
+                if(msc > 0){
+                    startSeekPos = msc;
+                }
+                start();
+            }
         }
     }
 
