@@ -6,13 +6,11 @@
 
 ## [项目介绍](https://github.com/jiajunhui/PlayerBase/wiki/Related-introduction)
 
-# Demo下载
-[Demo下载](http://d.firim.info/lmhz)
+## [Demo下载](http://d.firim.info/lmhz)
 
-# QQ交流群（600201778）
 <img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/qrcode_qq_group.jpg" width="270" height="370">
 
-# 使用
+# 使用及依赖-已适配AndroidX
 
 需要的权限，如果targetSDK版本在Android M以上的，请注意运行时权限的处理。<br>
 
@@ -21,7 +19,50 @@
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 ```
 
-添加如下依赖（已适配AndroidX）<br>
+#### 只使用MediaPlayer
+
+```gradle
+dependencies {
+  //---------如果仅使用MediaPlayer解码，使用以下依赖。----------
+  //该依赖仅包含MediaPlayer解码
+  implementation 'com.kk.taurus.playerbase:playerbase:3.4.0'
+  
+}
+```
+
+#### 使用ExoPlayer + MediaPlayer
+
+```gradle
+dependencies {
+ 
+  //---------如果使用ExoPlayer解码，使用以下依赖。---------
+  //该依赖包含exoplayer解码和MediaPlayer解码
+  //注意exoplayer的最小支持SDK版本为16
+  implementation 'cn.jiajunhui:exoplayer:340_2120_016'
+  
+}
+```
+
+#### 使用ijkplayer + MediaPlayer
+
+```gradle
+dependencies {
+  
+  //---------如果使用ijkPlayer解码，使用以下依赖。---------
+  //该依赖包含ijkplayer解码和MediaPlayer解码
+  implementation 'cn.jiajunhui:ijkplayer:340_088_011'
+  //ijk官方的解码库依赖，较少格式版本且不支持HTTPS。
+  implementation 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.8'
+  # Other ABIs: optional
+  implementation 'tv.danmaku.ijk.media:ijkplayer-armv5:0.8.8'
+  implementation 'tv.danmaku.ijk.media:ijkplayer-arm64:0.8.8'
+  implementation 'tv.danmaku.ijk.media:ijkplayer-x86:0.8.8'
+  implementation 'tv.danmaku.ijk.media:ijkplayer-x86_64:0.8.8'
+  
+}
+```
+
+#### 使用ijkplayer + ExoPlayer + MediaPlayer
 
 ```gradle
 dependencies {
