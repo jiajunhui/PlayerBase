@@ -2,6 +2,8 @@
 <br><br><br>
 **博文地址** ：[Android播放器基础封装库PlayerBase](https://juejin.im/post/5b0d4e6bf265da090f7376d2)
 
+## [提issue注意事项](https://github.com/jiajunhui/PlayerBase/wiki/Issue-Attention)
+
 ## [有问题先看介绍和wiki文档](https://github.com/jiajunhui/PlayerBase/wiki)
 
 ## [项目介绍](https://github.com/jiajunhui/PlayerBase/wiki/Related-introduction)
