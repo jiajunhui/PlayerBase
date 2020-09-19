@@ -9,7 +9,6 @@
 #### IjkPlayerPkg 
 [ ![Download](https://api.bintray.com/packages/taurus/Tools/ijkplayer/images/download.svg) ](https://bintray.com/taurus/Tools/ijkplayer/_latestVersion)[![API](https://img.shields.io/badge/API-16%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=16)
 
-<br><br><br>
 **博文地址** ：[Android播放器基础封装库PlayerBase](https://juejin.im/post/5b0d4e6bf265da090f7376d2)
 
 ## [提issue注意事项](https://github.com/jiajunhui/PlayerBase/wiki/Issue-Attention)
