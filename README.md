@@ -11,15 +11,13 @@
 
 **博文地址** ：[Android播放器基础封装库PlayerBase](https://juejin.im/post/5b0d4e6bf265da090f7376d2)
 
-## [提issue注意事项](https://github.com/jiajunhui/PlayerBase/wiki/Issue-Attention)
+### [提issue注意事项](https://github.com/jiajunhui/PlayerBase/wiki/Issue-Attention)
 
-## [有问题先看介绍和wiki文档](https://github.com/jiajunhui/PlayerBase/wiki)
+### [有问题先看介绍和wiki文档](https://github.com/jiajunhui/PlayerBase/wiki)
 
-## [项目介绍](https://github.com/jiajunhui/PlayerBase/wiki/Related-introduction)
+### [项目介绍](https://github.com/jiajunhui/PlayerBase/wiki/Related-introduction)
 
-## [Demo下载](http://d.firim.info/lmhz)
-
-<img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/qrcode_qq_group.jpg" width="270" height="370">
+### [Demo下载](http://d.firim.info/lmhz)
 
 # 使用及依赖-已适配AndroidX
 
@@ -155,7 +153,10 @@ public class App extends Application {
 
 # 交流
 联系方式：junhui_jia@163.com
+
 QQ群：600201778
+
+<img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/qrcode_qq_group.jpg" width="270" height="370">
 
 # License
 ```license
