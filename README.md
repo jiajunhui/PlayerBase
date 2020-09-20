@@ -34,7 +34,7 @@
 
 ```gradle
 dependencies {
-  //---------如果仅使用MediaPlayer解码，使用以下依赖。----------
+  
   //该依赖仅包含MediaPlayer解码
   implementation 'com.kk.taurus.playerbase:playerbase:3.4.0'
   
@@ -46,7 +46,6 @@ dependencies {
 ```gradle
 dependencies {
  
-  //---------如果使用ExoPlayer解码，使用以下依赖。---------
   //该依赖包含exoplayer解码和MediaPlayer解码
   //注意exoplayer的最小支持SDK版本为16
   implementation 'cn.jiajunhui:exoplayer:340_2120_016'
@@ -59,7 +58,6 @@ dependencies {
 ```gradle
 dependencies {
   
-  //---------如果使用ijkPlayer解码，使用以下依赖。---------
   //该依赖包含ijkplayer解码和MediaPlayer解码
   implementation 'cn.jiajunhui:ijkplayer:340_088_011'
   //ijk官方的解码库依赖，较少格式版本且不支持HTTPS。
@@ -77,18 +75,11 @@ dependencies {
 
 ```gradle
 dependencies {
-  //---------如果仅使用MediaPlayer解码，使用以下依赖。----------
-  //该依赖仅包含MediaPlayer解码
-  implementation 'com.kk.taurus.playerbase:playerbase:3.4.0'
   
-  
-  //---------如果使用ExoPlayer解码，使用以下依赖。---------
   //该依赖包含exoplayer解码和MediaPlayer解码
   //注意exoplayer的最小支持SDK版本为16
   implementation 'cn.jiajunhui:exoplayer:340_2120_016'
 
-  
-  //---------如果使用ijkPlayer解码，使用以下依赖。---------
   //该依赖包含ijkplayer解码和MediaPlayer解码
   implementation 'cn.jiajunhui:ijkplayer:340_088_011'
   //ijk官方的解码库依赖，较少格式版本且不支持HTTPS。
