@@ -19,7 +19,7 @@
 
 ### [Demo下载](http://d.firim.info/lmhz)
 
-# 使用及依赖-已适配AndroidX
+### 使用及依赖-已适配AndroidX
 
 需要的权限，如果targetSDK版本在Android M以上的，请注意运行时权限的处理。<br>
 
@@ -151,14 +151,14 @@ public class App extends Application {
 }
 ```
 
-# 交流
+### 交流
 联系方式：junhui_jia@163.com
 
 QQ群：600201778
 
 <img src="https://github.com/jiajunhui/PlayerBase/raw/master/screenshot/qrcode_qq_group.jpg" width="270" height="370">
 
-# License
+### License
 ```license
 Copyright 2017 jiajunhui<junhui_jia@163.com>
 
