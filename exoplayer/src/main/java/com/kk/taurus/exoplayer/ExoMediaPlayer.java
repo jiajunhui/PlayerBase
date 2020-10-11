@@ -517,10 +517,22 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
                     submitErrorEvent(OnErrorEventListener.ERROR_EVENT_IO, bundle);
                     break;
                 case ExoPlaybackException.TYPE_RENDERER:
-                    submitErrorEvent(OnErrorEventListener.ERROR_EVENT_COMMON, bundle);
+                    submitErrorEvent(OnErrorEventListener.ERROR_EVENT_RENDER, bundle);
                     break;
                 case ExoPlaybackException.TYPE_UNEXPECTED:
                     submitErrorEvent(OnErrorEventListener.ERROR_EVENT_UNKNOWN, bundle);
+                    break;
+                case ExoPlaybackException.TYPE_REMOTE:
+                    submitErrorEvent(OnErrorEventListener.ERROR_EVENT_REMOTE, bundle);
+                    break;
+                case ExoPlaybackException.TYPE_OUT_OF_MEMORY:
+                    submitErrorEvent(OnErrorEventListener.ERROR_EVENT_OUT_OF_MEMORY, bundle);
+                    break;
+                case ExoPlaybackException.TYPE_TIMEOUT:
+                    submitErrorEvent(OnErrorEventListener.ERROR_EVENT_TIMED_OUT, bundle);
+                    break;
+                default:
+                    submitErrorEvent(OnErrorEventListener.ERROR_EVENT_COMMON, bundle);
                     break;
             }
         }

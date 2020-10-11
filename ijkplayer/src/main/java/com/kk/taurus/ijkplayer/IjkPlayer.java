@@ -194,7 +194,7 @@ public class IjkPlayer extends BaseInternalPlayer {
             e.printStackTrace();
             updateStatus(STATE_ERROR);
             mTargetState = STATE_ERROR;
-            submitErrorEvent(OnErrorEventListener.ERROR_EVENT_COMMON, null);
+            submitErrorEvent(OnErrorEventListener.ERROR_EVENT_IO, null);
         }
     }
 
@@ -368,7 +368,10 @@ public class IjkPlayer extends BaseInternalPlayer {
                 submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_SURFACE_HOLDER_UPDATE, null);
             }
         }catch (Exception e){
-            e.printStackTrace();
+            Bundle bundle = BundlePool.obtain();
+            bundle.putString("errorMessage", e.getMessage());
+            bundle.putString("causeMessage", e.getCause()!=null?e.getCause().getMessage():"");
+            submitErrorEvent(OnErrorEventListener.ERROR_EVENT_RENDER, bundle);
         }
     }
 
@@ -380,7 +383,10 @@ public class IjkPlayer extends BaseInternalPlayer {
                 submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_SURFACE_UPDATE, null);
             }
         }catch (Exception e){
-            e.printStackTrace();
+            Bundle bundle = BundlePool.obtain();
+            bundle.putString("errorMessage", e.getMessage());
+            bundle.putString("causeMessage", e.getCause()!=null?e.getCause().getMessage():"");
+            submitErrorEvent(OnErrorEventListener.ERROR_EVENT_RENDER, bundle);
         }
     }
 
