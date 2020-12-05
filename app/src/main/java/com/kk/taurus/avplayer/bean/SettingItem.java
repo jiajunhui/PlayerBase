@@ -36,6 +36,7 @@ public class SettingItem {
     public static final int CODE_CONTROLLER_RESET = 701;
 
     public static final int CODE_TEST_UPDATE_RENDER = 801;
+    public static final int CODE_TEST_RENDER_ROTATION = 802;
 
     private String itemText;
     private int code;
@@ -96,6 +97,7 @@ public class SettingItem {
         items.add(new SettingItem("恢复Controller组件",CODE_CONTROLLER_RESET));
 
         items.add(new SettingItem("刷新Render",CODE_TEST_UPDATE_RENDER));
+        items.add(new SettingItem("画面旋转",CODE_TEST_RENDER_ROTATION));
 
         return items;
     }

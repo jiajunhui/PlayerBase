@@ -55,6 +55,8 @@ public class BaseVideoViewActivity extends AppCompatActivity implements
     private float mVolumeLeft = 0.5f;
     private float mVolumeRight = 0.5f;
 
+    private int mRotation;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -255,6 +257,10 @@ public class BaseVideoViewActivity extends AppCompatActivity implements
                 break;
             case SettingItem.CODE_TEST_UPDATE_RENDER:
                 mVideoView.updateRender();
+                break;
+            case SettingItem.CODE_TEST_RENDER_ROTATION:
+                mRotation += 90;
+                mVideoView.getRender().setVideoRotation(mRotation%360);
                 break;
         }
     }

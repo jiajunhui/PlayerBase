@@ -37,12 +37,12 @@ project.ext {
     lib = [
             //module versions
             ijksdkVersion = '0.8.8',
-            exoplayersdkVersion = '2.12.0',
+            exoplayersdkVersion = '2.12.2',
             appcompatVersion = '1.2.0',
 
-            playerbaseIjkVersion = '340_088_011',
-            playerbaseExoVersion = '340_2120_016',
-            playerbaseVersion = '3.4.0'
+            playerbaseIjkVersion = '341_088_012',
+            playerbaseExoVersion = '341_2122_017',
+            playerbaseVersion = '3.4.1'
     ]
 
 }

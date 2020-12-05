@@ -376,6 +376,7 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
         @Override
         public void onVideoSizeChanged(int width, int height,
                                        int unappliedRotationDegrees, float pixelWidthHeightRatio) {
+            PLog.d(TAG, "onVideoSizeChanged : width = " + width + ", height = " + height + ", rotation = " + unappliedRotationDegrees);
             mVideoWidth = width;
             mVideoHeight = height;
             Bundle bundle = BundlePool.obtain();
@@ -417,14 +418,8 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
                 switch (playbackState){
                     case Player.STATE_READY:
                         isPreparing = false;
-                        Format format = mInternalPlayer.getVideoFormat();
-                        Bundle bundle = BundlePool.obtain();
-                        if(format!=null){
-                            bundle.putInt(EventKey.INT_ARG1, format.width);
-                            bundle.putInt(EventKey.INT_ARG2, format.height);
-                        }
                         updateStatus(IPlayer.STATE_PREPARED);
-                        submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_PREPARED, bundle);
+                        submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_PREPARED, null);
 
                         if(mStartPos > 0 && mInternalPlayer.getDuration() > 0){
                             mInternalPlayer.seekTo(mStartPos);
