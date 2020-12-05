@@ -34,7 +34,7 @@
 dependencies {
   
   //该依赖仅包含MediaPlayer解码
-  implementation 'com.kk.taurus.playerbase:playerbase:3.4.0'
+  implementation 'com.kk.taurus.playerbase:playerbase:3.4.1'
   
 }
 ```
@@ -46,7 +46,7 @@ dependencies {
  
   //该依赖包含exoplayer解码和MediaPlayer解码
   //注意exoplayer的最小支持SDK版本为16
-  implementation 'cn.jiajunhui:exoplayer:340_2120_016'
+  implementation 'cn.jiajunhui:exoplayer:341_2122_017'
   
 }
 ```
@@ -57,7 +57,7 @@ dependencies {
 dependencies {
   
   //该依赖包含ijkplayer解码和MediaPlayer解码
-  implementation 'cn.jiajunhui:ijkplayer:340_088_011'
+  implementation 'cn.jiajunhui:ijkplayer:341_088_012'
   //ijk官方的解码库依赖，较少格式版本且不支持HTTPS。
   implementation 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.8'
   # Other ABIs: optional
