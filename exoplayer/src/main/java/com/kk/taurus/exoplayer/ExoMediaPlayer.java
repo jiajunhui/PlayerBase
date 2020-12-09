@@ -495,6 +495,7 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
 
         @Override
         public void onPlayerError(ExoPlaybackException error) {
+            updateStatus(IPlayer.STATE_ERROR);
             if(error==null){
                 submitErrorEvent(OnErrorEventListener.ERROR_EVENT_UNKNOWN, null);
                 return;
