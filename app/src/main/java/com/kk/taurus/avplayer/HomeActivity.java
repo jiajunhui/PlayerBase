@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.kk.taurus.avplayer.ui.InputUrlPlayActivity;
 import com.kk.taurus.avplayer.ui.MultiPlayActivity;
 import com.kk.taurus.avplayer.ui.MusicPlayActivity;
+import com.kk.taurus.avplayer.ui.RecyclerBaseVideoActivity;
 import com.kk.taurus.avplayer.ui.ViewPagerPlayActivity;
 import com.kk.taurus.avplayer.ui.listplay.MultiListActivity;
 import com.kk.taurus.avplayer.ui.ShareAnimationActivityA;
@@ -79,6 +80,10 @@ public class HomeActivity extends AppCompatActivity {
     private void updateDecoderInfo() {
         DecoderPlan defaultPlan = PlayerConfig.getDefaultPlan();
         mInfo.setText("当前解码方案为:" + defaultPlan.getDesc());
+    }
+
+    public void useBaseVideoViewWithRecycler(View view){
+        intentTo(RecyclerBaseVideoActivity.class);
     }
 
     public void useBaseVideoView(View view){

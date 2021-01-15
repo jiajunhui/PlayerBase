@@ -45,14 +45,10 @@ public class ViewRoundRectOutlineProvider extends ViewOutlineProvider {
     @Override
     public void getOutline(View view, Outline outline) {
         Rect rect = new Rect();
-        view.getGlobalVisibleRect(rect);
-        int leftMargin = 0;
-        int topMargin = 0;
-        Rect selfRect = new Rect(leftMargin, topMargin,
-                rect.right - rect.left - leftMargin, rect.bottom - rect.top - topMargin);
+        view.getDrawingRect(rect);
         if(mRect!=null){
-            selfRect = mRect;
+            rect = mRect;
         }
-        outline.setRoundRect(selfRect, mRadius);
+        outline.setRoundRect(rect, mRadius);
     }
 }
