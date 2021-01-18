@@ -20,7 +20,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:hint="http://"
-            android:text="rtmp://202.69.69.180:443/webcast/bshdlive-mobile"
+            android:text="rtmp://58.200.131.2:1935/livetv/cctv1"
             android:paddingLeft="16dp"
             style="@style/MyEditText"
             android:layout_weight="1"/>
