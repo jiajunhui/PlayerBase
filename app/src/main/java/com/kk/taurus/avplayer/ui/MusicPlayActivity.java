@@ -18,6 +18,7 @@ import androidx.appcompat.widget.SwitchCompat;
 import com.kk.taurus.avplayer.R;
 import com.kk.taurus.avplayer.view.VisualizerView;
 import com.kk.taurus.playerbase.AVPlayer;
+import com.kk.taurus.playerbase.config.PlayerConfig;
 import com.kk.taurus.playerbase.entity.DataSource;
 import com.kk.taurus.playerbase.event.EventKey;
 import com.kk.taurus.playerbase.event.OnErrorEventListener;
@@ -61,6 +62,8 @@ public class MusicPlayActivity extends AppCompatActivity implements OnPlayerEven
         mSeekBar.setOnSeekBarChangeListener(mOnSeekBarChangeListener);
 
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
+
+        PlayerConfig.setTimerCounterInterval(50);
 
         mPlayer = new AVPlayer();
         mPlayer.setLooping(mSwitchCompat.isChecked());
@@ -193,6 +196,7 @@ public class MusicPlayActivity extends AppCompatActivity implements OnPlayerEven
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        PlayerConfig.setTimerCounterInterval(1000);
         mPlayer.destroy();
         releaseVisualizer();
     }

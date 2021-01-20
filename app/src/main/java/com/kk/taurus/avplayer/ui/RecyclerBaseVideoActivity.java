@@ -12,13 +12,20 @@ import com.kk.taurus.avplayer.bean.RecyclerBaseVideoBean;
 
 public class RecyclerBaseVideoActivity extends AppCompatActivity {
 
+    RecyclerBaseVideoContentAdapter mAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recycler_base_video);
         RecyclerView contentRv = findViewById(R.id.content_rv);
         contentRv.setLayoutManager(new LinearLayoutManager(this));
-//        contentRv.setLayoutManager(new LinearLayoutManager(this,RecyclerView.HORIZONTAL,false));
-        contentRv.setAdapter(new RecyclerBaseVideoContentAdapter(RecyclerBaseVideoBean.getItemList()));
+        contentRv.setAdapter(mAdapter = new RecyclerBaseVideoContentAdapter(RecyclerBaseVideoBean.getItemList()));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mAdapter.onDestroy();
     }
 }

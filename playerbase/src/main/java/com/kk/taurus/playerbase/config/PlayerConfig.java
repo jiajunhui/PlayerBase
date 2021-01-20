@@ -46,6 +46,8 @@ public class PlayerConfig {
 
     private static boolean playRecordState = false;
 
+    private static int timerCounterInterval = 1000;
+
     static {
         mPlans = new SparseArrayCompat<>(2);
 
@@ -111,4 +113,13 @@ public class PlayerConfig {
         return playRecordState;
     }
 
+    public static int getTimerCounterInterval() {
+        if(timerCounterInterval <= 50)
+            timerCounterInterval = 50;
+        return timerCounterInterval;
+    }
+
+    public static void setTimerCounterInterval(int timerCounterInterval) {
+        PlayerConfig.timerCounterInterval = timerCounterInterval;
+    }
 }

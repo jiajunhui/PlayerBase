@@ -33,18 +33,6 @@
                 android:textColor="@color/colorPrimary"/>
 
             <Button
-                android:id="@+id/tv_recycler"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:onClick="useBaseVideoViewWithRecycler"
-                android:textAllCaps="false"
-                android:text="BaseVideoView的Recycler使用"
-                android:textSize="16sp"
-                android:textColor="@color/buttonTextColor"/>
-
-            <Button
                 android:id="@+id/tv_videoView"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
@@ -53,6 +41,18 @@
                 android:onClick="useBaseVideoView"
                 android:textAllCaps="false"
                 android:text="BaseVideoView的使用"
+                android:textSize="16sp"
+                android:textColor="@color/buttonTextColor"/>
+
+            <Button
+                android:id="@+id/tv_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:onClick="useBaseVideoViewWithRecycler"
+                android:textAllCaps="false"
+                android:text="BaseVideoView的Recycler使用"
                 android:textSize="16sp"
                 android:textColor="@color/buttonTextColor"/>
 

@@ -81,7 +81,7 @@ public final class AVPlayer implements IPlayer{
     public AVPlayer(int decoderPlanId){
         handleRecordProxy();
         //init timer counter proxy.
-        mTimerCounterProxy = new TimerCounterProxy(1000);
+        mTimerCounterProxy = new TimerCounterProxy(PlayerConfig.getTimerCounterInterval());
         //init internal player instance.
         loadInternalPlayer(decoderPlanId);
     }
@@ -378,6 +378,7 @@ public final class AVPlayer implements IPlayer{
 
     @Override
     public void setDataSource(DataSource dataSource) {
+        mTimerCounterProxy.setCounterInterval(PlayerConfig.getTimerCounterInterval());
         this.mDataSource = dataSource;
         //when data source update, attach listener.
         initListener();

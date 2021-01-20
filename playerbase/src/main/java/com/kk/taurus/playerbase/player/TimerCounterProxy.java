@@ -58,6 +58,10 @@ public class TimerCounterProxy {
         this.counterInterval = counterIntervalMs;
     }
 
+    public void setCounterInterval(int counterInterval) {
+        this.counterInterval = counterInterval;
+    }
+
     public void setUseProxy(boolean useProxy) {
         this.useProxy = useProxy;
         if(!useProxy){

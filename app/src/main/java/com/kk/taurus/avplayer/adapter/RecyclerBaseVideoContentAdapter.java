@@ -1,6 +1,6 @@
 package com.kk.taurus.avplayer.adapter;
 
-import android.graphics.Rect;
+import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -11,11 +11,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.kk.taurus.avplayer.R;
 import com.kk.taurus.avplayer.bean.RecyclerBaseVideoBean;
+import com.kk.taurus.avplayer.cover.LoadingCover;
 import com.kk.taurus.playerbase.entity.DataSource;
-import com.kk.taurus.playerbase.render.AspectRatio;
+import com.kk.taurus.playerbase.receiver.ReceiverGroup;
 import com.kk.taurus.playerbase.widget.BaseVideoView;
 
 import java.util.List;
+
+import static com.kk.taurus.avplayer.play.DataInter.ReceiverKey.KEY_LOADING_COVER;
 
 /**
  * @author KaraShokZ (张耀中)
@@ -30,6 +33,11 @@ public class RecyclerBaseVideoContentAdapter extends RecyclerView.Adapter<Recycl
 
     public RecyclerBaseVideoContentAdapter(List<RecyclerBaseVideoBean> dataList) {
         this.dataList = dataList;
+    }
+
+    public void onDestroy(){
+        if(typeLiveVideoBvv!=null)
+            typeLiveVideoBvv.stopPlayback();
     }
 
     @NonNull
@@ -54,9 +62,11 @@ public class RecyclerBaseVideoContentAdapter extends RecyclerView.Adapter<Recycl
         if (bean.itemType == 1){
             if (typeLiveVideoBvv == null){
                 typeLiveVideoBvv = holder.getView(R.id.activity_recycler_base_video_type_video_bvv);
-                typeLiveVideoBvv.setOvalRectShape();
-//                typeLiveVideoBvv.setRoundRectShape(30);
-                typeLiveVideoBvv.setAspectRatio(AspectRatio.AspectRatio_MATCH_PARENT);
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                    typeLiveVideoBvv.setRoundRectShape(30);
+                ReceiverGroup receiverGroup = new ReceiverGroup();
+                receiverGroup.addReceiver(KEY_LOADING_COVER, new LoadingCover(typeLiveVideoBvv.getContext()));
+                typeLiveVideoBvv.setReceiverGroup(receiverGroup);
                 typeLiveVideoBvv.setDataSource(new DataSource(bean.videoUrl));
                 typeLiveVideoBvv.start();
             }
