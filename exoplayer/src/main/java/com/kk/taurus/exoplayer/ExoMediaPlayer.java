@@ -47,7 +47,6 @@ import com.google.android.exoplayer2.upstream.DataSpec;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.RawResourceDataSource;
 import com.google.android.exoplayer2.util.MimeTypes;
 import com.google.android.exoplayer2.util.Util;
@@ -168,12 +167,12 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
                         userAgent, mBandwidthMeter);
         if(extra!=null && extra.size()>0 &&
                 ("http".equalsIgnoreCase(scheme)||"https".equalsIgnoreCase(scheme))){
-            dataSourceFactory = new DefaultHttpDataSourceFactory(
-                    userAgent,
-                    DefaultHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS,
-                    DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS,
-                    true);
-            ((DefaultHttpDataSourceFactory)dataSourceFactory).getDefaultRequestProperties().set(extra);
+            dataSourceFactory = new DefaultHttpDataSource.Factory()
+                    .setUserAgent(userAgent)
+                    .setConnectTimeoutMs(DefaultHttpDataSource.DEFAULT_CONNECT_TIMEOUT_MILLIS)
+                    .setReadTimeoutMs(DefaultHttpDataSource.DEFAULT_READ_TIMEOUT_MILLIS)
+                    .setAllowCrossProtocolRedirects(true)
+                    .setDefaultRequestProperties(extra);
         }
 
         // Prepare the player with the source.
@@ -477,6 +476,7 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
                     if(getState()==STATE_PREPARED){
                         updateStatus(IPlayer.STATE_STARTED);
                         submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_AUDIO_RENDER_START, null);
+                        submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_START, null);
                     }else{
                         updateStatus(IPlayer.STATE_STARTED);
                         submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_RESUME, null);
@@ -521,12 +521,13 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
                 case ExoPlaybackException.TYPE_REMOTE:
                     submitErrorEvent(OnErrorEventListener.ERROR_EVENT_REMOTE, bundle);
                     break;
-                case ExoPlaybackException.TYPE_OUT_OF_MEMORY:
-                    submitErrorEvent(OnErrorEventListener.ERROR_EVENT_OUT_OF_MEMORY, bundle);
-                    break;
-                case ExoPlaybackException.TYPE_TIMEOUT:
-                    submitErrorEvent(OnErrorEventListener.ERROR_EVENT_TIMED_OUT, bundle);
-                    break;
+                    //Deprecated from exo core 2.13.0
+//                case ExoPlaybackException.TYPE_OUT_OF_MEMORY:
+//                    submitErrorEvent(OnErrorEventListener.ERROR_EVENT_OUT_OF_MEMORY, bundle);
+//                    break;
+//                case ExoPlaybackException.TYPE_TIMEOUT:
+//                    submitErrorEvent(OnErrorEventListener.ERROR_EVENT_TIMED_OUT, bundle);
+//                    break;
                 default:
                     submitErrorEvent(OnErrorEventListener.ERROR_EVENT_COMMON, bundle);
                     break;
