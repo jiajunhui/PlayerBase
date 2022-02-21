@@ -26,22 +26,22 @@ import android.view.SurfaceHolder;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.PlaybackException;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.RenderersFactory;
-import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.TracksInfo;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.MergingMediaSource;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.source.SingleSampleMediaSource;
-import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.source.dash.DashMediaSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.upstream.AssetDataSource;
 import com.google.android.exoplayer2.upstream.DataSpec;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
@@ -50,7 +50,7 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.upstream.RawResourceDataSource;
 import com.google.android.exoplayer2.util.MimeTypes;
 import com.google.android.exoplayer2.util.Util;
-import com.google.android.exoplayer2.video.VideoListener;
+import com.google.android.exoplayer2.video.VideoSize;
 import com.kk.taurus.playerbase.config.AppContextAttach;
 import com.kk.taurus.playerbase.config.PlayerConfig;
 import com.kk.taurus.playerbase.config.PlayerLibrary;
@@ -76,7 +76,7 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
     public static final int PLAN_ID = 200;
 
     private final Context mAppContext;
-    private SimpleExoPlayer mInternalPlayer;
+    private ExoPlayer mInternalPlayer;
 
     private int mVideoWidth, mVideoHeight;
 
@@ -100,22 +100,21 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
     public ExoMediaPlayer(){
         mAppContext = AppContextAttach.getApplicationContext();
         RenderersFactory renderersFactory = new DefaultRenderersFactory(mAppContext);
-        DefaultTrackSelector trackSelector =
-                new DefaultTrackSelector(mAppContext);
-        mInternalPlayer = new SimpleExoPlayer.Builder(mAppContext, renderersFactory)
-                .setTrackSelector(trackSelector).build();
+        DefaultTrackSelector trackSelector = new DefaultTrackSelector(mAppContext);
+        mInternalPlayer = new ExoPlayer.Builder(mAppContext, renderersFactory)
+                .setTrackSelector(trackSelector)
+                .build();
 
         // Measures bandwidth during playback. Can be null if not required.
         mBandwidthMeter = new DefaultBandwidthMeter.Builder(mAppContext).build();
 
-        mInternalPlayer.addListener(mEventListener);
-
+        mInternalPlayer.addListener(mPlayerListener);
     }
 
     @Override
     public void setDataSource(DataSource dataSource) {
         updateStatus(STATE_INITIALIZED);
-        mInternalPlayer.addVideoListener(mVideoListener);
+
         String data = dataSource.getData();
         Uri uri = dataSource.getUri();
         String assetsPath = dataSource.getAssetsPath();
@@ -253,8 +252,9 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
 
     @Override
     public boolean isPlaying() {
-        if (mInternalPlayer == null)
+        if (mInternalPlayer == null) {
             return false;
+        }
         int state = mInternalPlayer.getPlaybackState();
         switch (state) {
             case Player.STATE_BUFFERING:
@@ -311,20 +311,22 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
     @Override
     public void pause() {
         int state = getState();
-        if(isInPlaybackState()
-                && state!=STATE_END
-                && state!=STATE_ERROR
-                && state!=STATE_IDLE
-                && state!=STATE_INITIALIZED
-                && state!=STATE_PAUSED
-                && state!=STATE_STOPPED)
+        if (isInPlaybackState()
+                && state != STATE_END
+                && state != STATE_ERROR
+                && state != STATE_IDLE
+                && state != STATE_INITIALIZED
+                && state != STATE_PAUSED
+                && state != STATE_STOPPED) {
             mInternalPlayer.setPlayWhenReady(false);
+        }
     }
 
     @Override
     public void resume() {
-        if(isInPlaybackState() && getState() == STATE_PAUSED)
+        if (isInPlaybackState() && getState() == STATE_PAUSED) {
             mInternalPlayer.setPlayWhenReady(true);
+        }
     }
 
     @Override
@@ -357,8 +359,7 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
         isPreparing = true;
         isBuffering = false;
         updateStatus(IPlayer.STATE_END);
-        mInternalPlayer.removeListener(mEventListener);
-        mInternalPlayer.removeVideoListener(mVideoListener);
+        mInternalPlayer.removeListener(mPlayerListener);
         mInternalPlayer.release();
         submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_DESTROY, null);
     }
@@ -371,13 +372,12 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
                 && state!=STATE_STOPPED;
     }
 
-    private VideoListener mVideoListener = new VideoListener() {
+    private final Player.Listener mPlayerListener = new Player.Listener() {
         @Override
-        public void onVideoSizeChanged(int width, int height,
-                                       int unappliedRotationDegrees, float pixelWidthHeightRatio) {
-            PLog.d(TAG, "onVideoSizeChanged : width = " + width + ", height = " + height + ", rotation = " + unappliedRotationDegrees);
-            mVideoWidth = width;
-            mVideoHeight = height;
+        public void onVideoSizeChanged(VideoSize videoSize) {
+            PLog.d(TAG, "onVideoSizeChanged : width = " + videoSize.width + ", height = " + videoSize.height + ", rotation = " + videoSize.unappliedRotationDegrees);
+            mVideoWidth = videoSize.width;
+            mVideoHeight = videoSize.height;
             Bundle bundle = BundlePool.obtain();
             bundle.putInt(EventKey.INT_ARG1, mVideoWidth);
             bundle.putInt(EventKey.INT_ARG2, mVideoHeight);
@@ -392,13 +392,9 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
             updateStatus(IPlayer.STATE_STARTED);
             submitPlayerEvent(OnPlayerEventListener.PLAYER_EVENT_ON_VIDEO_RENDER_START, null);
         }
-    };
-
-    private Player.EventListener mEventListener = new Player.EventListener() {
 
         @Override
-        public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
-
+        public void onTracksInfoChanged(TracksInfo tracksInfo) {
         }
 
         @Override
@@ -490,25 +486,32 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
 
         @Override
         public void onRepeatModeChanged(int repeatMode) {
-
         }
 
         @Override
-        public void onPlayerError(ExoPlaybackException error) {
+        public void onPlayerError(PlaybackException error) {
             updateStatus(IPlayer.STATE_ERROR);
-            if(error==null){
+            if (error == null) {
                 submitErrorEvent(OnErrorEventListener.ERROR_EVENT_UNKNOWN, null);
                 return;
             }
-            String errorMessage = error.getMessage()==null?"":error.getMessage();
+
+            String errorMessage = error.getMessage() == null ? "" : error.getMessage();
             Throwable cause = error.getCause();
-            String causeMessage = cause!=null?cause.getMessage():"";
-            PLog.e(TAG,errorMessage + ", causeMessage = " + causeMessage);
+            String causeMessage = cause != null ? cause.getMessage() : "";
+            PLog.e(TAG, errorMessage + ", causeMessage = " + causeMessage);
+
             Bundle bundle = BundlePool.obtain();
             bundle.putString("errorMessage", errorMessage);
             bundle.putString("causeMessage", causeMessage);
-            int type = error.type;
-            switch (type){
+
+            if (!(error instanceof ExoPlaybackException)) {
+                submitErrorEvent(OnErrorEventListener.ERROR_EVENT_UNKNOWN, bundle);
+                return;
+            }
+
+            int type = ((ExoPlaybackException) error).type;
+            switch (type) {
                 case ExoPlaybackException.TYPE_SOURCE:
                     submitErrorEvent(OnErrorEventListener.ERROR_EVENT_IO, bundle);
                     break;
@@ -521,13 +524,13 @@ public class ExoMediaPlayer extends BaseInternalPlayer {
                 case ExoPlaybackException.TYPE_REMOTE:
                     submitErrorEvent(OnErrorEventListener.ERROR_EVENT_REMOTE, bundle);
                     break;
-                    //Deprecated from exo core 2.13.0
-//                case ExoPlaybackException.TYPE_OUT_OF_MEMORY:
-//                    submitErrorEvent(OnErrorEventListener.ERROR_EVENT_OUT_OF_MEMORY, bundle);
-//                    break;
-//                case ExoPlaybackException.TYPE_TIMEOUT:
-//                    submitErrorEvent(OnErrorEventListener.ERROR_EVENT_TIMED_OUT, bundle);
-//                    break;
+                // Deprecated from exo core 2.13.0
+                // case ExoPlaybackException.TYPE_OUT_OF_MEMORY:
+                //     submitErrorEvent(OnErrorEventListener.ERROR_EVENT_OUT_OF_MEMORY, bundle);
+                //     break;
+                // case ExoPlaybackException.TYPE_TIMEOUT:
+                //     submitErrorEvent(OnErrorEventListener.ERROR_EVENT_TIMED_OUT, bundle);
+                //     break;
                 default:
                     submitErrorEvent(OnErrorEventListener.ERROR_EVENT_COMMON, bundle);
                     break;

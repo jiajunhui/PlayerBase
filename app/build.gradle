@@ -63,6 +63,6 @@ dependencies {
     implementation 'com.github.ctiao:DanmakuFlameMaster:0.9.25'
     implementation 'com.github.ctiao:ndkbitmap-armv7a:0.9.21'
 
-    implementation 'com.google.android.exoplayer:extension-rtmp:2.12.2'
+    implementation 'com.google.android.exoplayer:extension-rtmp:2.16.1'
 
 }
