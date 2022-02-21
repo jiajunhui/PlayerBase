@@ -10,7 +10,6 @@ import com.kk.taurus.playerbase.config.PlayerLibrary;
 import com.kk.taurus.playerbase.entity.DecoderPlan;
 import com.kk.taurus.playerbase.log.PLog;
 import com.kk.taurus.playerbase.record.PlayRecordManager;
-import com.squareup.leakcanary.LeakCanary;
 import com.xapp.jjh.logtools.config.XLogConfig;
 import com.xapp.jjh.logtools.logger.LogLevel;
 import com.xapp.jjh.logtools.tools.XLog;
@@ -39,13 +38,6 @@ public class App extends Application {
         super.onCreate();
         instance = this;
         PLog.LOG_OPEN = true;
-
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            // This process is dedicated to LeakCanary for heap analysis.
-            // You should not init your app in this process.
-            return;
-        }
-        LeakCanary.install(this);
 
         XLog.init(getApplicationContext(),
                 new XLogConfig()
